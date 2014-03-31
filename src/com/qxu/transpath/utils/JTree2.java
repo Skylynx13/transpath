@@ -6,6 +6,19 @@ import javax.swing.tree.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
+/**
+ * 
+ * ClassName: JTree2 <br/>
+ * Description: Not My Code. <br/>
+ * Date: 2014-3-31 下午10:15:02 <br/>
+ * <br/>
+ * 
+ * @author qxu@
+ * 
+ * Change Log:
+ * @version yyyy-mm-dd qxu@<br/>
+ *
+ */
 public class JTree2 extends JFrame {
 	JPanel cp = new JPanel();
 	JTree jtree;
