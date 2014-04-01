@@ -5,7 +5,7 @@ A tree belongs to a forest.
 A forest is a Lib.
 
 A tag is a facet, is a role.
-We don't knowthe thing, we know the tag only.
+We don't know the thing, we know the tag only.
 When we go for a thing, we just go to the tag.
 
 A tag is what it's about.
