@@ -10,6 +10,8 @@
  */
 package com.qxu.transpath;
 
+import java.util.List;
+
  /**
  * ClassName: BranchNode <br/>
  * Description: TODO <br/>
@@ -23,6 +25,9 @@ package com.qxu.transpath;
  * 
  */
 
-public class BranchNode {
-
+public class NodeDataContainer {
+    private String name;
+    private int id;
+    private int parentId;
+    private List childrenId;
 }
