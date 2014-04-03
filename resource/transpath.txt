@@ -18,6 +18,11 @@ In multiple dimensions and layers/levels.
 The forest is always in memory.
 However lists and indexes exist trying to persistent.
 
+A tree grows from a root.
+A tree grows branches.
+Branches grow branches, or not.
+Items attach on a branch, as an end of its reach.
+
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 [Store info]
 Item1.suffix|tree1:pub/subpub/entry/|tree2: series/subseries/|tree3:author/date/
