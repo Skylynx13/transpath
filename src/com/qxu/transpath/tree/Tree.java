@@ -27,23 +27,24 @@ import java.util.List;
  */
 
 public class Tree extends Node {
-    private List<Node> children;
+    private Tree parent;
+    private List<Tree> children;
 
     public Tree(int id, String name) {
         super(id, name);
-        this.children = new ArrayList<Node>();
+        this.children = new ArrayList<Tree>();
     }
     
     
-    public List<Node> getChildren() {
+    public List<Tree> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Node> children) {
+    public void setChildren(List<Tree> children) {
         this.children = children;
     }
     
-    public void addChild(Node child) {
+    public void addChild(Tree child) {
         children.add(child);
         child.setParent(this);
     }
