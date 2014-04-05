@@ -23,9 +23,9 @@ package com.qxu.transpath.tree;
  * 
  */
 
-public class Branch extends TNodeTree {
+public class Branch {
     public Branch(int id, String name) {
-        super(id, name);
+        //super(id, name);
         // TODO Auto-generated constructor stub
     }
 

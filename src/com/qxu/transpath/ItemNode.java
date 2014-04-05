@@ -47,7 +47,7 @@ public class ItemNode {
         String str = itemName;
         Iterator<TreeBranch> iTreeBranch = itemTreeBranches.iterator();
         while (iTreeBranch.hasNext()) {
-            str += TranspathConstants.BRANCH_CONNECTOR + iTreeBranch.next().toString();
+            str += TranspathConstants.BRANCH_LINKER + iTreeBranch.next().toString();
         }
         return str;
     }

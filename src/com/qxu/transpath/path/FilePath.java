@@ -28,11 +28,11 @@ public class FilePath extends BasePath {
 	}
 	
 	public void setFullPath() {
-		super.setFullPath(archiveName + TranspathConstants.LEVEL_CONNECTOR + blockName);
+		super.setFullPath(archiveName + TranspathConstants.LEVEL_LINKER + blockName);
 	}
 	
 	@Override
 	public String getFullPath() {
-		return archiveName + TranspathConstants.LEVEL_CONNECTOR + blockName;
+		return archiveName + TranspathConstants.LEVEL_LINKER + blockName;
 	}
 }
