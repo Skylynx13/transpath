@@ -23,19 +23,19 @@ package com.qxu.transpath.tree;
  * 
  */
 
-public class Branch extends Tree {
+public class Branch extends TNodeTree {
     public Branch(int id, String name) {
         super(id, name);
         // TODO Auto-generated constructor stub
     }
 
-    private Tree parent;
+    private TNodeTree parent;
 
-    public Tree getParent() {
+    public TNodeTree getParent() {
         return parent;
     }
 
-    public void setParent(Tree parent) {
+    public void setParent(TNodeTree parent) {
         this.parent = parent;
     }
 }

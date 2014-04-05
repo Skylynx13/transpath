@@ -4,8 +4,8 @@
  * 
  * Project Name:transpath
  * Package Name:com.qxu.transpath.tree
- * File Name:Tree.java
- * Date:2014-4-5 下午10:32:45
+ * File Name:RootNode.java
+ * Date:2014-4-2 下午10:45:10
  * 
  */
 package com.qxu.transpath.tree;
@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
  /**
- * ClassName: Tree <br/>
- * Description: 一棵树。 <br/>
- * Date: 2014-4-5 下午10:32:45 <br/>
+ * ClassName: TNodeTree<TNode> <br/>
+ * Description: 一棵以TNode为结点的树。 <br/>
+ * Date: 2014-4-2 下午10:45:10 <br/>
  * <br/>
  * 
  * @author qxu@
@@ -26,44 +26,47 @@ import java.util.List;
  * 
  */
 
-public class Tree {
-    private Tree parent;
-    private List<Tree> children;
+public class TNodeTree<TNode> {
+    private TNode node; 
+    private TNodeTree<TNode> parent;
+    private List<TNodeTree<TNode>> children;
 
-    public Tree() {
+    public TNodeTree(TNode node) {
+        this.setNode(node);
         this.setParent(null);
         this.setChildren(null);
     }
     
-    public Tree getParent() {
+    public TNode getNode() {
+        return node;
+    }
+
+    public void setNode(TNode node) {
+        this.node = node;
+    }
+
+    public TNodeTree<TNode> getParent() {
         return parent;
     }
 
-    public void setParent(Tree parent) {
+    public void setParent(TNodeTree<TNode> parent) {
         this.parent = parent;
     }
 
-    public List<Tree> getChildren() {
+    public List<TNodeTree<TNode>> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Tree> children) {
+    public void setChildren(List<TNodeTree<TNode>> children) {
         this.children = children;
     }
 
-    public void addChild(Tree tree) {
+    public void addChild(TNodeTree<TNode> tree) {
         if (null == this.children) {
-            this.children = new ArrayList<Tree>();
+            this.children = new ArrayList<TNodeTree<TNode>>();
         }
         this.children.add(tree);
         tree.setParent(this);
-    }
-    
-    public Tree getChild(int index) {
-        if (null == this.children) {
-            return null;
-        }
-        return this.children.get(index);
     }
         
     public int numberOfChild() {
@@ -77,11 +80,7 @@ public class Tree {
         return (null == this.children);
     }
     
-    public boolean isRoot() {
-        return (null == this.parent);
-    }
-    
     public boolean isBranch() {
-        return !this.isLeaf()&&!this.isBranch();
+        return !this.isLeaf();
     }
 }
