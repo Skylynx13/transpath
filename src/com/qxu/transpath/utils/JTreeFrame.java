@@ -8,8 +8,8 @@ import javax.swing.event.*;
 
 /**
  * 
- * ClassName: JTree2 <br/>
- * Description: Not My Code. <br/>
+ * ClassName: JTreeFrame <br/>
+ * Description: Show the NodeTree using JTree. <br/>
  * Date: 2014-3-31 下午10:15:02 <br/>
  * <br/>
  * 
@@ -19,12 +19,12 @@ import javax.swing.event.*;
  * @version yyyy-mm-dd qxu@<br/>
  *
  */
-public class JTree2 extends JFrame {
+public class JTreeFrame extends JFrame {
 	JPanel cp = new JPanel();
 	JTree jtree;
 	DefaultMutableTreeNode root;
 
-	public JTree2() {
+	public JTreeFrame() {
 		this.setSize(600, 600);
 		this.setTitle("try to use tree");
 		cp = (JPanel) this.getContentPane();
@@ -33,11 +33,6 @@ public class JTree2 extends JFrame {
 		createTree(root);
 		jtree = new JTree(root);
 		cp.add(jtree, BorderLayout.CENTER);
-	}
-
-	public static void main(String[] args) {
-		JTree2 JTree2 = new JTree2();
-		JTree2.setVisible(true);
 	}
 
 	private void createTree(DefaultMutableTreeNode root) {
@@ -57,9 +52,15 @@ public class JTree2 extends JFrame {
 		}
 	}
 
-	protected void processWindowEvent(WindowEvent e) {
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			System.exit(0);
-		}
-	}
+    protected void processWindowEvent(WindowEvent e) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            System.exit(0);
+        }
+    }
+
+    public static void main(String[] args) {
+        JTreeFrame treeFrame = new JTreeFrame();
+        treeFrame.setVisible(true);
+    }
+
 }

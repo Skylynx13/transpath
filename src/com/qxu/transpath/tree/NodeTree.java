@@ -18,6 +18,8 @@ import com.qxu.transpath.utils.TranspathConstants;
  /**
  * ClassName: NodeTree <br/>
  * Description: A Tree with a Node. <br/>
+ * If this is not enough for use, <br/>
+ * reference to Class DefaultMutableTreeNode.<br/>
  * Date: 2014-4-5 下午10:47:08 <br/>
  * <br/>
  * 
@@ -99,13 +101,13 @@ public class NodeTree {
         this.node.setName(name);
     }
 
-    public String getNodeFullNameAsPath() {
-        String fullName = "";
+    public String getNodePathName() {
+        String pathName = "";
         if (null != this.parent) {
-            fullName += this.parent.getNodeFullNameAsPath();
+            pathName += this.parent.getNodePathName();
         } 
-        fullName += TranspathConstants.PATH_LINKER + this.getNodeName();
-        return fullName;
+        pathName += TranspathConstants.PATH_LINKER + this.getNodeName();
+        return pathName;
     }
     
     public boolean isLeaf() {
@@ -122,12 +124,12 @@ public class NodeTree {
     
     public String list() {
         String list = "<";
-        list += this.node.getId() + "|" + this.getNodeFullNameAsPath();
+        list += this.node.getId() + "|" + this.getNodeName();
         for (NodeTree child:this.children) {
             if (!child.isLeaf()) {
                 list += ((NodeTree) child).list();
             } else {
-                list += "<" + child.node.getId() + "|" + child.getNodeFullNameAsPath() + ">";
+                list += "<" + child.node.getId() + "|" + child.getNodeName() + ">";
             }
         }
         list += ">";
@@ -146,11 +148,11 @@ public class NodeTree {
         tree1.addChild(tree2);
         System.out.println(tree1.list());
         System.out.println(tree2.list());
-        System.out.println(tree1.getNodeFullNameAsPath());
-        System.out.println(tree2.getNodeFullNameAsPath());
-        System.out.println(node1.getNodeFullNameAsPath());
-        System.out.println(node2.getNodeFullNameAsPath());
-        System.out.println(node3.getNodeFullNameAsPath());
+        System.out.println(tree1.getNodePathName());
+        System.out.println(tree2.getNodePathName());
+        System.out.println(node1.getNodePathName());
+        System.out.println(node2.getNodePathName());
+        System.out.println(node3.getNodePathName());
     }
 
 }
