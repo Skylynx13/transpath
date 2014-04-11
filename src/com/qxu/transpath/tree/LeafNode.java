@@ -23,10 +23,10 @@ package com.qxu.transpath.tree;
  * 
  */
 
-public class Leaf extends Node {
+public class LeafNode {
 
-    public Leaf(int id, String name) {
-        super(id, name);
+    public LeafNode(int id, String name) {
+        //super(id, name);
         // TODO Auto-generated constructor stub
     }
 

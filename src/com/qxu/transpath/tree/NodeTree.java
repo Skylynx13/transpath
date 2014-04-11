@@ -11,7 +11,12 @@
 package com.qxu.transpath.tree;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import javax.swing.tree.TreeNode;
 
 import com.qxu.transpath.utils.TranspathConstants;
 
@@ -30,7 +35,7 @@ import com.qxu.transpath.utils.TranspathConstants;
  * 
  */
 
-public class NodeTree {
+public class NodeTree implements TreeNode {
     private Node node;
     private NodeTree parent;
     private List<NodeTree> children;
@@ -72,33 +77,35 @@ public class NodeTree {
     }
 
     public void addChild(NodeTree nodeTree) {
-        if (null == this.children) {
-            this.children = new ArrayList<NodeTree>();
+        if (null == children) {
+            children = new ArrayList<NodeTree>();
         }
-        this.children.add(nodeTree);
+        children.add(nodeTree);
         nodeTree.setParent(this);
     }
     
-    public NodeTree getChild(int index) {
-        if (null == this.children) {
+    @Override
+    public NodeTree getChildAt(int index) {
+        if (null == children) {
             return null;
         }
-        return this.children.get(index);
+        return children.get(index);
     }
         
-    public int numberOfChild() {
-        if (null == this.children) {
+    @Override
+    public int getChildCount() {
+        if (null == children) {
             return 0;
         }
         return children.size();
     }
     
     public String getNodeName() {
-        return this.node.getName();
+        return node.getName();
     }
     
     public void setNodeName(String name) {
-        this.node.setName(name);
+        node.setName(name);
     }
 
     public String getNodePathName() {
@@ -110,6 +117,47 @@ public class NodeTree {
         return pathName;
     }
     
+    @Override
+    public int getIndex(TreeNode node) {
+        if (null == node) {
+            throw new IllegalArgumentException("Argument is null.");
+        }
+        if ((this.isLeaf()) || (node.getParent() != this)) {
+            return -1;
+        }
+        return children.indexOf(node);
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return !isRoot();
+    }
+
+    @Override
+    public Enumeration<NodeTree> children() {
+        if (this.isLeaf()) {
+            return new Enumeration<NodeTree>() {
+                public boolean hasMoreElements() {
+                    return false;
+                }
+                public NodeTree nextElement() {
+                    throw new NoSuchElementException("No elements here.");
+                }
+            };
+        } else {
+            return new Enumeration<NodeTree>() {
+                Iterator<NodeTree> iter = children.iterator();
+
+                public boolean hasMoreElements() {
+                    return iter.hasNext();
+                }
+                public NodeTree nextElement() throws NoSuchElementException {
+                    return iter.next();
+                }
+            };
+        }
+    }
+
     public boolean isLeaf() {
         return (null == this.children);
     }
@@ -154,5 +202,4 @@ public class NodeTree {
         System.out.println(node2.getNodePathName());
         System.out.println(node3.getNodePathName());
     }
-
 }

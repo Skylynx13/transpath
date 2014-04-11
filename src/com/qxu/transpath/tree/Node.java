@@ -12,7 +12,7 @@ package com.qxu.transpath.tree;
 
  /**
  * ClassName: Node <br/>
- * Description: Information of the node of the tree. <br/>
+ * Description: TODO <br/>
  * Date: 2014-4-2 下午10:34:48 <br/>
  * <br/>
  * 
@@ -28,7 +28,8 @@ public class Node {
     private String name;
     
     public Node(int id, String name) {
-        this.setNode(id, name);
+        this.id = id;
+        this.name = name;
     }
     
     public void setNode(int id, String name) {
