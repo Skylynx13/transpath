@@ -1,4 +1,4 @@
-package com.qxu.transpath.utils;
+package com.qxu.transpath.ui;
 
 import java.awt.*;
 import javax.swing.*;

@@ -8,7 +8,7 @@
  * Date:2014-4-5 下午10:32:45
  * 
  */
-package com.qxu.transpath.tree;
+package com.qxu.transpath.temp;
 
 import java.util.ArrayList;
 import java.util.List;
