@@ -100,6 +100,14 @@ public class NodeTree implements TreeNode {
         return children.size();
     }
     
+    public int getNodeId() {
+        return node.getId();
+    }
+    
+    public void setNodeId(int id) {
+        node.setId(id);
+    }
+    
     public String getNodeName() {
         return node.getName();
     }
@@ -109,11 +117,25 @@ public class NodeTree implements TreeNode {
     }
 
     public String getNodePathName() {
-        String pathName = "";
-        if (null != this.parent) {
+        String pathName = TranspathConstants.EMPTY_STRING;
+        if (!isRoot()) {
             pathName += this.parent.getNodePathName();
         } 
         pathName += TranspathConstants.PATH_LINKER + this.getNodeName();
+        return pathName;
+    }
+    
+    public String getNodePathName_style1() {
+        String pathName = TranspathConstants.EMPTY_STRING;
+        if (isRoot()) {
+            pathName += TranspathConstants.PATH_LINKER;
+        } else {
+            pathName += this.parent.getNodePathName();
+        } 
+        pathName += this.getNodeName();
+        if (!isLeaf()) {
+            pathName += TranspathConstants.PATH_LINKER;
+        }
         return pathName;
     }
     
@@ -170,19 +192,6 @@ public class NodeTree implements TreeNode {
         return !this.isLeaf()&&!this.isBranch();
     }
     
-    public String list() {
-        String list = "<";
-        list += this.node.getId() + "|" + this.getNodeName();
-        for (NodeTree child:this.children) {
-            if (!child.isLeaf()) {
-                list += ((NodeTree) child).list();
-            } else {
-                list += "<" + child.node.getId() + "|" + child.getNodeName() + ">";
-            }
-        }
-        list += ">";
-        return list;
-    }
     
     public static void main (String args[]) {
         NodeTree tree1 = new NodeTree(new Node(11, "tree1"));
@@ -194,8 +203,6 @@ public class NodeTree implements TreeNode {
         NodeTree tree2 = new NodeTree(new Node(12, "tree2"));
         tree2.addChild(node3);
         tree1.addChild(tree2);
-        System.out.println(tree1.list());
-        System.out.println(tree2.list());
         System.out.println(tree1.getNodePathName());
         System.out.println(tree2.getNodePathName());
         System.out.println(node1.getNodePathName());

@@ -9,7 +9,7 @@
  * Date:Mar 12, 2014 11:34:51 PM
  * 
  */
-package com.qxu.transpath;
+package com.qxu.transpath.temp;
 
 import com.qxu.transpath.utils.TranspathConstants;
 

@@ -8,7 +8,7 @@
  * Date:2014-4-2 上午12:14:48
  * 
  */
-package com.qxu.transpath;
+package com.qxu.transpath.temp;
 
 import java.util.List;
 

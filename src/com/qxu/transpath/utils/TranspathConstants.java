@@ -1,7 +1,8 @@
 package com.qxu.transpath.utils;
 
 public class TranspathConstants {
-	public static final String BRANCH_LINKER = "|";
+    public static final String EMPTY_STRING = "";
+    public static final String BRANCH_LINKER = "|";
     public static final String LEVEL_LINKER = "/";
     public static final String LINE_LINKER = "\n";
     public static final String PATH_LINKER = "/";
