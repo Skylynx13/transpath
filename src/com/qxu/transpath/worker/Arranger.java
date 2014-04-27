@@ -10,15 +10,19 @@
  */
 package com.qxu.transpath.worker;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 import com.qxu.transpath.utils.CdEntry;
 import com.qxu.transpath.utils.TranspathConstants;
 
  /**
  * ClassName: Arranger <br/>
- * Description: TODO <br/>
+ * Description: To arrange raw file and build a task list. <br/>
  * Date: Apr 23, 2014 11:32:59 PM <br/>
  * <br/>
  * 
@@ -31,6 +35,9 @@ import com.qxu.transpath.utils.TranspathConstants;
 
 public class Arranger {
     private ArrayList<CdEntry> entries;
+    private CdEntry entry;
+    private String testLine;
+    private int status;
     
     public Arranger() {
         this.entries = new ArrayList<CdEntry>();
@@ -40,19 +47,66 @@ public class Arranger {
         this.entries = entries;
     }
     
+    public boolean checkIgnorableLine (String line) {
+        return line.matches("\\s*Code:\\s*")||line.matches("\\s*");
+    }
+    
     public void addEntry(String name) {
         if (this.entries == null) {
             this.entries = new ArrayList<CdEntry>();
         }
-        this.entries.add(new CdEntry(name));
+        entry = new CdEntry(name);
+        this.entries.add(entry);
+    }
+    
+    public boolean checkLinkLine(String line) {
+        return line.matches("http://.*");
     }
     
     public Arranger readFromFile(String fileName) {
+        Scanner in = null;
+        String line = "";
+        try {
+            in = new Scanner(new FileReader(fileName));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        int cnt = 0;
+        while (in.hasNext()) {
+            line = in.nextLine().trim();
+            if (this.checkIgnorableLine(line)) {
+                continue;
+            }
+            if (this.checkLinkLine(line)) {
+                if (this.entry.hasName()) {
+                    entry.addLink(line);
+                } else {
+                    status = 100000 + cnt; // Error: Entry no name at line cnt.
+                    return null;
+                }
+            } else {
+                if ((this.entry !=null) && (this.entry.getLinksSize() == 0)) {
+                    entry.addComment(line);                    
+                } else {
+                    this.addEntry(line);
+                }
+            }
+            System.out.println(line);
+            cnt++;
+        }
+        System.out.println(cnt);
+        in.close();
         return this;
     }
     
     public int writeToFile(String fileName) {
-        
+        try {
+            PrintWriter out = new PrintWriter(fileName);
+            out.println(this.toOutput());
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return entries.size();
     }
     
@@ -79,5 +133,13 @@ public class Arranger {
             }
         }
         return str;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

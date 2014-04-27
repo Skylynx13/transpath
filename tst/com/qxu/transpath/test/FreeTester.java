@@ -77,9 +77,9 @@ public class FreeTester {
         Collections.sort(aStrList, new SortByName());
         System.out.println(aStrList.toString());
     }
-    public void testArranger() {
-        CdEntry cde1 = new CdEntry("name1", "comment1", "link1");
-        cde1.addComment("comment11");
+    public void testArrangerBasic() {
+        CdEntry cde1 = new CdEntry("name1");
+        //cde1.addComment("comment11");
         cde1.addLink("link11");
         CdEntry cde2 = new CdEntry("name2", "comment2", "link2");
         cde2.addComment("comment21");
@@ -101,7 +101,19 @@ public class FreeTester {
         
         System.out.println(argr.sort().toString());
         System.out.println(argr.toOutput());
+        System.out.println(argr.checkIgnorableLine("    aCode: "));
+        System.out.println(argr.checkLinkLine("http://  "));
+        System.out.println("[" + new String("       abcd    ").trim() + "]");
     }
+    
+    public void testArranger() {
+        try {
+            (new Arranger()).readFromFile("resource/raw.txt").sort().writeToFile("resource/task.txt");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public static void main(String args[]) {
         FreeTester ft = new FreeTester();
         //ft.testNodeTree();

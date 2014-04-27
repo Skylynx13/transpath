@@ -52,6 +52,9 @@ public class CdEntry implements Comparable<CdEntry>{
     public void setName(String name) {
         this.name = name;
     }
+    public boolean hasName() {
+        return ((this.name != null) && (this.name != ""));
+    }
     public ArrayList<String> getComments() {
         return comments;
     }
@@ -75,6 +78,18 @@ public class CdEntry implements Comparable<CdEntry>{
             this.links = new ArrayList<String>();
         }
         this.links.add(link);
+    }
+    public int getLinksSize() {
+        if (this.links == null) {
+            return 0;
+        }
+        return this.links.size();
+    }
+    public int getCommentsSize() {
+        if (this.comments == null) {
+            return 0;
+        }
+        return this.comments.size();
     }
     @Override
     public int compareTo(CdEntry cde) {
