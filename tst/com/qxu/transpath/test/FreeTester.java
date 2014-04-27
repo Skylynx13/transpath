@@ -102,15 +102,18 @@ public class FreeTester {
         System.out.println(argr.sort().toString());
         System.out.println(argr.toOutput());
         System.out.println(argr.checkIgnorableLine("    aCode: "));
-        System.out.println(argr.checkLinkLine("http://  "));
+        System.out.println("Link: " + argr.checkLinkLine("http://  "));
+        System.out.println("Comment: " + argr.checkCommentLine("//  "));
         System.out.println("[" + new String("       abcd    ").trim() + "]");
     }
     
     public void testArranger() {
+        Arranger argr = new Arranger();
         try {
-            (new Arranger()).readFromFile("resource/raw.txt").sort().writeToFile("resource/task.txt");
+            int n = argr.readFromFile("resource/raw.txt").sort().writeToFile("resource/task.txt");
+            System.out.println("Totally " + n + " entries processed.");
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            System.out.println(argr.getStatus());
         }
     }
     

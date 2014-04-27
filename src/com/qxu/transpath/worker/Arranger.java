@@ -60,7 +60,11 @@ public class Arranger {
     }
     
     public boolean checkLinkLine(String line) {
-        return line.matches("http://.*");
+        return line.matches("http[s]?://.*");
+    }
+    
+    public boolean checkCommentLine(String line) {
+        return line.matches("//.*");
     }
     
     public Arranger readFromFile(String fileName) {
@@ -70,6 +74,8 @@ public class Arranger {
             in = new Scanner(new FileReader(fileName));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            status = 100000; // File open error;
+            return null;
         }
         int cnt = 0;
         while (in.hasNext()) {
@@ -78,18 +84,19 @@ public class Arranger {
                 continue;
             }
             if (this.checkLinkLine(line)) {
-                if (this.entry.hasName()) {
-                    entry.addLink(line);
-                } else {
-                    status = 100000 + cnt; // Error: Entry no name at line cnt.
+                if (this.entry == null || !this.entry.hasName()) {
+                    status = 200000 + cnt; // Error: Entry no name at line cnt.
                     return null;
                 }
-            } else {
-                if ((this.entry !=null) && (this.entry.getLinksSize() == 0)) {
-                    entry.addComment(line);                    
-                } else {
-                    this.addEntry(line);
+                entry.addLink(line);
+            } else if (this.checkCommentLine(line)) {
+                if (this.entry == null && !this.entry.hasName()) {
+                    status = 200000 + cnt; // Error: Entry no name at line cnt.
+                    return null;
                 }
+                entry.addComment(line);                    
+            } else {
+                this.addEntry(line);
             }
             System.out.println(line);
             cnt++;
