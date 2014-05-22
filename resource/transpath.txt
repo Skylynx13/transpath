@@ -1,3 +1,9 @@
+A long way journey needs a first step forward.
+The requirements at hands need to be cared about.
+Firstly io and sort can be resolved.
+Then we focus on massive rename.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 A tag is a leaf.
 A leaf belongs to a branch.
 A branch belongs to a tree.

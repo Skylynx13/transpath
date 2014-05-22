@@ -117,11 +117,25 @@ public class FreeTester {
         }
     }
     
+    public void testReplaceStr() {
+        String str0 = new String("abcd__efg___hi___digital___jkl___mn_empire_.ccc");
+        String str1 = str0.replaceAll("___", ") (");
+        String str2 = str1.replaceAll("__", " (");
+        String str3 = str2.replaceAll("_\\.", ").");
+        String str4 = str3.replaceAll("_", " ");
+        String str5 = str4.replaceAll("\\(digital\\)", "(Digital)");
+        String str6 = str5.replaceAll(" empire\\)", "-empire)");
+        System.out.println(str0 + " -> " + str1  + " -> " + str2
+                + " -> " + str3  + " -> " + str4  + " -> " + str5
+                + " -> " + str6);
+    }
+    
     public static void main(String args[]) {
         FreeTester ft = new FreeTester();
         //ft.testNodeTree();
         //ft.testList();
         ft.testArranger();
+        //ft.testReplaceStr();
     }
 }
 

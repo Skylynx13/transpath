@@ -48,7 +48,8 @@ public class Arranger {
     }
     
     public boolean checkIgnorableLine (String line) {
-        return line.matches("\\s*Code:\\s*")||line.matches("\\s*");
+        return line.matches("\\s*Code:\\s*")||line.matches("\\s*")||
+                line.matches("\\s*Quote:\\s*")||line.matches("\\s*//\\s*");
     }
     
     public void addEntry(String name) {
@@ -60,7 +61,7 @@ public class Arranger {
     }
     
     public boolean checkLinkLine(String line) {
-        return line.matches("http[s]?://.*");
+        return line.matches("[v]?http[s]?://.*");
     }
     
     public boolean checkCommentLine(String line) {
