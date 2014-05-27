@@ -115,6 +115,10 @@ public class NodeTree implements TreeNode {
     public void setNodeName(String name) {
         node.setName(name);
     }
+    
+    public String toString() {
+        return this.getNodeName();
+    }
 
     public String getNodePathName() {
         String pathName = TranspathConstants.EMPTY_STRING;

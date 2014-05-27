@@ -6,6 +6,9 @@ import javax.swing.tree.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
+import com.qxu.transpath.tree.Node;
+import com.qxu.transpath.tree.NodeTree;
+
 /**
  * 
  * ClassName: JTreeFrame <br/>
@@ -25,7 +28,6 @@ public class JTreeFrame extends JFrame {
 	JTree jtree;
 	JTree jtree1;
     DefaultMutableTreeNode root;
-    DefaultMutableTreeNode root1;
 
 	public JTreeFrame() {
 		this.setSize(600, 600);
@@ -33,13 +35,26 @@ public class JTreeFrame extends JFrame {
 		cp = (JPanel) this.getContentPane();
 		cp.setLayout(new BorderLayout());
         root = new DefaultMutableTreeNode("school");
-        root1 = new DefaultMutableTreeNode("school1");
+        
+        NodeTree tree1 = new NodeTree(new Node(11, "tree1"));
+        NodeTree node1 = new NodeTree(new Node(1, "node1"));
+        tree1.addChild(node1);
+        NodeTree node2 = new NodeTree(new Node(2, "node2"));
+        tree1.addChild(node2);
+        NodeTree node3 = new NodeTree(new Node(3, "node3"));
+        NodeTree tree2 = new NodeTree(new Node(12, "tree2"));
+        tree2.addChild(node3);
+        tree1.addChild(tree2);
+
 		createTree(root);
 		jtree = new JTree(root);
-		jtree1 = new JTree(root1);
+		jtree1 = new JTree(tree1);
 		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree, jtree1);
 		mPane.setContinuousLayout(true);
 		mPane.setOneTouchExpandable(true);
+		mPane.setSize(super.getSize());
+		mPane.setDividerLocation(0.5);
+		mPane.setDividerSize(8);
         cp.add(mPane, BorderLayout.CENTER);
 	}
 
