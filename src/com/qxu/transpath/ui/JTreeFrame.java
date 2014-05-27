@@ -21,18 +21,26 @@ import javax.swing.event.*;
  */
 public class JTreeFrame extends JFrame {
 	JPanel cp = new JPanel();
+	JFrame subFrame = new JFrame();
 	JTree jtree;
-	DefaultMutableTreeNode root;
+	JTree jtree1;
+    DefaultMutableTreeNode root;
+    DefaultMutableTreeNode root1;
 
 	public JTreeFrame() {
 		this.setSize(600, 600);
 		this.setTitle("try to use tree");
 		cp = (JPanel) this.getContentPane();
 		cp.setLayout(new BorderLayout());
-		root = new DefaultMutableTreeNode("school");
+        root = new DefaultMutableTreeNode("school");
+        root1 = new DefaultMutableTreeNode("school1");
 		createTree(root);
 		jtree = new JTree(root);
-		cp.add(jtree, BorderLayout.CENTER);
+		jtree1 = new JTree(root1);
+		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree, jtree1);
+		mPane.setContinuousLayout(true);
+		mPane.setOneTouchExpandable(true);
+        cp.add(mPane, BorderLayout.CENTER);
 	}
 
 	private void createTree(DefaultMutableTreeNode root) {

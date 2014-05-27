@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
  /**
  * ClassName: CdEntry <br/>
- * Description: TODO <br/>
+ * Description: content destination entry <br/>
  * Date: Apr 23, 2014 11:38:09 PM <br/>
  * <br/>
  * 
