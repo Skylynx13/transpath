@@ -13,6 +13,7 @@ package com.qxu.transpath.test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
@@ -118,16 +119,23 @@ public class FreeTester {
     }
     
     public void testReplaceStr() {
-        String str0 = new String("abcd__efg___hi___digital___jkl___mn_empire_.ccc");
+        String str0 = new String("abcd__efg___hi___test)(2014___digital___jkl___mn_empire_.ccc");
         String str1 = str0.replaceAll("___", ") (");
         String str2 = str1.replaceAll("__", " (");
         String str3 = str2.replaceAll("_\\.", ").");
         String str4 = str3.replaceAll("_", " ");
-        String str5 = str4.replaceAll("\\(digital\\)", "(Digital)");
-        String str6 = str5.replaceAll(" empire\\)", "-empire)");
-        System.out.println(str0 + " -> " + str1  + " -> " + str2
-                + " -> " + str3  + " -> " + str4  + " -> " + str5
-                + " -> " + str6);
+        String str5 = str4.replaceAll("\\(", " (");
+        String str6 = str5.replaceAll("  \\(", " (");
+        String str7 = str6.replaceAll("\\(digital\\)", "(Digital)");
+        String str8 = str7.replaceAll(" Empire\\)", "-Empire)");
+        System.out.println(str0 + "\r -> " + str1  + "\r -> " + str2
+                + "\r -> " + str3  + "\r -> " + str4  + "\r -> " + str5
+                + "\r -> " + str6 + "\r -> " + str7 + "\r -> " + str8);
+    }
+    
+    public void testHashMap() {
+        HashMap<String, String> thm = new HashMap<String, String>();
+        thm.put("abc", "def");
     }
     
     public static void main(String args[]) {

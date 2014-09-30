@@ -30,8 +30,8 @@ public class JTreeFrame extends JFrame {
     DefaultMutableTreeNode root;
 
 	public JTreeFrame() {
-		this.setSize(600, 600);
-		this.setTitle("try to use tree");
+		this.setSize(1200, 600);
+		this.setTitle("transpath");
 		cp = (JPanel) this.getContentPane();
 		cp.setLayout(new BorderLayout());
         root = new DefaultMutableTreeNode("school");

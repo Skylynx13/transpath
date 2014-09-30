@@ -1,6 +1,8 @@
 package com.qxu.transpath.worker;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,25 +54,71 @@ public class PathFinder {
 
 		return fileList;
 	}
+
+	public int writeToFile(String fileName, String listRoot) {
+	    PrintWriter out = null;
+        try {
+            out = new PrintWriter(fileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        ArrayList<File> fileList = this.getFileList(listRoot);
+        for (File tfl: fileList) {
+            if (tfl.isFile()) {
+                String path = tfl.getParent();
+                String root = listRoot.replaceAll("\\\\", "\\\\\\\\");
+                path = path.replaceAll(root, "").replaceAll("\\\\", "/");
+                out.println(tfl.getName() + "|" + path);
+            }
+        }
+        out.close();
+        return 0;
+    }
+	
+	public void testOutput() {
+        ArrayList<String> fl = this.getFileNameList("qtest");
+        fl = this.getFileNameList("F:\\Book\\TFLib\\A2013");
+        ArrayList<File> fl1 = this.getFileList("qtest");
+        fl1 = this.getFileList("F:\\Book\\TFLib\\A2013");
+        List<String> fl2 = Arrays.asList("abc", "def", "ghi", "tdir000", "tdir001");
+        fl.addAll(fl2);
+//      for (String str: fl) {
+//      System.out.println(str);
+//  }
+        for (File tfl: fl1) {
+            String dInd = tfl.isDirectory()?">>>":"";
+            System.out.println(tfl.getPath() + dInd);
+        }
+        System.out.println("=======================================");
+        for (File tfl: fl1) {
+            if (tfl.isFile()) {
+                System.out.println(tfl.getName() + "|" + tfl.getParent().replaceAll("\\\\", "/"));
+            }
+        }
+	}
+	
+	public void testOutFile() {
+        String fn1 = "resource/pflist.txt";
+        String lr1 = "F:\\Book\\TFLib";
+	    this.writeToFile(fn1, lr1);
+	}
+	
+	public void testBackslash() {
+        String str1 = "F:\\Book\\TFLib\\A2013";
+        String str2 = "F:\\Book\\TFLib\\A2013\\asdf\\asdfasd\\asdfasdf";
+        str1 = str1.replaceAll("\\\\", "\\\\\\\\");
+        System.out.println(str1);
+        str2 = str2.replaceAll(str1, "");
+        System.out.println(str2);
+        str2 = str2.replaceAll("\\\\", "/");
+        System.out.println(str2);	    
+	}
 	
 	public static void main (String[] args) {
 		PathFinder pf1 = new PathFinder();
-		ArrayList<String> fl = pf1.getFileNameList("qtest");
-		ArrayList<File> fl1 = pf1.getFileList("qtest");
-		List<String> fl2 = Arrays.asList("abc", "def", "ghi", "tdir000", "tdir001");
-		fl.addAll(fl2);
-//		for (String str: fl) {
-//		System.out.println(str);
-//	}
-		for (File tfl: fl1) {
-			String dInd = tfl.isDirectory()?">>>":"";
-			System.out.println(tfl.getPath() + dInd);
-		}
-		System.out.println("=======================================");
-		for (File tfl: fl1) {
-			if (tfl.isFile()) {
-				System.out.println(tfl.getName() + "|" + tfl.getParent().replaceAll("\\\\", "/"));
-			}
-		}
+		//pf1.testOutput();
+		pf1.testOutFile();
+		System.out.println("Done.");
 	}
 }

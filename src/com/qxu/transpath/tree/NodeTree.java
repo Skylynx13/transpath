@@ -13,6 +13,7 @@ package com.qxu.transpath.tree;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -39,6 +40,7 @@ public class NodeTree implements TreeNode {
     private Node node;
     private NodeTree parent;
     private List<NodeTree> children;
+    private boolean allowsChildren;
 
     public NodeTree() {
         this.setNode(null);
@@ -81,7 +83,7 @@ public class NodeTree implements TreeNode {
             children = new ArrayList<NodeTree>();
         }
         children.add(nodeTree);
-        nodeTree.setParent(this);
+        nodeTree.parent = this;
     }
     
     @Override
@@ -116,6 +118,8 @@ public class NodeTree implements TreeNode {
         node.setName(name);
     }
     
+    // For JTree display
+    @Override
     public String toString() {
         return this.getNodeName();
     }
@@ -156,7 +160,11 @@ public class NodeTree implements TreeNode {
 
     @Override
     public boolean getAllowsChildren() {
-        return !isRoot();
+        return this.allowsChildren;
+    }
+
+    public void setAllowsChildren(boolean allowsChildren) {
+        this.allowsChildren = allowsChildren;
     }
 
     @Override
@@ -196,7 +204,6 @@ public class NodeTree implements TreeNode {
         return !this.isLeaf()&&!this.isBranch();
     }
     
-    
     public static void main (String args[]) {
         NodeTree tree1 = new NodeTree(new Node(11, "tree1"));
         NodeTree node1 = new NodeTree(new Node(1, "node1"));
@@ -213,4 +220,5 @@ public class NodeTree implements TreeNode {
         System.out.println(node2.getNodePathName());
         System.out.println(node3.getNodePathName());
     }
+
 }
