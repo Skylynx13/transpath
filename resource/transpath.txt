@@ -68,10 +68,15 @@ Branches of the tree.
 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Keeper: save trees to files
+Seeker: load files to trees
 
-
-
-
+read file path and build tree,
+from tree keep to file,
+from file read to tree,
+from tree display to treeview.
+edit treeview make tree changes,
+then file changes.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

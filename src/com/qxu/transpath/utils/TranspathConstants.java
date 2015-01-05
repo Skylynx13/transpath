@@ -8,4 +8,7 @@ public class TranspathConstants {
     public static final String PATH_LINKER = "/";
 	public static final String PERIOD = ".";
     public static final String TREENAME_BRANCH = ":";	
+
+    public static final String TREE_LOCATION = "LOC";
+    public static final String TREE_FULLLIST = "TFL";
 }

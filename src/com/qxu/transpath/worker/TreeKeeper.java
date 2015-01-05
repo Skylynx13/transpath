@@ -35,7 +35,7 @@ public class TreeKeeper {
     public String[] branchNames;
     
     public String toString() {
-        return leafName + branchNames[0] + branchNames[1];
+        return leafName + ":::" + branchNames[0] + ":::" + branchNames[1];
     } 
     
     public TreeKeeper() {
