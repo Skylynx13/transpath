@@ -60,6 +60,13 @@ public class Arranger {
         this.entries.add(entry);
     }
     
+    public void addEntry(CdEntry cde) {
+        if (this.entries == null) {
+            this.entries = new ArrayList<CdEntry>();
+        }
+        this.entries.add(cde);
+    }
+    
     public boolean checkLinkLine(String line) {
         return line.matches("[v]?http[s]?://.*");
     }
@@ -121,6 +128,28 @@ public class Arranger {
     public Arranger sort() {
         Collections.sort(entries);
         return this;
+    }
+    
+    public Arranger merge() {
+        Arranger newArranger = new Arranger();
+        CdEntry newEntry = null;
+        String lastEntryName = "";
+        for (CdEntry currEntry:this.entries) {
+            if (currEntry.getName().equals(lastEntryName)) {
+                newEntry = newEntry.mergeEntry(currEntry);
+            }
+            else {
+                if (newEntry != null) {
+                    newArranger.addEntry(newEntry);
+                }
+                newEntry = currEntry.copy();
+                lastEntryName = currEntry.getName();
+            }
+        }
+        if (newEntry != null) {
+            newArranger.addEntry(newEntry);
+        }
+        return newArranger;
     }
     
     public String toString() {

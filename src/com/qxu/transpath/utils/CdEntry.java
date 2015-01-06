@@ -46,6 +46,30 @@ public class CdEntry implements Comparable<CdEntry>{
         this.links = new ArrayList<String>();
         this.links.add(link);
     }
+    public CdEntry copy() {
+        CdEntry newCde = new CdEntry();
+        newCde.setName(this.name);
+        newCde.addComments(this.comments);
+        newCde.addLinks(this.links);
+        return newCde;
+    }
+    
+    private void addLinks(ArrayList<String> pLinks) {
+        if (this.links == null) {
+            this.links = new ArrayList<String>();
+        }
+        for (String aLink: pLinks) {
+            this.links.add(aLink);
+        }
+    }
+    private void addComments(ArrayList<String> pComments) {
+        if (this.comments == null) {
+            this.comments = new ArrayList<String>();
+        }
+        for (String aComment: pComments) {
+            this.comments.add(aComment);
+        }
+    }
     public String getName() {
         return name;
     }
@@ -85,17 +109,27 @@ public class CdEntry implements Comparable<CdEntry>{
         }
         return this.links.size();
     }
+    
     public int getCommentsSize() {
         if (this.comments == null) {
             return 0;
         }
         return this.comments.size();
     }
+    
     @Override
     public int compareTo(CdEntry cde) {
         return this.name.compareTo(cde.name);
     }
+    
     public String toString() {
         return name + this.comments.toString() + this.links.toString();
+    }
+    
+    public CdEntry mergeEntry(CdEntry otherEntry) {
+        CdEntry newCde = this.copy();
+        newCde.addComments(otherEntry.getComments());
+        newCde.addLinks(otherEntry.getLinks());
+        return newCde;
     }
 }

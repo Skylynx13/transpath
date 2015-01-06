@@ -111,7 +111,7 @@ public class FreeTester {
     public void testArranger() {
         Arranger argr = new Arranger();
         try {
-            int n = argr.readFromFile("resource/raw.txt").sort().writeToFile("resource/task.txt");
+            int n = argr.readFromFile("resource/raw.txt").sort().merge().writeToFile("resource/task.txt");
             System.out.println("Totally " + n + " entries processed.");
         } catch (NullPointerException e) {
             System.out.println(argr.getStatus());
