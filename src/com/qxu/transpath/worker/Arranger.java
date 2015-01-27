@@ -133,18 +133,23 @@ public class Arranger {
     public Arranger merge() {
         Arranger newArranger = new Arranger();
         CdEntry newEntry = null;
-        String lastEntryName = "";
         for (CdEntry currEntry:this.entries) {
-            if (currEntry.getName().equals(lastEntryName)) {
-                newEntry = newEntry.mergeEntry(currEntry);
-            }
-            else {
-                if (newEntry != null) {
-                    newArranger.addEntry(newEntry);
-                }
+            if (newEntry == null) {
                 newEntry = currEntry.copy();
-                lastEntryName = currEntry.getName();
+                continue;
             }
+            if (newEntry.getName().equals(currEntry.getName()) ||
+                newEntry.getName().startsWith(currEntry.getName())) {
+                newEntry = newEntry.mergeEntry(currEntry);
+                continue;
+            }
+            if (currEntry.getName().startsWith(newEntry.getName())) {
+                newEntry.setName(currEntry.getName());
+                newEntry = newEntry.mergeEntry(currEntry);
+                continue;
+            }
+            newArranger.addEntry(newEntry);
+            newEntry = currEntry.copy();
         }
         if (newEntry != null) {
             newArranger.addEntry(newEntry);
