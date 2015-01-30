@@ -100,13 +100,17 @@ public class PathFinder {
 	
 	public void testOutFile() {
         String fn1 = "resource/pflist.txt";
-        String lr1 = "F:\\Book\\TFLib";
+        String lr1 = "D:\\Book\\TFLib";
+        //String lr1 = "D:\\temp";
+        long strtMillis = System.currentTimeMillis();
+        System.out.println("Path(" + lr1 + ") write to File(" + fn1 + ").");
 	    this.writeToFile(fn1, lr1);
+	    System.out.println("File written in " + (System.currentTimeMillis()-strtMillis) + "ms.");
 	}
 	
 	public void testBackslash() {
-        String str1 = "F:\\Book\\TFLib\\A2013";
-        String str2 = "F:\\Book\\TFLib\\A2013\\asdf\\asdfasd\\asdfasdf";
+        String str1 = "F:\\Book\\TFLib\\A2014";
+        String str2 = "F:\\Book\\TFLib\\A2014\\asdf\\asdfasd\\asdfasdf";
         str1 = str1.replaceAll("\\\\", "\\\\\\\\");
         System.out.println(str1);
         str2 = str2.replaceAll(str1, "");
@@ -119,6 +123,6 @@ public class PathFinder {
 		PathFinder pf1 = new PathFinder();
 		//pf1.testOutput();
 		pf1.testOutFile();
-		System.out.println("Done.");
+        System.out.println("Done.");
 	}
 }

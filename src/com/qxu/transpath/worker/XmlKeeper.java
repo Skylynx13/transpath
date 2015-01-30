@@ -12,6 +12,8 @@ package com.qxu.transpath.worker;
 
 import javax.swing.tree.TreeNode;
 
+import com.qxu.transpath.tree.NodeTree;
+
  /**
  * ClassName: XmlKeeper <br/>
  * Description: Keep NodeTree in XML file. <br/> 
@@ -30,7 +32,7 @@ public class XmlKeeper implements Keeper {
     
 
     @Override
-    public TreeNode buildTree() {
+    public NodeTree buildTree() {
         return null;
         // TODO Auto-generated method stub
     }

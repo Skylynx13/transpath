@@ -59,7 +59,7 @@ public class TntKeeper implements Keeper {
     }
 
     @Override
-    public TreeNode buildTree() {
+    public NodeTree buildTree() {
         //InputStream fiStream = new InputStream(tntFileName);
         return null;
    }

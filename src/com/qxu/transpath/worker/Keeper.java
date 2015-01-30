@@ -22,6 +22,8 @@ package com.qxu.transpath.worker;
 
 import javax.swing.tree.TreeNode;
 
+import com.qxu.transpath.tree.NodeTree;
+
 /**
  * ClassName: Keeper <br/>
  * Description: Interface for persistence. <br/>
@@ -35,6 +37,6 @@ import javax.swing.tree.TreeNode;
  * 
  */
 public interface Keeper {
-    public TreeNode buildTree();
+    public NodeTree buildTree();
     public void keepTree();
 }
