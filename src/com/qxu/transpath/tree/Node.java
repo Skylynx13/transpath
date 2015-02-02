@@ -10,6 +10,8 @@
  */
 package com.qxu.transpath.tree;
 
+import java.util.ArrayList;
+
  /**
  * ClassName: Node <br/>
  * Description: TODO <br/>
@@ -26,15 +28,48 @@ package com.qxu.transpath.tree;
 public class Node {
     private int id;
     private String name;
+    private ArrayList<String> branches = new ArrayList<String>();
+    
+    public Node() {
+        this.id = 0;
+        this.name = "";
+        this.branches = null;
+    }
     
     public Node(int id, String name) {
         this.id = id;
         this.name = name;
+        this.branches = null;
+    }
+    
+    public Node(int id, String name, String branch) {
+        this.id = id;
+        this.name = name;
+        this.branches.add(branch);
     }
     
     public void setNode(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+    
+    public void setNode(int id, String name, ArrayList<String> branches) {
+        this.id = id;
+        this.name = name;
+        this.branches = branches;
+    }
+    
+    public String get1stBranch() {
+        return this.branches.get(0);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Node copy(Node pNode) {
+        Node aNode = new Node();
+        aNode.id = pNode.id;
+        aNode.name = pNode.name;
+        aNode.branches = (ArrayList<String>) pNode.branches.clone();
+        return aNode;
     }
     
     public int getId() {
