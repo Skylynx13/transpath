@@ -38,31 +38,32 @@ import com.qxu.transpath.tree.NodeTree;
  */
 
 public class StorageKeeper{
-    public static int id = 100000001;
+    private static int id = 100000001;
+    private String rootDir;
+    public StorageKeeper(String root) {
+        this.rootDir = root;
+    }
     
-    public ArrayList<Node> buildListFromFileSystem(String pRoot) {
+    private ArrayList<Node> buildListFromStorage() {
+        return buildListFromARoot(this.rootDir);
+    }
+
+    public ArrayList<Node> buildListFromARoot(String pRoot) {
         ArrayList<Node> nodeList = new ArrayList<Node>();
-        //StorageKeeper sk = new StorageKeeper();
         File dirRoot = new File(pRoot);
         if (!dirRoot.isDirectory())
             return nodeList;
         
-        
-        File[] fileInRoot = dirRoot.listFiles();
-
-//        for (int iFile = 0; iFile<fileInRoot.length; iFile++){
-        for (File aFile: fileInRoot) {
+        for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 
                 nodeList.add(new Node(StorageKeeper.id++, aFile.getName(), "1st:" + aFile.getParent()));
             }
             if (aFile.isDirectory()) {
-                nodeList.addAll(this.buildListFromFileSystem(aFile.getPath()));
+                nodeList.addAll(this.buildListFromARoot(aFile.getPath()));
             }
         }
-
         return nodeList;
-        // TODO Auto-generated method stub
     }
 
     public NodeTree buildTreeFromFile(String pFileName) {
@@ -70,14 +71,14 @@ public class StorageKeeper{
         return nTree;
     }
     
-    public boolean keepTree(String outFile, String root, ArrayList<Node> nodes) {
+    public boolean keepTree(String outFile, ArrayList<Node> nodes) {
         PrintWriter out = null;
         try {
             out = new PrintWriter(outFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        root = root.replaceAll("\\\\", "\\\\\\\\");
+        String root = this.rootDir.replaceAll("\\\\", "\\\\\\\\");
         for(Node aNode: nodes) {
             out.println("ID" + aNode.getId() + ":" + aNode.getName());
             out.println(aNode.get1stBranch().replaceAll(root, "").replaceAll("\\\\", "/"));
@@ -87,10 +88,10 @@ public class StorageKeeper{
     }
     
     public static void main(String[] args) {
-        StorageKeeper sk = new StorageKeeper();
-        String root = "D:\\Quest\\WIKI";
-        ArrayList<Node> nodes = sk.buildListFromFileSystem(root);
-        sk.keepTree("resource/pflist.txt", root, nodes);
+        String root = "D:\\Book\\TFLib";
+        StorageKeeper sk = new StorageKeeper(root);
+        ArrayList<Node> nodes = sk.buildListFromStorage();
+        sk.keepTree("resource/pflist.txt", nodes);
         System.out.println("ok");
     }
 
