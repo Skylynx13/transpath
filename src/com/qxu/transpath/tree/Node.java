@@ -44,13 +44,13 @@ public class Node {
         this.branches = null;
     }
     
-    public Node(int id, String name, String branch1st) {
+    public Node(int id, String name, String branch) {
         this.id = id;
         this.name = name;
 
         if (this.branches == null)
             this.branches = new ArrayList<String>();
-        this.branches.add(TranspathConstants.BRANCH_TAG_1ST + TranspathConstants.COLON);
+        this.branches.add(branch);
     }
     
     public void setNode(int id, String name) {
@@ -75,12 +75,24 @@ public class Node {
         return "";
     }
     
+    public String get1stBranchPath() {
+        if (this.get1stBranch().equals(""))
+            return "";
+        return this.get1stBranch().substring(TranspathConstants.BRANCH_TAG_1ST.length()+TranspathConstants.COLON.length());
+    }
+    
     public String get2ndBranch() {
         for (String aBranch: this.branches){
             if (aBranch.startsWith(TranspathConstants.BRANCH_TAG_2ND))
                 return aBranch;
         }
         return "";
+    }
+    
+    public String get2ndBranchPath() {
+        if (this.get2ndBranch().equals(""))
+            return "";
+        return this.get2ndBranch().substring(TranspathConstants.BRANCH_TAG_2ND.length()+TranspathConstants.COLON.length());
     }
     
     public String get3rdBranch() {
@@ -100,6 +112,8 @@ public class Node {
     }
     
     public void addBranch(String branch) {
+        if (this.branches == null)
+            this.branches = new ArrayList<String>();
         this.branches.add(branch);
     }
     

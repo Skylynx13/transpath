@@ -48,6 +48,10 @@ public class NodeTree implements TreeNode {
         this.setChildren(null);
     }
     
+    public boolean isNull() {
+        return ((null==this.getNode())&&(null==this.getParent())&&(null==this.getChildren()));
+    }
+    
     public NodeTree(Node node) {
         this.setNode(node);
         this.setParent(null);
@@ -133,6 +137,25 @@ public class NodeTree implements TreeNode {
         return pathName;
     }
     
+    public NodeTree getChildByName(String aName) {
+        if (null==this.children)
+            return null;
+        for(NodeTree aChild:this.children) {
+            if (aChild.node.getName().equals(aName))
+                return aChild;
+        }
+        return null;
+    }
+    
+    public NodeTree getChildByNameAnyway(String aName) {
+        NodeTree aNodeTree = getChildByName(aName);
+        if (null == aNodeTree) {
+            aNodeTree = new NodeTree(new Node(0, aName));
+            this.addChild(aNodeTree);
+        }
+        return aNodeTree;
+    }
+    
     public String getNodePathName_style1() {
         String pathName = TranspathConstants.EMPTY_STRING;
         if (isRoot()) {
@@ -204,6 +227,29 @@ public class NodeTree implements TreeNode {
         return !this.isLeaf()&&!this.isBranch();
     }
     
+    public NodeTree addBranch(String pPath) {
+        if (this.isNull()) {
+            this.setNode(new Node(0, TranspathConstants.ROOT));
+        }
+        String[] nodeNames = pPath.split(TranspathConstants.SLASH);
+        NodeTree bTree = this;
+        for (String nodeName: nodeNames) {
+            if (!nodeName.isEmpty()) {
+                //System.out.println(nodeName);
+                bTree=bTree.getChildByNameAnyway(nodeName);
+            }
+        }
+        return bTree;
+    }
+    
+    public void add1stBranchNode(Node pNode) {
+        this.addBranch(pNode.get1stBranchPath()).addChild(new NodeTree(pNode));
+    }
+
+    public void add2ndBranchNode(Node pNode) {
+        this.addBranch(pNode.get2ndBranchPath()).addChild(new NodeTree(pNode));
+    }
+
     public static void main (String args[]) {
         NodeTree tree1 = new NodeTree(new Node(11, "tree1"));
         NodeTree node1 = new NodeTree(new Node(1, "node1"));
