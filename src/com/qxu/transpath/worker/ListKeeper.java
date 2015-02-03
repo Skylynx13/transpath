@@ -14,15 +14,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.UUID;
-
-import javax.swing.tree.TreeNode;
-
-import org.apache.commons.codec.binary.Base64;
 
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
+import com.qxu.transpath.utils.TranspathConstants;
 
  /**
  * ClassName: StorageKeeper <br/>
@@ -37,18 +32,20 @@ import com.qxu.transpath.tree.NodeTree;
  * 
  */
 
-public class StorageKeeper{
+public class ListKeeper{
     private static int id = 100000001;
-    private String rootDir;
-    public StorageKeeper(String root) {
-        this.rootDir = root;
+    private ArrayList<Node> nodes =null;
+    
+    public ListKeeper() {
     }
     
-    private ArrayList<Node> buildListFromStorage() {
-        return buildListFromARoot(this.rootDir);
+    private static ListKeeper buildListFromStorage(String root) {
+        ListKeeper sk = new ListKeeper();
+        sk.nodes = buildListFromARoot(root, root);
+        return sk;
     }
 
-    public ArrayList<Node> buildListFromARoot(String pRoot) {
+    public static ArrayList<Node> buildListFromARoot(String pRoot, String pBaseRoot) {
         ArrayList<Node> nodeList = new ArrayList<Node>();
         File dirRoot = new File(pRoot);
         if (!dirRoot.isDirectory())
@@ -56,11 +53,12 @@ public class StorageKeeper{
         
         for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
-                
-                nodeList.add(new Node(StorageKeeper.id++, aFile.getName(), "1st:" + aFile.getParent()));
+                nodeList.add(new Node(ListKeeper.id++, aFile.getName(), 
+                        aFile.getParent().replaceAll(pBaseRoot.replaceAll("\\\\", "\\\\\\\\"), "")
+                                           .replaceAll("\\\\", "/")));
             }
             if (aFile.isDirectory()) {
-                nodeList.addAll(this.buildListFromARoot(aFile.getPath()));
+                nodeList.addAll(ListKeeper.buildListFromARoot(aFile.getPath(), pBaseRoot));
             }
         }
         return nodeList;
@@ -71,17 +69,16 @@ public class StorageKeeper{
         return nTree;
     }
     
-    public boolean keepTree(String outFile, ArrayList<Node> nodes) {
+    public boolean keepList(String outFile) {
         PrintWriter out = null;
         try {
             out = new PrintWriter(outFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        String root = this.rootDir.replaceAll("\\\\", "\\\\\\\\");
-        for(Node aNode: nodes) {
-            out.println("ID" + aNode.getId() + ":" + aNode.getName());
-            out.println(aNode.get1stBranch().replaceAll(root, "").replaceAll("\\\\", "/"));
+        for(Node aNode: this.nodes) {
+            out.println(TranspathConstants.LIST_TAG_ID + aNode.getId() + TranspathConstants.COLON + aNode.getName());
+            out.println(aNode.get1stBranch());
         }
         out.close();
         return true;
@@ -89,9 +86,7 @@ public class StorageKeeper{
     
     public static void main(String[] args) {
         String root = "D:\\Book\\TFLib";
-        StorageKeeper sk = new StorageKeeper(root);
-        ArrayList<Node> nodes = sk.buildListFromStorage();
-        sk.keepTree("resource/pflist.txt", nodes);
+        ListKeeper.buildListFromStorage(root).keepList("resource/pflist.txt");
         System.out.println("ok");
     }
 

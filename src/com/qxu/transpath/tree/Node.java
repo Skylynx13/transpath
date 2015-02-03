@@ -12,6 +12,8 @@ package com.qxu.transpath.tree;
 
 import java.util.ArrayList;
 
+import com.qxu.transpath.utils.TranspathConstants;
+
  /**
  * ClassName: Node <br/>
  * Description: TODO <br/>
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 public class Node {
     private int id;
     private String name;
-    private ArrayList<String> branches = new ArrayList<String>();
+    private ArrayList<String> branches;
     
     public Node() {
         this.id = 0;
@@ -42,10 +44,13 @@ public class Node {
         this.branches = null;
     }
     
-    public Node(int id, String name, String branch) {
+    public Node(int id, String name, String branch1st) {
         this.id = id;
         this.name = name;
-        this.branches.add(branch);
+
+        if (this.branches == null)
+            this.branches = new ArrayList<String>();
+        this.branches.add(TranspathConstants.BRANCH_TAG_1ST + TranspathConstants.COLON);
     }
     
     public void setNode(int id, String name) {
@@ -53,23 +58,49 @@ public class Node {
         this.name = name;
     }
     
+    @SuppressWarnings("unchecked")
     public void setNode(int id, String name, ArrayList<String> branches) {
         this.id = id;
         this.name = name;
-        this.branches = branches;
+        if (this.branches == null)
+            this.branches = new ArrayList<String>();
+        this.branches = (ArrayList<String>) branches.clone();
     }
     
     public String get1stBranch() {
-        return this.branches.get(0);
+        for (String aBranch: this.branches){
+            if (aBranch.startsWith(TranspathConstants.BRANCH_TAG_1ST))
+                return aBranch;
+        }
+        return "";
     }
     
-    @SuppressWarnings("unchecked")
-    public Node copy(Node pNode) {
-        Node aNode = new Node();
-        aNode.id = pNode.id;
-        aNode.name = pNode.name;
-        aNode.branches = (ArrayList<String>) pNode.branches.clone();
-        return aNode;
+    public String get2ndBranch() {
+        for (String aBranch: this.branches){
+            if (aBranch.startsWith(TranspathConstants.BRANCH_TAG_2ND))
+                return aBranch;
+        }
+        return "";
+    }
+    
+    public String get3rdBranch() {
+        for (String aBranch: this.branches){
+            if (aBranch.startsWith(TranspathConstants.BRANCH_TAG_3RD))
+                return aBranch;
+        }
+        return "";
+    }
+    
+    public String get4thBranch() {
+        for (String aBranch: this.branches){
+            if (aBranch.startsWith(TranspathConstants.BRANCH_TAG_4TH))
+                return aBranch;
+        }
+        return "";
+    }
+    
+    public void addBranch(String branch) {
+        this.branches.add(branch);
     }
     
     public int getId() {
