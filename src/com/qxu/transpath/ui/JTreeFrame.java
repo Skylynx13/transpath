@@ -8,7 +8,7 @@ import javax.swing.event.*;
 
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
-import com.qxu.transpath.worker.ListKeeper;
+import com.qxu.transpath.worker.Keeper;
 
 /**
  * 
@@ -48,9 +48,9 @@ public class JTreeFrame extends JFrame {
         tree1.addChild(tree2);
 
 		createTree(root);
-		jtree = new JTree(ListKeeper.buildListFromFile("resource/pflist.txt").build1stTreeFromList());
+		jtree = new JTree(Keeper.buildListFromFile("resource/pflist.txt").build1stTreeFromList());
         
-		jtree1 = new JTree(ListKeeper.buildListFromFile("resource/pflist.txt").build2ndTreeFromList());
+		jtree1 = new JTree(Keeper.buildListFromFile("resource/pflist.txt").build2ndTreeFromList());
 
 		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree, jtree1);
 		mPane.setContinuousLayout(true);

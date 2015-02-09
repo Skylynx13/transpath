@@ -30,7 +30,7 @@ import com.qxu.transpath.utils.TranspathConstants;
  * 
  */
 
-public class TntKeeper implements Keeper {
+public class TntKeeper implements FileKeeper {
     private String tntFileName = "resource/tflib001.tnt";
     
     public String listSomething(NodeTree pTree) {

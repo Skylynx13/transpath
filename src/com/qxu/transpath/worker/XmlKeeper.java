@@ -28,7 +28,7 @@ import com.qxu.transpath.tree.NodeTree;
  * 
  */
 
-public class XmlKeeper implements Keeper {
+public class XmlKeeper implements FileKeeper {
     
 
     @Override

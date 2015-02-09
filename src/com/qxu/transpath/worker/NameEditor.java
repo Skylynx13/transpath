@@ -32,16 +32,21 @@ public class NameEditor {
             {"\\(digital\\)", "(Digital)"}, 
             {"\\(", " ("}, 
             {"  \\(", " ("}};
+    private String[][] replaceOnce = {{"Timewalker ","Timewalker 0"}};
     
     public NameEditor(String root) {
         this.rootDir=root;
     }
     
     public boolean replaceByTemplate() {
-        return replaceDir(this.rootDir);
+        return replaceDir(this.rootDir, this.replaceTemplates);
     }
     
-    public boolean replaceDir(String pRoot) {
+    public boolean replaceOnce() {
+        return replaceDir(this.rootDir, this.replaceOnce);
+    }
+    
+    public boolean replaceDir(String pRoot, String[][] replaceList) {
         File dirRoot = new File(pRoot);
         if (!dirRoot.isDirectory())
             return false;
@@ -49,7 +54,7 @@ public class NameEditor {
         for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 String replacedName = aFile.getName();
-                for (String[] repTempl: this.replaceTemplates){
+                for (String[] repTempl: replaceList){
                     replacedName = replacedName.replaceAll(repTempl[0], repTempl[1]);
                 }
                 System.out.println(aFile.getName() + " -> " + replacedName);
@@ -59,9 +64,10 @@ public class NameEditor {
         return true;
     }
     public static void main(String[] args) {
-        String root = "D:\\temp\\qtest\\";
-//        String root = "D:\\Book\\TFLib\\new\\full\\";
+//        String root = "D:\\temp\\qtest\\";
+        String root = "D:\\Book\\TFLib\\new\\full\\";
         System.out.println("Result: " + new NameEditor(root).replaceByTemplate() + ".");
+        //System.out.println("Result: " + new NameEditor(root).replaceOnce() + ".");
     }
 
 }
