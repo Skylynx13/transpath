@@ -151,4 +151,20 @@ public class Keeper{
         //NodeTree.buildTreeFromPath("/abcdefg/hijk/lmno/pq/rstuv/wxyz");
     }
 
+    public static int getId() {
+        return id;
+    }
+
+    public static void setId(int id) {
+        Keeper.id = id;
+    }
+
+    public ArrayList<Node> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(ArrayList<Node> nodes) {
+        this.nodes = nodes;
+    }
+
 }
