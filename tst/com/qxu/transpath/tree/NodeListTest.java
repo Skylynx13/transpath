@@ -3,12 +3,12 @@
  * All Rights Reserved.
  * 
  * Project Name:transpath
- * Package Name:com.qxu.transpath.worker
- * File Name:KeeperTest.java
- * Date:2015-2-9 下午6:28:23
+ * Package Name:com.qxu.transpath.tree
+ * File Name:NodeListTest.java
+ * Date:2015-2-11 下午2:30:59
  * 
  */
-package com.qxu.transpath.worker;
+package com.qxu.transpath.tree;
 
 import static org.junit.Assert.*;
 
@@ -19,14 +19,13 @@ import java.util.Scanner;
 
 import org.junit.Test;
 
-import com.qxu.transpath.tree.Node;
-import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.worker.Keeper;
 
  /**
- * ClassName: KeeperTest <br/>
- * Description: <br/>
- * Date: 2015-2-9 下午6:28:23 <br/>
+ * ClassName: NodeListTest <br/>
+ * Description: TODO <br/>
+ * Date: 2015-2-11 下午2:30:59 <br/>
  * <br/>
  * 
  * @author qxu@
@@ -36,11 +35,11 @@ import com.qxu.transpath.utils.TranspathConstants;
  * 
  */
 
-public class KeeperTest {
+public class NodeListTest {
 
     @Test
-    public void buildListFromStorageTest() {
-        ArrayList<Node> nodes = Keeper.buildListFromStorage("qtest");
+    public void buildFromRootTest() {
+        ArrayList<Node> nodes = NodeList.buildFromRoot("qtest");
         assertEquals("tfile004.txt", nodes.get(0).getName());
         assertEquals("/tdir001/tdir102/", nodes.get(0).getBranch1st());
         assertEquals("tfile005.txt", nodes.get(1).getName());
@@ -60,8 +59,8 @@ public class KeeperTest {
     }
     
     @Test
-    public void buildListFromFileTest() {
-        ArrayList<Node> nodes = Keeper.buildListFromFile("resource/tst/KeeperTest_buildListFromFileTest001.txt");
+    public void buildFromFileTest() {
+        ArrayList<Node> nodes = NodeList.buildFromFile("resource/tst/KeeperTest_buildListFromFileTest001.txt");
         assertEquals("ABCDEFG.cbr", nodes.get(0).getName());
         assertEquals("/abc/def/ghijklmn/", nodes.get(0).getBranch1st());
         assertEquals("HIJKLMN.cbz", nodes.get(1).getName());
@@ -70,7 +69,7 @@ public class KeeperTest {
     
     @Test
     public void buildTreeFromListTest() {
-        NodeTree aTree = Keeper.buildTreeFromList(Keeper.buildListFromStorage("qtest"));
+        NodeTree aTree = NodeList.buildTreeFromList(NodeList.buildFromRoot("qtest"));
         assertEquals(TranspathConstants.ROOT, aTree.getNodeName());
         assertEquals("tdir001", aTree.getChildAt(0).getNodeName());
         assertEquals("/root/tdir001", aTree.getChildAt(0).getNodePathName());
@@ -103,8 +102,8 @@ public class KeeperTest {
     @Test
     public void combined_Storage_File_Keep_Test() {
         String root = "qtest/";
-        Keeper.keepList("resource/pflist.txt", Keeper.buildListFromStorage(root));
-        Keeper.keepList("resource/pflist1st.txt", Keeper.buildListFromFile("resource/pflist.txt"));
+        NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot(root));
+        NodeList.keepList("resource/pflist1st.txt", NodeList.buildFromFile("resource/pflist.txt"));
         Scanner sc1 = null;
         Scanner sc2 = null;
         try {

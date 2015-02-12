@@ -224,7 +224,7 @@ public class NodeTree implements TreeNode {
     }
     
     public boolean isBranch() {
-        return !this.isLeaf()&&!this.isBranch();
+        return !this.isLeaf()&&!this.isRoot();
     }
     
     public NodeTree addBranch(String pPath) {
@@ -234,7 +234,7 @@ public class NodeTree implements TreeNode {
         String[] nodeNames = pPath.split(TranspathConstants.SLASH);
         NodeTree bTree = this;
         for (String nodeName: nodeNames) {
-            if (!nodeName.isEmpty()) {
+            if (null != nodeName && !nodeName.isEmpty()) {
                 //System.out.println(nodeName);
                 bTree=bTree.getChildByNameAnyway(nodeName);
             }
@@ -243,11 +243,11 @@ public class NodeTree implements TreeNode {
     }
     
     public void add1stBranchNode(Node pNode) {
-        this.addBranch(pNode.get1stBranchPath()).addChild(new NodeTree(pNode));
+        this.addBranch(pNode.getBranch1st()).addChild(new NodeTree(pNode));
     }
 
     public void add2ndBranchNode(Node pNode) {
-        this.addBranch(pNode.get2ndBranchPath()).addChild(new NodeTree(pNode));
+        this.addBranch(pNode.getBranch2nd()).addChild(new NodeTree(pNode));
     }
 
     public static void main (String args[]) {

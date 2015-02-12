@@ -15,6 +15,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import com.qxu.transpath.tree.Node;
@@ -35,19 +37,49 @@ import com.qxu.transpath.utils.TranspathConstants;
  */
 
 public class Keeper{
-    private static int id = 100000001;
-    private ArrayList<Node> nodes =null;
-    
-    public static Keeper buildListFromStorage(String pRoot) {
-        Keeper sk = new Keeper();
-        sk.nodes = buildListFromARoot(pRoot, pRoot);
-        return sk;
+    public static ArrayList<Node> buildListFromStorage(String pRoot) {
+        if (pRoot.endsWith("\\") || pRoot.endsWith("/")) {
+            pRoot=pRoot.substring(0,pRoot.length()-1);
+        }
+        return Keeper.buildListFromARoot(pRoot, pRoot);
     }
     
-    public static Keeper buildListFromFile(String pFile) {
-        Keeper sk = new Keeper();
-        sk.nodes = parseListFile(pFile);
-        return sk;
+    public static ArrayList<Node> buildListFromFile(String pFile) {
+        return Keeper.parseListFile(pFile);
+    }
+
+    public static NodeTree buildTreeFromList(ArrayList<Node> nodes) {
+        NodeTree nTree = new NodeTree();
+        for (Node aNode : nodes) {
+            nTree.add1stBranchNode(aNode);
+        }
+        return nTree;
+    }
+
+    public static boolean keepList(String outFile, ArrayList<Node> nodes) {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(outFile);
+            for (Node aNode : nodes) {
+                out.println(TranspathConstants.LIST_TAG_ID + aNode.getId() + TranspathConstants.COLON + aNode.getName());
+                if (aNode.getBranch1st()!=null && !aNode.getBranch1st().isEmpty()) {
+                    out.println(TranspathConstants.BRANCH_TAG_1ST + TranspathConstants.COLON + aNode.getBranch1st());
+                }
+                if (aNode.getBranch2nd()!=null && !aNode.getBranch2nd().isEmpty()) {
+                    out.println(TranspathConstants.BRANCH_TAG_2ND + TranspathConstants.COLON + aNode.getBranch2nd());
+                }
+                if (aNode.getBranch3rd()!=null && !aNode.getBranch3rd().isEmpty()) {
+                    out.println(TranspathConstants.BRANCH_TAG_3RD + TranspathConstants.COLON + aNode.getBranch3rd());
+                }
+                if (aNode.getBranch4th()!=null && !aNode.getBranch4th().isEmpty()) {
+                    out.println(TranspathConstants.BRANCH_TAG_4TH + TranspathConstants.COLON + aNode.getBranch4th());
+                }
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     private static ArrayList<Node> parseListFile(String pFile) {
@@ -71,15 +103,12 @@ public class Keeper{
                                  aLine.substring(aLine.indexOf(TranspathConstants.COLON)+TranspathConstants.COLON.length()));
                 continue;
             }
-            if (aLine.startsWith(TranspathConstants.BRANCH_TAG_1ST) ||
-                aLine.startsWith(TranspathConstants.BRANCH_TAG_2ND) ||
-                aLine.startsWith(TranspathConstants.BRANCH_TAG_3RD) ||
-                aLine.startsWith(TranspathConstants.BRANCH_TAG_4TH)) {
+            if (aLine.startsWith(TranspathConstants.BRANCH_TAG_1ST)) {
                 if (aNode == null) {
                     System.out.println("File Corrupted.");
                     return null;
                 }
-                aNode.addBranch(aLine);
+                aNode.setBranch1st(aLine.substring(aLine.indexOf(TranspathConstants.COLON)+ TranspathConstants.COLON.length()));
             }
         }
         if (aNode != null) {
@@ -88,7 +117,6 @@ public class Keeper{
         aScan.close();
 
         return aNodes;
-        // TODO Auto-generated method stub
     }
 
     private static ArrayList<Node> buildListFromARoot(String pRoot, String pBaseRoot) {
@@ -99,10 +127,10 @@ public class Keeper{
         
         for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
-                nodeList.add(new Node(Keeper.id++, aFile.getName(), 
-                        TranspathConstants.BRANCH_TAG_1ST + TranspathConstants.COLON 
-                        + aFile.getParent().replaceAll(pBaseRoot.replaceAll("\\\\", "\\\\\\\\"), "")
-                                           .replaceAll("\\\\", "/")));
+                Node aNode = new Node(0, aFile.getName()); 
+                aNode.setBranch1st(aFile.getParent().replaceAll(pBaseRoot.replaceAll("\\\\", "\\\\\\\\"), "")
+                                           .replaceAll("\\\\", TranspathConstants.SLASH) + TranspathConstants.SLASH);
+                nodeList.add(aNode);
             }
             if (aFile.isDirectory()) {
                 nodeList.addAll(Keeper.buildListFromARoot(aFile.getPath(), pBaseRoot));
@@ -110,61 +138,38 @@ public class Keeper{
         }
         return nodeList;
     }
+    
+    private ArrayList<Node> sortByNodeName(ArrayList<Node> pArrayList) {
+        @SuppressWarnings("unchecked")
+        ArrayList<Node> sortedArrayList = (ArrayList<Node>) pArrayList.clone();
+        Collections.sort(sortedArrayList, new Comparator<Node>() {
+            @Override
+            public int compare(Node n1, Node n2) {
+                return n1.getName().compareTo(n2.getName());
+            }
+        });
+        return sortedArrayList;
+    }
 
-    public NodeTree build1stTreeFromList() {
-        NodeTree nTree = new NodeTree();
-        for (Node aNode:this.nodes) {
-            nTree.add1stBranchNode(aNode);
-        }
-        return nTree;
+    private ArrayList<Node> sortByPathName(ArrayList<Node> pArrayList) {
+        @SuppressWarnings("unchecked")
+        ArrayList<Node> sortedArrayList = (ArrayList<Node>) pArrayList.clone();
+        Collections.sort(sortedArrayList, new Comparator<Node>() {
+            @Override
+            public int compare(Node n1, Node n2) {
+                return n1.getBranch1st().compareTo(n2.getBranch1st());
+            }
+        });
+        return sortedArrayList;       
     }
-    
-    public NodeTree build2ndTreeFromList() {
-        NodeTree nTree = new NodeTree();
-        for (Node aNode:this.nodes) {
-            nTree.add2ndBranchNode(aNode);
-        }
-        return nTree;
-    }
-    
-    public boolean keepList(String outFile) {
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(outFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        for(Node aNode: this.nodes) {
-            out.println(TranspathConstants.LIST_TAG_ID + aNode.getId() + TranspathConstants.COLON + aNode.getName());
-            out.println(aNode.get1stBranch());
-        }
-        out.close();
-        return true;
-    }
-    
+
     public static void main(String[] args) {
-        String root = "D:\\Book\\TFLib";
-        //ListKeeper.buildListFromStorage(root).keepList("resource/pflist.txt");
+        String root = "D:\\Book\\TFLib\\";
+        Keeper.keepList("resource/pflist.txt", Keeper.buildListFromStorage(root));
         System.out.println("buildListFromStorage ok");
-        Keeper.buildListFromFile("resource/pflist.txt").keepList("resource/pflist1st.txt");
+        Keeper.keepList("resource/pflist1st.txt", Keeper.buildListFromFile("resource/pflist.txt"));
         System.out.println("buildListFromFile ok");
         //NodeTree.buildTreeFromPath("/abcdefg/hijk/lmno/pq/rstuv/wxyz");
-    }
-
-    public static int getId() {
-        return id;
-    }
-
-    public static void setId(int id) {
-        Keeper.id = id;
-    }
-
-    public ArrayList<Node> getNodes() {
-        return nodes;
-    }
-
-    public void setNodes(ArrayList<Node> nodes) {
-        this.nodes = nodes;
     }
 
 }

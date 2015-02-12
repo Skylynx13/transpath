@@ -48,10 +48,11 @@ public class JTreeFrame extends JFrame {
         tree1.addChild(tree2);
 
 		createTree(root);
-		jtree = new JTree(Keeper.buildListFromFile("resource/pflist.txt").build1stTreeFromList());
+		jtree = new JTree(Keeper.buildTreeFromList(Keeper.buildListFromFile("resource/pflist.txt")));
         
-		jtree1 = new JTree(Keeper.buildListFromFile("resource/pflist.txt").build2ndTreeFromList());
-
+		//jtree1 = new JTree(Keeper.buildListFromFile("resource/pflist.txt").build2ndTreeFromList());
+		jtree1 = new JTree(tree1);
+		
 		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree, jtree1);
 		mPane.setContinuousLayout(true);
 		mPane.setOneTouchExpandable(true);
@@ -78,6 +79,7 @@ public class JTreeFrame extends JFrame {
 		}
 	}
 
+	@Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
             System.exit(0);
