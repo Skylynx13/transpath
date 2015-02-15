@@ -7,8 +7,9 @@ import java.awt.event.*;
 import javax.swing.event.*;
 
 import com.qxu.transpath.tree.Node;
+import com.qxu.transpath.tree.NodeList;
 import com.qxu.transpath.tree.NodeTree;
-import com.qxu.transpath.worker.Keeper;
+import com.qxu.transpath.utils.TranspathConstants;
 
 /**
  * 
@@ -31,12 +32,38 @@ public class JTreeFrame extends JFrame {
     DefaultMutableTreeNode root;
 
 	public JTreeFrame() {
+	    this.initJTree();
+	}
+	
+	public void initJTree() {
 		this.setSize(1200, 600);
 		this.setTitle("transpath");
 		cp = (JPanel) this.getContentPane();
 		cp.setLayout(new BorderLayout());
-        root = new DefaultMutableTreeNode("school");
         
+		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
+		jtree = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("resource/pflist.txt"), TranspathConstants.BRANCH_1ST));
+        
+		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
+		jtree1 = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib.txt"), TranspathConstants.BRANCH_1ST));
+
+		//jtree1 = new JTree(this.buildTestTree());
+        
+        JScrollPane sPane = new JScrollPane(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sPane.setViewportView(jtree1);
+        jtree1.revalidate();
+		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree, sPane);
+		mPane.setContinuousLayout(true);
+		mPane.setOneTouchExpandable(true);
+		mPane.setSize(super.getSize());
+		mPane.setDividerLocation(0.5);
+		mPane.setDividerSize(8);
+		cp.add(mPane, BorderLayout.CENTER);
+	}
+	
+	private NodeTree buildTestTree() {
         NodeTree tree1 = new NodeTree(new Node(11, "tree1"));
         NodeTree node1 = new NodeTree(new Node(1, "node1"));
         tree1.addChild(node1);
@@ -46,23 +73,12 @@ public class JTreeFrame extends JFrame {
         NodeTree tree2 = new NodeTree(new Node(12, "tree2"));
         tree2.addChild(node3);
         tree1.addChild(tree2);
-
-		createTree(root);
-		jtree = new JTree(Keeper.buildTreeFromList(Keeper.buildListFromFile("resource/pflist.txt")));
-        
-		//jtree1 = new JTree(Keeper.buildListFromFile("resource/pflist.txt").build2ndTreeFromList());
-		jtree1 = new JTree(tree1);
-		
-		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree, jtree1);
-		mPane.setContinuousLayout(true);
-		mPane.setOneTouchExpandable(true);
-		mPane.setSize(super.getSize());
-		mPane.setDividerLocation(0.5);
-		mPane.setDividerSize(8);
-        cp.add(mPane, BorderLayout.CENTER);
+        node3.addChild(new NodeTree(new Node(4, "node4")));
+        return tree1;
 	}
 
-	private void createTree(DefaultMutableTreeNode root) {
+	private void createTree() {
+	    DefaultMutableTreeNode root = new DefaultMutableTreeNode("school");
 		DefaultMutableTreeNode classroom = null;
 		DefaultMutableTreeNode number = null;
 		classroom = new DefaultMutableTreeNode("classroom");

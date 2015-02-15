@@ -11,6 +11,8 @@
 package com.qxu.transpath.tree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import com.qxu.transpath.utils.TranspathConstants;
 
@@ -30,19 +32,26 @@ import com.qxu.transpath.utils.TranspathConstants;
 public class Node {
     private int id;
     private String name;
-    private String branch1st;
-    private String branch2nd;
-    private String branch3rd;
-    private String branch4th;
+    private HashMap<String, String> branches;
     
     public Node() {
         this.id = 0;
         this.name = "";
+        this.branches = new HashMap<String, String>();
     }
     
     public Node(int id, String name) {
         this.id = id;
         this.name = name;
+        this.branches = new HashMap<String, String>();
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public Node clone() {
+        Node node = new Node(this.id, this.name);
+        node.branches = (HashMap<String, String>)this.branches.clone();
+        return node;
     }
     
     public int getId() {
@@ -61,36 +70,51 @@ public class Node {
         this.name = name;
     }
 
-    public String getBranch1st() {
-        return branch1st;
+    public HashMap<String, String> getBranches() {
+        return branches;
+    }
+
+    public void setBranches(HashMap<String, String> branches) {
+        this.branches = branches;
+    }
+
+    public void putBranch(String key, String value) {
+        if (null == this.branches) {
+            this.branches = new HashMap<String, String>();
+        }
+        this.branches.put(key, value);
     }
     
-    public void setBranch1st(String branch1st) {
-        this.branch1st = branch1st;
+    public String getBranch(String key) {
+        return this.branches.get(key);
     }
 
-    public String getBranch2nd() {
-        return branch2nd;
+    public Node merge(Node n1) {
+        Node n2 = this.clone();
+        
+        Iterator<String> iter = n1.getBranches().keySet().iterator();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            if (!n2.getBranches().containsKey(key)) {
+                n2.putBranch(key, n1.getBranch(key));
+            }
+        }
+        return n2;
     }
-
-    public void setBranch2nd(String branch2nd) {
-        this.branch2nd = branch2nd;
-    }
-
-    public String getBranch3rd() {
-        return branch3rd;
-    }
-
-    public void setBranch3rd(String branch3rd) {
-        this.branch3rd = branch3rd;
-    }
-
-    public String getBranch4th() {
-        return branch4th;
-    }
-
-    public void setBranch4th(String branch4th) {
-        this.branch4th = branch4th;
+    
+    public String keepNode() {
+        StringBuffer nodeBuf = new StringBuffer();
+        nodeBuf.append(TranspathConstants.NODE_ID);
+        nodeBuf.append(this.getId());
+        nodeBuf.append(TranspathConstants.COLON);
+        nodeBuf.append(this.getName());
+        for(String key: this.branches.keySet()) {
+            nodeBuf.append(TranspathConstants.CRLN);
+            nodeBuf.append(key);
+            nodeBuf.append(TranspathConstants.COLON);
+            nodeBuf.append(this.getBranch(key));
+        }
+        return nodeBuf.toString();
     }
 
 }

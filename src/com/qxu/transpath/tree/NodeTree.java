@@ -90,6 +90,10 @@ public class NodeTree implements TreeNode {
         nodeTree.parent = this;
     }
     
+    public void addChildNode(Node node) {
+        this.addChild(new NodeTree(node));
+    }
+    
     @Override
     public NodeTree getChildAt(int index) {
         if (null == children) {
@@ -242,12 +246,12 @@ public class NodeTree implements TreeNode {
         return bTree;
     }
     
-    public void add1stBranchNode(Node pNode) {
-        this.addBranch(pNode.getBranch1st()).addChild(new NodeTree(pNode));
-    }
-
-    public void add2ndBranchNode(Node pNode) {
-        this.addBranch(pNode.getBranch2nd()).addChild(new NodeTree(pNode));
+    public static NodeTree buildFromList(ArrayList<Node> nodes, String branchType) {
+        NodeTree aTree = new NodeTree();
+        for (Node aNode : nodes) {
+            aTree.addBranch(aNode.getBranch(branchType)).addChildNode(aNode);
+        }
+        return aTree;
     }
 
     public static void main (String args[]) {
