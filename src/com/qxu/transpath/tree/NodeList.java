@@ -62,7 +62,7 @@ public class NodeList {
                 Node aNode = new Node(0, aFile.getName()); 
                 aNode.putBranch(TranspathConstants.BRANCH_1ST,
                         aFile.getParent().replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH)
-                        .replaceAll(pRoot, TranspathConstants.EMPTY_STRING) + TranspathConstants.SLASH);
+                        .replaceAll(pRoot, TranspathConstants.EMPTY) + TranspathConstants.SLASH);
                 nodes.add(aNode);
             }
             if (aFile.isDirectory()) {
@@ -107,7 +107,7 @@ public class NodeList {
             aLine = aScan.nextLine().trim();
             if (aLine.startsWith(TranspathConstants.NODE_ID)) {
                 String[] iLine = aLine.split(TranspathConstants.COLON);
-                if (iLine.length != TranspathConstants.BRANCH_FIELDS) {
+                if (iLine.length != TranspathConstants.FIELDS_BRANCH) {
                     System.out.println("File Corrupted.");
                     return null;
                 }
@@ -116,7 +116,7 @@ public class NodeList {
             }
             if (aLine.indexOf(TranspathConstants.COLON) > 0 ) {
                 String[] bLine = aLine.split(TranspathConstants.COLON);
-                if (bLine.length != TranspathConstants.INFO_FIELDS || nodes == null || nodes.size() < 1) {
+                if (bLine.length != TranspathConstants.FIELDS_INFO || nodes == null || nodes.size() < 1) {
                     System.out.println("File Corrupted.");
                     return null;
                 }

@@ -3,9 +3,6 @@ package com.qxu.transpath.path;
 import com.qxu.transpath.utils.TranspathConstants;
 
 public class FilePath extends BasePath {
-	private static final String prefixArchive = "A";
-	private static final String prefixBlock = "B";
-	
 	private String archiveName;
 	private int archiveYear;
 

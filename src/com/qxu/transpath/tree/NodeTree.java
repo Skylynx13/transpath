@@ -133,7 +133,7 @@ public class NodeTree implements TreeNode {
     }
 
     public String getNodePathName() {
-        String pathName = TranspathConstants.EMPTY_STRING;
+        String pathName = TranspathConstants.EMPTY;
         if (!isRoot()) {
             pathName += this.parent.getNodePathName();
         } 
@@ -161,7 +161,7 @@ public class NodeTree implements TreeNode {
     }
     
     public String getNodePathName_style1() {
-        String pathName = TranspathConstants.EMPTY_STRING;
+        String pathName = TranspathConstants.EMPTY;
         if (isRoot()) {
             pathName += TranspathConstants.PATH_LINKER;
         } else {
