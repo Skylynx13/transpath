@@ -33,7 +33,7 @@ public class NodeTreeTest {
 
     @Test
     public void buildFromListTest() {
-        NodeTree aTree = NodeTree.buildFromList(NodeList.buildFromRoot("qtest"), TranspathConstants.BRANCH_1ST);
+        NodeTree aTree = NodeTree.buildFromList(NodeList.buildFromRoot("resource/qtest"), TranspathConstants.BRANCH_1ST);
         assertEquals(TranspathConstants.ROOT, aTree.getNodeName());
         assertEquals("tdir001", aTree.getChildAt(0).getNodeName());
         assertEquals("/TFLib/tdir001", aTree.getChildAt(0).getNodePathName());

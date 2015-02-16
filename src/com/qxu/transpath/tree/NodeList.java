@@ -38,8 +38,10 @@ import com.qxu.transpath.utils.TranspathConstants;
  */
 
 public class NodeList {
+    
     public static ArrayList<Node> buildFromRoot(String pRoot) {
-        if (pRoot.endsWith("\\") || pRoot.endsWith("/")) {
+        pRoot = pRoot.replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH);
+        if (pRoot.endsWith(TranspathConstants.SLASH)) {
             pRoot=pRoot.substring(0,pRoot.length()-1);
         }
         if (new File(pRoot).isFile()) {
@@ -59,8 +61,8 @@ public class NodeList {
             if (aFile.isFile()) {
                 Node aNode = new Node(0, aFile.getName()); 
                 aNode.putBranch(TranspathConstants.BRANCH_1ST,
-                        aFile.getParent().replaceAll(pRoot.replaceAll("\\\\", "\\\\\\\\"), "")
-                        .replaceAll("\\\\", TranspathConstants.SLASH) + TranspathConstants.SLASH);
+                        aFile.getParent().replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH)
+                        .replaceAll(pRoot, TranspathConstants.EMPTY_STRING) + TranspathConstants.SLASH);
                 nodes.add(aNode);
             }
             if (aFile.isDirectory()) {
@@ -78,8 +80,55 @@ public class NodeList {
             }
         });
     }
+    
+    public static void sortByBranchName(ArrayList<Node> nodes, final String key) {
+        Collections.sort(nodes, new Comparator<Node>() {
+           @Override
+           public int compare(Node n1, Node n2) {
+               return n1.getBranch(key).compareTo(n2.getBranch(key));
+           }
+        });
+    }
 
     public static ArrayList<Node> buildFromFile(String pFile) {
+        ArrayList<Node> nodes = new ArrayList<Node>();
+
+        Scanner aScan = null;
+        try {
+            aScan = new Scanner(new FileReader(pFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+        String aLine = "";
+        Node node = null;
+        while (aScan.hasNext()) {
+            aLine = aScan.nextLine().trim();
+            if (aLine.startsWith(TranspathConstants.NODE_ID)) {
+                String[] iLine = aLine.split(TranspathConstants.COLON);
+                if (iLine.length != TranspathConstants.BRANCH_FIELDS) {
+                    System.out.println("File Corrupted.");
+                    return null;
+                }
+                nodes.add(new Node(Integer.parseInt(iLine[1]), iLine[2]));
+                continue;
+            }
+            if (aLine.indexOf(TranspathConstants.COLON) > 0 ) {
+                String[] bLine = aLine.split(TranspathConstants.COLON);
+                if (bLine.length != TranspathConstants.INFO_FIELDS || nodes == null || nodes.size() < 1) {
+                    System.out.println("File Corrupted.");
+                    return null;
+                }
+                nodes.get(nodes.size()-1).putBranch(bLine[0], bLine[1]);
+            }
+        }
+        aScan.close();
+
+        return nodes;
+    }
+
+    private static ArrayList<Node> buildFromFile_SupportedBranchTypes(String pFile) {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
         Scanner aScan = null;
@@ -100,21 +149,17 @@ public class NodeList {
                 nodes.add(node);
                 continue;
             }
-            if (aLine.startsWith(TranspathConstants.BRANCH_1ST)) {
-                if (nodes == null) {
-                    System.out.println("File Corrupted.");
-                    return null;
+            for (String branchType : TranspathConstants.SUPPORTED_BRANCH_TYPES) {
+                if (aLine.startsWith(branchType)) {
+                    if (nodes == null || nodes.size() < 1) {
+                        System.out.println("File Corrupted.");
+                        return null;
+                    }
+                    nodes.get(nodes.size()-1).putBranch(branchType, aLine.substring(aLine.indexOf(TranspathConstants.COLON)+ TranspathConstants.COLON.length()));
                 }
-                nodes.get(nodes.size()-1).putBranch(TranspathConstants.BRANCH_1ST, aLine.substring(aLine.indexOf(TranspathConstants.COLON)+ TranspathConstants.COLON.length()));
-            }
-            if (aLine.startsWith(TranspathConstants.BRANCH_2ND)) {
-                if (nodes == null) {
-                    System.out.println("File Corrupted.");
-                    return null;
-                }
-                nodes.get(nodes.size()-1).putBranch(TranspathConstants.BRANCH_2ND, aLine.substring(aLine.indexOf(TranspathConstants.COLON)+ TranspathConstants.COLON.length()));
             }
         }
+        //System.out.println(nodes.size());
         aScan.close();
 
         return nodes;
@@ -188,7 +233,7 @@ public class NodeList {
     }
     
     @SuppressWarnings("unchecked")
-    public static ArrayList<Node> combineIterator(ArrayList<Node> nl1, ArrayList<Node> nl2) {
+    private static ArrayList<Node> combineIterator(ArrayList<Node> nl1, ArrayList<Node> nl2) {
         if (NodeList.checkDuplicatedNode(nl1).size() > 0) {
             System.out.println("Duplicated Node Names NL1: " + NodeList.checkDuplicatedNode(nl1));
             return null;
@@ -274,7 +319,6 @@ public class NodeList {
             lastNodeName = node.getName();
         }
         return dupStr;
-        // TODO Auto-generated method stub
     }
 
     public static void main(String[] args) {

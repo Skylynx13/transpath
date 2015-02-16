@@ -1,8 +1,8 @@
-ID0001:ABCDEFG.cbr
+ID:0001:ABCDEFG.cbr
 1ST:/abc/def/ghijklmn/
-ID0002:HIJKLMN.cbz
+ID:0002:HIJKLMN.cbz
 1ST:/abc/opq/rstuvwxyz/
-ID0003:OPQRST.cbz
+ID:0003:OPQRST.cbz
 1ST:/abc/opq/rstuvwxyz/
-ID0004:UVWXYZ.cbz
+ID:0004:UVWXYZ.cbz
 1ST:/abc/opq/rstuvwxyz1/

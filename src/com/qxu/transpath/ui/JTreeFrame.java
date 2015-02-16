@@ -45,9 +45,34 @@ public class JTreeFrame extends JFrame {
 		jtree = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("resource/pflist.txt"), TranspathConstants.BRANCH_1ST));
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
-		jtree1 = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib.txt"), TranspathConstants.BRANCH_1ST));
+		jtree1 = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_2nd.txt"), TranspathConstants.BRANCH_2ND));
 
 		//jtree1 = new JTree(this.buildTestTree());
+
+		jtree1.setShowsRootHandles(true);
+		jtree1.setRootVisible(true);
+		UIManager.getSystemLookAndFeelClassName();
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+            //UIManager.setLookAndFeel("javax.swing.plaf.mac.MacLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        SwingUtilities.updateComponentTreeUI(jtree1);
+
         
         JScrollPane sPane = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
@@ -61,6 +86,8 @@ public class JTreeFrame extends JFrame {
 		mPane.setDividerLocation(0.5);
 		mPane.setDividerSize(8);
 		cp.add(mPane, BorderLayout.CENTER);
+		
+		
 	}
 	
 	private NodeTree buildTestTree() {

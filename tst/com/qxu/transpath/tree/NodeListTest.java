@@ -39,7 +39,7 @@ public class NodeListTest {
 
     @Test
     public void buildFromRootTest() {
-        ArrayList<Node> nodes = NodeList.buildFromRoot("qtest");
+        ArrayList<Node> nodes = NodeList.buildFromRoot("resource/qtest");
         assertEquals("tfile004.txt", nodes.get(0).getName());
         assertEquals("/tdir001/tdir102/", nodes.get(0).getBranch(TranspathConstants.BRANCH_1ST));
         assertEquals("tfile005.txt", nodes.get(1).getName());
@@ -68,15 +68,39 @@ public class NodeListTest {
     }
     
     @Test
+    public void buildFromFileTest_Double_Colon() {
+        assertEquals(null, NodeList.buildFromFile("resource/tst/NodeListTest_buildFromFileTest002.txt"));
+    }
+    
+    @Test
+    public void buildFromFileTest_Triple_Colon() {
+        assertEquals(null, NodeList.buildFromFile("resource/tst/NodeListTest_buildFromFileTest005.txt"));
+    }
+    
+    @Test
+    public void buildFromFileTest_File_Corrupted() {
+        assertEquals(null, NodeList.buildFromFile("resource/tst/NodeListTest_buildFromFileTest003.txt"));
+    }
+    
+    @Test
+    public void buildFromFileTest_No_Branches() {
+        ArrayList<Node> nodes = NodeList.buildFromFile("resource/tst/NodeListTest_buildFromFileTest004.txt");
+        assertEquals("ABCDEFG.cbr", nodes.get(0).getName());
+        assertEquals(null, nodes.get(0).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("HIJKLMN.cbz", nodes.get(1).getName());
+        assertEquals(null, nodes.get(1).getBranch(TranspathConstants.BRANCH_1ST));
+    }
+    
+    @Test
     public void storageKeepingTest() {
-        String root = "qtest/";
-        NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot(root));
-        NodeList.keepList("resource/pflist1st.txt", NodeList.buildFromFile("resource/pflist.txt"));
+        String root = "resource/qtest/";
+        NodeList.keepList("resource/tst/pflist.txt", NodeList.buildFromRoot(root));
+        NodeList.keepList("resource/tst/pflist1st.txt", NodeList.buildFromFile("resource/tst/pflist.txt"));
         Scanner sc1 = null;
         Scanner sc2 = null;
         try {
-            sc1 = new Scanner(new FileReader("resource/pflist.txt"));
-            sc2 = new Scanner(new FileReader("resource/pflist1st.txt"));
+            sc1 = new Scanner(new FileReader("resource/tst/pflist.txt"));
+            sc2 = new Scanner(new FileReader("resource/tst/pflist1st.txt"));
             int cnt = 0;
             while (sc1.hasNext() && sc2.hasNext()) {
                 String line1 = sc1.nextLine().trim();
@@ -303,6 +327,223 @@ public class NodeListTest {
         assertEquals(null, nl3.get(1).getBranch("2ND"));
         assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(2).getBranch("2ND"));
         assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
+    }
+    
+    @Test
+    public void sortByNodeNameTest() {
+        ArrayList<Node> nl1 = new ArrayList<Node>(); 
+        Node node = null; 
+        node = new Node(1, "ABCDEFG.cbr");
+        node.putBranch("1ST", "/abc/def/zghijklmn/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(2, "HIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz3/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(3, "AIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(4, "JIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz1/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(5, "ABCDEFG.cbr");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(6, "HIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/opq/rstuvwxyz/");
+        nl1.add(node);
+        node = new Node(7, "BIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc3/opq/rstuvwxyz/");
+        nl1.add(node);
+        node = new Node(8, "IIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc3/iopq/rstuvwxyz/");
+        nl1.add(node);
+       
+        NodeList.sortByNodeName(nl1);
+        assertEquals(8, nl1.size());
+        assertEquals("ABCDEFG.cbr", nl1.get(0).getName());
+        assertEquals("/abc/def/zghijklmn/", nl1.get(0).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(0).getBranch("2ND"));
+
+        assertEquals("ABCDEFG.cbr", nl1.get(1).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(1).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(1).getBranch("2ND"));
+        
+        assertEquals("AIJKLMN.cbz", nl1.get(2).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(2).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(2).getBranch("2ND"));
+        
+        assertEquals("BIJKLMN.cbz", nl1.get(3).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(3).getBranch("1ST"));
+        assertEquals("/abc3/opq/rstuvwxyz/", nl1.get(3).getBranch("2ND"));
+        
+        assertEquals("HIJKLMN.cbz", nl1.get(4).getName());
+        assertEquals("/abc/opq/rstuvwxyz3/", nl1.get(4).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(4).getBranch("2ND"));
+        
+        assertEquals("HIJKLMN.cbz", nl1.get(5).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(5).getBranch("1ST"));
+        assertEquals("/abc2/opq/rstuvwxyz/", nl1.get(5).getBranch("2ND"));
+        
+        assertEquals("IIJKLMN.cbz", nl1.get(6).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(6).getBranch("1ST"));
+        assertEquals("/abc3/iopq/rstuvwxyz/", nl1.get(6).getBranch("2ND"));
+        
+        assertEquals("JIJKLMN.cbz", nl1.get(7).getName());
+        assertEquals("/abc/opq/rstuvwxyz1/", nl1.get(7).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(7).getBranch("2ND"));
+    }
+
+    @Test
+    public void sortByBranchNameTest_1st() {
+        ArrayList<Node> nl1 = new ArrayList<Node>(); 
+        Node node = null; 
+        node = new Node(1, "ABCDEFG.cbr");
+        node.putBranch("1ST", "/abc/def/zghijklmn/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(2, "HIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz3/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(3, "AIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(4, "JIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz1/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(5, "ABCDEFG.cbr");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(6, "HIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/opq/rstuvwxyz/");
+        nl1.add(node);
+        node = new Node(7, "BIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc3/opq/rstuvwxyz/");
+        nl1.add(node);
+        node = new Node(8, "IIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc3/iopq/rstuvwxyz/");
+        nl1.add(node);
+       
+        NodeList.sortByBranchName(nl1, "1ST");
+        assertEquals(8, nl1.size());
+        assertEquals("ABCDEFG.cbr", nl1.get(0).getName());
+        assertEquals("/abc/def/zghijklmn/", nl1.get(0).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(0).getBranch("2ND"));
+
+        assertEquals("JIJKLMN.cbz", nl1.get(1).getName());
+        assertEquals("/abc/opq/rstuvwxyz1/", nl1.get(1).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(1).getBranch("2ND"));
+
+        assertEquals("AIJKLMN.cbz", nl1.get(2).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(2).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(2).getBranch("2ND"));
+        
+        assertEquals("ABCDEFG.cbr", nl1.get(3).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(3).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(3).getBranch("2ND"));
+        
+        assertEquals("HIJKLMN.cbz", nl1.get(4).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(4).getBranch("1ST"));
+        assertEquals("/abc2/opq/rstuvwxyz/", nl1.get(4).getBranch("2ND"));
+        
+        assertEquals("BIJKLMN.cbz", nl1.get(5).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(5).getBranch("1ST"));
+        assertEquals("/abc3/opq/rstuvwxyz/", nl1.get(5).getBranch("2ND"));
+        
+        assertEquals("IIJKLMN.cbz", nl1.get(6).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(6).getBranch("1ST"));
+        assertEquals("/abc3/iopq/rstuvwxyz/", nl1.get(6).getBranch("2ND"));
+        
+        assertEquals("HIJKLMN.cbz", nl1.get(7).getName());
+        assertEquals("/abc/opq/rstuvwxyz3/", nl1.get(7).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(7).getBranch("2ND"));        
+    }
+    
+    @Test
+    public void sortByBranchNameTest_2nd() {
+        ArrayList<Node> nl1 = new ArrayList<Node>(); 
+        Node node = null; 
+        node = new Node(1, "ABCDEFG.cbr");
+        node.putBranch("1ST", "/abc/def/zghijklmn/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(2, "HIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz3/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(3, "AIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(4, "JIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz1/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(5, "ABCDEFG.cbr");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(6, "HIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc2/opq/rstuvwxyz/");
+        nl1.add(node);
+        node = new Node(7, "BIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc3/opq/rstuvwxyz/");
+        nl1.add(node);
+        node = new Node(8, "IIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz2/");
+        node.putBranch("2ND", "/abc3/iopq/rstuvwxyz/");
+        nl1.add(node);
+       
+        NodeList.sortByBranchName(nl1, "2ND");
+        assertEquals(8, nl1.size());
+        assertEquals("ABCDEFG.cbr", nl1.get(0).getName());
+        assertEquals("/abc/def/zghijklmn/", nl1.get(0).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(0).getBranch("2ND"));
+
+        assertEquals("HIJKLMN.cbz", nl1.get(1).getName());
+        assertEquals("/abc/opq/rstuvwxyz3/", nl1.get(1).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(1).getBranch("2ND"));
+        
+        assertEquals("AIJKLMN.cbz", nl1.get(2).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(2).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(2).getBranch("2ND"));
+        
+        assertEquals("JIJKLMN.cbz", nl1.get(3).getName());
+        assertEquals("/abc/opq/rstuvwxyz1/", nl1.get(3).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(3).getBranch("2ND"));
+
+        assertEquals("ABCDEFG.cbr", nl1.get(4).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(4).getBranch("1ST"));
+        assertEquals("/abc2/def/ghijklmn/", nl1.get(4).getBranch("2ND"));
+        
+        assertEquals("HIJKLMN.cbz", nl1.get(5).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(5).getBranch("1ST"));
+        assertEquals("/abc2/opq/rstuvwxyz/", nl1.get(5).getBranch("2ND"));
+        
+        assertEquals("IIJKLMN.cbz", nl1.get(6).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(6).getBranch("1ST"));
+        assertEquals("/abc3/iopq/rstuvwxyz/", nl1.get(6).getBranch("2ND"));
+        
+        assertEquals("BIJKLMN.cbz", nl1.get(7).getName());
+        assertEquals("/abc/opq/rstuvwxyz2/", nl1.get(7).getBranch("1ST"));
+        assertEquals("/abc3/opq/rstuvwxyz/", nl1.get(7).getBranch("2ND"));
+        
     }
 
 }

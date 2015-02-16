@@ -6,6 +6,7 @@ public class TranspathConstants {
     public static final String LEVEL_LINKER = "/";
     public static final String LINE_LINKER = "\n";
     public static final String PATH_LINKER = "/";
+    public static final String BACK_SLASH_4 = "\\\\";
 	public static final String PERIOD = ".";
 	public static final String TREENAME_BRANCH = ":";  
 	
@@ -21,7 +22,16 @@ public class TranspathConstants {
     public static final String BRANCH_2ND = "2ND";
     public static final String BRANCH_3RD = "3RD";
     public static final String BRANCH_4TH = "4TH";
+    public static final String[] SUPPORTED_BRANCH_TYPES = {
+        TranspathConstants.BRANCH_1ST, 
+        TranspathConstants.BRANCH_2ND, 
+        TranspathConstants.BRANCH_3RD, 
+        TranspathConstants.BRANCH_4TH
+        };
+
     public static final String CRLN = "\r\n";    
     public static final String CR = "\r";    
-    public static final String LN = "\n";    
+    public static final String LN = "\n";
+    public static final int INFO_FIELDS = 2;
+    public static final int BRANCH_FIELDS = 3;    
 }

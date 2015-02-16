@@ -105,6 +105,7 @@ public class Node {
     public String keepNode() {
         StringBuffer nodeBuf = new StringBuffer();
         nodeBuf.append(TranspathConstants.NODE_ID);
+        nodeBuf.append(TranspathConstants.COLON);
         nodeBuf.append(this.getId());
         nodeBuf.append(TranspathConstants.COLON);
         nodeBuf.append(this.getName());
