@@ -10,10 +10,6 @@
  */
 package com.qxu.transpath.worker;
 
-import java.io.InputStream;
-
-import javax.swing.tree.TreeNode;
-
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.utils.TranspathConstants;
 
@@ -31,6 +27,7 @@ import com.qxu.transpath.utils.TranspathConstants;
  */
 
 public class TntKeeper implements FileKeeper {
+    @SuppressWarnings("unused")
     private String tntFileName = "resource/tflib001.tnt";
     
     public String listSomething(NodeTree pTree) {

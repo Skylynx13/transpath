@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.event.*;
-import javax.swing.event.*;
 
 /**
  * 
@@ -20,7 +19,12 @@ import javax.swing.event.*;
  *
  */
 public class JTreeFrameSample extends JFrame {
-	JPanel cp = new JPanel();
+	/**
+     * serialVersionUID:TODO.
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    JPanel cp = new JPanel();
 	JTree jtree;
 	DefaultMutableTreeNode root;
 

@@ -20,8 +20,6 @@
  */
 package com.qxu.transpath.worker;
 
-import javax.swing.tree.TreeNode;
-
 import com.qxu.transpath.tree.NodeTree;
 
 /**

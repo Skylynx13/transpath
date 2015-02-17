@@ -2,9 +2,10 @@ package com.qxu.transpath.path;
 
 import com.qxu.transpath.utils.TranspathConstants;
 
+@SuppressWarnings("unused")
 public class FilePath extends BasePath {
 	private String archiveName;
-	private int archiveYear;
+    private int archiveYear;
 
 	private String blockName;
 	private int blockMonth;

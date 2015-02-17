@@ -10,7 +10,6 @@
  */
 package com.qxu.transpath.tree;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -18,7 +17,7 @@ import com.qxu.transpath.utils.TranspathConstants;
 
  /**
  * ClassName: Node <br/>
- * Description: TODO <br/>
+ * Description: Basic Unit of NodeTree. <br/>
  * Date: 2014-4-2 下午10:34:48 <br/>
  * <br/>
  * 

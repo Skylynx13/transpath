@@ -36,8 +36,8 @@ public class PathFinderTest {
     @Test
     public void testGetFileNameList() {
         PathFinder pf = new PathFinder();
-        ArrayList<String> fl = pf.getFileNameList("qtest");
-        assertEquals("qtest\\tdir001", fl.get(0));
+        ArrayList<String> fl = pf.getFileNameList("resource/qtest");
+        assertEquals("resource\\qtest\\tdir001", fl.get(0));
 //        assertEquals("qtest\\tdir002", fl.get(1));
 //        assertEquals("qtest\\tdir003", fl.get(2));
     }

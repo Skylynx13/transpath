@@ -28,7 +28,10 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 
 @RunWith(Suite.class)
-@SuiteClasses({ NodeTest.class, NodeListTest.class, NodeTreeTest.class })
+@SuiteClasses({ 
+    NodeTest.class, 
+    NodeListTest.class, 
+    NodeTreeTest.class })
 public class AllTreeTests {
 
 }

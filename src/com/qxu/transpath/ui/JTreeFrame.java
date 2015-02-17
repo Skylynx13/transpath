@@ -4,8 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.event.*;
-import javax.swing.event.*;
-
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeList;
 import com.qxu.transpath.tree.NodeTree;
@@ -25,7 +23,12 @@ import com.qxu.transpath.utils.TranspathConstants;
  *
  */
 public class JTreeFrame extends JFrame {
-	JPanel cp = new JPanel();
+	/**
+     * serialVersionUID:TODO.
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    JPanel cp = new JPanel();
 	JFrame subFrame = new JFrame();
 	JTree jtree;
 	JTree jtree1;
@@ -58,16 +61,12 @@ public class JTreeFrame extends JFrame {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
             //UIManager.setLookAndFeel("javax.swing.plaf.mac.MacLookAndFeel");
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (UnsupportedLookAndFeelException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
@@ -90,7 +89,8 @@ public class JTreeFrame extends JFrame {
 		
 	}
 	
-	private NodeTree buildTestTree() {
+	@SuppressWarnings("unused")
+    private NodeTree buildTestTree() {
         NodeTree tree1 = new NodeTree(new Node(11, "tree1"));
         NodeTree node1 = new NodeTree(new Node(1, "node1"));
         tree1.addChild(node1);
@@ -104,7 +104,8 @@ public class JTreeFrame extends JFrame {
         return tree1;
 	}
 
-	private void createTree() {
+	@SuppressWarnings("unused")
+    private void createTree() {
 	    DefaultMutableTreeNode root = new DefaultMutableTreeNode("school");
 		DefaultMutableTreeNode classroom = null;
 		DefaultMutableTreeNode number = null;

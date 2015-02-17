@@ -36,7 +36,6 @@ import com.qxu.transpath.utils.TranspathConstants;
 public class Arranger {
     private ArrayList<CdEntry> entries;
     private CdEntry entry;
-    private String testLine;
     private int status;
     
     public Arranger() {
@@ -183,5 +182,10 @@ public class Arranger {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+    
+    public static void main (String[] args) {
+        int n = new Arranger().readFromFile("resource/raw.txt").sort().merge().writeToFile("resource/task.txt");
+        System.out.println("Totally " + n + " entries processed.");
     }
 }

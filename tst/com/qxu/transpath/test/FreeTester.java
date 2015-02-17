@@ -139,11 +139,18 @@ public class FreeTester {
     }
     
     public static void main(String args[]) {
-        FreeTester ft = new FreeTester();
+        //FreeTester ft = new FreeTester();
         //ft.testNodeTree();
         //ft.testList();
-        ft.testArranger();
+        //ft.testArranger();
         //ft.testReplaceStr();
+        ArrayList<Node> nl1 = null;
+        ArrayList<Node> nl2 = new ArrayList<Node>();
+        nl2.add(new Node(0, "a"));
+        ArrayList<Node> nl3 = new ArrayList<Node>();
+        nl3.addAll(nl1);
+        nl3.addAll(nl2);
+        System.out.println("ok" + nl3);
     }
 }
 

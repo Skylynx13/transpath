@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -102,7 +101,6 @@ public class NodeList {
         }
         
         String aLine = "";
-        Node node = null;
         while (aScan.hasNext()) {
             aLine = aScan.nextLine().trim();
             if (aLine.startsWith(TranspathConstants.NODE_ID)) {
@@ -128,6 +126,7 @@ public class NodeList {
         return nodes;
     }
 
+    @SuppressWarnings("unused")
     private static ArrayList<Node> buildFromFile_SupportedBranchTypes(String pFile) {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
@@ -232,7 +231,7 @@ public class NodeList {
         return nl3;
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
     private static ArrayList<Node> combineIterator(ArrayList<Node> nl1, ArrayList<Node> nl2) {
         if (NodeList.checkDuplicatedNode(nl1).size() > 0) {
             System.out.println("Duplicated Node Names NL1: " + NodeList.checkDuplicatedNode(nl1));
