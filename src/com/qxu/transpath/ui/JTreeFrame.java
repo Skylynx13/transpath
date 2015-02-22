@@ -57,7 +57,7 @@ public class JTreeFrame extends JFrame {
 		UIManager.getSystemLookAndFeelClassName();
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
             //UIManager.setLookAndFeel("javax.swing.plaf.mac.MacLookAndFeel");
         } catch (ClassNotFoundException e) {

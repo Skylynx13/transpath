@@ -103,23 +103,19 @@ public class NodeList {
         String aLine = "";
         while (aScan.hasNext()) {
             aLine = aScan.nextLine().trim();
-            if (aLine.startsWith(TranspathConstants.NODE_ID)) {
-                String[] iLine = aLine.split(TranspathConstants.COLON);
-                if (iLine.length != TranspathConstants.FIELDS_BRANCH) {
-                    System.out.println("File Corrupted.");
-                    return null;
-                }
+            String[] iLine = aLine.split(TranspathConstants.COLON);
+            if (aLine.startsWith(TranspathConstants.NODE_ID) &&
+                iLine.length == TranspathConstants.FIELDS_BRANCH) {
                 nodes.add(new Node(Integer.parseInt(iLine[1]), iLine[2]));
                 continue;
             }
-            if (aLine.indexOf(TranspathConstants.COLON) > 0 ) {
-                String[] bLine = aLine.split(TranspathConstants.COLON);
-                if (bLine.length != TranspathConstants.FIELDS_INFO || nodes == null || nodes.size() < 1) {
-                    System.out.println("File Corrupted.");
-                    return null;
-                }
-                nodes.get(nodes.size()-1).putBranch(bLine[0], bLine[1]);
+            if (iLine.length == TranspathConstants.FIELDS_INFO &&
+                nodes != null && nodes.size() > 0) {
+                nodes.get(nodes.size()-1).putBranch(iLine[0], iLine[1]);
+                continue;
             }
+            System.out.println("File Corrupted.");
+            return null;
         }
         aScan.close();
 
