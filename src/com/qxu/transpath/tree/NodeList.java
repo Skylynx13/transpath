@@ -317,7 +317,61 @@ public class NodeList {
     }
 
     public static void main(String[] args) {
-        //NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013.txt", NodeList.buildFromRoot("F:\\Book\\TFLib\\"));
+        System.out.println("Started...");
+
+//        //Keep list from a root.
+//        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_1st.txt", NodeList.buildFromRoot("I:\\Book\\TFLib\\"));
+
+//        //Combine two list into a new one.
+//        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd++.txt", 
+//                NodeList.combine(
+//                        NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd.txt"), 
+//                        NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_Single_Branch_1st++.txt")));
+        
+        //Find those who only has one branch.
+        ArrayList<Node> nodes = NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt");
+        System.out.println("=========================================================");
+        System.out.println("1ST only:");
+        for (Node node : nodes) {
+            if (node.getBranch("2ND") == null) {
+                System.out.println(node.keepNode());
+            }
+        }
+        System.out.println("=========================================================");
+        System.out.println("2ND only:");
+        for (Node node : nodes) {
+            if (node.getBranch("1ST") == null) {
+                System.out.println(node.keepNode());
+            }
+        }
+        System.out.println("=========================================================");
+        System.out.println("Others:");
+        for (Node node : nodes) {
+            if (node.numberOfBranch() != 2 && node.numberOfBranch() != 1) {
+                System.out.println(node.keepNode());
+            }
+        }
+        
+//        //Keep list ignoring single branch node
+//        int tNum = 0;
+//        int kNum = 0;
+//        try {
+//            PrintWriter out = new PrintWriter("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt");
+//            for (Node aNode : NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd++.txt")) {
+//                if (aNode.numberOfBranch() == 2) {
+//                    out.println(aNode.keepNode());
+//                    kNum++;
+//                }
+//                tNum++;
+//            }
+//            System.out.println("Total Nodes: " + tNum);
+//            System.out.println("Kept Nodes: " + kNum);
+//            out.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
+        System.out.println("Done.");
     }
 
 }

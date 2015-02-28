@@ -84,6 +84,10 @@ public class Node {
         this.branches.put(key, value);
     }
     
+    public int numberOfBranch() {
+        return this.branches.size();
+    }
+    
     public String getBranch(String key) {
         return this.branches.get(key);
     }

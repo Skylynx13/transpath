@@ -330,6 +330,47 @@ public class NodeListTest {
     }
     
     @Test
+    public void combineTest_AHJ_BI() {
+        ArrayList<Node> nl1 = new ArrayList<Node>(); 
+        ArrayList<Node> nl2 = new ArrayList<Node>(); 
+        Node node = null; 
+        node = new Node(1, "ABCDEFG.cbr");
+        node.putBranch("1ST", "/abc/def/ghijklmn/");
+        nl1.add(node);
+        node = new Node(2, "HIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz/");
+        nl1.add(node);
+        node = new Node(3, "JIJKLMN.cbz");
+        node.putBranch("1ST", "/abc/opq/rstuvwxyz/");
+        nl1.add(node);
+
+        node = new Node(1, "BIJKLMN.cbz");
+        node.putBranch("2ND", "/abc3/opq/rstuvwxyz/");
+        nl2.add(node);
+        node = new Node(2, "IIJKLMN.cbz");
+        node.putBranch("2ND", "/abc3/iopq/rstuvwxyz/");
+        nl2.add(node);
+
+        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2);
+        assertEquals(5, nl3.size());
+        assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
+        assertEquals("BIJKLMN.cbz", nl3.get(1).getName());
+        assertEquals("HIJKLMN.cbz", nl3.get(2).getName());
+        assertEquals("IIJKLMN.cbz", nl3.get(3).getName());
+        assertEquals("JIJKLMN.cbz", nl3.get(4).getName());
+        assertEquals("/abc/def/ghijklmn/", nl3.get(0).getBranch("1ST"));
+        assertEquals(null, nl3.get(1).getBranch("1ST"));
+        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(2).getBranch("1ST"));
+        assertEquals(null, nl3.get(3).getBranch("1ST"));
+        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(4).getBranch("1ST"));
+        assertEquals(null, nl3.get(0).getBranch("2ND"));
+        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(1).getBranch("2ND"));
+        assertEquals(null, nl3.get(2).getBranch("2ND"));
+        assertEquals("/abc3/iopq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
+        assertEquals(null, nl3.get(4).getBranch("2ND"));
+    }
+    
+    @Test
     public void sortByNodeNameTest() {
         ArrayList<Node> nl1 = new ArrayList<Node>(); 
         Node node = null; 

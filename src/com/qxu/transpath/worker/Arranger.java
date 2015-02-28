@@ -46,11 +46,6 @@ public class Arranger {
         this.entries = entries;
     }
     
-    public boolean checkIgnorableLine (String line) {
-        return line.matches("\\s*Code:\\s*")||line.matches("\\s*")||
-                line.matches("\\s*Quote:\\s*")||line.matches("\\s*//\\s*");
-    }
-    
     public void addEntry(String name) {
         if (this.entries == null) {
             this.entries = new ArrayList<CdEntry>();
@@ -64,6 +59,11 @@ public class Arranger {
             this.entries = new ArrayList<CdEntry>();
         }
         this.entries.add(cde);
+    }
+    
+    public boolean checkIgnorableLine (String line) {
+        return line.matches("\\s*Code:\\s*")||line.matches("\\s*")||
+                line.matches("\\s*Quote:\\s*")||line.matches("\\s*//\\s*");
     }
     
     public boolean checkLinkLine(String line) {

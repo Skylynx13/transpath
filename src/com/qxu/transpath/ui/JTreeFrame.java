@@ -30,8 +30,8 @@ public class JTreeFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     JPanel cp = new JPanel();
 	JFrame subFrame = new JFrame();
-	JTree jtree;
 	JTree jtree1;
+	JTree jtree2;
     DefaultMutableTreeNode root;
 
 	public JTreeFrame() {
@@ -45,15 +45,15 @@ public class JTreeFrame extends JFrame {
 		cp.setLayout(new BorderLayout());
         
 		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
-		jtree = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("resource/pflist.txt"), TranspathConstants.BRANCH_1ST));
+		jtree1 = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST));
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
-		jtree1 = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_2nd.txt"), TranspathConstants.BRANCH_2ND));
+		jtree2 = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_2ND));
 
 		//jtree1 = new JTree(this.buildTestTree());
 
-		jtree1.setShowsRootHandles(true);
-		jtree1.setRootVisible(true);
+		jtree2.setShowsRootHandles(true);
+		jtree2.setRootVisible(true);
 		UIManager.getSystemLookAndFeelClassName();
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
@@ -70,15 +70,15 @@ public class JTreeFrame extends JFrame {
             e.printStackTrace();
         }
         
-        SwingUtilities.updateComponentTreeUI(jtree1);
+        SwingUtilities.updateComponentTreeUI(jtree2);
 
         
         JScrollPane sPane = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        sPane.setViewportView(jtree1);
-        jtree1.revalidate();
-		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree, sPane);
+        sPane.setViewportView(jtree2);
+        jtree2.revalidate();
+		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree1, sPane);
 		mPane.setContinuousLayout(true);
 		mPane.setOneTouchExpandable(true);
 		mPane.setSize(super.getSize());
