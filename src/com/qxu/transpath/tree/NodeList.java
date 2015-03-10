@@ -39,14 +39,30 @@ import com.qxu.transpath.utils.TranspathConstants;
 public class NodeList {
     
     public static ArrayList<Node> buildFromRoot(String pRoot) {
-        pRoot = pRoot.replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH);
-        if (pRoot.endsWith(TranspathConstants.SLASH)) {
-            pRoot=pRoot.substring(0,pRoot.length()-1);
+        String aRoot = pRoot.replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH);
+        if (aRoot.endsWith(TranspathConstants.SLASH)) {
+            aRoot=aRoot.substring(0, aRoot.length()-1);
         }
-        if (new File(pRoot).isFile()) {
+        if (new File(aRoot).isFile()) {
             return null;
         }
-        return NodeList.buildFromPath(pRoot, pRoot);
+        return NodeList.buildFromPath(aRoot, aRoot);
+    }
+    
+    public static ArrayList<Node> buildBlockFromRoot(String pBlock, String pRoot) {
+        String aRoot = pRoot.replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH);
+        String aBlock = pBlock.replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH);
+        if (aRoot.endsWith(TranspathConstants.SLASH)) {
+            aRoot=aRoot.substring(0, aRoot.length()-1);
+        }
+        if (aBlock.endsWith(TranspathConstants.SLASH)) {
+            aBlock=aBlock.substring(0, aBlock.length()-1);
+        }
+        aBlock = aRoot + aBlock;
+        if (new File(aRoot).isFile() || new File(aBlock).isFile()) {
+            return null;
+        }
+        return NodeList.buildFromPath(aBlock, aRoot);
     }
     
     private static ArrayList<Node> buildFromPath(String pPath, String pRoot) {
@@ -55,6 +71,8 @@ public class NodeList {
         if (dirRoot.isFile()) {
             return null;
         }
+        
+        System.out.println(pPath);
         
         for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
@@ -319,8 +337,11 @@ public class NodeList {
     public static void main(String[] args) {
         System.out.println("Started...");
 
-//        //Keep list from a root.
-//        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_1st.txt", NodeList.buildFromRoot("I:\\Book\\TFLib\\"));
+//      //Keep list from a root.
+//      NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_1st.txt", NodeList.buildFromRoot("I:\\Book\\TFLib\\"));
+
+      //Keep a block of list from a root.
+      NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2015_blocks0308.txt", NodeList.buildBlockFromRoot("\\A2015\\", "F:\\Book\\TFLib\\"));
 
 //        //Combine two list into a new one.
 //        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd++.txt", 
@@ -328,29 +349,29 @@ public class NodeList {
 //                        NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd.txt"), 
 //                        NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_Single_Branch_1st++.txt")));
         
-        //Find those who only has one branch.
-        ArrayList<Node> nodes = NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt");
-        System.out.println("=========================================================");
-        System.out.println("1ST only:");
-        for (Node node : nodes) {
-            if (node.getBranch("2ND") == null) {
-                System.out.println(node.keepNode());
-            }
-        }
-        System.out.println("=========================================================");
-        System.out.println("2ND only:");
-        for (Node node : nodes) {
-            if (node.getBranch("1ST") == null) {
-                System.out.println(node.keepNode());
-            }
-        }
-        System.out.println("=========================================================");
-        System.out.println("Others:");
-        for (Node node : nodes) {
-            if (node.numberOfBranch() != 2 && node.numberOfBranch() != 1) {
-                System.out.println(node.keepNode());
-            }
-        }
+//        //Find those who only has one branch.
+//        ArrayList<Node> nodes = NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt");
+//        System.out.println("=========================================================");
+//        System.out.println("1ST only:");
+//        for (Node node : nodes) {
+//            if (node.getBranch("2ND") == null) {
+//                System.out.println(node.keepNode());
+//            }
+//        }
+//        System.out.println("=========================================================");
+//        System.out.println("2ND only:");
+//        for (Node node : nodes) {
+//            if (node.getBranch("1ST") == null) {
+//                System.out.println(node.keepNode());
+//            }
+//        }
+//        System.out.println("=========================================================");
+//        System.out.println("Others:");
+//        for (Node node : nodes) {
+//            if (node.numberOfBranch() != 2 && node.numberOfBranch() != 1) {
+//                System.out.println(node.keepNode());
+//            }
+//        }
         
 //        //Keep list ignoring single branch node
 //        int tNum = 0;
