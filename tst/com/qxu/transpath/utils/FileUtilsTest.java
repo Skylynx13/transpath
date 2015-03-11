@@ -12,6 +12,8 @@ package com.qxu.transpath.utils;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Test;
 
  /**
@@ -57,4 +59,15 @@ public class FileUtilsTest {
                 "resource/tst/ArrangerTest_task_003.txt"));
     }
 
+    @Test
+    public void getFileSizeTest_file_size() {
+        assertEquals(9078, FileUtils.getFileSize(new File("resource/tst/ArrangerTest_raw.txt")));
+        assertEquals(8047, FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_000.txt")));
+        assertEquals(7715, FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_002.txt")));
+        assertEquals( 183, FileUtils.getFileSize(new File("resource/tst/mergeTest_source_001.txt")));
+    }
+    @Test
+    public void getFileSizeTest_dir_size() {
+        assertEquals(51203, FileUtils.getFileSize(new File("resource/tst")));
+    }
 }

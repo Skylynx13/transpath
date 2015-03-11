@@ -10,6 +10,7 @@
  */
 package com.qxu.transpath.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -62,19 +63,22 @@ public class FileUtils {
             return false;
         }
     }
+    
+    public static long getFileSize(File pFile) {
+        if (pFile.isFile()) {
+            return pFile.length();
+        }
+        long size = 0;
+        for (File sub : pFile.listFiles()) {
+            size += getFileSize(sub);
+        }
+        return size;
+    }
 
     public static void main (String[] args) {
-        System.out.println("Files have a same path-name should be true: " + 
-                FileUtils.compareFileBytes("resource/tst/ArrangerTest_task_000.txt", 
-                        "resource/tst/ArrangerTest_task_000.txt"));
-        System.out.println("Files have same contents should be true: " + 
-                FileUtils.compareFileBytes("resource/tst/ArrangerTest_task_000.txt", 
-                        "resource/tst/ArrangerTest_task_001.txt"));
-        System.out.println("Files have different length should be false: " + 
-                FileUtils.compareFileBytes("resource/tst/ArrangerTest_task_000.txt", 
-                        "resource/tst/ArrangerTest_task_002.txt"));
-        System.out.println("Files have different contents should be false: " + 
-                FileUtils.compareFileBytes("resource/tst/ArrangerTest_task_000.txt", 
-                        "resource/tst/ArrangerTest_task_003.txt"));
+        System.out.println(FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_000.txt")));
+        System.out.println(FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_002.txt")));
+        System.out.println(FileUtils.getFileSize(new File("resource/tst")));
+
     }
 }
