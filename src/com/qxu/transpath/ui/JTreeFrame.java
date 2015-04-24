@@ -45,12 +45,20 @@ public class JTreeFrame extends JFrame {
 		cp.setLayout(new BorderLayout());
         
 		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
-		jtree1 = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST));
+		NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST);
+		ntree1.recursivelySort();
+		jtree1 = new JTree(ntree1);
+        //jtree1 = new JTree(this.buildTestTree());
+        JScrollPane spaneLeft = new JScrollPane(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        spaneLeft.setViewportView(jtree1);
+        jtree1.revalidate();
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
-		jtree2 = new JTree(NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_2ND));
-
-		//jtree1 = new JTree(this.buildTestTree());
+		NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_2ND);
+        ntree2.recursivelySort();
+		jtree2 = new JTree(ntree2);
 
 		jtree2.setShowsRootHandles(true);
 		jtree2.setRootVisible(true);
@@ -69,16 +77,19 @@ public class JTreeFrame extends JFrame {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        
         SwingUtilities.updateComponentTreeUI(jtree2);
-
         
-        JScrollPane sPane = new JScrollPane(
+        JScrollPane spaneRight = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        sPane.setViewportView(jtree2);
+        spaneRight.setViewportView(jtree2);
         jtree2.revalidate();
-		JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jtree1, sPane);
+
+        
+        
+        
+        
+        JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spaneLeft, spaneRight);
 		mPane.setContinuousLayout(true);
 		mPane.setOneTouchExpandable(true);
 		mPane.setSize(super.getSize());

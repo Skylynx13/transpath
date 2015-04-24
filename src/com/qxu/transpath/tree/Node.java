@@ -32,6 +32,9 @@ public class Node {
     private int id;
     private String name;
     private HashMap<String, String> branches;
+    //TODO: prop needed: file type, update-time, size in byte.
+    //      in format: test:20150418210910:417043.
+    //      that is: String:long:int.
     
     public Node() {
         this.id = 0;
@@ -90,6 +93,10 @@ public class Node {
     
     public String getBranch(String key) {
         return this.branches.get(key);
+    }
+    
+    public String getMetadata() {
+        return this.getBranch(TranspathConstants.BRANCH_0MD);
     }
 
     public Node merge(Node n1) {

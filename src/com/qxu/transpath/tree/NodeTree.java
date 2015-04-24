@@ -11,6 +11,8 @@
 package com.qxu.transpath.tree;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +38,24 @@ import com.qxu.transpath.utils.TranspathConstants;
  */
 
 public class NodeTree implements TreeNode {
+    private static class NodeNameAscComparator implements Comparator<NodeTree> {
+
+        @Override
+        public int compare(NodeTree o1, NodeTree o2) {
+            return o1.getNodeName().compareTo(o2.getNodeName());
+        }
+        
+    }
+
+    private static class NodeNameDescComparator implements Comparator<NodeTree> {
+
+        @Override
+        public int compare(NodeTree o1, NodeTree o2) {
+            return o2.getNodeName().compareTo(o1.getNodeName());
+        }
+        
+    }
+
     private Node node;
     private NodeTree parent;
     private List<NodeTree> children;
@@ -123,6 +143,16 @@ public class NodeTree implements TreeNode {
     
     public void setNodeName(String name) {
         node.setName(name);
+    }
+    
+    public void recursivelySort() {
+        if (null == this.children) {
+            return;
+        }
+        Collections.sort(this.children, new NodeNameAscComparator());
+        for (NodeTree child : this.children) {
+            child.recursivelySort();
+        }
     }
     
     // For JTree display
@@ -271,3 +301,4 @@ public class NodeTree implements TreeNode {
     }
 
 }
+

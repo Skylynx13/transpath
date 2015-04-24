@@ -23,11 +23,13 @@ public class TranspathConstants {
     public static final String ROOT = "TFLib";   
 
     public static final String NODE_ID = "ID";
-    public static final String BRANCH_1ST = "1ST";
-    public static final String BRANCH_2ND = "2ND";
+    public static final String BRANCH_0MD = "0MD"; //Metadata
+    public static final String BRANCH_1ST = "1ST"; //Storage
+    public static final String BRANCH_2ND = "2ND"; //Index
     public static final String BRANCH_3RD = "3RD";
     public static final String BRANCH_4TH = "4TH";
     public static final String[] SUPPORTED_BRANCH_TYPES = {
+        TranspathConstants.BRANCH_0MD, 
         TranspathConstants.BRANCH_1ST, 
         TranspathConstants.BRANCH_2ND, 
         TranspathConstants.BRANCH_3RD, 

@@ -78,8 +78,9 @@ public class NodeList {
             if (aFile.isFile()) {
                 Node aNode = new Node(0, aFile.getName()); 
                 aNode.putBranch(TranspathConstants.BRANCH_1ST,
-                        aFile.getParent().replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH)
-                        .replaceAll(pRoot, TranspathConstants.EMPTY) + TranspathConstants.SLASH);
+                        composeStoragePath(pRoot, aFile));
+                aNode.putBranch(TranspathConstants.BRANCH_0MD, 
+                        composeMetadata(aFile));
                 nodes.add(aNode);
             }
             if (aFile.isDirectory()) {
@@ -87,6 +88,16 @@ public class NodeList {
             }
         }
         return nodes;
+    }
+
+    private static String composeMetadata(File aFile) {
+        // TODO Auto-generated method stub
+        return "Metadata";
+    }
+
+    private static String composeStoragePath(String pRoot, File pFile) {
+        return pFile.getParent().replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH)
+        .replaceAll(pRoot, TranspathConstants.EMPTY) + TranspathConstants.SLASH;
     }
 
     public static void sortByNodeName(ArrayList<Node> nodes) {
@@ -341,7 +352,8 @@ public class NodeList {
 //      NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_1st.txt", NodeList.buildFromRoot("I:\\Book\\TFLib\\"));
 
       //Keep a block of list from a root.
-      NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2015_blocks0308.txt", NodeList.buildBlockFromRoot("\\A2015\\", "F:\\Book\\TFLib\\"));
+        //NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2015_blocks0315.txt", NodeList.buildBlockFromRoot("\\A2015\\", "F:\\Book\\TFLib\\"));
+        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2015_b0418.txt", NodeList.buildBlockFromRoot("\\A2015\\", "F:\\Book\\TFLib\\"));
 
 //        //Combine two list into a new one.
 //        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd++.txt", 
