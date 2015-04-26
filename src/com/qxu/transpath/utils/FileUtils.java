@@ -193,7 +193,7 @@ public class FileUtils {
     }
 
     public static long getFileSize(String pFileName) {
-        if (pFileName.equals(TranspathConstants.EMPTY)) {
+        if (pFileName == null || pFileName.isEmpty()) {
             return 0;
         }
         return getFileSize(new File(pFileName));
@@ -214,17 +214,31 @@ public class FileUtils {
     }
 
     public static String getFileMimeType(String pFileName) {
-        if (pFileName.equals(TranspathConstants.EMPTY)) {
+        if (pFileName == null || pFileName.isEmpty()) {
             return TranspathConstants.EMPTY;
         }
         return URLConnection.getFileNameMap().getContentTypeFor(pFileName); 
     }
     
-    public static String getLastModifiedString(String pFileName) {
-        if (pFileName.equals(TranspathConstants.EMPTY)) {
+    public static String getFileMimeType(File pFile) {
+        if (pFile == null) {
             return TranspathConstants.EMPTY;
         }
-        long time = new File(pFileName).lastModified();
+        return getFileMimeType(pFile.getName());
+    }
+    
+    public static String getLastModifiedString(String pFileName) {
+        if (pFileName == null || pFileName.isEmpty()) {
+            return TranspathConstants.EMPTY;
+        }
+        return getLastModifiedString(new File(pFileName));
+    }
+    
+    public static String getLastModifiedString(File pFile) {
+        if (pFile == null) {
+            return TranspathConstants.EMPTY;
+        }
+        long time = pFile.lastModified();
 
         //An alternative way for a string in default format.
         //String fmtStr = new Timestamp(time).toString();

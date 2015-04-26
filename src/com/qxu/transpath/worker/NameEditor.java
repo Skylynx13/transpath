@@ -56,7 +56,9 @@ public class NameEditor {
                 for (String[] repTempl: replaceList){
                     replacedName = replacedName.replaceAll(repTempl[0], repTempl[1]);
                 }
-                System.out.println(aFile.getName() + " -> " + replacedName);
+                if (!aFile.getName().equals(replacedName)) {
+                    System.out.println(aFile.getName() + " -> " + replacedName);
+                }
                 if (!aFile.renameTo(new File(pRoot + replacedName))) {
                     System.out.println(aFile.getName() + " -e> " + replacedName);
                     return false;
@@ -94,9 +96,6 @@ public class NameEditor {
     }
 
     public static void main(String[] args) {
-        String root = "D:\\Book\\TFLib\\new\\full\\";
-        System.out.println("Result: " + new NameEditor(root).renameFileByTemplate() + ".");
-        
 //        String root = "I:\\Book\\TFLib\\A2013\\B0001\\Antarctic Press\\Robotech\\";
 //        File a = new File(root);
 //        for (File b : a.listFiles()) {
@@ -115,8 +114,11 @@ public class NameEditor {
 //        System.out.println("Result: " + new NameEditor(root).moveFileToRoot());
 //        }
         
-//      String root = "I:\\Book\\TFLib\\A2013\\B0012\\Academy Comics\\Robotech\\Robotech Mechangle\\";
-//      String[][] replaceOnce = {{"Mechangel ","Robotech Mechangel 0"}};
+        String root = "D:\\Book\\TFLib\\new\\full\\";
+        System.out.println("Result: " + new NameEditor(root).renameFileByTemplate() + ".");
+        
+//      String root = "D:\\Book\\TFLib\\new\\full\\";
+//      String[][] replaceOnce = {{"Eternal Warriors ","Eternal Warriors 0"}};
 //      System.out.println("Result: " + new NameEditor(root).renameFileOnce(replaceOnce) + ".");
     }
 

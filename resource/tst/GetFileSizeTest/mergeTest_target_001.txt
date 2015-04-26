@@ -1,0 +1,14 @@
+ID:1:ABCDEFG.cbr
+1ST:/abc/def/ghijklmn/
+2ND:/abc2/def/ghijklmn/
+ID:3:AIJKLMN.cbz
+1ST:/abc/opq/rstuvwxyz/
+ID:3:BIJKLMN.cbz
+2ND:/abc3/opq/rstuvwxyz/
+ID:2:HIJKLMN.cbz
+1ST:/abc/opq/rstuvwxyz/
+2ND:/abc2/opq/rstuvwxyz/
+ID:4:IIJKLMN.cbz
+2ND:/abc3/iopq/rstuvwxyz/
+ID:4:JIJKLMN.cbz
+1ST:/abc/opq/rstuvwxyz/

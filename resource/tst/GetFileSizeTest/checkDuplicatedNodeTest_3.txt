@@ -1,0 +1,16 @@
+ID:0001:ABCDEFG.cbr
+1ST:/abc/def/ghijklmn/
+ID:0002:HIJKLMN.cbz
+1ST:/abc/opq/rstuvwxyz/
+ID:0004:dup1
+1ST:/abc/opq/rstuvwxyz/
+ID:0005:dup3
+1ST:/abc/opq/rstuvwxyz/
+ID:0006:dup2
+1ST:/abc/opq/rstuvwxyz/
+ID:0007:dup3
+1ST:/abc/opq/rstuvwxyz/
+ID:0008:dup2
+1ST:/abc/opq/rstuvwxyz/
+ID:0009:dup1
+1ST:/abc/opq/rstuvwxyz/
