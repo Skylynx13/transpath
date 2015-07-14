@@ -56,7 +56,7 @@ public class JTreeFrame extends JFrame {
         jtree1.revalidate();
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
-		NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_2ND);
+		NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
         ntree2.recursivelySort();
 		jtree2 = new JTree(ntree2);
 

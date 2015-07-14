@@ -138,12 +138,7 @@ public class FreeTester {
         thm.put("abc", "def");
     }
     
-    public static void main(String args[]) {
-        //FreeTester ft = new FreeTester();
-        //ft.testNodeTree();
-        //ft.testList();
-        //ft.testArranger();
-        //ft.testReplaceStr();
+    public void testArrayListAddAll() {
         ArrayList<Node> nl1 = null;
         ArrayList<Node> nl2 = new ArrayList<Node>();
         nl2.add(new Node(0, "a"));
@@ -151,6 +146,37 @@ public class FreeTester {
         nl3.addAll(nl1);
         nl3.addAll(nl2);
         System.out.println("ok" + nl3);
+    }
+    public void testReformat() {
+        String str0 = "Uncle Sam and the Freedom Fighters, 2006-08-00 (_02) (digital) (OkC.O.M.P.U.T.O.-Novus-HD).cbz";
+        System.out.println(str0);
+        System.out.println(this.reformat(str0));
+    }
+    
+    public String reformat(String str) {
+        String ret = str.replaceAll("_", " ");
+        int idxComma = ret.indexOf(',');
+        int idx1stBracket = ret.indexOf('(');
+        //get number
+        String rpl1s = ", ";
+        String rpl1t = " " + String.format("%03d", Integer.parseInt(ret.substring(ret.indexOf('(')+1, ret.indexOf(')')).trim())) + " (";
+        String rpl2s = ret.substring(ret.indexOf('(')-1, ret.indexOf(')')+1).replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
+        String rpl2t = ")";
+        System.out.println(":" + rpl1t + ":" + rpl2s + ":");
+        ret = ret.replaceAll(rpl1s, rpl1t).replaceAll(rpl2s, rpl2t);
+        
+        System.out.println(str);
+        System.out.println(ret);
+        return ret;
+    }
+    
+    public static void main(String args[]) {
+        FreeTester ft = new FreeTester();
+        //ft.testNodeTree();
+        //ft.testList();
+        //ft.testArranger();
+        //ft.testReplaceStr();
+        ft.testReformat();
     }
 }
 

@@ -28,10 +28,13 @@ import java.io.File;
 public class NameEditor {
     private String rootDir;
     private String[][] replaceTemplates = {
+            {"_2C ", ", "},
             {"_", " "}, 
             {"\\(digital\\)", "(Digital)"}, 
             {"\\(", " ("}, 
-            {"  \\(", " ("}};
+            {"  \\(", " ("}, 
+            {" Vol. ", " v0"}, 
+            {" Vol ", " v0"}};
         
     public NameEditor(String root) {
         this.rootDir=root;
@@ -46,9 +49,13 @@ public class NameEditor {
     }
     
     public boolean renamePathFile(String pRoot, String[][] replaceList) {
+        int totalFile = 0;
+        int procFile = 0;
         File dirRoot = new File(pRoot);
-        if (!dirRoot.isDirectory())
+        if (!dirRoot.isDirectory()) {
+            System.out.println("Path name error.");
             return false;
+        }
         
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
@@ -56,15 +63,53 @@ public class NameEditor {
                 for (String[] repTempl: replaceList){
                     replacedName = replacedName.replaceAll(repTempl[0], repTempl[1]);
                 }
+                totalFile++;
                 if (!aFile.getName().equals(replacedName)) {
+                    procFile++;
+                    if (!aFile.renameTo(new File(pRoot + replacedName))) {
+                        System.out.println(aFile.getName() + " -e> " + replacedName);
+                        return false;
+                    }
                     System.out.println(aFile.getName() + " -> " + replacedName);
-                }
-                if (!aFile.renameTo(new File(pRoot + replacedName))) {
-                    System.out.println(aFile.getName() + " -e> " + replacedName);
-                    return false;
                 }
             }
         }
+        System.out.println(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
+        return true;
+    }
+    
+    public boolean reformatNumber() {
+        int totalFile = 0;
+        int procFile = 0;
+        String pRoot = this.rootDir;
+        File dirRoot = new File(pRoot);
+        if (!dirRoot.isDirectory())
+            return false;
+        
+        for (File aFile : dirRoot.listFiles()) {
+            if (aFile.isFile()) {
+                String replacedName = aFile.getName();
+                if (replacedName.indexOf(",") < 0) {
+                    continue;
+                }
+                String rpl1s = ", ";
+                String rpl1t = " " + String.format("%03d", Integer.parseInt(replacedName.substring(replacedName.indexOf('(')+1, replacedName.indexOf(')')).trim())) + " (";
+                String rpl2s = replacedName.substring(replacedName.indexOf('(')-1, replacedName.indexOf(')')+1).replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
+                String rpl2t = ")";
+                System.out.println(":" + rpl1t + ":" + rpl2s + ":");
+                replacedName = replacedName.replaceAll("#", " ").replaceAll(rpl1s, rpl1t).replaceAll(rpl2s, rpl2t);
+                totalFile++;
+                if (!aFile.getName().equals(replacedName)) {
+                    procFile++;
+                    if (!aFile.renameTo(new File(pRoot + replacedName))) {
+                        System.out.println(aFile.getName() + " -e> " + replacedName);
+                        return false;
+                    }
+                    System.out.println(aFile.getName() + " -> " + replacedName);
+                }
+            }
+        }
+        System.out.println(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
     }
     
@@ -116,6 +161,7 @@ public class NameEditor {
         
         String root = "D:\\Book\\TFLib\\new\\full\\";
         System.out.println("Result: " + new NameEditor(root).renameFileByTemplate() + ".");
+        System.out.println("Result: " + new NameEditor(root).reformatNumber() + ".");
         
 //      String root = "D:\\Book\\TFLib\\new\\full\\";
 //      String[][] replaceOnce = {{"Eternal Warriors ","Eternal Warriors 0"}};
