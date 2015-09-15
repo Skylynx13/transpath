@@ -277,10 +277,17 @@ public class NodeTree implements TreeNode {
     
     public static NodeTree buildFromList(ArrayList<Node> nodes, String branchType) {
         NodeTree aTree = new NodeTree();
-        for (Node aNode : nodes) {
-            aTree.addBranch(aNode.getBranch(branchType)).addChildNode(aNode);
-        }
+//        for (Node aNode : nodes) {
+//            aTree.addBranch(aNode.getBranch(branchType)).addChildNode(aNode);
+//        }
+        aTree.appendFromList(nodes, branchType);
         return aTree;
+    }
+
+    public void appendFromList(ArrayList<Node> nodes, String branchType) {
+        for (Node aNode : nodes) {
+            this.addBranch(aNode.getBranch(branchType)).addChildNode(aNode);
+        }
     }
 
     public static void main (String args[]) {

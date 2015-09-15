@@ -45,8 +45,11 @@ public class JTreeFrame extends JFrame {
 		cp.setLayout(new BorderLayout());
         
 		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
-		NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST);
-		ntree1.recursivelySort();
+        //NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST);
+        NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
+        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
+        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0726.txt"), TranspathConstants.BRANCH_1ST);
+        ntree1.recursivelySort();
 		jtree1 = new JTree(ntree1);
         //jtree1 = new JTree(this.buildTestTree());
         JScrollPane spaneLeft = new JScrollPane(
@@ -57,6 +60,8 @@ public class JTreeFrame extends JFrame {
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
 		NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
+		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
+		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0726.txt"), TranspathConstants.BRANCH_2ND);
         ntree2.recursivelySort();
 		jtree2 = new JTree(ntree2);
 

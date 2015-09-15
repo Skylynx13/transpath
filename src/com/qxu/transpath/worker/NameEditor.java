@@ -88,7 +88,7 @@ public class NameEditor {
         
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
-                String replacedName = aFile.getName();
+                String replacedName = aFile.getName().replaceAll("#", " ");
                 if (replacedName.indexOf(",") < 0) {
                     continue;
                 }
@@ -97,7 +97,7 @@ public class NameEditor {
                 String rpl2s = replacedName.substring(replacedName.indexOf('(')-1, replacedName.indexOf(')')+1).replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
                 String rpl2t = ")";
                 System.out.println(":" + rpl1t + ":" + rpl2s + ":");
-                replacedName = replacedName.replaceAll("#", " ").replaceAll(rpl1s, rpl1t).replaceAll(rpl2s, rpl2t);
+                replacedName = replacedName.replaceAll(rpl1s, rpl1t).replaceAll(rpl2s, rpl2t);
                 totalFile++;
                 if (!aFile.getName().equals(replacedName)) {
                     procFile++;

@@ -63,7 +63,8 @@ public class Arranger {
     
     public boolean checkIgnorableLine (String line) {
         return line.matches("\\s*Code:\\s*")||line.matches("\\s*")||
-                line.matches("\\s*Quote:\\s*")||line.matches("\\s*//\\s*");
+               line.matches("\\s*Quote:\\s*")||line.matches("\\s*//\\s*")||
+               line.matches("\\s*Multi Quote Quote\\s*");
     }
     
     public boolean checkLinkLine(String line) {

@@ -77,6 +77,8 @@ public class NodeList {
         for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 Node aNode = new Node(0, aFile.getName()); 
+                aNode.putBranch(TranspathConstants.BRANCH_2ND, 
+                        composeIndexPathDefault());
                 aNode.putBranch(TranspathConstants.BRANCH_1ST,
                         composeStoragePath(pRoot, aFile));
                 aNode.putBranch(TranspathConstants.BRANCH_0MD, 
@@ -88,6 +90,10 @@ public class NodeList {
             }
         }
         return nodes;
+    }
+
+    private static String composeIndexPathDefault() {
+        return TranspathConstants.INDEX_PRE_CATALOG;
     }
 
     private static String composeMetadata(File pFile) {
@@ -358,7 +364,7 @@ public class NodeList {
       //Keep a block of list from a root.
 //        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_fin.txt", NodeList.buildBlockFromRoot("\\A2013\\", "F:\\Book\\TFLib\\"));
 //        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2014_fin.txt", NodeList.buildBlockFromRoot("\\A2014\\", "F:\\Book\\TFLib\\"));
-        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2015_b0628.txt", NodeList.buildBlockFromRoot("\\A2015\\", "F:\\Book\\TFLib\\"));
+        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2015_b0913.txt", NodeList.buildBlockFromRoot("\\A2015\\", "F:\\Book\\TFLib\\"));
 
 //        //Combine two list into a new one.
 //        NodeList.keepList("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt", 

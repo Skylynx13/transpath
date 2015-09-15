@@ -38,4 +38,6 @@ public class TranspathConstants {
 
     public static final int FIELDS_INFO   = 2;
     public static final int FIELDS_BRANCH = 3;
+    
+    public static final String INDEX_PRE_CATALOG = "/PreCatalog/";
 }
