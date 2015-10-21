@@ -141,31 +141,48 @@ public class NameEditor {
     }
 
     public static void main(String[] args) {
-//        String root = "I:\\Book\\TFLib\\A2013\\B0001\\Antarctic Press\\Robotech\\";
-//        File a = new File(root);
-//        for (File b : a.listFiles()) {
-//            System.out.println("T: " + b.getPath() + "; F: " + b.getName() + "; P: " + b.getParent());
-//        }
+
+        renameNormalRequirement();
+
+        renameSpecialRequirement();
+    }
+    
+    public static void renameMove() {
         
-//        String root0 = "I:\\Book\\TFLib\\A2013\\B00";
-////        String root = "D:\\temp\\qtest\\";
-//        for (int i = 32; i < 51; i++) {
-//            String root = root0 + i;
-//            System.out.println("Processing " + root + " ...");
-//        if (!root.endsWith("\\")) {
-//            root += "\\";
-//        }
-//        File a = new File(root);
-//        System.out.println("Result: " + new NameEditor(root).moveFileToRoot());
-//        }
-        
+    }
+
+    public static void sampleMoveFileToRoot() {
+        String root0 = "I:\\Book\\TFLib\\A2013\\B00";
+        // String root = "D:\\temp\\qtest\\";
+        for (int i = 32; i < 51; i++) {
+            String root = root0 + i;
+            System.out.println("Processing " + root + " ...");
+            if (!root.endsWith("\\")) {
+                root += "\\";
+            }
+            File a = new File(root);
+            System.out.println("Result: " + new NameEditor(root).moveFileToRoot());
+        }
+    }
+
+    public static void sampleListFiles() {
+        String root = "I:\\Book\\TFLib\\A2013\\B0001\\Antarctic Press\\Robotech\\";
+        File a = new File(root);
+        for (File b : a.listFiles()) {
+            System.out.println("T: " + b.getPath() + "; F: " + b.getName() + "; P: " + b.getParent());
+        }
+    }
+
+    public static void renameNormalRequirement() {
         String root = "D:\\Book\\TFLib\\new\\full\\";
         System.out.println("Result: " + new NameEditor(root).renameFileByTemplate() + ".");
         System.out.println("Result: " + new NameEditor(root).reformatNumber() + ".");
-        
-//      String root = "D:\\Book\\TFLib\\new\\full\\";
-//      String[][] replaceOnce = {{"Eternal Warriors ","Eternal Warriors 0"}};
-//      System.out.println("Result: " + new NameEditor(root).renameFileOnce(replaceOnce) + ".");
+    }
+
+    public static void renameSpecialRequirement() {
+        String root = "D:\\Book\\TFLib\\new\\full\\";
+        String[][] replaceOnce = { { "Scarlet Spider v01 ", "Scarlet Spider v02 " } };
+        System.out.println("Result: " + new NameEditor(root).renameFileOnce(replaceOnce) + ".");
     }
 
 }

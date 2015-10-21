@@ -62,9 +62,16 @@ public class Arranger {
     }
     
     public boolean checkIgnorableLine (String line) {
-        return line.matches("\\s*Code:\\s*")||line.matches("\\s*")||
-               line.matches("\\s*Quote:\\s*")||line.matches("\\s*//\\s*")||
-               line.matches("\\s*Multi Quote Quote\\s*");
+        return line.matches("\\s*Code:\\s*") 
+                || line.matches("\\s*") 
+                || line.matches("\\s*Quote:\\s*")
+                || line.matches("\\s*Download:\\s*")
+                || line.matches("\\s*//\\s*") 
+                || line.matches("\\s*Multi Quote Quote\\s*")
+                || line.matches("\\s*azamworld is offline\\s*")
+                || line.matches("\\s*goblin is offline\\s*")
+                || line.matches("\\s*This image has been resized.*")
+                || line.matches("\\s*Last edited by.*");
     }
     
     public boolean checkLinkLine(String line) {
