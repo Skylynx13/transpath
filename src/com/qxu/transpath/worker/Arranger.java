@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 import com.qxu.transpath.utils.CdEntry;
+import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TranspathConstants;
 
  /**
@@ -59,19 +60,6 @@ public class Arranger {
             this.entries = new ArrayList<CdEntry>();
         }
         this.entries.add(cde);
-    }
-    
-    public boolean checkIgnorableLine (String line) {
-        return line.matches("\\s*Code:\\s*") 
-                || line.matches("\\s*") 
-                || line.matches("\\s*Quote:\\s*")
-                || line.matches("\\s*Download:\\s*")
-                || line.matches("\\s*//\\s*") 
-                || line.matches("\\s*Multi Quote Quote\\s*")
-                || line.matches("\\s*azamworld is offline\\s*")
-                || line.matches("\\s*goblin is offline\\s*")
-                || line.matches("\\s*This image has been resized.*")
-                || line.matches("\\s*Last edited by.*");
     }
     
     public boolean checkLinkLine(String line) {
@@ -192,8 +180,134 @@ public class Arranger {
         this.status = status;
     }
     
-    public static void main (String[] args) {
+    public int trimFile(String inFile, String outFile) {
+        int iInLine = 0;
+        int iOutLine = 0;
+        int iLastOpen = 0;
+        int iLastClose = 0;
+        String sLastOpen = null;
+        String sLastClose = null;
+        Scanner in = null;
+        PrintWriter out = null;
+        boolean isInWindow = false;
+        
+        try {
+            in = new Scanner(new FileReader(inFile));
+            out = new PrintWriter(outFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        while (in.hasNext()) {
+            iInLine++;
+            String inLine = in.nextLine();
+            if (!isInWindow && checkEndLine(inLine)) {
+                System.out.println("Error: End line out of window!");
+                System.out.println("Last Close Line " + iLastClose + ": " + sLastClose);
+                System.out.println("This Close Line " + iInLine + ": " + inLine);
+            }
+            if (!isInWindow && checkLinkLine(inLine)) {
+                System.out.println("Error: Link line out of window!");
+                System.out.println("Last Close Line: " + iLastClose + ": " + sLastClose);
+                System.out.println("This Close Line " + iInLine + ": " + inLine);
+            }
+            if (isInWindow && checkStartLine(inLine)) {
+                System.out.println("Error: Start line inside window!");
+                System.out.println("Last Open Line: " + iLastOpen + ": " + sLastOpen);
+                System.out.println("This Open Line " + iInLine + ": " + inLine);
+            }
+            if (!isInWindow && checkStartLine(inLine)) {
+                isInWindow = true;
+                iLastOpen = iInLine;
+                sLastOpen = inLine;
+                //System.out.println("Line " + iInLine + " window opened.");
+           } 
+            if (isInWindow && checkEndLine(inLine)) {
+                isInWindow = false;
+                iLastClose = iInLine;
+                sLastClose = inLine;
+                //System.out.println("Line " + iInLine + " window closed.");
+            }
+            if (isInWindow && !checkIgnorableLine(inLine)) {
+                out.println(inLine);
+                iOutLine++;
+            }
+        }
+        
+        if (in != null) {
+            in.close();
+        }
+        if (out != null) {
+            out.close();
+        }
+        return iOutLine;
+    }
+    
+    public int countMatch(String inFile, String inRegex) {
+        int matchedLine = 0;
+        Scanner in = null;
+        try {
+            in = new Scanner(new FileReader(inFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (in.hasNext()) {
+            String inLine = in.nextLine();
+            if (inLine.matches(inRegex)) {
+                System.out.println(inLine);
+                matchedLine++;
+            }
+        }
+        if (in != null) {
+            in.close();
+        }
+        return matchedLine;
+    }
+    
+    public boolean checkStartLine (String line) {
+        return line.matches("^(Default|Video) Re: .*$") 
+                || line.matches("^Default$")
+                || line.matches("^(Today|Yesterday|\\d{2}-\\d{2}-\\d{4}) \\d{2}:\\d{2}$");
+    }
+
+    public boolean checkEndLine (String line) {
+        return line.matches("^\\w* is offline\\s*Reply With Quote$") 
+                || line.matches("^\\s*Multi Quote\\s*Quote$")
+                //|| line.matches("^Week of \\d{2}/\\d{2}/\\d{4}$")
+                || line.matches("^\\s*Last edited by.*$");
+    }
+
+    public boolean checkIgnorableLine (String line) {
+        return checkStartLine(line)
+                || checkEndLine(line)
+                //|| line.matches("\\s*//\\s*") 
+                || line.matches("^\\s*$") 
+                || line.matches("^\\s*Code:\\s*$") 
+                || line.matches("^\\s*Quote:\\s*$")
+                || line.matches("^\\s*Download:\\s*$")
+                || line.matches("^\\s*This image has been resized.*$");
+    }
+
+    public static void countMatchString() {
+        int n = new Arranger().countMatch("resource/rawDump.txt", 
+                "^\\s*Last edited by.*$");
+        System.out.println("Matched Lines: "+ n);        
+    }
+
+    public static void arrangeTask() {
         int n = new Arranger().readFromFile("resource/raw.txt").sort().merge().writeToFile("resource/task.txt");
         System.out.println("Totally " + n + " entries processed.");
+        
+    }
+    
+    public static void filterRaw() {
+        int n = new Arranger().trimFile("resource/rawDump.txt", "resource/rawClean.txt");
+        System.out.println("Raw Filtered to "+ n + " lines.");        
+    }
+    
+    public static void main (String[] args) {
+        arrangeTask();
+        //filterRaw();
+        //countMatchString();
     }
 }

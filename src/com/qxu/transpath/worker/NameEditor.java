@@ -26,9 +26,13 @@ import java.io.File;
  */
 
 public class NameEditor {
+    private static final String FULL_ROOT = "D:\\Book\\TFLib\\new\\full\\";
     private String rootDir;
     private String[][] replaceTemplates = {
             {"_2C ", ", "},
+            {"_\\.", ")."},
+            {"___", ") ("},
+            {"__", " ("},
             {"_", " "}, 
             {"\\(digital\\)", "(Digital)"}, 
             {"\\(", " ("}, 
@@ -71,6 +75,70 @@ public class NameEditor {
                         return false;
                     }
                     System.out.println(aFile.getName() + " -> " + replacedName);
+                }
+            }
+        }
+        System.out.println(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
+        return true;
+    }
+    
+    public boolean renamePathFilePushDate() {
+        int totalFile = 0;
+        int procFile = 0;
+        String pRoot = this.rootDir;
+        File dirRoot = new File(pRoot);
+        if (!dirRoot.isDirectory()) {
+            System.out.println("Path name error.");
+            return false;
+        }
+        
+        for (File aFile : dirRoot.listFiles()) {
+            if (aFile.isFile()) {
+                String oldName = aFile.getName();
+                int idxFirstBlank = oldName.indexOf(' ');
+                int idxLastPoint = oldName.lastIndexOf('.');
+                String newName = oldName.substring(idxFirstBlank+1, idxLastPoint) + " ("
+                        + oldName.substring(0, idxFirstBlank) + ")" + oldName.substring(idxLastPoint);
+                totalFile++;
+                if (!oldName.equals(newName)) {
+                    procFile++;
+                    if (!aFile.renameTo(new File(pRoot + newName))) {
+                        System.out.println(aFile.getName() + " -e> " + newName);
+                        return false;
+                    }
+                    System.out.println(oldName + " -> " + newName);
+                }
+            }
+        }
+        System.out.println(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
+        return true;
+    }
+    
+    public boolean renamePathFileUnPushDate() {
+        int totalFile = 0;
+        int procFile = 0;
+        String pRoot = this.rootDir;
+        File dirRoot = new File(pRoot);
+        if (!dirRoot.isDirectory()) {
+            System.out.println("Path name error.");
+            return false;
+        }
+        
+        for (File aFile : dirRoot.listFiles()) {
+            if (aFile.isFile()) {
+                String oldName = aFile.getName();
+                int idxFirstBlank = oldName.lastIndexOf('(');
+                int idxLastPoint = oldName.lastIndexOf(')');
+                String newName = oldName.substring(idxFirstBlank+1, idxLastPoint) + " "
+                        + oldName.substring(0, idxFirstBlank-1) + oldName.substring(idxLastPoint+1);
+                totalFile++;
+                if (!oldName.equals(newName)) {
+                    procFile++;
+                    if (!aFile.renameTo(new File(pRoot + newName))) {
+                        System.out.println(aFile.getName() + " -e> " + newName);
+                        return false;
+                    }
+                    System.out.println(oldName + " -> " + newName);
                 }
             }
         }
@@ -140,15 +208,12 @@ public class NameEditor {
         return true;
     }
 
-    public static void main(String[] args) {
-
-        renameNormalRequirement();
-
-        renameSpecialRequirement();
+    public static void renamePushDate() {
+        System.out.println("Result: " + new NameEditor(FULL_ROOT).renamePathFilePushDate() + ".");
     }
-    
-    public static void renameMove() {
-        
+
+    public static void renameUnPushDate() {
+        System.out.println("Result: " + new NameEditor(FULL_ROOT).renamePathFileUnPushDate() + ".");
     }
 
     public static void sampleMoveFileToRoot() {
@@ -160,7 +225,7 @@ public class NameEditor {
             if (!root.endsWith("\\")) {
                 root += "\\";
             }
-            File a = new File(root);
+            new File(root);
             System.out.println("Result: " + new NameEditor(root).moveFileToRoot());
         }
     }
@@ -173,17 +238,22 @@ public class NameEditor {
         }
     }
 
-    public static void renameNormalRequirement() {
-        String root = "D:\\Book\\TFLib\\new\\full\\";
-        System.out.println("Result: " + new NameEditor(root).renameFileByTemplate() + ".");
-        System.out.println("Result: " + new NameEditor(root).reformatNumber() + ".");
+    public static void renameNormalize() {
+        System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileByTemplate() + ".");
+        System.out.println("Result: " + new NameEditor(FULL_ROOT).reformatNumber() + ".");
     }
 
-    public static void renameSpecialRequirement() {
-        String root = "D:\\Book\\TFLib\\new\\full\\";
-        String[][] replaceOnce = { { "Scarlet Spider v01 ", "Scarlet Spider v02 " } };
-        System.out.println("Result: " + new NameEditor(root).renameFileOnce(replaceOnce) + ".");
+    public static void renameSpecialReplace() {
+        String[][] replaceOnce = { { "\\.rar", " (Scan-A).cbr" } };
+        System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
 
+    public static void main(String[] args) {
+        renameNormalize();
+        //renameSpecialReplace();
+        //renamePushDate();
+        //renameUnPushDate();
+    }
+    
 }
 
