@@ -64,7 +64,7 @@ public class FileUtilsTest {
 
     @Test
     public void getFileSizeTest_file_size() {
-        assertEquals(9078, FileUtils.getFileSize(new File("resource/tst/ArrangerTest_raw.txt")));
+        assertEquals(9445, FileUtils.getFileSize(new File("resource/tst/ArrangerTest_raw.txt")));
         assertEquals(8047, FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_000.txt")));
         assertEquals(7715, FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_002.txt")));
         assertEquals( 183, FileUtils.getFileSize(new File("resource/tst/mergeTest_source_001.txt")));

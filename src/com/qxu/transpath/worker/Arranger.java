@@ -91,7 +91,7 @@ public class Arranger {
                     status = 200000 + cnt; // Error: Entry no name at line cnt.
                     return null;
                 }
-                entry.addLink(line);
+                entry.addUniqueLink(line);
             } else if (this.checkCommentLine(line)) {
                 if (this.entry == null && !this.entry.hasName()) {
                     status = 200000 + cnt; // Error: Entry no name at line cnt.

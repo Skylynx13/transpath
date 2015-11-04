@@ -108,7 +108,7 @@ public class NodeListTest {
                 assertEquals(true, line1.equals(line2));
                 cnt++;
             }
-            assertEquals(24, cnt);
+            assertEquals(32, cnt);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {

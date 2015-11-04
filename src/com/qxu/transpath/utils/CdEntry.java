@@ -55,11 +55,13 @@ public class CdEntry implements Comparable<CdEntry>{
     }
     
     private void addLinks(ArrayList<String> pLinks) {
-        if (this.links == null) {
-            this.links = new ArrayList<String>();
-        }
         for (String aLink: pLinks) {
-            this.links.add(aLink);
+            this.addLink(aLink);
+        }
+    }
+    private void addUniqueLinks(ArrayList<String> pLinks) {
+        for (String aLink: pLinks) {
+            this.addUniqueLink(aLink);
         }
     }
     private void addComments(ArrayList<String> pComments) {
@@ -103,6 +105,21 @@ public class CdEntry implements Comparable<CdEntry>{
         }
         this.links.add(link);
     }
+    public void addUniqueLink(String link) {
+        if (this.links == null) {
+            this.links = new ArrayList<String>();
+        }
+        boolean linkFound = false;
+        for (String exLink: this.links){
+            if (link.equals(exLink)) {
+                linkFound = true;
+                break;
+            }
+        }
+        if (!linkFound) {
+            this.links.add(link);            
+        }
+    }
     public int getLinksSize() {
         if (this.links == null) {
             return 0;
@@ -129,7 +146,7 @@ public class CdEntry implements Comparable<CdEntry>{
     public CdEntry mergeEntry(CdEntry otherEntry) {
         CdEntry newCde = this.copy();
         newCde.addComments(otherEntry.getComments());
-        newCde.addLinks(otherEntry.getLinks());
+        newCde.addUniqueLinks(otherEntry.getLinks());
         return newCde;
     }
 }

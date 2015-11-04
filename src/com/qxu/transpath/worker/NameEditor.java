@@ -244,13 +244,13 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "\\.rar", " (Scan-A).cbr" } };
+        String[][] replaceOnce = { { "Vault of Horror ", "Vault of Horror 0" } };
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
 
     public static void main(String[] args) {
-        renameNormalize();
-        //renameSpecialReplace();
+        //renameNormalize();
+        renameSpecialReplace();
         //renamePushDate();
         //renameUnPushDate();
     }
