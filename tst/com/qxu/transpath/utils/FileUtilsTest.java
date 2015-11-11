@@ -13,8 +13,13 @@ package com.qxu.transpath.utils;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -167,5 +172,29 @@ public class FileUtilsTest {
     @Test
     public void getLastModifiedStringTest() {
         assertEquals("2015-03-19 14:11:42.114", FileUtils.getLastModifiedString("resource/tst/getLastModifiedString_000.txt"));
+    }
+    
+    @Test
+    public void getRarCommentTest() {
+        String fn1 = "resource/tst/getSetRarCommentTest.rar";
+        String fn2 = "resource/tst/getSetZipCommentTest.zip";
+        File f1 = new File(fn1);
+//        try {
+//            ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(fn2));
+//            zout.write(new String("ask why").getBytes());
+//            zout.flush();
+//            zout.setComment("abc");
+//            zout.close();
+//            ZipInputStream zin = new ZipInputStream(new FileInputStream(fn2));
+//            byte[] b = new byte[10];
+//            zin.read(b);
+//            zin.close();
+//            System.out.println(b);
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+        System.out.println(FileUtils.extractZipComment(fn2));
+        assertEquals(true, true);
     }
 }

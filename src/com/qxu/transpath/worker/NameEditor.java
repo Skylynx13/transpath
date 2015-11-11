@@ -244,7 +244,7 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "Vault of Horror ", "Vault of Horror 0" } };
+        String[][] replaceOnce = { { "peterwatts-", "PeterWatts-" } };
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
 

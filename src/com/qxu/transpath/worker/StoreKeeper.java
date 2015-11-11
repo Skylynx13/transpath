@@ -46,7 +46,8 @@ public class StoreKeeper {
     private static void combineLists(String targetFile, String srcFile1, String srcFile2) {
         // Combine two list into a new one.
         NodeList.keepList(targetFile,
-                NodeList.combine(NodeList.buildFromFile(srcFile1), NodeList.buildFromFile(srcFile2)));
+                NodeList.combine(NodeList.buildFromFile(srcFile1), 
+                        NodeList.buildFromFile(srcFile2), false));
     }
     
     private static void keepListIgnoreSingleBranch() {
@@ -64,6 +65,23 @@ public class StoreKeeper {
             }
             System.out.println("Total Nodes: " + tNum);
             System.out.println("Kept Nodes: " + kNum);
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void keepStoreIndex(String inFile, String outFile) {
+        //Keep simple name of the list.
+        int tNum = 0;
+        try {
+            PrintWriter out = new PrintWriter(outFile);
+            for (Node aNode : NodeList.buildFromFile(inFile)) {
+                //System.out.println("Debug: " + aNode.getSimpleName());
+                out.println(aNode.getName());
+                tNum++;
+            }
+            System.out.println("Total Index Name: " + tNum);
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -99,8 +117,24 @@ public class StoreKeeper {
     public static void main(String[] args) {
         System.out.println("StoreKeeper on job...");
 
-        StoreKeeper.keepBlockFromRoot("D:\\_TF\\_Update\\TFLib_A2015_b1103.txt", "\\A2015\\", "F:\\Book\\TFLib\\");
-
+        String newBlock = "D:\\_TF\\_Update\\TFLib_A2015_b1111.txt";
+        
+        System.out.println("Keeping new block...");
+        StoreKeeper.keepBlockFromRoot(newBlock, "\\A2015\\", "F:\\Book\\TFLib\\");
+        
+        System.out.println("Combining store...");
+        StoreKeeper.combineLists("resource/storehis.txt", 
+                "D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt", 
+                "D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt");
+        
+        StoreKeeper.combineLists("resource/store.txt", 
+                "resource/storehis.txt", 
+                newBlock);
+        
+        System.out.println("Keeping store index...");
+        StoreKeeper.keepStoreIndex("resource/store.txt", 
+                "resource/istore.txt");
+        
         // StoreKeeper.keepListFromRoot("D:\\_TF\\_Update\\TFLib_A2013_1st.txt",
         // "I:\\Book\\TFLib\\");
 

@@ -85,4 +85,17 @@ public class StrUtils {
 
         return pString.indexOf(endBefore, startIndex) + endBefore.length() - 1;
     }
+
+    public static String getSimpleName(String name) {
+        int iEnd = name.length();
+        if (name.lastIndexOf('.') > 0) {
+            iEnd = name.lastIndexOf('.');            
+        }
+        if (name.indexOf('(') > 0) {
+            iEnd = name.indexOf('(');
+        }
+        return name.substring(0, iEnd);
+    }
+
+
 }

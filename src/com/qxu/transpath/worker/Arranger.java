@@ -19,6 +19,7 @@ import java.util.Scanner;
 
 import com.qxu.transpath.utils.CdEntry;
 import com.qxu.transpath.utils.FileUtils;
+import com.qxu.transpath.utils.StrUtils;
 import com.qxu.transpath.utils.TranspathConstants;
 
  /**
@@ -101,7 +102,7 @@ public class Arranger {
             } else {
                 this.addEntry(line);
             }
-            System.out.println(line);
+            //System.out.println(line);
             cnt++;
         }
         System.out.println(cnt);
@@ -113,6 +114,17 @@ public class Arranger {
         try {
             PrintWriter out = new PrintWriter(fileName);
             out.println(this.toOutput());
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return entries.size();
+    }
+    
+    public int writeIndexToFile(String fileName) {
+        try {
+            PrintWriter out = new PrintWriter(fileName);
+            out.println(this.toIndex());
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -152,6 +164,13 @@ public class Arranger {
         return newArranger;
     }
     
+    public Arranger merge(Arranger otherArranger) {
+        Arranger newArranger = new Arranger();
+        newArranger.entries.addAll(this.entries);
+        newArranger.entries.addAll(otherArranger.entries);
+        return this.sort().merge();
+    }
+    
     public String toString() {
         return entries.toString();
     }
@@ -168,6 +187,16 @@ public class Arranger {
             for (String lnk: cde.getLinks()) {
                 str += lnk + TranspathConstants.LINE_LINKER;
             }
+        }
+        return str;
+    }
+
+    public String toIndex() {
+        String str = "";
+        if (this.entries == null) 
+            return str;
+        for (CdEntry cde:this.entries) {
+            str += cde.getName() + TranspathConstants.LINE_LINKER;
         }
         return str;
     }
@@ -243,27 +272,6 @@ public class Arranger {
         return iOutLine;
     }
     
-    public int countMatch(String inFile, String inRegex) {
-        int matchedLine = 0;
-        Scanner in = null;
-        try {
-            in = new Scanner(new FileReader(inFile));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        while (in.hasNext()) {
-            String inLine = in.nextLine();
-            if (inLine.matches(inRegex)) {
-                System.out.println(inLine);
-                matchedLine++;
-            }
-        }
-        if (in != null) {
-            in.close();
-        }
-        return matchedLine;
-    }
-    
     public boolean checkStartLine (String line) {
         return line.matches("^(Default|Video) Re: .*$") 
                 || line.matches("^Default$")
@@ -273,7 +281,7 @@ public class Arranger {
     public boolean checkEndLine (String line) {
         return line.matches("^\\w* is offline\\s*Reply With Quote$") 
                 || line.matches("^\\s*Multi Quote\\s*Quote$")
-                //|| line.matches("^Week of \\d{2}/\\d{2}/\\d{4}$")
+                //|| line.matches("^Week of \\d{2}/\\d{2}/\\d{4}$") // Open this line if want to ignore weekly list from the dump.
                 || line.matches("^\\s*Last edited by.*$");
     }
 
@@ -287,27 +295,28 @@ public class Arranger {
                 || line.matches("^\\s*Download:\\s*$")
                 || line.matches("^\\s*This image has been resized.*$");
     }
-
-    public static void countMatchString() {
-        int n = new Arranger().countMatch("resource/rawDump.txt", 
-                "^\\s*Last edited by.*$");
-        System.out.println("Matched Lines: "+ n);        
-    }
-
-    public static void arrangeTask() {
-        int n = new Arranger().readFromFile("resource/raw.txt").sort().merge().writeToFile("resource/task.txt");
-        System.out.println("Totally " + n + " entries processed.");
-        
-    }
     
-    public static void filterRaw() {
-        int n = new Arranger().trimFile("resource/rawDump.txt", "resource/rawClean.txt");
-        System.out.println("Raw Filtered to "+ n + " lines.");        
+    public String compare(Arranger otherArranger) {
+        StringBuffer result = new StringBuffer();
+        int i1=0;
+        for (CdEntry cde1 : this.entries) {
+            i1++;
+            int i2 = 0;
+            for (CdEntry cde2 : otherArranger.entries) {
+                i2++;
+                String simpleName2 = StrUtils.getSimpleName(cde2.getName());
+                if (cde1.getName().equalsIgnoreCase(simpleName2) 
+                        || cde1.getName().startsWith(simpleName2)
+                        || simpleName2.startsWith(cde1.getName())) {
+                    result.append("New Line " + i1 + ": " + cde1.getName() + TranspathConstants.LINE_LINKER
+                            +"Old Line " + i2 + ": " + cde2.getName() + TranspathConstants.LINE_LINKER); 
+                }
+                if (i2%10000==0) {
+                    System.out.println("i1="+i1+"; i2="+i2);
+                }
+            }
+        }
+        return result.toString();
     }
-    
-    public static void main (String[] args) {
-        arrangeTask();
-        //filterRaw();
-        //countMatchString();
-    }
+
 }

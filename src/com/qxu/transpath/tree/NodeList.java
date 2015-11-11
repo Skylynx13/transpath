@@ -212,16 +212,17 @@ public class NodeList {
     }
 
     @SuppressWarnings("unchecked")
-    public static ArrayList<Node> combine(ArrayList<Node> nl1, ArrayList<Node> nl2) {
-        if (NodeList.checkDuplicatedNode(nl1).size() > 0) {
-            System.out.println("Duplicated Node Names NL1: " + NodeList.checkDuplicatedNode(nl1));
-            return null;
+    public static ArrayList<Node> combine(ArrayList<Node> nl1, ArrayList<Node> nl2, boolean checkDuplicated) {
+        if (checkDuplicated) {
+            if (NodeList.checkDuplicatedNode(nl1).size() > 0) {
+                System.out.println("Duplicated Node Names NL1: " + NodeList.checkDuplicatedNode(nl1));
+                return null;
+            }
+            if (NodeList.checkDuplicatedNode(nl2).size() > 0) {
+                System.out.println("Duplicated Node Names NL2: " + NodeList.checkDuplicatedNode(nl2));
+                return null;
+            }
         }
-        if (NodeList.checkDuplicatedNode(nl2).size() > 0) {
-            System.out.println("Duplicated Node Names NL2: " + NodeList.checkDuplicatedNode(nl2));
-            return null;
-        }
-        
         if (0 == nl1.size()) {
             return (ArrayList<Node>) nl2.clone();
         }

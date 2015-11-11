@@ -18,6 +18,7 @@ import java.util.HashMap;
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.utils.CdEntry;
+import com.qxu.transpath.utils.StrUtils;
 import com.qxu.transpath.worker.Arranger;
 import com.qxu.transpath.worker.TntKeeper;
 
@@ -176,7 +177,9 @@ public class FreeTester {
         //ft.testList();
         //ft.testArranger();
         //ft.testReplaceStr();
-        ft.testReformat();
+        //ft.testReformat();
+        
+        System.out.println(StrUtils.getSimpleName("G.I. Joe Action Force Mini Comic.cbr"));
     }
 }
 

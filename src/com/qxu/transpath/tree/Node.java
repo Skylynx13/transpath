@@ -98,6 +98,17 @@ public class Node {
     public String getMetadata() {
         return this.getBranch(TranspathConstants.BRANCH_0MD);
     }
+    
+    public String getSimpleName() {
+        int iEnd = name.length();
+        if (name.lastIndexOf('.') > 0) {
+            iEnd = name.lastIndexOf('.');            
+        }
+        if (name.indexOf('(') > 0) {
+            iEnd = name.indexOf('(');
+        }
+        return name.substring(0, iEnd);
+    }
 
     public Node merge(Node n1) {
         Node n2 = this.clone();

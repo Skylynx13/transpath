@@ -24,7 +24,7 @@ import com.qxu.transpath.utils.TranspathConstants;
 
  /**
  * ClassName: NodeListTest <br/>
- * Description: TODO <br/>
+ * Description: <br/>
  * Date: 2015-2-11 下午2:30:59 <br/>
  * <br/>
  * 
@@ -169,7 +169,7 @@ public class NodeListTest {
         node.putBranch("2ND", "/abc3/iopq/rstuvwxyz/");
         nl2.add(node);
 
-        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2);
+        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(6, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
         assertEquals("AIJKLMN.cbz", nl3.get(1).getName());
@@ -219,7 +219,7 @@ public class NodeListTest {
         node.putBranch("2ND", "/abc3/iopq/rstuvwxyz/");
         nl2.add(node);
 
-        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2);
+        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(6, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
         assertEquals("AIJKLMN.cbz", nl3.get(1).getName());
@@ -269,7 +269,7 @@ public class NodeListTest {
         node.putBranch("2ND", "/abc3/iopq/rstuvwxyz/");
         nl2.add(node);
 
-        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2);
+        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(5, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
         assertEquals("AIJKLMN.cbz", nl3.get(1).getName());
@@ -313,7 +313,7 @@ public class NodeListTest {
         node.putBranch("2ND", "/abc3/opq/rstuvwxyz/");
         nl2.add(node);
 
-        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2);
+        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(4, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
         assertEquals("AIJKLMN.cbz", nl3.get(1).getName());
@@ -351,7 +351,7 @@ public class NodeListTest {
         node.putBranch("2ND", "/abc3/iopq/rstuvwxyz/");
         nl2.add(node);
 
-        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2);
+        ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(5, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
         assertEquals("BIJKLMN.cbz", nl3.get(1).getName());
