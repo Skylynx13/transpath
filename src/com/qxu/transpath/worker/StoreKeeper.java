@@ -114,26 +114,37 @@ public class StoreKeeper {
         }
     }
 
+    /**
+     * main:<br/>
+     * bin>java com.qxu.transpath.worker.StoreKeeper storehis<br/>
+     * bin>java com.qxu.transpath.worker.StoreKeeper b1112 istore<br/>
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         System.out.println("StoreKeeper on job...");
-
-        String newBlock = "D:\\_TF\\_Update\\TFLib_A2015_b1111.txt";
-        
-        System.out.println("Keeping new block...");
-        StoreKeeper.keepBlockFromRoot(newBlock, "\\A2015\\", "F:\\Book\\TFLib\\");
-        
-        System.out.println("Combining store...");
-        StoreKeeper.combineLists("resource/storehis.txt", 
-                "D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt", 
-                "D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt");
-        
-        StoreKeeper.combineLists("resource/store.txt", 
-                "resource/storehis.txt", 
-                newBlock);
-        
-        System.out.println("Keeping store index...");
-        StoreKeeper.keepStoreIndex("resource/store.txt", 
-                "resource/istore.txt");
+        for (String arg : args) {
+            if (arg.equals("storehis")) {
+                System.out.println("Combining storehis...");
+                StoreKeeper.combineLists("resource/storehis.txt", 
+                        "D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt",
+                        "D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt");
+                System.out.println("Done.");
+            } else if (arg.startsWith("b")) {
+                String newBlock = "D:\\_TF\\_Update\\TFLib_A2015_" + arg + ".txt";
+                System.out.println("Keeping block...");
+                StoreKeeper.keepBlockFromRoot(newBlock, "\\A2015\\", "F:\\Book\\TFLib\\");
+                System.out.println("Combining store...");
+                StoreKeeper.combineLists("resource/store.txt", "resource/storehis.txt", newBlock);
+                System.out.println("Done.");
+            } else if (arg.equals("istore")) {
+                System.out.println("Keeping store index...");
+                StoreKeeper.keepStoreIndex("resource/store.txt", 
+                        "resource/istore.txt");
+                System.out.println("Done.");
+            } 
+        }
+        System.out.println("StoreKeeper job done.");
         
         // StoreKeeper.keepListFromRoot("D:\\_TF\\_Update\\TFLib_A2013_1st.txt",
         // "I:\\Book\\TFLib\\");
@@ -142,7 +153,6 @@ public class StoreKeeper {
         // "D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt",
         // "D:\\_TF\\_Update\\TFLib_A2013_fin.txt");
 
-        System.out.println("StoreKeeper Done.");
     }
 
 }
