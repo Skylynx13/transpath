@@ -179,7 +179,7 @@ public class StoreKeeper {
     }
 
     public static void buildStoreHis() {
-        System.out.println("Combining storehis...");
+        System.out.println("Combining storehis..."); 
         StoreKeeper.combineLists(TranspathConstants.TP_HOME + "storehis.txt", 
                 "D:\\Qdata\\update\\TFLib_A2013_0_1_2.txt",
                 "D:\\Qdata\\update\\TFLib_A2014_0_1_2.txt");
