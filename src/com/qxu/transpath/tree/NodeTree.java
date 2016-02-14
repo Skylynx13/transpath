@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: NodeTree <br/>
@@ -169,11 +169,11 @@ public class NodeTree implements TreeNode, MutableTreeNode {
     }
 
     public String getNodePathName() {
-        String pathName = TranspathConstants.EMPTY;
+        String pathName = TransConst.EMPTY;
         if (!isRoot()) {
             pathName += this.parent.getNodePathName();
         } 
-        pathName += TranspathConstants.PATH_LINKER + this.getNodeName();
+        pathName += TransConst.PATH_LINKER + this.getNodeName();
         return pathName;
     }
     
@@ -197,15 +197,15 @@ public class NodeTree implements TreeNode, MutableTreeNode {
     }
     
     public String getNodePathName_style1() {
-        String pathName = TranspathConstants.EMPTY;
+        String pathName = TransConst.EMPTY;
         if (isRoot()) {
-            pathName += TranspathConstants.PATH_LINKER;
+            pathName += TransConst.PATH_LINKER;
         } else {
             pathName += this.parent.getNodePathName();
         } 
         pathName += this.getNodeName();
         if (!isLeaf()) {
-            pathName += TranspathConstants.PATH_LINKER;
+            pathName += TransConst.PATH_LINKER;
         }
         return pathName;
     }
@@ -269,9 +269,9 @@ public class NodeTree implements TreeNode, MutableTreeNode {
     
     public NodeTree addBranch(String pPath) {
         if (this.isNull()) {
-            this.setNode(new Node(0, TranspathConstants.ROOT));
+            this.setNode(new Node(0, TransConst.ROOT));
         }
-        String[] nodeNames = pPath.split(TranspathConstants.SLASH);
+        String[] nodeNames = pPath.split(TransConst.SLASH);
         NodeTree bTree = this;
         for (String nodeName: nodeNames) {
             if (null != nodeName && !nodeName.isEmpty()) {

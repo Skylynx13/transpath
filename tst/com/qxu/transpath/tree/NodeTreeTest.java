@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: NodeTreeTest <br/>
@@ -33,8 +33,8 @@ public class NodeTreeTest {
 
     @Test
     public void buildFromListTest() {
-        NodeTree aTree = NodeTree.buildFromList(NodeList.buildFromRoot("resource/qtest"), TranspathConstants.BRANCH_1ST);
-        assertEquals(TranspathConstants.ROOT, aTree.getNodeName());
+        NodeTree aTree = NodeTree.buildFromList(NodeList.buildFromRoot("resource/qtest"), TransConst.BRANCH_1ST);
+        assertEquals(TransConst.ROOT, aTree.getNodeName());
         assertEquals("tdir001", aTree.getChildAt(0).getNodeName());
         assertEquals("/TFLib/tdir001", aTree.getChildAt(0).getNodePathName());
         assertEquals("tdir102", aTree.getChildAt(0).getChildAt(0).getNodeName());

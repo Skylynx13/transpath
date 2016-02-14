@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: NodeList <br/>
@@ -39,8 +39,8 @@ import com.qxu.transpath.utils.TranspathConstants;
 public class NodeList {
     
     public static ArrayList<Node> buildFromRoot(String pRoot) {
-        String aRoot = pRoot.replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH);
-        if (aRoot.endsWith(TranspathConstants.SLASH)) {
+        String aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
+        if (aRoot.endsWith(TransConst.SLASH)) {
             aRoot=aRoot.substring(0, aRoot.length()-1);
         }
         if (new File(aRoot).isFile()) {
@@ -50,12 +50,12 @@ public class NodeList {
     }
     
     public static ArrayList<Node> buildBlockFromRoot(String pBlock, String pRoot) {
-        String aRoot = pRoot.replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH);
-        String aBlock = pBlock.replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH);
-        if (aRoot.endsWith(TranspathConstants.SLASH)) {
+        String aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
+        String aBlock = pBlock.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
+        if (aRoot.endsWith(TransConst.SLASH)) {
             aRoot=aRoot.substring(0, aRoot.length()-1);
         }
-        if (aBlock.endsWith(TranspathConstants.SLASH)) {
+        if (aBlock.endsWith(TransConst.SLASH)) {
             aBlock=aBlock.substring(0, aBlock.length()-1);
         }
         aBlock = aRoot + aBlock;
@@ -77,11 +77,11 @@ public class NodeList {
         for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 Node aNode = new Node(0, aFile.getName()); 
-                aNode.putBranch(TranspathConstants.BRANCH_2ND, 
+                aNode.putBranch(TransConst.BRANCH_2ND, 
                         composeIndexPathDefault());
-                aNode.putBranch(TranspathConstants.BRANCH_1ST,
+                aNode.putBranch(TransConst.BRANCH_1ST,
                         composeStoragePath(pRoot, aFile));
-                aNode.putBranch(TranspathConstants.BRANCH_0MD, 
+                aNode.putBranch(TransConst.BRANCH_0MD, 
                         composeMetadata(aFile));
                 nodes.add(aNode);
             }
@@ -93,21 +93,21 @@ public class NodeList {
     }
 
     private static String composeIndexPathDefault() {
-        return TranspathConstants.INDEX_PRE_CATALOG;
+        return TransConst.INDEX_PRE_CATALOG;
     }
 
     private static String composeMetadata(File pFile) {
-        return new StringBuffer(TranspathConstants.SLASH)
+        return new StringBuffer(TransConst.SLASH)
             .append(pFile.length())
-            .append(TranspathConstants.SLASH)
+            .append(TransConst.SLASH)
             .append(pFile.lastModified())
             .toString();
     }
 
     private static String composeStoragePath(String pRoot, File pFile) {
         return pFile.getParent()
-                .replaceAll(TranspathConstants.BACK_SLASH_4, TranspathConstants.SLASH)
-                .replaceAll(pRoot, TranspathConstants.EMPTY) + TranspathConstants.SLASH;
+                .replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
+                .replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
     }
 
     public static void sortByNodeName(ArrayList<Node> nodes) {
@@ -142,13 +142,13 @@ public class NodeList {
         String aLine = "";
         while (aScan.hasNext()) {
             aLine = aScan.nextLine().trim();
-            String[] iLine = aLine.split(TranspathConstants.COLON);
-            if (aLine.startsWith(TranspathConstants.NODE_ID) &&
-                iLine.length == TranspathConstants.FIELDS_BRANCH) {
+            String[] iLine = aLine.split(TransConst.COLON);
+            if (aLine.startsWith(TransConst.NODE_ID) &&
+                iLine.length == TransConst.FIELDS_BRANCH) {
                 nodes.add(new Node(Integer.parseInt(iLine[1]), iLine[2]));
                 continue;
             }
-            if (iLine.length == TranspathConstants.FIELDS_INFO &&
+            if (iLine.length == TransConst.FIELDS_INFO &&
                 nodes != null && nodes.size() > 0) {
                 nodes.get(nodes.size()-1).putBranch(iLine[0], iLine[1]);
                 continue;
@@ -177,19 +177,19 @@ public class NodeList {
         Node node = null;
         while (aScan.hasNext()) {
             aLine = aScan.nextLine().trim();
-            if (aLine.startsWith(TranspathConstants.NODE_ID)) {
-                node = new Node(Integer.parseInt(aLine.substring(TranspathConstants.NODE_ID.length(), aLine.indexOf(TranspathConstants.COLON))), 
-                                 aLine.substring(aLine.indexOf(TranspathConstants.COLON)+TranspathConstants.COLON.length()));
+            if (aLine.startsWith(TransConst.NODE_ID)) {
+                node = new Node(Integer.parseInt(aLine.substring(TransConst.NODE_ID.length(), aLine.indexOf(TransConst.COLON))), 
+                                 aLine.substring(aLine.indexOf(TransConst.COLON)+TransConst.COLON.length()));
                 nodes.add(node);
                 continue;
             }
-            for (String branchType : TranspathConstants.SUPPORTED_BRANCH_TYPES) {
+            for (String branchType : TransConst.SUPPORTED_BRANCH_TYPES) {
                 if (aLine.startsWith(branchType)) {
                     if (nodes == null || nodes.size() < 1) {
                         System.out.println("File Corrupted.");
                         return null;
                     }
-                    nodes.get(nodes.size()-1).putBranch(branchType, aLine.substring(aLine.indexOf(TranspathConstants.COLON)+ TranspathConstants.COLON.length()));
+                    nodes.get(nodes.size()-1).putBranch(branchType, aLine.substring(aLine.indexOf(TransConst.COLON)+ TransConst.COLON.length()));
                 }
             }
         }

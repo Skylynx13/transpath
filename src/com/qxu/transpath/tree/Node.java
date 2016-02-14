@@ -13,7 +13,7 @@ package com.qxu.transpath.tree;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: Node <br/>
@@ -96,7 +96,7 @@ public class Node {
     }
     
     public String getMetadata() {
-        return this.getBranch(TranspathConstants.BRANCH_0MD);
+        return this.getBranch(TransConst.BRANCH_0MD);
     }
     
     public String getSimpleName() {
@@ -125,15 +125,15 @@ public class Node {
     
     public String keepNode() {
         StringBuffer nodeBuf = new StringBuffer();
-        nodeBuf.append(TranspathConstants.NODE_ID);
-        nodeBuf.append(TranspathConstants.COLON);
+        nodeBuf.append(TransConst.NODE_ID);
+        nodeBuf.append(TransConst.COLON);
         nodeBuf.append(this.getId());
-        nodeBuf.append(TranspathConstants.COLON);
+        nodeBuf.append(TransConst.COLON);
         nodeBuf.append(this.getName());
         for(String key: this.branches.keySet()) {
-            nodeBuf.append(TranspathConstants.CRLN);
+            nodeBuf.append(TransConst.CRLN);
             nodeBuf.append(key);
-            nodeBuf.append(TranspathConstants.COLON);
+            nodeBuf.append(TransConst.COLON);
             nodeBuf.append(this.getBranch(key));
         }
         return nodeBuf.toString();

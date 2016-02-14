@@ -20,7 +20,7 @@ import java.util.Scanner;
 import com.qxu.transpath.utils.CdEntry;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.StrUtils;
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: Arranger <br/>
@@ -180,12 +180,12 @@ public class Arranger {
         if (this.entries == null) 
             return str;
         for (CdEntry cde:this.entries) {
-            str += cde.getName() + TranspathConstants.LINE_LINKER;
+            str += cde.getName() + TransConst.LINE_LINKER;
             for (String cmt: cde.getComments()) {
-                str += cmt + TranspathConstants.LINE_LINKER;
+                str += cmt + TransConst.LINE_LINKER;
             }
             for (String lnk: cde.getLinks()) {
-                str += lnk + TranspathConstants.LINE_LINKER;
+                str += lnk + TransConst.LINE_LINKER;
             }
         }
         return str;
@@ -196,7 +196,7 @@ public class Arranger {
         if (this.entries == null) 
             return str;
         for (CdEntry cde:this.entries) {
-            str += cde.getName() + TranspathConstants.LINE_LINKER;
+            str += cde.getName() + TransConst.LINE_LINKER;
         }
         return str;
     }
@@ -308,8 +308,8 @@ public class Arranger {
                 if (cde1.getName().equalsIgnoreCase(simpleName2) 
                         || cde1.getName().startsWith(simpleName2)
                         || simpleName2.startsWith(cde1.getName())) {
-                    result.append("New Line " + i1 + ": " + cde1.getName() + TranspathConstants.LINE_LINKER
-                            +"Old Line " + i2 + ": " + cde2.getName() + TranspathConstants.LINE_LINKER); 
+                    result.append("New Line " + i1 + ": " + cde1.getName() + TransConst.LINE_LINKER
+                            +"Old Line " + i2 + ": " + cde2.getName() + TransConst.LINE_LINKER); 
                 }
                 if (i2%10000==0) {
                     System.out.println("i1="+i1+"; i2="+i2);

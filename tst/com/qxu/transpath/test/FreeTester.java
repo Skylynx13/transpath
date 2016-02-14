@@ -10,15 +10,20 @@
  */
 package com.qxu.transpath.test;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Properties;
 
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.utils.CdEntry;
 import com.qxu.transpath.utils.StrUtils;
+import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.worker.Arranger;
 import com.qxu.transpath.worker.TntKeeper;
 
@@ -171,6 +176,21 @@ public class FreeTester {
         return ret;
     }
     
+    private void testProps() {
+        String aProp = "abc";
+        Properties aProps = new Properties();
+        try {
+            aProps.load(new FileInputStream(TransConst.TP_PROPS));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        aProp = aProps.getProperty("test");
+        System.out.println("free props tests: [" + aProp + "]");
+        
+    }
+    
     public static void main(String args[]) {
         FreeTester ft = new FreeTester();
         //ft.testNodeTree();
@@ -179,7 +199,9 @@ public class FreeTester {
         //ft.testReplaceStr();
         //ft.testReformat();
         
-        System.out.println(StrUtils.getSimpleName("G.I. Joe Action Force Mini Comic.cbr"));
+        //System.out.println(StrUtils.getSimpleName("G.I. Joe Action Force Mini Comic.cbr"));
+        
+        ft.testProps();
     }
 }
 

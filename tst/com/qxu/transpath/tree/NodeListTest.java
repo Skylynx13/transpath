@@ -20,7 +20,7 @@ import java.util.Scanner;
 
 import org.junit.Test;
 
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: NodeListTest <br/>
@@ -41,30 +41,30 @@ public class NodeListTest {
     public void buildFromRootTest() {
         ArrayList<Node> nodes = NodeList.buildFromRoot("resource/qtest");
         assertEquals("tfile004.txt", nodes.get(0).getName());
-        assertEquals("/tdir001/tdir102/", nodes.get(0).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/tdir001/tdir102/", nodes.get(0).getBranch(TransConst.BRANCH_1ST));
         assertEquals("tfile005.txt", nodes.get(1).getName());
-        assertEquals("/tdir001/tdir102/", nodes.get(1).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/tdir001/tdir102/", nodes.get(1).getBranch(TransConst.BRANCH_1ST));
         assertEquals("tfile006.txt", nodes.get(2).getName());
-        assertEquals("/tdir002/tdir201/", nodes.get(2).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/tdir002/tdir201/", nodes.get(2).getBranch(TransConst.BRANCH_1ST));
         assertEquals("tfile007.txt", nodes.get(3).getName());
-        assertEquals("/tdir002/tdir201/", nodes.get(3).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/tdir002/tdir201/", nodes.get(3).getBranch(TransConst.BRANCH_1ST));
         assertEquals("tfile008.txt", nodes.get(4).getName());
-        assertEquals("/tdir003/", nodes.get(4).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/tdir003/", nodes.get(4).getBranch(TransConst.BRANCH_1ST));
         assertEquals("tfile001.txt", nodes.get(5).getName());
-        assertEquals("/", nodes.get(5).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/", nodes.get(5).getBranch(TransConst.BRANCH_1ST));
         assertEquals("tfile002.txt", nodes.get(6).getName());
-        assertEquals("/", nodes.get(6).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/", nodes.get(6).getBranch(TransConst.BRANCH_1ST));
         assertEquals("tfile003.txt", nodes.get(7).getName());
-        assertEquals("/", nodes.get(7).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/", nodes.get(7).getBranch(TransConst.BRANCH_1ST));
     }
     
     @Test
     public void buildFromFileTest() {
         ArrayList<Node> nodes = NodeList.buildFromFile("resource/tst/NodeListTest_buildFromFileTest001.txt");
         assertEquals("ABCDEFG.cbr", nodes.get(0).getName());
-        assertEquals("/abc/def/ghijklmn/", nodes.get(0).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/abc/def/ghijklmn/", nodes.get(0).getBranch(TransConst.BRANCH_1ST));
         assertEquals("HIJKLMN.cbz", nodes.get(1).getName());
-        assertEquals("/abc/opq/rstuvwxyz/", nodes.get(1).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals("/abc/opq/rstuvwxyz/", nodes.get(1).getBranch(TransConst.BRANCH_1ST));
     }
     
     @Test
@@ -86,9 +86,9 @@ public class NodeListTest {
     public void buildFromFileTest_No_Branches() {
         ArrayList<Node> nodes = NodeList.buildFromFile("resource/tst/NodeListTest_buildFromFileTest004.txt");
         assertEquals("ABCDEFG.cbr", nodes.get(0).getName());
-        assertEquals(null, nodes.get(0).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals(null, nodes.get(0).getBranch(TransConst.BRANCH_1ST));
         assertEquals("HIJKLMN.cbz", nodes.get(1).getName());
-        assertEquals(null, nodes.get(1).getBranch(TranspathConstants.BRANCH_1ST));
+        assertEquals(null, nodes.get(1).getBranch(TransConst.BRANCH_1ST));
     }
     
     @Test
@@ -124,7 +124,7 @@ public class NodeListTest {
                 "HIJKLMN.cbz");
         assertEquals(2, node.getId());
         assertEquals("HIJKLMN.cbz", node.getName());
-        assertEquals("/abc/opq/rstuvwxyz/", node.getBranch(TranspathConstants.BRANCH_1ST));        
+        assertEquals("/abc/opq/rstuvwxyz/", node.getBranch(TransConst.BRANCH_1ST));        
     }
     
     @Test

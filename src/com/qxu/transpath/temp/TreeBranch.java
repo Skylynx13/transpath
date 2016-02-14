@@ -11,7 +11,7 @@
  */
 package com.qxu.transpath.temp;
 
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: TBranch <br/>
@@ -31,7 +31,7 @@ public class TreeBranch {
     
     @Override
     public String toString() {
-        return treeName + TranspathConstants.TREENAME_BRANCH + itemPath;
+        return treeName + TransConst.TREENAME_BRANCH + itemPath;
     }
 
     public String getTreeName() {

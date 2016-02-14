@@ -24,7 +24,7 @@ package com.qxu.transpath.temp;
 import java.util.Iterator;
 import java.util.List;
 
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: ItemNode <br/>
@@ -47,7 +47,7 @@ public class ItemNode {
         String str = itemName;
         Iterator<TreeBranch> iTreeBranch = itemTreeBranches.iterator();
         while (iTreeBranch.hasNext()) {
-            str += TranspathConstants.BRANCH_LINKER + iTreeBranch.next().toString();
+            str += TransConst.BRANCH_LINKER + iTreeBranch.next().toString();
         }
         return str;
     }

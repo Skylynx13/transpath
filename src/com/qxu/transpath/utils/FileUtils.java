@@ -217,28 +217,28 @@ public class FileUtils {
 
     public static String getFileMimeType(String pFileName) {
         if (pFileName == null || pFileName.isEmpty()) {
-            return TranspathConstants.EMPTY;
+            return TransConst.EMPTY;
         }
         return URLConnection.getFileNameMap().getContentTypeFor(pFileName); 
     }
     
     public static String getFileMimeType(File pFile) {
         if (pFile == null) {
-            return TranspathConstants.EMPTY;
+            return TransConst.EMPTY;
         }
         return getFileMimeType(pFile.getName());
     }
     
     public static String getLastModifiedString(String pFileName) {
         if (pFileName == null || pFileName.isEmpty()) {
-            return TranspathConstants.EMPTY;
+            return TransConst.EMPTY;
         }
         return getLastModifiedString(new File(pFileName));
     }
     
     public static String getLastModifiedString(File pFile) {
         if (pFile == null) {
-            return TranspathConstants.EMPTY;
+            return TransConst.EMPTY;
         }
         long time = pFile.lastModified();
 

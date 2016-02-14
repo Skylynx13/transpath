@@ -1,6 +1,6 @@
 package com.qxu.transpath.utils;
 
-public class TranspathConstants {
+public class TransConst {
     public static final String PREFIX_ARCHIVE = "A";
     public static final String PREFIX_BLOCK   = "B";    
     public static final String BRANCH_LINKER = "|";
@@ -29,18 +29,21 @@ public class TranspathConstants {
     public static final String BRANCH_3RD = "3RD";
     public static final String BRANCH_4TH = "4TH";
     public static final String[] SUPPORTED_BRANCH_TYPES = {
-        TranspathConstants.BRANCH_0MD, 
-        TranspathConstants.BRANCH_1ST, 
-        TranspathConstants.BRANCH_2ND, 
-        TranspathConstants.BRANCH_3RD, 
-        TranspathConstants.BRANCH_4TH
+        TransConst.BRANCH_0MD, 
+        TransConst.BRANCH_1ST, 
+        TransConst.BRANCH_2ND, 
+        TransConst.BRANCH_3RD, 
+        TransConst.BRANCH_4TH
         };
 
     public static final int FIELDS_INFO   = 2;
     public static final int FIELDS_BRANCH = 3;
     
     public static final String INDEX_PRE_CATALOG = "/PreCatalog/";
-    
+
+// Path info be moved to properties
 //    public static final String TP_HOME = "D:\\_TF\\_Update\\transpath\\";
-    public static final String TP_HOME = "D:\\Qdata\\update\\transpath\\";
+//    public static final String TP_HOME = "D:\\Qdata\\update\\transpath\\";
+    public static final String TP_PROPS = "transpath.properties";
+//    public static final String TP_HOME = "TP_HOME";
 }

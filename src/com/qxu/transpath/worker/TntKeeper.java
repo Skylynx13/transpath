@@ -11,7 +11,7 @@
 package com.qxu.transpath.worker;
 
 import com.qxu.transpath.tree.NodeTree;
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: TntKeeper <br/>
@@ -46,7 +46,7 @@ public class TntKeeper implements FileKeeper {
     
     public String listAll(NodeTree pTree) {
         String list = pTree.getNodePathName();
-        list += TranspathConstants.LINE_LINKER;
+        list += TransConst.LINE_LINKER;
         if (!pTree.isLeaf()) {
             for (NodeTree child:pTree.getChildren()) {
                 list += listAll(child);

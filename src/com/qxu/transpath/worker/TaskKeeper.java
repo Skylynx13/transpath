@@ -17,7 +17,8 @@ import java.util.Scanner;
 
 import com.qxu.transpath.utils.DateUtils;
 import com.qxu.transpath.utils.FileUtils;
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransProp;
 
  /**
  * ClassName: FreshKeeper <br/>
@@ -51,41 +52,41 @@ public class TaskKeeper {
 
     public void keepFresh() {
         System.out.println("Keeping fresh...");
-        int n = new Arranger().readFromFile(TranspathConstants.TP_HOME + "raw.txt").sort().merge().writeToFile(TranspathConstants.TP_HOME + "fresh.txt");
-        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "fresh.txt", TranspathConstants.TP_HOME + "fresh_" + archDate + ".txt");
+        int n = new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "raw.txt").sort().merge().writeToFile(TransProp.getProp("TP_HOME") + "fresh.txt");
+        FileUtils.copyFileBytes(TransProp.getProp("TP_HOME") + "fresh.txt", TransProp.getProp("TP_HOME") + "fresh_" + archDate + ".txt");
         System.out.println("Totally " + n + " fresh entries processed.");
         System.out.println("Done.");
     }
     
     public void keepTask() {
         System.out.println("Keeping task...");
-        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "task.txt", TranspathConstants.TP_HOME + "task_" + archDate + "_old.txt");
-        int n = new Arranger().readFromFile(TranspathConstants.TP_HOME + "task.txt").merge(new Arranger().readFromFile(TranspathConstants.TP_HOME + "fresh.txt")).writeToFile(TranspathConstants.TP_HOME + "task.txt");
-        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "task.txt", TranspathConstants.TP_HOME + "task_" + archDate + ".txt");
+        FileUtils.copyFileBytes(TransProp.getProp("TP_HOME") + "task.txt", TransProp.getProp("TP_HOME") + "task_" + archDate + "_old.txt");
+        int n = new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "task.txt").merge(new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "fresh.txt")).writeToFile(TransProp.getProp("TP_HOME") + "task.txt");
+        FileUtils.copyFileBytes(TransProp.getProp("TP_HOME") + "task.txt", TransProp.getProp("TP_HOME") + "task_" + archDate + ".txt");
         System.out.println("Totally " + n + " task entries processed.");
         System.out.println("Done.");
     }
     
     public void keepReadyIndex() {
         System.out.println("Keeping iReady...");
-        int n = new Arranger().readFromFile(TranspathConstants.TP_HOME + "ready.txt").writeIndexToFile(TranspathConstants.TP_HOME + "iready.txt");
+        int n = new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "ready.txt").writeIndexToFile(TransProp.getProp("TP_HOME") + "iready.txt");
         System.out.println("Totally " + n + " ready index processed.");
         System.out.println("Done.");
     }
     
     public void checkFresh() {
         System.out.println("Checking fresh...");
-        Arranger arrFresh = new Arranger().readFromFile(TranspathConstants.TP_HOME + "fresh.txt");
+        Arranger arrFresh = new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "fresh.txt");
         String result = "";
         result += "==================================================================";
         result += "Fresh vs Store: \n";
-        result += arrFresh.compare(new Arranger().readFromFile(TranspathConstants.TP_HOME + "istore.txt"));
+        result += arrFresh.compare(new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "istore.txt"));
         result += "==================================================================";
         result += "Fresh vs Ready: \n";
-        result += arrFresh.compare(new Arranger().readFromFile(TranspathConstants.TP_HOME + "iready.txt"));
+        result += arrFresh.compare(new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "iready.txt"));
         System.out.println(result);
         try {
-            PrintWriter out = new PrintWriter(TranspathConstants.TP_HOME + "compare.txt");
+            PrintWriter out = new PrintWriter(TransProp.getProp("TP_HOME") + "compare.txt");
             out.println(result);
             out.close();
         } catch (FileNotFoundException e) {
@@ -96,17 +97,17 @@ public class TaskKeeper {
     
     public void checkTask() {
         System.out.println("Checking task...");
-        Arranger arrTask = new Arranger().readFromFile(TranspathConstants.TP_HOME + "task.txt");
+        Arranger arrTask = new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "task.txt");
         String result = "";
         result += "==================================================================\n";
         result += "Task vs Store: \n";
-        result += arrTask.compare(new Arranger().readFromFile(TranspathConstants.TP_HOME + "istore.txt"));
+        result += arrTask.compare(new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "istore.txt"));
         result += "==================================================================\n";
         result += "Task vs Ready: \n";
-        result += arrTask.compare(new Arranger().readFromFile(TranspathConstants.TP_HOME + "iready.txt"));
+        result += arrTask.compare(new Arranger().readFromFile(TransProp.getProp("TP_HOME") + "iready.txt"));
         System.out.println(result);
         try {
-            PrintWriter out = new PrintWriter(TranspathConstants.TP_HOME + "compare.txt");
+            PrintWriter out = new PrintWriter(TransProp.getProp("TP_HOME") + "compare.txt");
             out.println(result);
             out.close();
         } catch (FileNotFoundException e) {
@@ -117,9 +118,9 @@ public class TaskKeeper {
     
     public void keepRaw() {
         System.out.println("Keeping raw...");
-        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "dump.txt", TranspathConstants.TP_HOME + "dump_" + archDate + ".txt");
-        int n = new Arranger().trimFile(TranspathConstants.TP_HOME + "dump.txt", TranspathConstants.TP_HOME + "raw.txt");
-        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "raw.txt", TranspathConstants.TP_HOME + "raw_" + archDate + ".txt");
+        FileUtils.copyFileBytes(TransProp.getProp("TP_HOME") + "dump.txt", TransProp.getProp("TP_HOME") + "dump_" + archDate + ".txt");
+        int n = new Arranger().trimFile(TransProp.getProp("TP_HOME") + "dump.txt", TransProp.getProp("TP_HOME") + "raw.txt");
+        FileUtils.copyFileBytes(TransProp.getProp("TP_HOME") + "raw.txt", TransProp.getProp("TP_HOME") + "raw_" + archDate + ".txt");
         System.out.println("Raw Filtered to "+ n + " lines.");        
         System.out.println("Done.");
     }

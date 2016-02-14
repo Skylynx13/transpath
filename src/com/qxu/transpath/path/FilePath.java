@@ -1,6 +1,6 @@
 package com.qxu.transpath.path;
 
-import com.qxu.transpath.utils.TranspathConstants;
+import com.qxu.transpath.utils.TransConst;
 
 @SuppressWarnings("unused")
 public class FilePath extends BasePath {
@@ -26,11 +26,11 @@ public class FilePath extends BasePath {
 	}
 	
 	public void setFullPath() {
-		super.setFullPath(archiveName + TranspathConstants.LEVEL_LINKER + blockName);
+		super.setFullPath(archiveName + TransConst.LEVEL_LINKER + blockName);
 	}
 	
 	@Override
 	public String getFullPath() {
-		return archiveName + TranspathConstants.LEVEL_LINKER + blockName;
+		return archiveName + TransConst.LEVEL_LINKER + blockName;
 	}
 }
