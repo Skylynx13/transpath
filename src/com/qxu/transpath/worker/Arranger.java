@@ -168,7 +168,7 @@ public class Arranger {
         Arranger newArranger = new Arranger();
         newArranger.entries.addAll(this.entries);
         newArranger.entries.addAll(otherArranger.entries);
-        return this.sort().merge();
+        return newArranger.sort().merge();
     }
     
     public String toString() {
@@ -232,18 +232,18 @@ public class Arranger {
             String inLine = in.nextLine();
             if (!isInWindow && checkEndLine(inLine)) {
                 System.out.println("Error: End line out of window!");
-                System.out.println("Last Close Line " + iLastClose + ": " + sLastClose);
-                System.out.println("This Close Line " + iInLine + ": " + inLine);
+                System.out.println("Last End Line " + iLastClose + ": " + sLastClose);
+                System.out.println("This End Line " + iInLine + ": " + inLine);
             }
             if (!isInWindow && checkLinkLine(inLine)) {
                 System.out.println("Error: Link line out of window!");
-                System.out.println("Last Close Line: " + iLastClose + ": " + sLastClose);
-                System.out.println("This Close Line " + iInLine + ": " + inLine);
+                System.out.println("Last End Line: " + iLastClose + ": " + sLastClose);
+                System.out.println("This Link Line " + iInLine + ": " + inLine);
             }
             if (isInWindow && checkStartLine(inLine)) {
                 System.out.println("Error: Start line inside window!");
-                System.out.println("Last Open Line: " + iLastOpen + ": " + sLastOpen);
-                System.out.println("This Open Line " + iInLine + ": " + inLine);
+                System.out.println("Last Start Line: " + iLastOpen + ": " + sLastOpen);
+                System.out.println("This Start Line " + iInLine + ": " + inLine);
             }
             if (!isInWindow && checkStartLine(inLine)) {
                 isInWindow = true;

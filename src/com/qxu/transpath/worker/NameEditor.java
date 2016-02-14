@@ -244,13 +244,13 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "peterwatts-", "PeterWatts-" } };
+        String[][] replaceOnce = { { "Transformers ", "The Transformers " } };
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
 
     public static void main(String[] args) {
-        //renameNormalize();
-        renameSpecialReplace();
+        renameNormalize();
+        //renameSpecialReplace();
         //renamePushDate();
         //renameUnPushDate();
     }

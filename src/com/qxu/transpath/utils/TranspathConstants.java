@@ -40,4 +40,7 @@ public class TranspathConstants {
     public static final int FIELDS_BRANCH = 3;
     
     public static final String INDEX_PRE_CATALOG = "/PreCatalog/";
+    
+//    public static final String TP_HOME = "D:\\_TF\\_Update\\transpath\\";
+    public static final String TP_HOME = "D:\\Qdata\\update\\transpath\\";
 }

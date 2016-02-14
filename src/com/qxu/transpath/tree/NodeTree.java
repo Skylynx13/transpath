@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.qxu.transpath.utils.TranspathConstants;
@@ -37,12 +38,18 @@ import com.qxu.transpath.utils.TranspathConstants;
  * 
  */
 
-public class NodeTree implements TreeNode {
+public class NodeTree implements TreeNode, MutableTreeNode {
     private static class NodeNameAscComparator implements Comparator<NodeTree> {
 
         @Override
         public int compare(NodeTree o1, NodeTree o2) {
-            return o1.getNodeName().compareTo(o2.getNodeName());
+            if (o1.isBranch() == o2.isBranch()) {
+                return o1.getNodeName().compareTo(o2.getNodeName());                
+            }
+            if (o1.isBranch()) {
+                return -1;
+            }
+            return 1;
         }
         
     }
@@ -305,6 +312,36 @@ public class NodeTree implements TreeNode {
         System.out.println(node1.getNodePathName());
         System.out.println(node2.getNodePathName());
         System.out.println(node3.getNodePathName());
+    }
+
+    @Override
+    public void insert(MutableTreeNode child, int index) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void remove(int index) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void remove(MutableTreeNode node) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void setUserObject(Object object) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void removeFromParent() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void setParent(MutableTreeNode newParent) {
+        // TODO Auto-generated method stub
     }
 
 }

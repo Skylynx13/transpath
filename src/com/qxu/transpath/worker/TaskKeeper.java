@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 import com.qxu.transpath.utils.DateUtils;
 import com.qxu.transpath.utils.FileUtils;
+import com.qxu.transpath.utils.TranspathConstants;
 
  /**
  * ClassName: FreshKeeper <br/>
@@ -49,48 +50,78 @@ public class TaskKeeper {
     }
 
     public void keepFresh() {
-        int n = new Arranger().readFromFile("resource/raw.txt").sort().merge().writeToFile("resource/fresh.txt");
-        FileUtils.copyFileBytes("resource/fresh.txt", "resource/fresh_" + archDate + ".txt");
+        System.out.println("Keeping fresh...");
+        int n = new Arranger().readFromFile(TranspathConstants.TP_HOME + "raw.txt").sort().merge().writeToFile(TranspathConstants.TP_HOME + "fresh.txt");
+        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "fresh.txt", TranspathConstants.TP_HOME + "fresh_" + archDate + ".txt");
         System.out.println("Totally " + n + " fresh entries processed.");
+        System.out.println("Done.");
     }
     
     public void keepTask() {
-        FileUtils.copyFileBytes("resource/task.txt", "resource/task_" + archDate + "_old.txt");
-        int n = new Arranger().readFromFile("resource/task.txt").merge(new Arranger().readFromFile("resource/fresh.txt")).writeToFile("resource/task.txt");
-        FileUtils.copyFileBytes("resource/task.txt", "resource/task_" + archDate + ".txt");
+        System.out.println("Keeping task...");
+        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "task.txt", TranspathConstants.TP_HOME + "task_" + archDate + "_old.txt");
+        int n = new Arranger().readFromFile(TranspathConstants.TP_HOME + "task.txt").merge(new Arranger().readFromFile(TranspathConstants.TP_HOME + "fresh.txt")).writeToFile(TranspathConstants.TP_HOME + "task.txt");
+        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "task.txt", TranspathConstants.TP_HOME + "task_" + archDate + ".txt");
         System.out.println("Totally " + n + " task entries processed.");
+        System.out.println("Done.");
     }
     
     public void keepReadyIndex() {
-        int n = new Arranger().readFromFile("resource/ready.txt").writeIndexToFile("resource/iready.txt");
-        System.out.println("Totally " + n + " task index processed.");
+        System.out.println("Keeping iReady...");
+        int n = new Arranger().readFromFile(TranspathConstants.TP_HOME + "ready.txt").writeIndexToFile(TranspathConstants.TP_HOME + "iready.txt");
+        System.out.println("Totally " + n + " ready index processed.");
+        System.out.println("Done.");
     }
     
     public void checkFresh() {
-        Arranger arrFresh = new Arranger().readFromFile("resource/fresh.txt");
+        System.out.println("Checking fresh...");
+        Arranger arrFresh = new Arranger().readFromFile(TranspathConstants.TP_HOME + "fresh.txt");
         String result = "";
         result += "==================================================================";
         result += "Fresh vs Store: \n";
-        result += arrFresh.compare(new Arranger().readFromFile("resource/istore.txt"));
+        result += arrFresh.compare(new Arranger().readFromFile(TranspathConstants.TP_HOME + "istore.txt"));
         result += "==================================================================";
         result += "Fresh vs Ready: \n";
-        result += arrFresh.compare(new Arranger().readFromFile("resource/iready.txt"));
+        result += arrFresh.compare(new Arranger().readFromFile(TranspathConstants.TP_HOME + "iready.txt"));
         System.out.println(result);
         try {
-            PrintWriter out = new PrintWriter("resource/compare.txt");
+            PrintWriter out = new PrintWriter(TranspathConstants.TP_HOME + "compare.txt");
             out.println(result);
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        
+        System.out.println("Done.");
+    }
+    
+    public void checkTask() {
+        System.out.println("Checking task...");
+        Arranger arrTask = new Arranger().readFromFile(TranspathConstants.TP_HOME + "task.txt");
+        String result = "";
+        result += "==================================================================\n";
+        result += "Task vs Store: \n";
+        result += arrTask.compare(new Arranger().readFromFile(TranspathConstants.TP_HOME + "istore.txt"));
+        result += "==================================================================\n";
+        result += "Task vs Ready: \n";
+        result += arrTask.compare(new Arranger().readFromFile(TranspathConstants.TP_HOME + "iready.txt"));
+        System.out.println(result);
+        try {
+            PrintWriter out = new PrintWriter(TranspathConstants.TP_HOME + "compare.txt");
+            out.println(result);
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Done.");
     }
     
     public void keepRaw() {
-        FileUtils.copyFileBytes("resource/dump.txt", "resource/dump_" + archDate + ".txt");
-        int n = new Arranger().trimFile("resource/dump.txt", "resource/raw.txt");
-        FileUtils.copyFileBytes("resource/raw.txt", "resource/raw_" + archDate + ".txt");
+        System.out.println("Keeping raw...");
+        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "dump.txt", TranspathConstants.TP_HOME + "dump_" + archDate + ".txt");
+        int n = new Arranger().trimFile(TranspathConstants.TP_HOME + "dump.txt", TranspathConstants.TP_HOME + "raw.txt");
+        FileUtils.copyFileBytes(TranspathConstants.TP_HOME + "raw.txt", TranspathConstants.TP_HOME + "raw_" + archDate + ".txt");
         System.out.println("Raw Filtered to "+ n + " lines.");        
+        System.out.println("Done.");
     }
     
     /**
@@ -105,19 +136,18 @@ public class TaskKeeper {
         System.out.println("TaskKeeper on job...");
         for (String arg : args){
             if (arg.equals("fresh")) {
-                System.out.println("Keeping fresh...");
                 keeper.keepRaw();
                 keeper.keepFresh();
-                keeper.keepReadyIndex();
-                System.out.println("Done.");
-            } else if (arg.equals("check")) {
-                System.out.println("Checking fresh...");
-                keeper.checkFresh();
-                System.out.println("Done.");
             } else if (arg.equals("task")) {
-                System.out.println("Keeping task...");
+                keeper.keepRaw();
+                keeper.keepFresh();
                 keeper.keepTask();
-                System.out.println("Done.");
+            } else if (arg.equals("iready")) {
+                keeper.keepReadyIndex();
+            } else if (arg.equals("checkfresh")) {
+                keeper.checkFresh();
+            } else if (arg.equals("checktask")) {
+                keeper.checkTask();
             }
         }
         System.out.println("Keeper job done");

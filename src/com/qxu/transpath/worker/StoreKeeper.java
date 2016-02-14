@@ -16,6 +16,9 @@ import java.util.ArrayList;
 
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeList;
+import com.qxu.transpath.utils.DateUtils;
+import com.qxu.transpath.utils.FileUtils;
+import com.qxu.transpath.utils.TranspathConstants;
 
  /**
  * ClassName: StoreKeeper <br/>
@@ -55,8 +58,8 @@ public class StoreKeeper {
         int tNum = 0;
         int kNum = 0;
         try {
-            PrintWriter out = new PrintWriter("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt");
-            for (Node aNode : NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd++.txt")) {
+            PrintWriter out = new PrintWriter("D:\\Qdata\\update\\TFLib_A2013_1st_2nd_fin.txt");
+            for (Node aNode : NodeList.buildFromFile("D:\\Qdata\\update\\TFLib_A2013_1st_2nd++.txt")) {
                 if (aNode.numberOfBranch() == 2) {
                     out.println(aNode.keepNode());
                     kNum++;
@@ -90,7 +93,7 @@ public class StoreKeeper {
     
     private static void findSingleBranchNode() {
         // Find those who only has one branch.
-        ArrayList<Node> nodes = NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt");
+        ArrayList<Node> nodes = NodeList.buildFromFile("D:\\Qdata\\update\\TFLib_A2013_1st_2nd_fin.txt");
         System.out.println("=========================================================");
         System.out.println("1ST only:");
         for (Node node : nodes) {
@@ -125,23 +128,13 @@ public class StoreKeeper {
         System.out.println("StoreKeeper on job...");
         for (String arg : args) {
             if (arg.equals("storehis")) {
-                System.out.println("Combining storehis...");
-                StoreKeeper.combineLists("resource/storehis.txt", 
-                        "D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt",
-                        "D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt");
-                System.out.println("Done.");
+                buildStoreHis();
             } else if (arg.startsWith("b")) {
-                String newBlock = "D:\\_TF\\_Update\\TFLib_A2015_" + arg + ".txt";
-                System.out.println("Keeping block...");
-                StoreKeeper.keepBlockFromRoot(newBlock, "\\A2015\\", "F:\\Book\\TFLib\\");
-                System.out.println("Combining store...");
-                StoreKeeper.combineLists("resource/store.txt", "resource/storehis.txt", newBlock);
-                System.out.println("Done.");
+                buildStoreBlock(arg);
+            } else if (arg.startsWith("A")) {
+                buildStoreArchive(arg);
             } else if (arg.equals("istore")) {
-                System.out.println("Keeping store index...");
-                StoreKeeper.keepStoreIndex("resource/store.txt", 
-                        "resource/istore.txt");
-                System.out.println("Done.");
+                buildStoreIndex();
             } 
         }
         System.out.println("StoreKeeper job done.");
@@ -153,6 +146,44 @@ public class StoreKeeper {
         // "D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt",
         // "D:\\_TF\\_Update\\TFLib_A2013_fin.txt");
 
+    }
+
+    public static void buildStoreIndex() {
+        System.out.println("Keeping store index...");
+        StoreKeeper.keepStoreIndex(TranspathConstants.TP_HOME + "store16.txt", 
+                TranspathConstants.TP_HOME + "istore.txt");
+        System.out.println("Done.");
+    }
+
+    public static void buildStoreBlock(String arg) {
+        String year = arg.substring(1,3);
+        String newBlock = "D:\\Qdata\\update\\TFLib_A20" + year + "_" + arg + ".txt";
+        System.out.println("Keeping block...");
+        StoreKeeper.keepBlockFromRoot(newBlock, "\\A20" + year + "\\", "F:\\Book\\TFLib\\");
+        System.out.println("Combining store...");
+        if (year.equals("15")) {
+            StoreKeeper.combineLists(TranspathConstants.TP_HOME + "store15.txt", TranspathConstants.TP_HOME + "storehis.txt", newBlock);
+        } else if (year.equals("16")) {
+            StoreKeeper.combineLists(TranspathConstants.TP_HOME + "store16.txt", TranspathConstants.TP_HOME + "store15.txt", newBlock);
+        }
+        System.out.println("Done.");
+    }
+
+    public static void buildStoreArchive(String arg) {
+        String newBlock = "D:\\Qdata\\update\\TFLib_" + arg + ".txt";
+        System.out.println("Keeping block...");
+        StoreKeeper.keepBlockFromRoot(newBlock, "\\" + arg + "\\", "F:\\Book\\TFLib\\");
+        System.out.println("Backup...");
+        FileUtils.copyFileBytes(newBlock, TranspathConstants.TP_HOME + "TFLib_" + arg + "_" + DateUtils.dateStringToday() + ".txt");
+        System.out.println("Done.");
+    }
+
+    public static void buildStoreHis() {
+        System.out.println("Combining storehis...");
+        StoreKeeper.combineLists(TranspathConstants.TP_HOME + "storehis.txt", 
+                "D:\\Qdata\\update\\TFLib_A2013_0_1_2.txt",
+                "D:\\Qdata\\update\\TFLib_A2014_0_1_2.txt");
+        System.out.println("Done.");
     }
 
 }

@@ -4,6 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.event.*;
+
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeList;
 import com.qxu.transpath.tree.NodeTree;
@@ -35,20 +36,58 @@ public class JTreeFrame extends JFrame {
     DefaultMutableTreeNode root;
 
 	public JTreeFrame() {
-	    this.initJTree();
+	    initJTree();
+	    initMenuBar();
+	    
 	}
+
+    public void initMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+	    this.setJMenuBar(menuBar);
+	    
+        JMenu sysMenu = new JMenu("Sys");
+        menuBar.add(sysMenu);
+        
+        Action exitAction = new AbstractAction("Exit") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        };
+        JMenuItem sysExitItem = sysMenu.add(exitAction);
+        
+        JMenu taskMenu = new JMenu("Task");
+        menuBar.add(taskMenu);	    
+	    
+	    JMenuItem taskKeepItem = new JMenuItem("Keep");
+	    taskMenu.add(taskKeepItem);
+
+	    JMenu storeMenu = new JMenu("Store");
+	    menuBar.add(storeMenu);
+	    JMenuItem storeKeepItem = new JMenuItem("Keep");
+	    storeMenu.add(storeKeepItem);
+	    
+	    ActionListener listener = new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }};
+	    taskKeepItem.addActionListener(listener);
+    }
 	
 	public void initJTree() {
 		this.setSize(1200, 600);
-		this.setTitle("transpath");
+		this.setTitle("STARS");
 		cp = (JPanel) this.getContentPane();
 		cp.setLayout(new BorderLayout());
         
 		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
         //NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST);
-        NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
-        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
-        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0928.txt"), TranspathConstants.BRANCH_1ST);
+      NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\transpath\\store16.txt"), TranspathConstants.BRANCH_1ST);
+//        NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
+//        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
+//        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0928.txt"), TranspathConstants.BRANCH_1ST);
         ntree1.recursivelySort();
 		jtree1 = new JTree(ntree1);
         //jtree1 = new JTree(this.buildTestTree());
@@ -59,14 +98,16 @@ public class JTreeFrame extends JFrame {
         jtree1.revalidate();
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
-		NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
-		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
-		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0726.txt"), TranspathConstants.BRANCH_2ND);
+        NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\transpath\\store16.txt"), TranspathConstants.BRANCH_2ND);
+//      NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
+//		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
+//		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0726.txt"), TranspathConstants.BRANCH_2ND);
         ntree2.recursivelySort();
 		jtree2 = new JTree(ntree2);
 
 		jtree2.setShowsRootHandles(true);
 		jtree2.setRootVisible(true);
+		jtree2.setEditable(true);
 		UIManager.getSystemLookAndFeelClassName();
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
