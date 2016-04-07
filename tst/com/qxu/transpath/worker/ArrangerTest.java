@@ -39,4 +39,18 @@ public class ArrangerTest {
         assertEquals(true, FileUtils.compareFileBytes("resource/tst/ArrangerTest_task.txt", "resource/tst/ArrangerTest_task_000.txt"));
     }
 
+    @Test
+    public void applyFilterTest_keywords_filter() {
+        //TODO
+        assertEquals(true, true);
+    }
+    
+    @Test
+    public void equals_arranger() {
+        Arranger firstArranger = new Arranger();
+        Arranger secondArranger = new Arranger();
+        firstArranger.addEntry("abc");
+        secondArranger.addEntry("abc");
+        assertEquals(true, firstArranger.equals(secondArranger));
+    }
 }

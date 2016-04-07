@@ -151,8 +151,8 @@ public class StoreKeeper {
 
     public static void buildStoreIndex() {
         System.out.println("Keeping store index...");
-        StoreKeeper.keepStoreIndex(TransProp.getProp("TP_HOME") + "store16.txt", 
-                TransProp.getProp("TP_HOME") + "istore.txt");
+        StoreKeeper.keepStoreIndex(TransProp.get("TP_HOME") + "store16.txt", 
+                TransProp.get("TP_HOME") + "istore.txt");
         System.out.println("Done.");
     }
 
@@ -160,12 +160,12 @@ public class StoreKeeper {
         String year = arg.substring(1,3);
         String newBlock = "D:\\Qdata\\update\\TFLib_A20" + year + "_" + arg + ".txt";
         System.out.println("Keeping block...");
-        StoreKeeper.keepBlockFromRoot(newBlock, "\\A20" + year + "\\", "F:\\Book\\TFLib\\");
+        StoreKeeper.keepBlockFromRoot(newBlock, "\\A20" + year + "\\", "G:\\Book\\TFLib\\");
         System.out.println("Combining store...");
         if (year.equals("15")) {
-            StoreKeeper.combineLists(TransProp.getProp("TP_HOME") + "store15.txt", TransProp.getProp("TP_HOME") + "storehis.txt", newBlock);
+            StoreKeeper.combineLists(TransProp.get("TP_HOME") + "store15.txt", TransProp.get("TP_HOME") + "storehis.txt", newBlock);
         } else if (year.equals("16")) {
-            StoreKeeper.combineLists(TransProp.getProp("TP_HOME") + "store16.txt", TransProp.getProp("TP_HOME") + "store15.txt", newBlock);
+            StoreKeeper.combineLists(TransProp.get("TP_HOME") + "store16.txt", TransProp.get("TP_HOME") + "store15.txt", newBlock);
         }
         System.out.println("Done.");
     }
@@ -175,13 +175,13 @@ public class StoreKeeper {
         System.out.println("Keeping block...");
         StoreKeeper.keepBlockFromRoot(newBlock, "\\" + arg + "\\", "F:\\Book\\TFLib\\");
         System.out.println("Backup...");
-        FileUtils.copyFileBytes(newBlock, TransProp.getProp("TP_HOME") + "TFLib_" + arg + "_" + DateUtils.dateStringToday() + ".txt");
+        FileUtils.copyFileBytes(newBlock, TransProp.get("TP_HOME") + "TFLib_" + arg + "_" + DateUtils.dateStringToday() + ".txt");
         System.out.println("Done.");
     }
 
     public static void buildStoreHis() {
         System.out.println("Combining storehis...."); 
-        StoreKeeper.combineLists(TransProp.getProp("TP_HOME") + "storehis.txt", 
+        StoreKeeper.combineLists(TransProp.get("TP_HOME") + "storehis.txt", 
                 "D:\\Qdata\\update\\TFLib_A2013_0_1_2.txt",
                 "D:\\Qdata\\update\\TFLib_A2014_0_1_2.txt");
         System.out.println("Done.");

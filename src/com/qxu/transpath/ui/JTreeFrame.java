@@ -9,6 +9,7 @@ import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeList;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransProp;
 
 /**
  * 
@@ -47,7 +48,6 @@ public class JTreeFrame extends JFrame {
 	    
         JMenu sysMenu = new JMenu("Sys");
         menuBar.add(sysMenu);
-        
         Action exitAction = new AbstractAction("Exit") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,22 +58,41 @@ public class JTreeFrame extends JFrame {
         
         JMenu taskMenu = new JMenu("Task");
         menuBar.add(taskMenu);	    
-	    
 	    JMenuItem taskKeepItem = new JMenuItem("Keep");
 	    taskMenu.add(taskKeepItem);
-
-	    JMenu storeMenu = new JMenu("Store");
-	    menuBar.add(storeMenu);
-	    JMenuItem storeKeepItem = new JMenuItem("Keep");
-	    storeMenu.add(storeKeepItem);
-	    
-	    ActionListener listener = new ActionListener(){
-
+        ActionListener listener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
-            }};
-	    taskKeepItem.addActionListener(listener);
+            }
+        };
+        taskKeepItem.addActionListener(listener);
+
+
+        JMenu storeMenu = new JMenu("Store");
+        menuBar.add(storeMenu);
+        JMenuItem storeKeepItem = new JMenuItem("Keep");
+        storeMenu.add(storeKeepItem);
+        storeKeepItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print(TransProp.get("test"));
+                System.exit(0);
+            }
+        });
+        
+        JMenu helpMenu = new JMenu("Help");
+        JMenuItem helpAboutItem = new JMenuItem("About");
+        helpAboutItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("It's ok anyway.");
+                System.exit(0);
+            }
+        });
+        helpMenu.add(helpAboutItem);
+        menuBar.add(helpMenu);
+        
     }
 	
 	public void initJTree() {
@@ -84,7 +103,7 @@ public class JTreeFrame extends JFrame {
         
 		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
         //NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST);
-      NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\transpath\\store16.txt"), TransConst.BRANCH_1ST);
+      NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_1ST);
 //        NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
 //        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
 //        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0928.txt"), TranspathConstants.BRANCH_1ST);
@@ -98,7 +117,7 @@ public class JTreeFrame extends JFrame {
         jtree1.revalidate();
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
-        NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\transpath\\store16.txt"), TransConst.BRANCH_2ND);
+        NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_2ND);
 //      NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
 //		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
 //		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0726.txt"), TranspathConstants.BRANCH_2ND);

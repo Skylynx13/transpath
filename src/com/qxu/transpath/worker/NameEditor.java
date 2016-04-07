@@ -216,9 +216,9 @@ public class NameEditor {
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renamePathFileUnPushDate() + ".");
     }
 
+    @Deprecated
     public static void sampleMoveFileToRoot() {
         String root0 = "I:\\Book\\TFLib\\A2013\\B00";
-        // String root = "D:\\temp\\qtest\\";
         for (int i = 32; i < 51; i++) {
             String root = root0 + i;
             System.out.println("Processing " + root + " ...");
@@ -244,7 +244,7 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "Transformers ", "The Transformers " } };
+        String[][] replaceOnce = { { "X-Men v4 ", "X-Men v04 " } };
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
 

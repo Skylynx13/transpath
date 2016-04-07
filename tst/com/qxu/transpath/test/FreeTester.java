@@ -202,6 +202,7 @@ public class FreeTester {
         //System.out.println(StrUtils.getSimpleName("G.I. Joe Action Force Mini Comic.cbr"));
         
         ft.testProps();
+        System.out.println(new String(" Week of 02/04/2016  ").matches("^\\s*Week of \\d{2}/\\d{2}/\\d{4}\\s*$"));
     }
 }
 

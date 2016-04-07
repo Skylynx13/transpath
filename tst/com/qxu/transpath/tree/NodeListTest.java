@@ -172,21 +172,21 @@ public class NodeListTest {
         ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(6, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
-        assertEquals("AIJKLMN.cbz", nl3.get(1).getName());
-        assertEquals("BIJKLMN.cbz", nl3.get(2).getName());
-        assertEquals("HIJKLMN.cbz", nl3.get(3).getName());
+        assertEquals("HIJKLMN.cbz", nl3.get(1).getName());
+        assertEquals("AIJKLMN.cbz", nl3.get(2).getName());
+        assertEquals("BIJKLMN.cbz", nl3.get(3).getName());
         assertEquals("IIJKLMN.cbz", nl3.get(4).getName());
         assertEquals("JIJKLMN.cbz", nl3.get(5).getName());
         assertEquals("/abc/def/ghijklmn/", nl3.get(0).getBranch("1ST"));
         assertEquals("/abc/opq/rstuvwxyz/", nl3.get(1).getBranch("1ST"));
-        assertEquals(null, nl3.get(2).getBranch("1ST"));
-        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(3).getBranch("1ST"));
+        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(2).getBranch("1ST"));
+        assertEquals(null, nl3.get(3).getBranch("1ST"));
         assertEquals(null, nl3.get(4).getBranch("1ST"));
         assertEquals("/abc/opq/rstuvwxyz/", nl3.get(5).getBranch("1ST"));
         assertEquals("/abc2/def/ghijklmn/", nl3.get(0).getBranch("2ND"));
-        assertEquals(null, nl3.get(1).getBranch("2ND"));
-        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(2).getBranch("2ND"));
-        assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
+        assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(1).getBranch("2ND"));
+        assertEquals(null, nl3.get(2).getBranch("2ND"));
+        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
         assertEquals("/abc3/iopq/rstuvwxyz/", nl3.get(4).getBranch("2ND"));
         assertEquals(null, nl3.get(5).getBranch("2ND"));
     }
@@ -222,21 +222,21 @@ public class NodeListTest {
         ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(6, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
-        assertEquals("AIJKLMN.cbz", nl3.get(1).getName());
-        assertEquals("BIJKLMN.cbz", nl3.get(2).getName());
-        assertEquals("HIJKLMN.cbz", nl3.get(3).getName());
+        assertEquals("HIJKLMN.cbz", nl3.get(1).getName());
+        assertEquals("AIJKLMN.cbz", nl3.get(2).getName());
+        assertEquals("BIJKLMN.cbz", nl3.get(3).getName());
         assertEquals("IIJKLMN.cbz", nl3.get(4).getName());
         assertEquals("JIJKLMN.cbz", nl3.get(5).getName());
         assertEquals(null, nl3.get(0).getBranch("1ST"));
         assertEquals("/abc/opq/rstuvwxyz/", nl3.get(1).getBranch("1ST"));
-        assertEquals(null, nl3.get(2).getBranch("1ST"));
-        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(3).getBranch("1ST"));
+        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(2).getBranch("1ST"));
+        assertEquals(null, nl3.get(3).getBranch("1ST"));
         assertEquals(null, nl3.get(4).getBranch("1ST"));
         assertEquals("/abc/opq/rstuvwxyz/", nl3.get(5).getBranch("1ST"));
         assertEquals("/abc2/def/ghijklmn/", nl3.get(0).getBranch("2ND"));
-        assertEquals(null, nl3.get(1).getBranch("2ND"));
-        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(2).getBranch("2ND"));
-        assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
+        assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(1).getBranch("2ND"));
+        assertEquals(null, nl3.get(2).getBranch("2ND"));
+        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
         assertEquals("/abc3/iopq/rstuvwxyz/", nl3.get(4).getBranch("2ND"));
         assertEquals(null, nl3.get(5).getBranch("2ND"));
     }
@@ -272,19 +272,19 @@ public class NodeListTest {
         ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(5, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
-        assertEquals("AIJKLMN.cbz", nl3.get(1).getName());
-        assertEquals("BIJKLMN.cbz", nl3.get(2).getName());
-        assertEquals("HIJKLMN.cbz", nl3.get(3).getName());
+        assertEquals("HIJKLMN.cbz", nl3.get(1).getName());
+        assertEquals("AIJKLMN.cbz", nl3.get(2).getName());
+        assertEquals("BIJKLMN.cbz", nl3.get(3).getName());
         assertEquals("IIJKLMN.cbz", nl3.get(4).getName());
         assertEquals("/abc/def/ghijklmn/", nl3.get(0).getBranch("1ST"));
         assertEquals("/abc/opq/rstuvwxyz/", nl3.get(1).getBranch("1ST"));
-        assertEquals(null, nl3.get(2).getBranch("1ST"));
-        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(3).getBranch("1ST"));
+        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(2).getBranch("1ST"));
+        assertEquals(null, nl3.get(3).getBranch("1ST"));
         assertEquals(null, nl3.get(4).getBranch("1ST"));
         assertEquals("/abc2/def/ghijklmn/", nl3.get(0).getBranch("2ND"));
-        assertEquals(null, nl3.get(1).getBranch("2ND"));
-        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(2).getBranch("2ND"));
-        assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
+        assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(1).getBranch("2ND"));
+        assertEquals(null, nl3.get(2).getBranch("2ND"));
+        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
         assertEquals("/abc3/iopq/rstuvwxyz/", nl3.get(4).getBranch("2ND"));
     }
 
@@ -316,17 +316,17 @@ public class NodeListTest {
         ArrayList<Node> nl3 = NodeList.combine(nl1, nl2, false);
         assertEquals(4, nl3.size());
         assertEquals("ABCDEFG.cbr", nl3.get(0).getName());
-        assertEquals("AIJKLMN.cbz", nl3.get(1).getName());
-        assertEquals("BIJKLMN.cbz", nl3.get(2).getName());
-        assertEquals("HIJKLMN.cbz", nl3.get(3).getName());
+        assertEquals("HIJKLMN.cbz", nl3.get(1).getName());
+        assertEquals("AIJKLMN.cbz", nl3.get(2).getName());
+        assertEquals("BIJKLMN.cbz", nl3.get(3).getName());
         assertEquals("/abc/def/ghijklmn/", nl3.get(0).getBranch("1ST"));
         assertEquals("/abc/opq/rstuvwxyz/", nl3.get(1).getBranch("1ST"));
-        assertEquals(null, nl3.get(2).getBranch("1ST"));
-        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(3).getBranch("1ST"));
+        assertEquals("/abc/opq/rstuvwxyz/", nl3.get(2).getBranch("1ST"));
+        assertEquals(null, nl3.get(3).getBranch("1ST"));
         assertEquals("/abc2/def/ghijklmn/", nl3.get(0).getBranch("2ND"));
-        assertEquals(null, nl3.get(1).getBranch("2ND"));
-        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(2).getBranch("2ND"));
-        assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
+        assertEquals("/abc2/opq/rstuvwxyz/", nl3.get(1).getBranch("2ND"));
+        assertEquals(null, nl3.get(2).getBranch("2ND"));
+        assertEquals("/abc3/opq/rstuvwxyz/", nl3.get(3).getBranch("2ND"));
     }
     
     @Test

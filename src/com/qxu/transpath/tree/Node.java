@@ -32,7 +32,7 @@ public class Node {
     private int id;
     private String name;
     private HashMap<String, String> branches;
-    //TODO: prop needed: file type, update-time, size in byte.
+    //TODO: prop needed as a branch: file type, update-time, size in byte.
     //      in format: test:20150418210910:417043.
     //      that is: String:long:int.
     

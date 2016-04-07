@@ -293,6 +293,7 @@ public class Arranger {
                 || line.matches("^\\s*Code:\\s*$") 
                 || line.matches("^\\s*Quote:\\s*$")
                 || line.matches("^\\s*Download:\\s*$")
+                || line.matches("^\\s*Week of \\d{2}/\\d{2}/\\d{4}\\s*$")
                 || line.matches("^\\s*This image has been resized.*$");
     }
     
@@ -318,5 +319,28 @@ public class Arranger {
         }
         return result.toString();
     }
+
+    public Arranger applyFilter(String[] keys) {
+        Arranger newArranger = new Arranger();
+        for (CdEntry currEntry : this.entries) {
+            
+            newArranger.addEntry(currEntry);
+        }
+        return newArranger;
+    }
+    
+    public boolean equals(Arranger another) {
+        boolean isEquals = true;
+        
+        for (CdEntry thisEntry : this.entries) {
+            for (CdEntry anotherEntry : another.entries) {
+                if (!thisEntry.equals(anotherEntry)) {
+                    isEquals = false;
+                }
+            }
+        }
+        return isEquals;
+    }
+    
 
 }
