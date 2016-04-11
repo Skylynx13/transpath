@@ -149,4 +149,48 @@ public class CdEntry implements Comparable<CdEntry>{
         newCde.addUniqueLinks(otherEntry.getLinks());
         return newCde;
     }
+    
+    public boolean equals(CdEntry another) {
+        if (!this.name.equals(another.name))
+            return false;
+        if (this.comments.size() != another.comments.size())
+            return false;
+        if (this.links.size() != another.links.size())
+            return false;
+        for (int iLen = 0; iLen < this.comments.size(); iLen++) {
+            String thisComment = this.comments.get(iLen);
+            String anotherComment = another.comments.get(iLen);
+            if (!thisComment.equals(anotherComment))
+                return false;
+        }
+        for (int iLen = 0; iLen < this.links.size(); iLen++) {
+            String thisLink = this.links.get(iLen);
+            String anotherLink = another.links.get(iLen);
+            if (!thisLink.equals(anotherLink))
+                return false;
+        }
+        return true;
+    }
+    
+    public void clear() {
+        this.name = "";
+        this.comments.clear();
+        this.links.clear();
+    }
+    public boolean matches(String[] keys) {
+        for (String key : keys) {
+            key = "(?i).*" + key + ".*";
+            if (this.name.matches(key)) 
+                return true;
+            for (String comment : this.comments) {
+                if (comment.matches(key))
+                    return true;
+            }
+            for (String link : this.links) {
+                if (link.matches(key))
+                    return true;
+            }
+        }
+        return false;
+    }
 }

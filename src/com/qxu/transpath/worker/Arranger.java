@@ -297,7 +297,7 @@ public class Arranger {
                 || line.matches("^\\s*This image has been resized.*$");
     }
     
-    public String compare(Arranger otherArranger) {
+    public String findSameEntries(Arranger otherArranger) {
         StringBuffer result = new StringBuffer();
         int i1=0;
         for (CdEntry cde1 : this.entries) {
@@ -323,24 +323,23 @@ public class Arranger {
     public Arranger applyFilter(String[] keys) {
         Arranger newArranger = new Arranger();
         for (CdEntry currEntry : this.entries) {
-            
-            newArranger.addEntry(currEntry);
+            if (currEntry.matches(keys))
+                newArranger.addEntry(currEntry);
         }
         return newArranger;
     }
     
     public boolean equals(Arranger another) {
-        boolean isEquals = true;
-        
-        for (CdEntry thisEntry : this.entries) {
-            for (CdEntry anotherEntry : another.entries) {
-                if (!thisEntry.equals(anotherEntry)) {
-                    isEquals = false;
-                }
-            }
+        if (this.entries.size() != another.entries.size())
+            return false;
+
+        for (int iLength = 0; iLength < this.entries.size(); iLength++) {
+            CdEntry thisEntry = this.entries.get(iLength);
+            CdEntry anotherEntry = another.entries.get(iLength);
+            if (!thisEntry.equals(anotherEntry))
+                return false;
         }
-        return isEquals;
+        return true;
     }
-    
 
 }

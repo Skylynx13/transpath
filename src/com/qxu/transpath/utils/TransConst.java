@@ -45,5 +45,13 @@ public class TransConst {
 //    public static final String TP_HOME = "D:\\_TF\\_Update\\transpath\\";
 //    public static final String TP_HOME = "D:\\Qdata\\update\\transpath\\";
     public static final String TP_PROPS = "transpath.properties";
+    public static final String TP_KEYWORDS = "keywords.list";
 //    public static final String TP_HOME = "TP_HOME";
+    public static final String MD5 = "MD5";
+    public static final String SHA = "SHA";
+    public static final String SHA1 = "SHA-1";
+    public static final String SHA256 = "SHA-256";
+    public static final String SHA384 = "SHA-384";
+    public static final String SHA512 = "SHA-512";
+    public static final String CRC32 = "CRC32";
 }

@@ -80,10 +80,10 @@ public class TaskKeeper {
         String result = "";
         result += "==================================================================";
         result += "Fresh vs Store: \n";
-        result += arrFresh.compare(new Arranger().readFromFile(TransProp.get("TP_HOME") + "istore.txt"));
+        result += arrFresh.findSameEntries(new Arranger().readFromFile(TransProp.get("TP_HOME") + "istore.txt"));
         result += "==================================================================";
         result += "Fresh vs Ready: \n";
-        result += arrFresh.compare(new Arranger().readFromFile(TransProp.get("TP_HOME") + "iready.txt"));
+        result += arrFresh.findSameEntries(new Arranger().readFromFile(TransProp.get("TP_HOME") + "iready.txt"));
         System.out.println(result);
         try {
             PrintWriter out = new PrintWriter(TransProp.get("TP_HOME") + "compare.txt");
@@ -101,10 +101,10 @@ public class TaskKeeper {
         String result = "";
         result += "==================================================================\n";
         result += "Task vs Store: \n";
-        result += arrTask.compare(new Arranger().readFromFile(TransProp.get("TP_HOME") + "istore.txt"));
+        result += arrTask.findSameEntries(new Arranger().readFromFile(TransProp.get("TP_HOME") + "istore.txt"));
         result += "==================================================================\n";
         result += "Task vs Ready: \n";
-        result += arrTask.compare(new Arranger().readFromFile(TransProp.get("TP_HOME") + "iready.txt"));
+        result += arrTask.findSameEntries(new Arranger().readFromFile(TransProp.get("TP_HOME") + "iready.txt"));
         System.out.println(result);
         try {
             PrintWriter out = new PrintWriter(TransProp.get("TP_HOME") + "compare.txt");
