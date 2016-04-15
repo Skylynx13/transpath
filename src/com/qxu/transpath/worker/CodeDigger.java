@@ -40,9 +40,21 @@ public class CodeDigger {
         System.out.println("Done.");
     }
     
-    public static void digBigEntries() {
-        String[] keys = {"(\\d{3}(\\.\\d{1,2}){0,1} MB)|(\\d{1,2}(\\.\\d{1,2}){0,1} GB)"};
-        CodeDigger.digKeyword(keys, TransProp.get("TP_HOME") + "fresh.txt");
+    public static void pickoutKeyword(String[] keys, String filename) {
+        System.out.println("Digging keyword...");
+        int n = new Arranger().readFromFile(filename).applyFilterReversely(keys).writeToFile(TransProp.get("TP_HOME") + "track001.txt");
+        System.out.println("Totally " + n + " entries extracted.");
+        System.out.println("Done.");
+    }
+    
+    public static void digBigEntries(String fileName) {
+        String[] keys = {"(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB)"};
+        CodeDigger.digKeyword(keys, fileName);
+    }
+    
+    public static void pickoutBigEntries(String fileName) {
+        String[] keys = {"(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB)"};
+        CodeDigger.pickoutKeyword(keys, fileName);
     }
     
     public static String[] readKeywordList(String fileName) {
@@ -65,5 +77,6 @@ public class CodeDigger {
         String[] keywords = CodeDigger.readKeywordList(TransProp.get("TP_HOME") + TransConst.TP_KEYWORDS);
         System.out.println(Arrays.toString(keywords));
         CodeDigger.digKeyword(keywords, TransProp.get("TP_HOME") + "fresh.txt");
+        //CodeDigger.pickoutBigEntries(TransProp.get("TP_HOME") + "task20160331_stone.txt");
     }
 }

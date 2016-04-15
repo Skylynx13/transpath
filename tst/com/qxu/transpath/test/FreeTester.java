@@ -203,6 +203,8 @@ public class FreeTester {
         
         ft.testProps();
         System.out.println(new String(" Week of 02/04/2016  ").matches("^\\s*Week of \\d{2}/\\d{2}/\\d{4}\\s*$"));
+        String rex = "(?i).*(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB).*";
+        System.out.println(new String("gkk233.2 MB").matches(rex));
     }
 }
 

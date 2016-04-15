@@ -17,7 +17,7 @@ import java.util.Properties;
 
  /**
  * ClassName: TransProp <br/>
- * Description: TODO <br/>
+ * Description: Transpath properties interface.<br/>
  * Date: 2016-2-14 下午3:45:49 <br/>
  * <br/>
  * 

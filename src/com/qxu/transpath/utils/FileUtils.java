@@ -325,22 +325,38 @@ public class FileUtils {
     }
 
     public static String digest(String fileName, String algorithm) {
-        String strDigest = "";
         byte[] rBytes = new byte[READ_BUFFER_SIZE];
+
+        if (TransConst.CRC32.equals(algorithm)) {
+            CRC32 crc32 = new CRC32();
+            try {
+                BufferedInputStream inBuff = new BufferedInputStream(new FileInputStream(fileName));
+                int nLen = 0;
+                while ((nLen = inBuff.read(rBytes)) != -1) {
+                    crc32.update(rBytes, 0, nLen);
+                }
+                inBuff.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "";
+            }
+            return Long.toHexString(crc32.getValue()).toUpperCase();
+        }
+        
+        MessageDigest md = null;
         try {
-            MessageDigest md = MessageDigest.getInstance(algorithm);
+            md = MessageDigest.getInstance(algorithm);
 
             DigestInputStream dInput = new DigestInputStream(new FileInputStream(fileName), md);
             while (dInput.read(rBytes) != -1) {
             }
             dInput.close();
 
-            strDigest = new BigInteger(1, md.digest()).toString(16).toUpperCase();
         } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
-        return strDigest;
+        return new BigInteger(1, md.digest()).toString(16).toUpperCase();
     }
 
     public static String digestMd5(String fileName) {
@@ -352,23 +368,13 @@ public class FileUtils {
     }
 
     public static String digestCrc32(String fileName) {
-        BufferedInputStream inBuff = null;
-        CRC32 crc32 = new CRC32();
-        byte[] rBytes = new byte[READ_BUFFER_SIZE];
-        try {
-            inBuff = new BufferedInputStream(new FileInputStream(fileName));
-            int nLen = 0;
-            while ((nLen = inBuff.read(rBytes)) != -1) {
-                crc32.update(rBytes, 0, nLen);
-            }
-            inBuff.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-        return Long.toHexString(crc32.getValue()).toUpperCase();
+        return digest(fileName, TransConst.CRC32);
     }
 
+    public static boolean verify(String fileName, String checkCode, String algorithm) {
+        return checkCode.equals(digest(fileName, algorithm));
+    }
+    
     public static void main(String[] args) {
         System.out.println(FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_000.txt")));
         System.out.println(FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_002.txt")));

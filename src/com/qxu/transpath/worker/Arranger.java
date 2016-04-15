@@ -329,6 +329,15 @@ public class Arranger {
         return newArranger;
     }
     
+    public Arranger applyFilterReversely(String[] keys) {
+        Arranger newArranger = new Arranger();
+        for (CdEntry currEntry : this.entries) {
+            if (!currEntry.matches(keys))
+                newArranger.addEntry(currEntry);
+        }
+        return newArranger;
+    }
+    
     public boolean equals(Arranger another) {
         if (this.entries.size() != another.entries.size())
             return false;
