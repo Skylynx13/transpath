@@ -14,6 +14,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+
+import com.qxu.transpath.utils.DateUtils;
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: StoreList <br/>
@@ -29,38 +35,132 @@ import java.util.ArrayList;
  */
 
 public class StoreList {
+    String version;
     int pidMin;
     int pidMax;
-    int length;
     ArrayList<StoreNode> storeList;
         
     public StoreList() {
+        version = DateUtils.formatDateTimeLongToday();
         pidMin = 0;
         pidMax = 0;
-        length = 0;
         storeList = new ArrayList<StoreNode>();
     }
     
     public StoreList(StoreList pStoreList) {
+        version = DateUtils.formatDateTimeLongToday();
         pidMin = pStoreList.pidMin;
         pidMax = pStoreList.pidMax;
-        length = pStoreList.length;
         storeList = new ArrayList<StoreNode>(pStoreList.storeList);
     }
     
-    public void addNode(StoreNode pStoreNode) {
-        pStoreNode.id = ++pidMax;
-        storeList.add(pStoreNode);
-        length = storeList.size();
+    public int size() {
+        return (null == storeList) ? 0 : storeList.size();
     }
     
+    public void recapPidMinMax() {
+        pidMin = Integer.MAX_VALUE;
+        pidMax = 0;
+        for (StoreNode aNode : storeList) {
+            if (aNode.id < pidMin) {
+                pidMin = aNode.id;
+            }
+            if (aNode.id > pidMax) {
+                pidMax = aNode.id;
+            }
+        }
+    }
+
     public StoreNode get(int index) {
         return storeList.get(index);
     }
+
+    public StoreNode getByPid(int pPid) {
+        for (StoreNode aNode : storeList) {
+            if (aNode.id == pPid) {
+                return aNode;
+            }
+        }
+        return null;
+    }
+
+    public void addNode(StoreNode pStoreNode) {
+        if (0 == size()) {
+            pidMin = 1;
+        }
+        pStoreNode.id = ++pidMax;
+        storeList.add(pStoreNode);
+    }
     
-    public void persistFile(File pFile) {
+    public void attachList(StoreList pStoreList) {
+        for (StoreNode aStoreNode : pStoreList.storeList) {
+            addNode(aStoreNode);
+        }
+    }
+
+    @Deprecated
+    public void attachList1(StoreList pStoreList) {
+        StoreList tempList = new StoreList(pStoreList);
+        for (StoreNode tempNode : tempList.storeList) {
+            tempNode.id += pidMax;
+        }
+        storeList.addAll(tempList.storeList);
+        pidMax += tempList.size();
+    }
+
+    public void removeByPath(String pPath) {
+        ArrayList<StoreNode> removeList = new ArrayList<StoreNode>();
+        for (StoreNode aNode : storeList) {
+            if (aNode.storePath.equals(pPath)) {
+                removeList.add(aNode);
+            }
+        }
+        storeList.removeAll(removeList);
+        recapPidMinMax();
+    }
+    
+    public HashMap<Integer, Integer> reorgPid() {
+        HashMap<Integer, Integer> aMap = new HashMap<Integer, Integer>();
+        int newPid = 0;
+        for (StoreNode aNode : storeList) {
+            newPid++;
+            if (aNode.id != newPid) {
+                aMap.put(aNode.id, newPid);
+                aNode.id = newPid;
+            }
+        }
+        recapPidMinMax();
+        return aMap;
+    }
+    
+    public HashMap<Integer, Integer> orderByPathAndName() {
+        Collections.sort(storeList, new Comparator<StoreNode>() {
+            @Override
+            public int compare(StoreNode sn1, StoreNode sn2) {
+                int cmp = sn1.storePath.compareTo(sn2.storePath);
+                if (cmp != 0) {
+                    return cmp;
+                }
+                return sn1.name.compareTo(sn2.name);
+            }
+        });
+        return reorgPid();
+    }
+    
+    public String keepHeader() {
+        return new StringBuffer(version).append(TransConst.COLON)
+                .append(String.format(TransConst.FORMAT_INT_08, pidMin))
+                .append(TransConst.COLON)
+                .append(String.format(TransConst.FORMAT_INT_08, pidMax))
+                .append(TransConst.COLON)
+                .append(String.format(TransConst.FORMAT_INT_08, size())).toString();
+ 
+    }
+    
+    public void keepFile(File pFile) {
         try {
             PrintWriter out = new PrintWriter(pFile);
+            out.println(keepHeader());
             for (StoreNode aNode : storeList) {
                 out.println(aNode.keepNode());
             }
@@ -68,6 +168,15 @@ public class StoreList {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+    
+    public String toString() {
+        StringBuffer strBuff = new StringBuffer(keepHeader());
+        strBuff.append(TransConst.CRLN);
+        for (StoreNode aNode : storeList) {
+            strBuff.append(aNode.keepNode()).append(TransConst.CRLN);
+        }
+        return strBuff.toString();
     }
     
     public static void main (String[] args) {

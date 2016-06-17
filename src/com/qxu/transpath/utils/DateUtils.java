@@ -34,6 +34,10 @@ public class DateUtils {
         return formatDate(TransConst.FMT_DATE, new Date());
     }
     
+    public static String formatDateTimeLongToday() {
+        return formatDate(TransConst.FMT_DATE_TIME_LONG, new Date());
+    }
+    
     public static String formatDateTimeLong(long pDateValue) {
         return formatDateTimeLong(new Date(pDateValue));
     }
