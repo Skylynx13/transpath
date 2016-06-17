@@ -54,4 +54,13 @@ public class TransConst {
     public static final String SHA384 = "SHA-384";
     public static final String SHA512 = "SHA-512";
     public static final String CRC32 = "CRC32";
+    
+    public static final String FORMAT_INT_08 = "%08d";
+    public static final String FORMAT_INT_13 = "%013d";
+    public static final String FORMAT_HEX_08 = "%08x";
+    
+    public static final String FMT_DATE_TIME_SHORT = "yyyyMMddHHmm";
+    public static final String FMT_DATE_TIME = "yyyyMMddHHmmss";
+    public static final String FMT_DATE_TIME_LONG = "yyyyMMddHHmmssSSS";
+    public static final String FMT_DATE = "yyyyMMdd";
 }

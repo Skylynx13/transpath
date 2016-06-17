@@ -37,8 +37,61 @@ public class NameEditor {
             {"\\(digital\\)", "(Digital)"}, 
             {"\\(", " ("}, 
             {"  \\(", " ("}, 
-            {" Vol. ", " v0"}, 
-            {" Vol ", " v0"}};
+            {" Vol\\. ", " v0"}, 
+            {" Vol\\.", " v0"}, 
+            {" Vol ", " v0"},
+            {" v00", " v0"},
+            { "#", "" }, 
+            { " v1 ", " v01 " }, 
+            { " v2 ", " v02 " }, 
+            { " v3 ", " v03 " }, 
+            { " v4 ", " v04 " }, 
+            { " v5 ", " v05 " }, 
+            { " v6 ", " v06 " }, 
+            { " v01 ", " v01 - " }, 
+            { " v02 ", " v02 - " }, 
+            { " v03 ", " v03 - " }, 
+            { " v04 ", " v04 - " }, 
+            { " v05 ", " v05 - " }, 
+            { " v06 ", " v06 - " }, 
+            { " v01 - - ", " v01 - " }, 
+            { " v02 - - ", " v02 - " }, 
+            { " v03 - - ", " v03 - " }, 
+            { " v04 - - ", " v04 - " }, 
+            { " v05 - - ", " v05 - " }, 
+            { " v06 - - ", " v06 - " }, 
+            { " Of ", " of " }, 
+            { " of The", " of the" },
+            { " From ", " from " }, 
+            { " And ", " and " }, 
+            { " VS ", " vs " },
+            { " Vs ", " vs " },
+            { " Vs\\. ", " vs " },
+            { " vs\\. ", " vs " },
+            { "\\.zip", ".cbz" }, 
+            { "\\.rar", ".cbr" }, 
+            { "\\.CBZ", ".cbz" }, 
+            { "\\.CBR", ".cbr" }, 
+            { "02 of 02 covers", "(2 covers)" },
+            { "03 of 03 covers", "(3 covers)" },
+            { "04 of 04 covers", "(4 covers)" },
+            { "05 of 05 covers", "(5 covers)" },
+            { "06 of 06 covers", "(6 covers)" },
+            { "07 of 07 covers", "(7 covers)" },
+            { "08 of 08 covers", "(8 covers)" },
+            { "09 of 09 covers", "(9 covers)" },
+            { " 01\\.cbr", " 001.cbr" },
+            { " 02\\.cbr", " 002.cbr" },
+            { " 03\\.cbr", " 003.cbr" },
+            { " 04\\.cbr", " 004.cbr" }, 
+            { " 05\\.cbr", " 005.cbr" }, 
+            { " 06\\.cbr", " 006.cbr" }, 
+            { " 01\\.cbz", " 001.cbz" }, 
+            { " 02\\.cbz", " 002.cbz" }, 
+            { " 03\\.cbz", " 003.cbz" }, 
+            { " 04\\.cbz", " 004.cbz" }, 
+            { " 05\\.cbz", " 005.cbz" }, 
+            { " 06\\.cbz", " 006.cbz" }};
         
     public NameEditor(String root) {
         this.rootDir=root;
@@ -82,7 +135,7 @@ public class NameEditor {
         return true;
     }
     
-    public boolean renamePathFilePushDate() {
+    public boolean renamePathFileSwapDate() {
         int totalFile = 0;
         int procFile = 0;
         String pRoot = this.rootDir;
@@ -95,10 +148,12 @@ public class NameEditor {
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 String oldName = aFile.getName();
-                int idxFirstBlank = oldName.indexOf(' ');
-                int idxLastPoint = oldName.lastIndexOf('.');
-                String newName = oldName.substring(idxFirstBlank+1, idxLastPoint) + " ("
-                        + oldName.substring(0, idxFirstBlank) + ")" + oldName.substring(idxLastPoint);
+                String[] oldSubStr = oldName.split(" ");
+                int slen = oldSubStr.length;
+                String newName = oldSubStr[0] + " " + oldSubStr[2] + " " + oldSubStr[1];
+                for (int i=3; i<slen; i++) {
+                    newName += " " + oldSubStr[i];
+                }
                 totalFile++;
                 if (!oldName.equals(newName)) {
                     procFile++;
@@ -114,6 +169,73 @@ public class NameEditor {
         return true;
     }
     
+    public boolean renamePathFilePushDate() {
+        int totalFile = 0;
+        int procFile = 0;
+        String pRoot = this.rootDir;
+        File dirRoot = new File(pRoot);
+        if (!dirRoot.isDirectory()) {
+            System.out.println("Path name error.");
+            return false;
+        }
+        
+        for (File aFile : dirRoot.listFiles()) {
+            if (aFile.isFile()) {
+                String oldName = aFile.getName();
+                int idxFirstBlank = oldName.indexOf(' ');
+                int idxLastPoint = oldName.lastIndexOf('.');
+                int idxFirstLeftBracket = oldName.indexOf('(');
+                int idxInsert = idxLastPoint;
+                if (idxFirstLeftBracket > 1) {
+                    idxInsert = idxFirstLeftBracket - 1;
+                }
+                String newName = oldName.substring(idxFirstBlank+1, idxInsert) + " ("
+                        + oldName.substring(0, idxFirstBlank) + ")" + oldName.substring(idxInsert);
+                totalFile++;
+                if (!oldName.equals(newName)) {
+                    procFile++;
+                    if (!aFile.renameTo(new File(pRoot + newName))) {
+                        System.out.println(aFile.getName() + " -e> " + newName);
+                        return false;
+                    }
+                    System.out.println(oldName + " -> " + newName);
+                }
+            }
+        }
+        System.out.println(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
+        return true;
+    }
+    
+    private boolean renameCutHead() {
+        int totalFile = 0;
+        int procFile = 0;
+        String pRoot = this.rootDir;
+        File dirRoot = new File(pRoot);
+        if (!dirRoot.isDirectory()) {
+            System.out.println("Path name error.");
+            return false;
+        }
+        
+        for (File aFile : dirRoot.listFiles()) {
+            if (aFile.isFile()) {
+                String oldName = aFile.getName();
+                int idxFirstBlank = oldName.indexOf(' ');
+                String newName = oldName.substring(idxFirstBlank+1);
+                totalFile++;
+                if (!oldName.equals(newName)) {
+                    procFile++;
+                    if (!aFile.renameTo(new File(pRoot + newName))) {
+                        System.out.println(aFile.getName() + " -e> " + newName);
+                        return false;
+                    }
+                    System.out.println(oldName + " -> " + newName);
+                }
+            }
+        }
+        System.out.println(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
+        return true;
+    }
+
     public boolean renamePathFileUnPushDate() {
         int totalFile = 0;
         int procFile = 0;
@@ -240,17 +362,24 @@ public class NameEditor {
 
     public static void renameNormalize() {
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileByTemplate() + ".");
-        System.out.println("Result: " + new NameEditor(FULL_ROOT).reformatNumber() + ".");
+        //System.out.println("Result: " + new NameEditor(FULL_ROOT).reformatNumber() + ".");
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "X-Men v4 ", "X-Men v04 " } };
+        String[][] replaceOnce = { { "Ultimate Marvel Team-Up ", 
+                                     "Ultimate Marvel Team-Up 0" } };
+
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
+    }
+    
+    public static void cutHead() {
+        System.out.println("Result: " + new NameEditor(FULL_ROOT).renameCutHead() + ".");
     }
 
     public static void main(String[] args) {
-        renameNormalize();
-        //renameSpecialReplace();
+        //cutHead();
+        //renameNormalize();
+        renameSpecialReplace();
         //renamePushDate();
         //renameUnPushDate();
     }

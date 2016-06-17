@@ -30,11 +30,33 @@ import javax.swing.text.DateFormatter;
 
 public class DateUtils {
     
-    public static String dateStringToday() {
-        return new SimpleDateFormat("yyyyMMdd").format(new Date());
+    public static String formatDateToday() {
+        return formatDate(TransConst.FMT_DATE, new Date());
+    }
+    
+    public static String formatDateTimeLong(long pDateValue) {
+        return formatDateTimeLong(new Date(pDateValue));
+    }
+    
+    public static String formatDateTimeLong(Date pDate) {
+        return formatDate(TransConst.FMT_DATE_TIME_LONG, pDate);
+    }
+    
+    public static String formatDate(String pFormat, long pDateValue) {
+        return formatDate(pFormat, new Date(pDateValue));
+    }
+
+    public static String formatDate(String pFormat, Date pDate) {
+        return new SimpleDateFormat(pFormat).format(pDate);
     }
     
     public static void main (String[] args) {
-        System.out.println(DateUtils.dateStringToday());
+        System.out.println(DateUtils.formatDateToday());
+
+        long aTime = System.currentTimeMillis();
+        Date aDate = new Date();
+        System.out.println(aTime);
+        System.out.println(DateUtils.formatDateTimeLong(aTime));
+        System.out.println(DateUtils.formatDateTimeLong(aDate));
     }
 }

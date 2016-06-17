@@ -37,7 +37,7 @@ public class TaskKeeper {
     private String archDate;
     
     public TaskKeeper() {
-        archDate = DateUtils.dateStringToday();
+        archDate = DateUtils.formatDateToday();
     }
     
     public TaskKeeper(String dateString) {

@@ -49,22 +49,6 @@ public class NodeList {
         return NodeList.buildFromPath(aRoot, aRoot);
     }
     
-    public static ArrayList<Node> buildBlockFromRoot(String pBlock, String pRoot) {
-        String aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
-        String aBlock = pBlock.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
-        if (aRoot.endsWith(TransConst.SLASH)) {
-            aRoot=aRoot.substring(0, aRoot.length()-1);
-        }
-        if (aBlock.endsWith(TransConst.SLASH)) {
-            aBlock=aBlock.substring(0, aBlock.length()-1);
-        }
-        aBlock = aRoot + aBlock;
-        if (new File(aRoot).isFile() || new File(aBlock).isFile()) {
-            return null;
-        }
-        return NodeList.buildFromPath(aBlock, aRoot);
-    }
-    
     private static ArrayList<Node> buildFromPath(String pPath, String pRoot) {
         ArrayList<Node> nodes = new ArrayList<Node>();
         File dirRoot = new File(pPath);
@@ -90,6 +74,84 @@ public class NodeList {
             }
         }
         return nodes;
+    }
+
+    public static ArrayList<Node> buildBlockFromRoot(String pBlock, String pRoot) {
+        String aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
+        String aBlock = pBlock.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
+        if (aRoot.endsWith(TransConst.SLASH)) {
+            aRoot=aRoot.substring(0, aRoot.length()-1);
+        }
+        if (aBlock.endsWith(TransConst.SLASH)) {
+            aBlock=aBlock.substring(0, aBlock.length()-1);
+        }
+        aBlock = aRoot + aBlock;
+        if (new File(aRoot).isFile() || new File(aBlock).isFile()) {
+            return null;
+        }
+        return NodeList.buildFromPath(aBlock, aRoot);
+    }
+    
+    private static ArrayList<StoreNode> buildStoreFromPath(String pPath, String pRoot) {
+        ArrayList<StoreNode> nodes = new ArrayList<StoreNode>();
+        File dirRoot = new File(pPath);
+        if (dirRoot.isFile()) {
+            return null;
+        }
+        
+        System.out.println(pPath);
+        
+        for (File aFile: dirRoot.listFiles()) {
+            if (aFile.isFile()) {
+                StoreNode aNode = new StoreNode(pRoot, aFile); 
+                System.out.println(aNode.keepNode());
+                nodes.add(aNode);
+            }
+            if (aFile.isDirectory()) {
+                nodes.addAll(NodeList.buildStoreFromPath(aFile.getPath(), pRoot));
+            }
+        }
+        return nodes;
+    }
+
+    public static ArrayList<StoreNode> buildStoreBlockFromRoot(String pBlock, String pRoot) {
+        String aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
+        String aBlock = pBlock.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
+        if (aRoot.endsWith(TransConst.SLASH)) {
+            aRoot=aRoot.substring(0, aRoot.length()-1);
+        }
+        if (aBlock.endsWith(TransConst.SLASH)) {
+            aBlock=aBlock.substring(0, aBlock.length()-1);
+        }
+        aBlock = aRoot + aBlock;
+        if (new File(aRoot).isFile() || new File(aBlock).isFile()) {
+            return null;
+        }
+        return NodeList.buildStoreFromPath(aBlock, aRoot);
+    }
+    
+    public static void keepList(String outFile, ArrayList<Node> nodes) {
+        try {
+            PrintWriter out = new PrintWriter(outFile);
+            for (Node aNode : nodes) {
+                out.println(aNode.keepNode());
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void keepStoreList(String outFile, ArrayList<StoreNode> nodes) {
+        try {
+            PrintWriter out = new PrintWriter(outFile);
+            for (StoreNode aNode : nodes) {
+                out.println(aNode.keepNode());
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private static String composeIndexPathDefault() {
@@ -124,6 +186,16 @@ public class NodeList {
            @Override
            public int compare(Node n1, Node n2) {
                return n1.getBranch(key).compareTo(n2.getBranch(key));
+           }
+        });
+    }
+
+    public static void sortByFullStoreName(ArrayList<Node> nodes) {
+        Collections.sort(nodes, new Comparator<Node>() {
+           @Override
+           public int compare(Node n1, Node n2) {
+               return new String(n1.getBranch("1ST")+n1.getName())
+                      .compareTo(n2.getBranch("1ST")+n2.getName());
            }
         });
     }
@@ -197,18 +269,6 @@ public class NodeList {
         aScan.close();
 
         return nodes;
-    }
-
-    public static void keepList(String outFile, ArrayList<Node> nodes) {
-        try {
-            PrintWriter out = new PrintWriter(outFile);
-            for (Node aNode : nodes) {
-                out.println(aNode.keepNode());
-            }
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @SuppressWarnings("unchecked")

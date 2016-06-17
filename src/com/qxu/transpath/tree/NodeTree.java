@@ -178,25 +178,6 @@ public class NodeTree implements MutableTreeNode {
         return pathName;
     }
 
-    public NodeTree getChildByName(String aName) {
-        if (null == this.children)
-            return null;
-        for (NodeTree aChild : this.children) {
-            if (aChild.node.getName().equals(aName))
-                return aChild;
-        }
-        return null;
-    }
-
-    public NodeTree getChildByNameAnyway(String aName) {
-        NodeTree aNodeTree = getChildByName(aName);
-        if (null == aNodeTree) {
-            aNodeTree = new NodeTree(new Node(0, aName));
-            this.addChild(aNodeTree);
-        }
-        return aNodeTree;
-    }
-
     public String getNodePathName_style1() {
         String pathName = TransConst.EMPTY;
         if (isRoot()) {
@@ -209,6 +190,25 @@ public class NodeTree implements MutableTreeNode {
             pathName += TransConst.PATH_LINKER;
         }
         return pathName;
+    }
+
+    public NodeTree getChildByName(String aName) {
+        if (null == this.children)
+            return null;
+        for (NodeTree aChild : this.children) {
+            if (aChild.node.getName().equals(aName))
+                return aChild;
+        }
+        return null;
+    }
+
+    public NodeTree getChildByNameOrAddIt(String aName) {
+        NodeTree aNodeTree = getChildByName(aName);
+        if (null == aNodeTree) {
+            aNodeTree = new NodeTree(new Node(0, aName));
+            this.addChild(aNodeTree);
+        }
+        return aNodeTree;
     }
 
     @Override
@@ -279,7 +279,7 @@ public class NodeTree implements MutableTreeNode {
         for (String nodeName : nodeNames) {
             if (null != nodeName && !nodeName.isEmpty()) {
                 // System.out.println(nodeName);
-                bTree = bTree.getChildByNameAnyway(nodeName);
+                bTree = bTree.getChildByNameOrAddIt(nodeName);
             }
         }
         return bTree;
