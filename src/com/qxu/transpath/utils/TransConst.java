@@ -55,6 +55,7 @@ public class TransConst {
     public static final String SHA512 = "SHA-512";
     public static final String CRC32 = "CRC32";
     
+    public static final String FORMAT_INT_04 = "%04d";
     public static final String FORMAT_INT_08 = "%08d";
     public static final String FORMAT_INT_13 = "%013d";
     public static final String FORMAT_HEX_08 = "%08x";

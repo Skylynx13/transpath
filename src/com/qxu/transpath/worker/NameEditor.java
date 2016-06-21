@@ -27,6 +27,7 @@ import java.io.File;
 
 public class NameEditor {
     private static final String FULL_ROOT = "D:\\Book\\TFLib\\new\\full\\";
+    //private static final String FULL_ROOT = "G:\\Book\\TFLib\\A2013\\B0015\\";
     private String rootDir;
     private String[][] replaceTemplates = {
             {"_2C ", ", "},
@@ -366,8 +367,8 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "Ultimate Marvel Team-Up ", 
-                                     "Ultimate Marvel Team-Up 0" } };
+        String[][] replaceOnce = { { "SHIELD", 
+                                     "S.H.I.E.L.D." } };
 
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
@@ -378,8 +379,8 @@ public class NameEditor {
 
     public static void main(String[] args) {
         //cutHead();
-        //renameNormalize();
-        renameSpecialReplace();
+        renameNormalize();
+        //renameSpecialReplace();
         //renamePushDate();
         //renameUnPushDate();
     }

@@ -60,7 +60,7 @@ public class StoreKeeper {
         long t1 = System.currentTimeMillis() - t0;
         System.out.println("Store Listed: " + s1);
         System.out.println("Time Used: " + t1);
-        System.out.println("Avg Speed: " + (s1*1.0)/t1 + "item/s.");
+        System.out.println("Avg Speed: " + (s1)*1000000/t1*0.001 + "item/s.");
     }
     
     private static void combineLists(String targetFile, String srcFile1, String srcFile2) {
@@ -155,13 +155,6 @@ public class StoreKeeper {
         System.out.println("Done.");
     }
 
-    public static void buildStoreStoreBlock() {
-        String newBlock = "D:\\Qdata\\update\\TFLib_A2016_storetest.txt";
-        System.out.println("Keeping block...");
-        StoreKeeper.keepStoreBlockFromRoot(newBlock, "\\A2016\\", "D:\\Book\\TFLib\\");
-        System.out.println("Done.");
-    }
-
     public static void buildStoreArchive(String arg) {
         String newBlock = "D:\\Qdata\\update\\TFLib_" + arg + ".txt";
         System.out.println("Keeping block...");
@@ -193,15 +186,18 @@ public class StoreKeeper {
     }
     public static void fetchVariant() {
         String srcFile = TransProp.get("TP_HOME") + "store16.txt";
-        String targetFile = TransProp.get("TP_HOME") + "store16002013.txt";
+        String targetFile = TransProp.get("TP_HOME") + "store1600ri2016.txt";
         ArrayList<Node> nodeList = NodeList.buildFromFile(srcFile);
         ArrayList<Node> newList = new ArrayList<Node>();
         for (Node aNode : nodeList) {
-            if ((aNode.getName().matches("(?i).*poster.*") ||
-                    aNode.getName().matches("(?i).*covers only.*") ||
-                    aNode.getName().matches("(?i).*cover only.*") ||
-                    aNode.getName().matches("(?i).*variant.*")) &&
-                aNode.getBranch("1ST").matches("(?i).*/A2013/.*")) {
+//            if ((aNode.getName().matches("(?i).*poster.*") ||
+//                    aNode.getName().matches("(?i).*covers only.*") ||
+//                    aNode.getName().matches("(?i).*cover only.*") ||
+//                    aNode.getName().matches("(?i).*variant.*")) &&
+//                aNode.getBranch("1ST").matches("(?i).*/A2013/.*")) {
+                if ((aNode.getName().matches("(?i).*retailer.*") ||
+                        aNode.getName().matches("(?i).*incentive.*")) &&
+                        aNode.getBranch("1ST").matches("(?i).*/A2016/.*")) {
                 newList.add(aNode);
             }
         }
@@ -266,6 +262,14 @@ public class StoreKeeper {
         }
         long t1 = System.currentTimeMillis();
         System.out.println("Total Time(ms): " + (t1-t0));
+    }
+
+    public static void buildStoreStoreBlock() {
+        System.out.println("Keeping block...");
+        StoreKeeper.keepStoreBlockFromRoot("D:\\Qdata\\update\\TFLib_A2013_BlockTest.txt", 
+                                           "\\A2013\\V0101\\", 
+                                           "F:\\Book\\TFLib\\");
+        System.out.println("Done.");
     }
 
     /**

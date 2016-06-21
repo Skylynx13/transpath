@@ -29,13 +29,15 @@ import com.qxu.transpath.utils.TransConst;
  *          <sid>:<size>:<time>:<md5>:<sha>:<crc32>:<spath>:<sname>
  */
 
-public class StoreNode extends Node {
+public class StoreNode {
+    public int id = 0;
     public long length = 0;
     public long lastModified = 0;
     public String md5 = "";
     public String sha = "";
     public String crc32 = "";
     public String storePath = "";
+    public String name = "";
 
     public StoreNode() {
         id = 0;
@@ -81,7 +83,6 @@ public class StoreNode extends Node {
         name = sItems[7];
     }
 
-    @Override
     public String keepNode() {
         return new StringBuffer(String.format(TransConst.FORMAT_INT_08, id))
                         .append(TransConst.COLON)
@@ -100,18 +101,19 @@ public class StoreNode extends Node {
                         .append(name)
                         .toString();
     }
-    
+
     public boolean equals(StoreNode pStoreNode) {
-        return super.equals(pStoreNode) 
-            && (this.length == pStoreNode.length)
-            && (this.lastModified == pStoreNode.lastModified)
-            && (this.md5.equals(pStoreNode.md5))
-            && (this.sha.equals(pStoreNode.sha))
-            && (this.crc32.equals(pStoreNode.crc32))
-            && (this.storePath.equals(pStoreNode.storePath));
+        return (this.id == pStoreNode.id) 
+                && (this.length == pStoreNode.length)
+                && (this.lastModified == pStoreNode.lastModified) 
+                && (this.md5.equals(pStoreNode.md5))
+                && (this.sha.equals(pStoreNode.sha)) 
+                && (this.crc32.equals(pStoreNode.crc32))
+                && (this.storePath.equals(pStoreNode.storePath)) 
+                && (this.name.equals(pStoreNode.name));
     }
-    
+
     public boolean equalsSimple(StoreNode pStoreNode) {
-        return super.equals(pStoreNode);
+        return (this.id == pStoreNode.id) && (this.name.equals(pStoreNode.name));
     }
 }
