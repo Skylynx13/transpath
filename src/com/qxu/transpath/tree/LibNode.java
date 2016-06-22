@@ -28,10 +28,10 @@ import com.qxu.transpath.utils.TransConst;
  *          <cid>:<sid>:<cpath>:<cname>
  */
 
-public class CatalogNode extends Node {
+public class LibNode extends Node {
     public ArrayList<String> tagList = new ArrayList<String>();
 
-    public CatalogNode(String cEntry) {
+    public LibNode(String cEntry) {
         String[] cItems = cEntry.split(TransConst.COLON);
         id = Integer.parseInt(cItems[0]);
         path = cItems[1];
