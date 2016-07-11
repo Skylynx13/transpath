@@ -31,14 +31,12 @@ import com.qxu.transpath.utils.TransConst;
  */
 
 public class StoreNode extends Node{
-//    public int id = 0;
-    public long length = 0;
-    public long lastModified = 0;
-    public String md5 = "";
-    public String sha = "";
-    public String crc32 = "";
-    public String storePath = "";
-//    public String name = "";
+    public long length;
+    public long lastModified;
+    public String md5;
+    public String sha;
+    public String crc32;
+    public String storePath;
 
     public StoreNode() {
         id = 0;
@@ -49,11 +47,6 @@ public class StoreNode extends Node{
         sha = "";
         crc32 = "";
         storePath = "";
-    }
-    
-    public StoreNode(Node pNode) {
-        id = pNode.id;
-        name = pNode.name;
     }
     
     public StoreNode(String pRoot, File pFile) {
@@ -81,20 +74,21 @@ public class StoreNode extends Node{
     }
 
     public String keepNode() {
+        String seperator = TransConst.COLON;
         return new StringBuffer(String.format(TransConst.FORMAT_INT_08, id))
-                        .append(TransConst.COLON)
+                        .append(seperator)
                         .append(String.format(TransConst.FORMAT_INT_13, length))
-                        .append(TransConst.COLON)
+                        .append(seperator)
                         .append(lastModified)
-                        .append(TransConst.COLON)
+                        .append(seperator)
                         .append(md5)
-                        .append(TransConst.COLON)
+                        .append(seperator)
                         .append(sha)
-                        .append(TransConst.COLON)
+                        .append(seperator)
                         .append(crc32)
-                        .append(TransConst.COLON)
+                        .append(seperator)
                         .append(storePath)
-                        .append(TransConst.COLON)
+                        .append(seperator)
                         .append(name)
                         .toString();
     }
@@ -110,15 +104,11 @@ public class StoreNode extends Node{
                 && (this.name.equals(pStoreNode.name));
     }
 
-    public boolean equalsSimple(StoreNode pStoreNode) {
-        return (this.id == pStoreNode.id) && (this.name.equals(pStoreNode.name));
-    }
-    
     public boolean checkDupNode(StoreNode pStoreNode) {
         return (null != pStoreNode) 
-                && (pStoreNode.md5.equals(this.md5)) 
+                && (pStoreNode.length == this.length) 
                 && (pStoreNode.crc32.equals(this.crc32))
-                && (pStoreNode.sha.equals(this.sha)) 
-                && (pStoreNode.length == this.length);
+                && (pStoreNode.md5.equals(this.md5)) 
+                && (pStoreNode.sha.equals(this.sha));
     }
 }

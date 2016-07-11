@@ -44,27 +44,14 @@ public class Node {
         return new Node(this.id, this.name);
     }
     
-    @Deprecated
-    public String getSimpleName() {
-        int iEnd = name.length();
-        if (name.lastIndexOf('.') > 0) {
-            iEnd = name.lastIndexOf('.');
-        }
-        if (name.indexOf('(') > 0) {
-            iEnd = name.indexOf('(');
-        }
-        return name.substring(0, iEnd);
-    }
-
-    @Deprecated
     public String keepNode() {
-        StringBuffer nodeBuf = new StringBuffer();
-        nodeBuf.append(TransConst.NODE_ID);
-        nodeBuf.append(TransConst.COLON);
-        nodeBuf.append(this.id);
-        nodeBuf.append(TransConst.COLON);
-        nodeBuf.append(this.name);
-        return nodeBuf.toString();
+        String seperator = TransConst.COLON;
+        return new StringBuffer(TransConst.NODE_ID)
+                .append(seperator)
+                .append(this.id)
+                .append(seperator)
+                .append(this.name)
+                .toString();
     }
 
     public boolean equals(Node pNode) {
