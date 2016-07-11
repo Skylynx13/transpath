@@ -56,10 +56,8 @@ public class StoreList {
 
     public StoreList(StoreList pStoreList) {
         version = DateUtils.formatDateTimeLongToday();
-        pidMin = pStoreList.pidMin;
-        pidMax = pStoreList.pidMax;
-        fileSize = pStoreList.fileSize;
         storeList = new ArrayList<StoreNode>(pStoreList.storeList);
+        recapListInfo();
     }
 
     public StoreList(ArrayList<StoreNode> pArrayList) {
@@ -68,6 +66,33 @@ public class StoreList {
         recapListInfo();
     }
 
+    public int size() {
+        return (null == storeList) ? 0 : storeList.size();
+    }
+
+    public void recapListInfo() {
+        pidMin = Integer.MAX_VALUE;
+        pidMax = 0;
+        fileSize = 0;
+        for (StoreNode aNode : storeList) {
+            if (aNode.id < pidMin) {
+                pidMin = aNode.id;
+            }
+            if (aNode.id > pidMax) {
+                pidMax = aNode.id;
+            }
+            fileSize += aNode.length;
+        }
+    }
+
+    public void clear() {
+        version = DateUtils.formatDateTimeLongToday();
+        pidMin = 0;
+        pidMax = 0;
+        fileSize = 0;
+        storeList = new ArrayList<StoreNode>();
+    }
+    
     public void load(String pFileName) {
         load(new File(pFileName));
     }
@@ -90,14 +115,6 @@ public class StoreList {
         aScan.close();    
     }
 
-    public void clear() {
-        version = DateUtils.formatDateTimeLongToday();
-        pidMin = 0;
-        pidMax = 0;
-        fileSize = 0;
-        storeList = new ArrayList<StoreNode>();
-    }
-    
     private String regulateSlash(String pStr) {
         String aStr = pStr.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
         if (aStr.endsWith(TransConst.SLASH)) {
@@ -146,25 +163,6 @@ public class StoreList {
         }
     }
 
-    public int size() {
-        return (null == storeList) ? 0 : storeList.size();
-    }
-
-    public void recapListInfo() {
-        pidMin = Integer.MAX_VALUE;
-        pidMax = 0;
-        fileSize = 0;
-        for (StoreNode aNode : storeList) {
-            if (aNode.id < pidMin) {
-                pidMin = aNode.id;
-            }
-            if (aNode.id > pidMax) {
-                pidMax = aNode.id;
-            }
-            fileSize += aNode.length;
-        }
-    }
-
     public StoreNode get(int index) {
         return storeList.get(index);
     }
@@ -195,16 +193,6 @@ public class StoreList {
         for (StoreNode aStoreNode : pStoreList.storeList) {
             addNode(aStoreNode);
         }
-    }
-
-    @Deprecated
-    public void attachList1(StoreList pStoreList) {
-        StoreList tempList = new StoreList(pStoreList);
-        for (StoreNode tempNode : tempList.storeList) {
-            tempNode.id += pidMax;
-        }
-        storeList.addAll(tempList.storeList);
-        pidMax += tempList.size();
     }
 
     public void removeByPath(String pPath) {
@@ -374,11 +362,8 @@ public class StoreList {
             String aTag = "2016";
             String bTag = String.format(TransConst.FORMAT_INT_04, bNum);
 
-          aList.build("F:\\Book\\TFLib\\", "\\A" + aTag + "\\B" + bTag + "\\");
-          aList.keepFile("D:\\Qdata\\update\\TFLib_A" + aTag + "_B" + bTag + ".txt");
-
-//            aList.build("F:\\Book\\TFLib\\", "\\A" + aTag + "\\V" + bTag + "\\");
-//            aList.keepFile("D:\\Qdata\\update\\TFLib_A" + aTag + "_V" + bTag + ".txt");
+            aList.build("F:\\Book\\TFLib\\", "\\A" + aTag + "\\B" + bTag + "\\");
+            aList.keepFile("D:\\Qdata\\update\\TFLib_A" + aTag + "_B" + bTag + ".txt");
 
             int s1 = aList.size();
             long t1 = System.currentTimeMillis() - t0;

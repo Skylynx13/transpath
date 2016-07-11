@@ -80,26 +80,6 @@ public class StoreListTest {
     }
 
     @Test
-    public void testAttachList1() {
-        StoreList sl1 = new StoreList();
-        sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc11"));
-        sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc12"));
-        StoreList sl2 = new StoreList();
-        sl2.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc21"));
-        sl2.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc22"));
-        sl2.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc23"));
-        sl2.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc24"));
-        sl1.attachList1(sl2);
-        String expResult = "00000001:00000006:00000000000000000246:00000006\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
-                + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
-                + "00000003:0000000000123:456:1:2:3:/aaa/bbb/:ccc21\r\n"
-                + "00000004:0000000000123:456:1:2:3:/aaa/bbb/:ccc22\r\n"
-                + "00000005:0000000000123:456:1:2:3:/aaa/bbb/:ccc23\r\n"
-                + "00000006:0000000000123:456:1:2:3:/aaa/bbb/:ccc24\r\n";
-        assertEquals(expResult, sl1.toString().substring(sl1.toString().indexOf(':')+1));
-    }
-    
-    @Test
     public void testRemoveByPath_middle() {
         StoreList sl1 = new StoreList();
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc11"));
