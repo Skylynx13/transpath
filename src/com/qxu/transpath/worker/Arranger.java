@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.Scanner;
 
 import com.qxu.transpath.utils.CdEntry;
-import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.StrUtils;
 import com.qxu.transpath.utils.TransConst;
 

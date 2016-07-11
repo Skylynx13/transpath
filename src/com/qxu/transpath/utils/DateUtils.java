@@ -13,8 +13,6 @@ package com.qxu.transpath.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.text.DateFormatter;
-
  /**
  * ClassName: DateUtils <br/>
  * Description: TODO <br/>

@@ -10,13 +10,7 @@
  */
 package com.qxu.transpath.tree;
 
-import static org.junit.Assert.*;
-
-import org.junit.Ignore;
 import org.junit.Test;
-
-import com.qxu.transpath.oldschool.NodeList;
-import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: NodeTreeTest <br/>

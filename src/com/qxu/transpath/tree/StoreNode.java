@@ -12,7 +12,6 @@ package com.qxu.transpath.tree;
 
 import java.io.File;
 
-import com.qxu.transpath.oldschool.BranchesNode;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
 

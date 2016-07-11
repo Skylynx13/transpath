@@ -12,8 +12,6 @@ package com.qxu.transpath.tree;
 
 import java.util.ArrayList;
 
-import com.qxu.transpath.utils.TransConst;
-
 /**
  * ClassName: CatalogNode <br/>
  * Description: TODO <br/>

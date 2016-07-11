@@ -27,6 +27,7 @@ import javax.swing.JFrame;
  * 
  */
 
+@SuppressWarnings("serial")
 public class TransMainFrame extends JFrame {
     @Override
     protected void processWindowEvent(WindowEvent e) {

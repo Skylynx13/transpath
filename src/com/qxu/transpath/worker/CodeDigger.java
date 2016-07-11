@@ -10,13 +10,11 @@
  */
 package com.qxu.transpath.worker;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransProp;
 

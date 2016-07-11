@@ -13,15 +13,8 @@ package com.qxu.transpath.utils;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
  /**
@@ -36,7 +29,6 @@ import org.junit.Test;
  * @version yyyy-mm-dd qxu@<br/>
  * 
  */
-
 public class FileUtilsTest {
 
     @Test
@@ -113,7 +105,6 @@ public class FileUtilsTest {
     
     @Test
     public void catFileBytesTest() {
-        String fn0 = "resource/tst/CatTest_000.txt";
         String fn1 = "resource/tst/CatTest_001.txt";
         String fn2 = "resource/tst/CatTest_002.txt";
         String fn3 = "resource/tst/CatTest_003.txt";
@@ -135,7 +126,6 @@ public class FileUtilsTest {
     
     @Test
     public void catFileBytesTest_copy_append() {
-        String fn0 = "resource/tst/CatTest_copy_append_000.txt";
         String fn1 = "resource/tst/CatTest_copy_append_001.txt";
         String fn2 = "resource/tst/CatTest_copy_append_002.txt";
         String fn3 = "resource/tst/CatTest_copy_append_003.txt";
@@ -174,6 +164,7 @@ public class FileUtilsTest {
         assertEquals("2015-03-19 14:11:42.114", FileUtils.getLastModifiedString("resource/tst/getLastModifiedString_000.txt"));
     }
     
+    @SuppressWarnings("unused")
     @Test
     public void getRarCommentTest() {
         String fn1 = "resource/tst/getSetRarCommentTest.rar";

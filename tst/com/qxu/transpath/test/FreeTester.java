@@ -22,7 +22,6 @@ import java.util.Properties;
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.utils.CdEntry;
-import com.qxu.transpath.utils.StrUtils;
 import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.worker.Arranger;
 import com.qxu.transpath.worker.TntKeeper;
@@ -161,8 +160,8 @@ public class FreeTester {
     
     public String reformat(String str) {
         String ret = str.replaceAll("_", " ");
-        int idxComma = ret.indexOf(',');
-        int idx1stBracket = ret.indexOf('(');
+        ret.indexOf(',');
+        ret.indexOf('(');
         //get number
         String rpl1s = ", ";
         String rpl1t = " " + String.format("%03d", Integer.parseInt(ret.substring(ret.indexOf('(')+1, ret.indexOf(')')).trim())) + " (";

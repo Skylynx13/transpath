@@ -5,11 +5,9 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.event.*;
 
-import com.qxu.transpath.oldschool.NodeList;
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.StoreList;
-import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransProp;
 
 /**
@@ -43,6 +41,7 @@ public class JTreeFrame extends JFrame {
 	    
 	}
 
+    @SuppressWarnings({ "serial", "unused" })
     public void initMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 	    this.setJMenuBar(menuBar);

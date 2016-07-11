@@ -11,13 +11,9 @@
 package com.qxu.transpath.worker;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.PrintWriter;
-import java.util.Scanner;
-
 import com.qxu.transpath.utils.DateUtils;
 import com.qxu.transpath.utils.FileUtils;
-import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransProp;
 
  /**
