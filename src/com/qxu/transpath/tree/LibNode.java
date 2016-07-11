@@ -28,10 +28,10 @@ import com.qxu.transpath.utils.TransConst;
  *          <cid>:<sid>:<cpath>:<cname>
  */
 
-public class TagNode extends Node {
+public class LibNode extends Node {
     public ArrayList<String> tagList = new ArrayList<String>();
 
-    public TagNode(String cEntry) {
+    public LibNode(String cEntry) {
         // TODO: format tobe decided.
     }
 
