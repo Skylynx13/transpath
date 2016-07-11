@@ -367,8 +367,8 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "SHIELD", 
-                                     "S.H.I.E.L.D." } };
+        String[][] replaceOnce = { { "Civil War Frontline ", 
+                                     "Civil War Frontline 0" } };
 
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
@@ -379,8 +379,8 @@ public class NameEditor {
 
     public static void main(String[] args) {
         //cutHead();
-        renameNormalize();
-        //renameSpecialReplace();
+        //renameNormalize();
+        renameSpecialReplace();
         //renamePushDate();
         //renameUnPushDate();
     }

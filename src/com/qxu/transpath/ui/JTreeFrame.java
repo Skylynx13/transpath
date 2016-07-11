@@ -8,6 +8,7 @@ import java.awt.event.*;
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeList;
 import com.qxu.transpath.tree.NodeTree;
+import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransProp;
 
@@ -117,7 +118,11 @@ public class JTreeFrame extends JFrame {
         jtree1.revalidate();
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
-        NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_2ND);
+//        NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_2ND);
+        StoreList aList = new StoreList();
+        aList.load(TransProp.get("SL_HOME") + "StoreList_20160710202559204.txt");
+        NodeTree ntree2 = NodeTree.buildFromList(aList);
+        
 //      NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
 //		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
 //		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0726.txt"), TranspathConstants.BRANCH_2ND);

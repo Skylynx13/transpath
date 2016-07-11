@@ -294,9 +294,21 @@ public class NodeTree implements MutableTreeNode {
         return aTree;
     }
 
+    public static NodeTree buildFromList(StoreList pList) {
+        NodeTree aTree = new NodeTree();
+        aTree.appendFromList(pList);
+        return aTree;
+    }
+    
     public void appendFromList(ArrayList<Node> nodes, String branchType) {
         for (Node aNode : nodes) {
             this.addBranch(aNode.getBranch(branchType)).addChildNode(aNode);
+        }
+    }
+
+    public void appendFromList(StoreList pList) {
+        for (StoreNode aNode : pList.storeList) {
+            this.addBranch(aNode.storePath).addChildNode(aNode);
         }
     }
 

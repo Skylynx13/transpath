@@ -29,15 +29,15 @@ import com.qxu.transpath.utils.TransConst;
  *          <sid>:<size>:<time>:<md5>:<sha>:<crc32>:<spath>:<sname>
  */
 
-public class StoreNode {
-    public int id = 0;
+public class StoreNode extends Node{
+//    public int id = 0;
     public long length = 0;
     public long lastModified = 0;
     public String md5 = "";
     public String sha = "";
     public String crc32 = "";
     public String storePath = "";
-    public String name = "";
+//    public String name = "";
 
     public StoreNode() {
         id = 0;
@@ -115,5 +115,13 @@ public class StoreNode {
 
     public boolean equalsSimple(StoreNode pStoreNode) {
         return (this.id == pStoreNode.id) && (this.name.equals(pStoreNode.name));
+    }
+    
+    public boolean checkDupNode(StoreNode pStoreNode) {
+        return (null != pStoreNode) 
+                && (pStoreNode.md5.equals(this.md5)) 
+                && (pStoreNode.crc32.equals(this.crc32))
+                && (pStoreNode.sha.equals(this.sha)) 
+                && (pStoreNode.length == this.length);
     }
 }

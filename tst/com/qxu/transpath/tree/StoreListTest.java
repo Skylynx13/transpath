@@ -49,6 +49,17 @@ public class StoreListTest {
     }
 
     @Test
+    public void testHasNode() {
+        StoreList sl = new StoreList();
+        StoreNode sn1 = new StoreNode();
+        StoreNode sn2 = new StoreNode();
+        assertEquals(0, sl.size());
+        sl.addNode(sn1);
+        assertEquals(true, sl.hasNode(sn1));
+        assertEquals(false, sl.hasNode(sn2));        
+    }
+    
+    @Test
     public void testAttachList() {
         StoreList sl1 = new StoreList();
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc11"));
@@ -59,7 +70,7 @@ public class StoreListTest {
         sl2.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc23"));
         sl2.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc24"));
         sl1.attachList(sl2);
-        String expResult = "00000001:00000006:00000006\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
+        String expResult = "00000001:00000006:00000000000000000738:00000006\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
                 + "00000003:0000000000123:456:1:2:3:/aaa/bbb/:ccc21\r\n"
                 + "00000004:0000000000123:456:1:2:3:/aaa/bbb/:ccc22\r\n"
@@ -79,7 +90,7 @@ public class StoreListTest {
         sl2.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc23"));
         sl2.addNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc24"));
         sl1.attachList1(sl2);
-        String expResult = "00000001:00000006:00000006\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
+        String expResult = "00000001:00000006:00000000000000000246:00000006\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
                 + "00000003:0000000000123:456:1:2:3:/aaa/bbb/:ccc21\r\n"
                 + "00000004:0000000000123:456:1:2:3:/aaa/bbb/:ccc22\r\n"
@@ -98,7 +109,7 @@ public class StoreListTest {
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/ddd/:ccc23"));
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/fff/:ccc24"));
         sl1.removeByPath("/aaa/ddd/");
-        String expResult = "00000001:00000006:00000003\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
+        String expResult = "00000001:00000006:00000000000000000369:00000003\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
                 + "00000006:0000000000123:456:1:2:3:/aaa/fff/:ccc24\r\n";
         assertEquals(expResult, sl1.toString().substring(sl1.toString().indexOf(':')+1));
@@ -113,7 +124,7 @@ public class StoreListTest {
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/ddd/:ccc23"));
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/fff/:ccc24"));
         sl1.removeByPath("/aaa/bbb/");
-        String expResult = "00000003:00000006:00000004\r\n"
+        String expResult = "00000003:00000006:00000000000000000492:00000004\r\n"
                 + "00000003:0000000000123:456:1:2:3:/aaa/ddd/:ccc21\r\n"
                 + "00000004:0000000000123:456:1:2:3:/aaa/ddd/:ccc22\r\n"
                 + "00000005:0000000000123:456:1:2:3:/aaa/ddd/:ccc23\r\n"
@@ -130,7 +141,7 @@ public class StoreListTest {
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/ddd/:ccc23"));
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/fff/:ccc24"));
         sl1.removeByPath("/aaa/fff/");
-        String expResult = "00000001:00000005:00000005\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
+        String expResult = "00000001:00000005:00000000000000000615:00000005\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
                 + "00000003:0000000000123:456:1:2:3:/aaa/ddd/:ccc21\r\n"
                 + "00000004:0000000000123:456:1:2:3:/aaa/ddd/:ccc22\r\n"
@@ -150,7 +161,7 @@ public class StoreListTest {
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/fff/:ccc25"));
         sl1.removeByPath("/aaa/ddd/");
         HashMap<Integer, Integer> aMap = sl1.reorgPid();
-        String expResult = "00000001:00000004:00000004\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
+        String expResult = "00000001:00000004:00000000000000000492:00000004\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
                 + "00000003:0000000000123:456:1:2:3:/aaa/fff/:ccc24\r\n"
                 + "00000004:0000000000123:456:1:2:3:/aaa/fff/:ccc25\r\n";
@@ -173,8 +184,9 @@ public class StoreListTest {
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/ddd/:ccc24"));
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/eee/:ccc23"));
         //sl1.removeByPath("/aaa/ddd/");
-        HashMap<Integer, Integer> aMap = sl1.orderByPathAndName();
-        String expResult = "00000001:00000007:00000007\r\n" 
+        sl1.orderByPathAndName();
+        HashMap<Integer, Integer> aMap = sl1.reorgPid();
+        String expResult = "00000001:00000007:00000000000000000861:00000007\r\n" 
                 + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
                 + "00000003:0000000000123:456:1:2:3:/aaa/ddd/:ccc24\r\n"
