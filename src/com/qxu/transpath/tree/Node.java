@@ -10,9 +10,6 @@
  */
 package com.qxu.transpath.tree;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
 import com.qxu.transpath.utils.TransConst;
 
 /**
@@ -31,84 +28,23 @@ import com.qxu.transpath.utils.TransConst;
 public class Node {
     public int id;
     public String name;
-    public String path;
-    public HashMap<String, String> branches;
-
-    // TODO: prop needed as a branch: file type, update-time, size in byte.
-    // in format: test:20150418210910:417043.
-    // that is: String:long:int.
 
     public Node() {
         this.id = 0;
         this.name = "";
-        this.branches = new HashMap<String, String>();
     }
 
-    public Node(int id, String name) {
-        this.id = id;
-        this.name = name;
-        this.branches = new HashMap<String, String>();
+    public Node(int pId, String pName) {
+        this.id = pId;
+        this.name = pName;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Node clone() {
-        Node node = new Node(this.id, this.name);
-        node.branches = (HashMap<String, String>) this.branches.clone();
-        return node;
+        return new Node(this.id, this.name);
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public HashMap<String, String> getBranches() {
-        return branches;
-    }
-
-    public void setBranches(HashMap<String, String> branches) {
-        this.branches = branches;
-    }
-
-    public void putBranch(String key, String value) {
-        if (null == this.branches) {
-            this.branches = new HashMap<String, String>();
-        }
-        this.branches.put(key, value);
-    }
-
-    public int numberOfBranch() {
-        return this.branches.size();
-    }
-
-    public String getBranch(String key) {
-        return this.branches.get(key);
-    }
-
-    public String getMetadata() {
-        return this.getBranch(TransConst.BRANCH_0MD);
-    }
-
+    
+    @Deprecated
     public String getSimpleName() {
         int iEnd = name.length();
         if (name.lastIndexOf('.') > 0) {
@@ -120,37 +56,19 @@ public class Node {
         return name.substring(0, iEnd);
     }
 
-    public Node merge(Node n1) {
-        Node n2 = this.clone();
-
-        Iterator<String> iter = n1.getBranches().keySet().iterator();
-        while (iter.hasNext()) {
-            String key = iter.next();
-            if (!n2.getBranches().containsKey(key)) {
-                n2.putBranch(key, n1.getBranch(key));
-            }
-        }
-        return n2;
-    }
-
+    @Deprecated
     public String keepNode() {
         StringBuffer nodeBuf = new StringBuffer();
         nodeBuf.append(TransConst.NODE_ID);
         nodeBuf.append(TransConst.COLON);
-        nodeBuf.append(this.getId());
+        nodeBuf.append(this.id);
         nodeBuf.append(TransConst.COLON);
-        nodeBuf.append(this.getName());
-        for (String key : this.branches.keySet()) {
-            nodeBuf.append(TransConst.CRLN);
-            nodeBuf.append(key);
-            nodeBuf.append(TransConst.COLON);
-            nodeBuf.append(this.getBranch(key));
-        }
+        nodeBuf.append(this.name);
         return nodeBuf.toString();
     }
 
     public boolean equals(Node pNode) {
-        return (this.name == pNode.name) && (this.path.equals(pNode.path));
+        return (this.id == pNode.id) && (this.name.equals(pNode.name));
     }
 
 }

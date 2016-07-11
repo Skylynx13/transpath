@@ -138,19 +138,19 @@ public class NodeTree implements MutableTreeNode {
     }
 
     public int getNodeId() {
-        return node.getId();
+        return node.id;
     }
 
-    public void setNodeId(int id) {
-        node.setId(id);
+    public void setNodeId(int pId) {
+        node.id = pId;
     }
 
     public String getNodeName() {
-        return node.getName();
+        return node.name;
     }
 
-    public void setNodeName(String name) {
-        node.setName(name);
+    public void setNodeName(String pName) {
+        node.name = pName;
     }
 
     public void recursivelySort() {
@@ -196,7 +196,7 @@ public class NodeTree implements MutableTreeNode {
         if (null == this.children)
             return null;
         for (NodeTree aChild : this.children) {
-            if (aChild.node.getName().equals(aName))
+            if (aChild.node.name.equals(aName))
                 return aChild;
         }
         return null;
@@ -285,27 +285,12 @@ public class NodeTree implements MutableTreeNode {
         return bTree;
     }
 
-    public static NodeTree buildFromList(ArrayList<Node> nodes, String branchType) {
-        NodeTree aTree = new NodeTree();
-        // for (Node aNode : nodes) {
-        // aTree.addBranch(aNode.getBranch(branchType)).addChildNode(aNode);
-        // }
-        aTree.appendFromList(nodes, branchType);
-        return aTree;
-    }
-
     public static NodeTree buildFromList(StoreList pList) {
         NodeTree aTree = new NodeTree();
         aTree.appendFromList(pList);
         return aTree;
     }
     
-    public void appendFromList(ArrayList<Node> nodes, String branchType) {
-        for (Node aNode : nodes) {
-            this.addBranch(aNode.getBranch(branchType)).addChildNode(aNode);
-        }
-    }
-
     public void appendFromList(StoreList pList) {
         for (StoreNode aNode : pList.storeList) {
             this.addBranch(aNode.storePath).addChildNode(aNode);

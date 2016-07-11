@@ -14,6 +14,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.qxu.transpath.oldschool.BranchesNodeTest;
+import com.qxu.transpath.oldschool.NodeListTest;
+
  /**
  * ClassName: AllTests <br/>
  * Description: TODO <br/>
@@ -29,7 +32,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-    NodeTest.class, 
+    BranchesNodeTest.class, 
     NodeListTest.class, 
     NodeTreeTest.class })
 public class AllTreeTests {

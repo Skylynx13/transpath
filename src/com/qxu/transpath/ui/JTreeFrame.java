@@ -5,8 +5,8 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.event.*;
 
+import com.qxu.transpath.oldschool.NodeList;
 import com.qxu.transpath.tree.Node;
-import com.qxu.transpath.tree.NodeList;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.utils.TransConst;
@@ -104,7 +104,10 @@ public class JTreeFrame extends JFrame {
         
 		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
         //NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST);
-      NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_1ST);
+        StoreList aList = new StoreList();
+        aList.load(TransProp.get("SL_HOME") + "StoreList_20160710202559204.txt");
+        NodeTree ntree1 = NodeTree.buildFromList(aList);
+//      NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_1ST);
 //        NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
 //        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
 //        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0928.txt"), TranspathConstants.BRANCH_1ST);
@@ -119,9 +122,9 @@ public class JTreeFrame extends JFrame {
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
 //        NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_2ND);
-        StoreList aList = new StoreList();
-        aList.load(TransProp.get("SL_HOME") + "StoreList_20160710202559204.txt");
-        NodeTree ntree2 = NodeTree.buildFromList(aList);
+        StoreList bList = new StoreList();
+        bList.load(TransProp.get("SL_HOME") + "StoreList_20160710202559204.txt");
+        NodeTree ntree2 = NodeTree.buildFromList(bList);
         
 //      NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
 //		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_2ND);

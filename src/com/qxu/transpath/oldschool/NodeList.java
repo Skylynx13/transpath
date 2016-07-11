@@ -8,7 +8,7 @@
  * Date:2015-2-11 下午2:30:48
  * 
  */
-package com.qxu.transpath.tree;
+package com.qxu.transpath.oldschool;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import com.qxu.transpath.tree.StoreNode;
 import com.qxu.transpath.utils.TransConst;
 
  /**
@@ -38,7 +39,7 @@ import com.qxu.transpath.utils.TransConst;
 
 public class NodeList {
     
-    public static ArrayList<Node> buildFromRoot(String pRoot) {
+    public static ArrayList<BranchesNode> buildFromRoot(String pRoot) {
         String aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
         if (aRoot.endsWith(TransConst.SLASH)) {
             aRoot=aRoot.substring(0, aRoot.length()-1);
@@ -49,8 +50,8 @@ public class NodeList {
         return NodeList.buildFromPath(aRoot, aRoot);
     }
     
-    private static ArrayList<Node> buildFromPath(String pPath, String pRoot) {
-        ArrayList<Node> nodes = new ArrayList<Node>();
+    private static ArrayList<BranchesNode> buildFromPath(String pPath, String pRoot) {
+        ArrayList<BranchesNode> nodes = new ArrayList<BranchesNode>();
         File dirRoot = new File(pPath);
         if (dirRoot.isFile()) {
             return null;
@@ -60,14 +61,14 @@ public class NodeList {
         
         for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
-                Node aNode = new Node(0, aFile.getName()); 
-                aNode.putBranch(TransConst.BRANCH_2ND, 
+                BranchesNode aBranchesNode = new BranchesNode(0, aFile.getName()); 
+                aBranchesNode.putBranch(TransConst.BRANCH_2ND, 
                         composeIndexPathDefault());
-                aNode.putBranch(TransConst.BRANCH_1ST,
+                aBranchesNode.putBranch(TransConst.BRANCH_1ST,
                         composeStoragePath(pRoot, aFile));
-                aNode.putBranch(TransConst.BRANCH_0MD, 
+                aBranchesNode.putBranch(TransConst.BRANCH_0MD, 
                         composeMetadata(aFile));
-                nodes.add(aNode);
+                nodes.add(aBranchesNode);
             }
             if (aFile.isDirectory()) {
                 nodes.addAll(NodeList.buildFromPath(aFile.getPath(), pRoot));
@@ -76,7 +77,7 @@ public class NodeList {
         return nodes;
     }
 
-    public static ArrayList<Node> buildBlockFromRoot(String pBlock, String pRoot) {
+    public static ArrayList<BranchesNode> buildBlockFromRoot(String pBlock, String pRoot) {
         String aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
         String aBlock = pBlock.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
         if (aRoot.endsWith(TransConst.SLASH)) {
@@ -103,9 +104,9 @@ public class NodeList {
         
         for (File aFile: dirRoot.listFiles()) {
             if (aFile.isFile()) {
-                StoreNode aNode = new StoreNode(pRoot, aFile); 
-                System.out.println(aNode.keepNode());
-                nodes.add(aNode);
+                StoreNode aBranchesNode = new StoreNode(pRoot, aFile); 
+                System.out.println(aBranchesNode.keepNode());
+                nodes.add(aBranchesNode);
             }
             if (aFile.isDirectory()) {
                 nodes.addAll(NodeList.buildStoreFromPath(aFile.getPath(), pRoot));
@@ -130,11 +131,11 @@ public class NodeList {
         return NodeList.buildStoreFromPath(aBlock, aRoot);
     }
     
-    public static void keepList(String outFile, ArrayList<Node> nodes) {
+    public static void keepList(String outFile, ArrayList<BranchesNode> nodes) {
         try {
             PrintWriter out = new PrintWriter(outFile);
-            for (Node aNode : nodes) {
-                out.println(aNode.keepNode());
+            for (BranchesNode aBranchesNode : nodes) {
+                out.println(aBranchesNode.keepNode());
             }
             out.close();
         } catch (FileNotFoundException e) {
@@ -145,8 +146,8 @@ public class NodeList {
     public static void keepStoreList(String outFile, ArrayList<StoreNode> nodes) {
         try {
             PrintWriter out = new PrintWriter(outFile);
-            for (StoreNode aNode : nodes) {
-                out.println(aNode.keepNode());
+            for (StoreNode aBranchesNode : nodes) {
+                out.println(aBranchesNode.keepNode());
             }
             out.close();
         } catch (FileNotFoundException e) {
@@ -172,36 +173,36 @@ public class NodeList {
                 .replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
     }
 
-    public static void sortByNodeName(ArrayList<Node> nodes) {
-        Collections.sort(nodes, new Comparator<Node>() {
+    public static void sortByBranchesNodeName(ArrayList<BranchesNode> nodes) {
+        Collections.sort(nodes, new Comparator<BranchesNode>() {
             @Override
-            public int compare(Node n1, Node n2) {
+            public int compare(BranchesNode n1, BranchesNode n2) {
                 return n1.getName().compareTo(n2.getName());
             }
         });
     }
     
-    public static void sortByBranchName(ArrayList<Node> nodes, final String key) {
-        Collections.sort(nodes, new Comparator<Node>() {
+    public static void sortByBranchName(ArrayList<BranchesNode> nodes, final String key) {
+        Collections.sort(nodes, new Comparator<BranchesNode>() {
            @Override
-           public int compare(Node n1, Node n2) {
+           public int compare(BranchesNode n1, BranchesNode n2) {
                return n1.getBranch(key).compareTo(n2.getBranch(key));
            }
         });
     }
 
-    public static void sortByFullStoreName(ArrayList<Node> nodes) {
-        Collections.sort(nodes, new Comparator<Node>() {
+    public static void sortByFullStoreName(ArrayList<BranchesNode> nodes) {
+        Collections.sort(nodes, new Comparator<BranchesNode>() {
            @Override
-           public int compare(Node n1, Node n2) {
+           public int compare(BranchesNode n1, BranchesNode n2) {
                return new String(n1.getBranch("1ST")+n1.getName())
                       .compareTo(n2.getBranch("1ST")+n2.getName());
            }
         });
     }
 
-    public static ArrayList<Node> buildFromFile(String pFile) {
-        ArrayList<Node> nodes = new ArrayList<Node>();
+    public static ArrayList<BranchesNode> buildFromFile(String pFile) {
+        ArrayList<BranchesNode> nodes = new ArrayList<BranchesNode>();
 
         Scanner aScan = null;
         try {
@@ -217,7 +218,7 @@ public class NodeList {
             String[] iLine = aLine.split(TransConst.COLON);
             if (aLine.startsWith(TransConst.NODE_ID) &&
                 iLine.length == TransConst.FIELDS_BRANCH) {
-                nodes.add(new Node(Integer.parseInt(iLine[1]), iLine[2]));
+                nodes.add(new BranchesNode(Integer.parseInt(iLine[1]), iLine[2]));
                 continue;
             }
             if (iLine.length == TransConst.FIELDS_INFO &&
@@ -234,8 +235,8 @@ public class NodeList {
     }
 
     @SuppressWarnings("unused")
-    private static ArrayList<Node> buildFromFile_SupportedBranchTypes(String pFile) {
-        ArrayList<Node> nodes = new ArrayList<Node>();
+    private static ArrayList<BranchesNode> buildFromFile_SupportedBranchTypes(String pFile) {
+        ArrayList<BranchesNode> nodes = new ArrayList<BranchesNode>();
 
         Scanner aScan = null;
         try {
@@ -246,11 +247,11 @@ public class NodeList {
         }
         
         String aLine = "";
-        Node node = null;
+        BranchesNode node = null;
         while (aScan.hasNext()) {
             aLine = aScan.nextLine().trim();
             if (aLine.startsWith(TransConst.NODE_ID)) {
-                node = new Node(Integer.parseInt(aLine.substring(TransConst.NODE_ID.length(), aLine.indexOf(TransConst.COLON))), 
+                node = new BranchesNode(Integer.parseInt(aLine.substring(TransConst.NODE_ID.length(), aLine.indexOf(TransConst.COLON))), 
                                  aLine.substring(aLine.indexOf(TransConst.COLON)+TransConst.COLON.length()));
                 nodes.add(node);
                 continue;
@@ -272,31 +273,31 @@ public class NodeList {
     }
 
     @SuppressWarnings("unchecked")
-    public static ArrayList<Node> combine(ArrayList<Node> nl1, ArrayList<Node> nl2, boolean checkDuplicated) {
+    public static ArrayList<BranchesNode> combine(ArrayList<BranchesNode> nl1, ArrayList<BranchesNode> nl2, boolean checkDuplicated) {
         if (checkDuplicated) {
-            if (NodeList.checkDuplicatedNode(nl1).size() > 0) {
-                System.out.println("Duplicated Node Names NL1: " + NodeList.checkDuplicatedNode(nl1));
+            if (NodeList.checkDuplicatedBranchesNode(nl1).size() > 0) {
+                System.out.println("Duplicated BranchesNode Names NL1: " + NodeList.checkDuplicatedBranchesNode(nl1));
                 return null;
             }
-            if (NodeList.checkDuplicatedNode(nl2).size() > 0) {
-                System.out.println("Duplicated Node Names NL2: " + NodeList.checkDuplicatedNode(nl2));
+            if (NodeList.checkDuplicatedBranchesNode(nl2).size() > 0) {
+                System.out.println("Duplicated BranchesNode Names NL2: " + NodeList.checkDuplicatedBranchesNode(nl2));
                 return null;
             }
         }
         if (0 == nl1.size()) {
-            return (ArrayList<Node>) nl2.clone();
+            return (ArrayList<BranchesNode>) nl2.clone();
         }
         if (0 == nl2.size()) {
-            return (ArrayList<Node>) nl1.clone();
+            return (ArrayList<BranchesNode>) nl1.clone();
         }
 
-        ArrayList<Node> nl3 = new ArrayList<Node>();
+        ArrayList<BranchesNode> nl3 = new ArrayList<BranchesNode>();
         int idx1 = 0;
         int idx2 = 0;
 
         while(idx1 < nl1.size() && idx2 < nl2.size()) {
-            Node n1 = nl1.get(idx1);
-            Node n2 = nl2.get(idx2);
+            BranchesNode n1 = nl1.get(idx1);
+            BranchesNode n2 = nl2.get(idx2);
             
             int comp = n1.getName().compareTo(n2.getName());
             
@@ -328,28 +329,28 @@ public class NodeList {
     }
     
     @SuppressWarnings({ "unchecked", "unused" })
-    private static ArrayList<Node> combineIterator(ArrayList<Node> nl1, ArrayList<Node> nl2) {
-        if (NodeList.checkDuplicatedNode(nl1).size() > 0) {
-            System.out.println("Duplicated Node Names NL1: " + NodeList.checkDuplicatedNode(nl1));
+    private static ArrayList<BranchesNode> combineIterator(ArrayList<BranchesNode> nl1, ArrayList<BranchesNode> nl2) {
+        if (NodeList.checkDuplicatedBranchesNode(nl1).size() > 0) {
+            System.out.println("Duplicated BranchesNode Names NL1: " + NodeList.checkDuplicatedBranchesNode(nl1));
             return null;
         }
-        if (NodeList.checkDuplicatedNode(nl2).size() > 0) {
-            System.out.println("Duplicated Node Names NL2: " + NodeList.checkDuplicatedNode(nl2));
+        if (NodeList.checkDuplicatedBranchesNode(nl2).size() > 0) {
+            System.out.println("Duplicated BranchesNode Names NL2: " + NodeList.checkDuplicatedBranchesNode(nl2));
             return null;
         }
         
-        Iterator<Node> iter1 = nl1.iterator();
-        Iterator<Node> iter2 = nl2.iterator();
+        Iterator<BranchesNode> iter1 = nl1.iterator();
+        Iterator<BranchesNode> iter2 = nl2.iterator();
         if (!iter1.hasNext()) {
-            return (ArrayList<Node>) nl2.clone();
+            return (ArrayList<BranchesNode>) nl2.clone();
         }
         if (!iter2.hasNext()) {
-            return (ArrayList<Node>) nl1.clone();
+            return (ArrayList<BranchesNode>) nl1.clone();
         }
 
-        ArrayList<Node> nl3 = new ArrayList<Node>();
-        Node n1 = null;
-        Node n2 = null;
+        ArrayList<BranchesNode> nl3 = new ArrayList<BranchesNode>();
+        BranchesNode n1 = null;
+        BranchesNode n2 = null;
         boolean n1next = true;
         boolean n2next = true;
         while (iter1.hasNext() && iter2.hasNext()) {
@@ -392,10 +393,10 @@ public class NodeList {
         return nl3;
     }
     
-    public static Node findNodeByName(ArrayList<Node> nodes, String nodeName) {
-        Iterator<Node> iter = nodes.iterator();
+    public static BranchesNode findBranchesNodeByName(ArrayList<BranchesNode> nodes, String nodeName) {
+        Iterator<BranchesNode> iter = nodes.iterator();
         while(iter.hasNext()) {
-            Node node = iter.next();
+            BranchesNode node = iter.next();
             if (node.getName().equals(nodeName)) {
                 return node;
             }
@@ -403,15 +404,15 @@ public class NodeList {
         return null;
     }
 
-    public static List<String> checkDuplicatedNode(ArrayList<Node> nodes) {
+    public static List<String> checkDuplicatedBranchesNode(ArrayList<BranchesNode> nodes) {
         List<String> dupStr = new ArrayList<String>();
-        NodeList.sortByNodeName(nodes);
-        String lastNodeName = null;
-        for(Node node: nodes) {
-            if (lastNodeName != null && lastNodeName.equals(node.getName())) {
-                dupStr.add(lastNodeName);
+        NodeList.sortByBranchesNodeName(nodes);
+        String lastBranchesNodeName = null;
+        for(BranchesNode node: nodes) {
+            if (lastBranchesNodeName != null && lastBranchesNodeName.equals(node.getName())) {
+                dupStr.add(lastBranchesNodeName);
             }
-            lastNodeName = node.getName();
+            lastBranchesNodeName = node.getName();
         }
         return dupStr;
     }

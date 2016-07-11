@@ -32,20 +32,13 @@ public class LibNode extends Node {
     public ArrayList<String> tagList = new ArrayList<String>();
 
     public LibNode(String cEntry) {
-        String[] cItems = cEntry.split(TransConst.COLON);
-        id = Integer.parseInt(cItems[0]);
-        path = cItems[1];
-        name = cItems[2];
+        // TODO: format tobe decided.
     }
 
     @Override
     public String keepNode() {
-        return new StringBuffer(String.format(TransConst.FORMAT_INT_08, id))
-                        .append(TransConst.COLON)
-                        .append(path)
-                        .append(TransConst.COLON)
-                        .append(name)
-                        .toString();
+        // TODO: format tobe decided.
+        return null;
     }
 
 }

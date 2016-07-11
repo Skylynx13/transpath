@@ -8,11 +8,13 @@
  * Date:2015-2-15 下午3:47:33
  * 
  */
-package com.qxu.transpath.tree;
+package com.qxu.transpath.oldschool;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import com.qxu.transpath.oldschool.BranchesNode;
 
  /**
  * ClassName: NodeTest <br/>
@@ -27,19 +29,19 @@ import org.junit.Test;
  * 
  */
 
-public class NodeTest {
+public class BranchesNodeTest {
 
     @Test
     public void mergeTest() {
-        Node n1 = new Node(1, "abc");
+        BranchesNode n1 = new BranchesNode(1, "abc");
         n1.putBranch("1ST", "the_1st_branch");
         n1.putBranch("3RD", "the_3rd_branch");
-        Node n2 = new Node(1, "abcd");
+        BranchesNode n2 = new BranchesNode(1, "abcd");
         n2.putBranch("1ST", "the_1xx_branch");
         n2.putBranch("2ND", "the_2nd_branch");
         n2.putBranch("3RD", "the_3xx_branch");
         n2.putBranch("4TH", "the_4th_branch");
-        Node n3 = n1.merge(n2);
+        BranchesNode n3 = n1.merge(n2);
         assertEquals(1, n3.getId());
         assertEquals("abc", n3.getName());
         assertEquals("the_1st_branch", n3.getBranch("1ST"));

@@ -12,6 +12,7 @@ package com.qxu.transpath.tree;
 
 import java.io.File;
 
+import com.qxu.transpath.oldschool.BranchesNode;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
 
@@ -53,10 +54,6 @@ public class StoreNode extends Node{
     public StoreNode(Node pNode) {
         id = pNode.id;
         name = pNode.name;
-        storePath = pNode.getBranch("1ST");
-        String[] meta = pNode.getBranch("0MD").split("/");
-        length = Long.parseLong(meta[1]);
-        lastModified = Long.parseLong(meta[2]);
     }
     
     public StoreNode(String pRoot, File pFile) {

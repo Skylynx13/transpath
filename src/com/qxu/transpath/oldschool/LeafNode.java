@@ -8,7 +8,7 @@
  * Date:2014-4-2 下午10:35:39
  * 
  */
-package com.qxu.transpath.tree;
+package com.qxu.transpath.oldschool;
 
  /**
  * ClassName: LeafNode <br/>
