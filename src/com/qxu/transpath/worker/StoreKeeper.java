@@ -16,6 +16,7 @@ import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.util.Arrays;
 
+import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.tree.StoreNode;
 import com.qxu.transpath.utils.TransConst;
@@ -54,10 +55,10 @@ public class StoreKeeper {
         }
         try {
             PrintWriter out = new PrintWriter(pFile);
-            for (StoreNode aNode : pList.storeList) {
+            for (Node aNode : pList.nodeList) {
                 //System.out.println(aNode.storePath);
                 out.println("del \"" + TransProp.get("ST_HOME")
-                        + aNode.storePath.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
+                        + aNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
                         + aNode.name + "\"");
             }
             out.close();
@@ -137,7 +138,8 @@ public class StoreKeeper {
             System.out.println(bName);
         }
         aList.orderByPathAndName();
-        aList.reorgPid();
+        aList.reorgId();
+        aList.recap();
         aList.refreshVersion();
         aList.keepFile(fileNameOfVersion(aList.version));
         return aList.version;
@@ -169,7 +171,8 @@ public class StoreKeeper {
             aList.attachList(bList);
             System.out.println(aBlock.getName());
         }
-        aList.reorgPid();
+        aList.reorgId();
+        aList.recap();
         aList.keepFile(tarName);
     }
     
@@ -195,20 +198,20 @@ public class StoreKeeper {
         int dNum = 0;
         int aNum = 0;
         
-        for (StoreNode aNode : aList.storeList) {
+        for (Node aNode : aList.nodeList) {
             if (null == aNode) {
                 continue;
-            } else if (!aNode.checkDupNode(dNode)) {
-                dNode = aNode;
-                resList.storeList.add(aNode);
+            } else if (!((StoreNode)aNode).checkDupNode(dNode)) {
+                dNode = ((StoreNode)aNode);
+                resList.nodeList.add(aNode);
                 continue;
             } else {
                 if (!dupList.hasNode(dNode)) {
-                    dupList.storeList.add(dNode);
+                    dupList.nodeList.add(dNode);
                     dNum++;
                 }
-                dupList.storeList.add(aNode);
-                delList.storeList.add(aNode);
+                dupList.nodeList.add(aNode);
+                delList.nodeList.add(aNode);
                 aNum++;
             }
         }
@@ -222,14 +225,14 @@ public class StoreKeeper {
         resList.recap();
         resList.keepFile(resName);
         resList.orderByPathAndName();
-        resList.reorgPid();
+        resList.reorgId();
         resList.recap();
         resList.keepFile(fileNameOfVersion(resList.version));
         
         delList.recap();
         delList.keepFile(delName);
         delList.orderByPathAndName();
-        delList.reorgPid();
+        delList.reorgId();
         delList.recap();
         keepDelBat(delList, batName);
         System.out.println("Current Length: " + aList.size());
@@ -256,7 +259,7 @@ public class StoreKeeper {
         String comVer = null;
         String newVer = null;
         
-        buildList(aTag, bTags);
+//        buildList(aTag, bTags);
         comVer = combineList(oldVer, aTag, bTags);
         newVer = checkDup(comVer);
         System.out.println("New version is: " + newVer + ".");

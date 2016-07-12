@@ -423,6 +423,14 @@ public class FileUtils {
         return checkCode.equals(digest(fileName, algorithm));
     }
     
+    public static String regulateSlash(String pStr) {
+        String aStr = pStr.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
+        if (aStr.endsWith(TransConst.SLASH)) {
+            aStr = aStr.substring(0, aStr.length() - 1);
+        }
+        return aStr;
+    }
+
     public static void main(String[] args) {
         long t0 = System.currentTimeMillis();
         System.out.println(FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_000.txt")) + ":" + (System.currentTimeMillis()-t0));

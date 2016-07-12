@@ -10,8 +10,6 @@
  */
 package com.qxu.transpath.tree;
 
-import com.qxu.transpath.utils.TransConst;
-
 /**
  * ClassName: Node <br/>
  * Description: Basic Unit of NodeTree. <br/>
@@ -25,37 +23,23 @@ import com.qxu.transpath.utils.TransConst;
  * 
  */
 
-public class Node {
+public abstract class Node {
     public int id;
+    public String path;
     public String name;
 
     public Node() {
         this.id = 0;
+        this.path = "";
         this.name = "";
     }
 
-    public Node(int pId, String pName) {
+    public Node(int pId, String pPath, String pName) {
         this.id = pId;
+        this.path = pPath;
         this.name = pName;
     }
-
-    @Override
-    public Node clone() {
-        return new Node(this.id, this.name);
-    }
     
-    public String keepNode() {
-        String seperator = TransConst.COLON;
-        return new StringBuffer(TransConst.NODE_ID)
-                .append(seperator)
-                .append(this.id)
-                .append(seperator)
-                .append(this.name)
-                .toString();
-    }
-
-    public boolean equals(Node pNode) {
-        return (this.id == pNode.id) && (this.name.equals(pNode.name));
-    }
+    public abstract String keepNode();
 
 }

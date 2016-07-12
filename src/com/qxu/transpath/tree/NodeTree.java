@@ -205,7 +205,7 @@ public class NodeTree implements MutableTreeNode {
     public NodeTree getChildByNameOrAddIt(String aName) {
         NodeTree aNodeTree = getChildByName(aName);
         if (null == aNodeTree) {
-            aNodeTree = new NodeTree(new Node(0, aName));
+            aNodeTree = new NodeTree(new SimpleNode(aName));
             this.addChild(aNodeTree);
         }
         return aNodeTree;
@@ -272,7 +272,7 @@ public class NodeTree implements MutableTreeNode {
 
     public NodeTree addBranch(String pPath) {
         if (this.isNull()) {
-            this.setNode(new Node(0, TransConst.ROOT));
+            this.setNode(new SimpleNode(TransConst.ROOT));
         }
         String[] nodeNames = pPath.split(TransConst.SLASH);
         NodeTree bTree = this;
@@ -292,19 +292,19 @@ public class NodeTree implements MutableTreeNode {
     }
     
     public void appendFromList(StoreList pList) {
-        for (StoreNode aNode : pList.storeList) {
-            this.addBranch(aNode.storePath).addChildNode(aNode);
+        for (Node aNode : pList.nodeList) {
+            this.addBranch(aNode.path).addChildNode(aNode);
         }
     }
 
     public static void main(String args[]) {
-        NodeTree tree1 = new NodeTree(new Node(11, "tree1"));
-        NodeTree node1 = new NodeTree(new Node(1, "node1"));
+        NodeTree tree1 = new NodeTree(new SimpleNode("tree1"));
+        NodeTree node1 = new NodeTree(new SimpleNode("node1"));
         tree1.addChild(node1);
-        NodeTree node2 = new NodeTree(new Node(2, "node2"));
+        NodeTree node2 = new NodeTree(new SimpleNode("node2"));
         tree1.addChild(node2);
-        NodeTree node3 = new NodeTree(new Node(3, "node3"));
-        NodeTree tree2 = new NodeTree(new Node(12, "tree2"));
+        NodeTree node3 = new NodeTree(new SimpleNode("node3"));
+        NodeTree tree2 = new NodeTree(new SimpleNode("tree2"));
         tree2.addChild(node3);
         tree1.addChild(tree2);
         System.out.println(tree1.getNodePathName());

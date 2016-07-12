@@ -5,8 +5,8 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.event.*;
 
-import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
+import com.qxu.transpath.tree.SimpleNode;
 import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.utils.TransProp;
 
@@ -174,16 +174,16 @@ public class JTreeFrame extends JFrame {
 	
 	@SuppressWarnings("unused")
     private NodeTree buildTestTree() {
-        NodeTree tree1 = new NodeTree(new Node(11, "tree1"));
-        NodeTree node1 = new NodeTree(new Node(1, "node1"));
+        NodeTree tree1 = new NodeTree(new SimpleNode("tree1"));
+        NodeTree node1 = new NodeTree(new SimpleNode("node1"));
         tree1.addChild(node1);
-        NodeTree node2 = new NodeTree(new Node(2, "node2"));
+        NodeTree node2 = new NodeTree(new SimpleNode("node2"));
         tree1.addChild(node2);
-        NodeTree node3 = new NodeTree(new Node(3, "node3"));
-        NodeTree tree2 = new NodeTree(new Node(12, "tree2"));
+        NodeTree node3 = new NodeTree(new SimpleNode("node3"));
+        NodeTree tree2 = new NodeTree(new SimpleNode("tree2"));
         tree2.addChild(node3);
         tree1.addChild(tree2);
-        node3.addChild(new NodeTree(new Node(4, "node4")));
+        node3.addChild(new NodeTree(new SimpleNode("node4")));
         return tree1;
 	}
 

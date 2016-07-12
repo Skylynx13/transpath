@@ -1,0 +1,227 @@
+/**
+ * Copyright (c) 2016,qxu. 
+ * All Rights Reserved.
+ * 
+ * Project Name:transpath
+ * Package Name:com.qxu.transpath.tree
+ * File Name:NodeList.java
+ * Date:2016-7-12 下午3:10:19
+ * 
+ */
+package com.qxu.transpath.tree;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Scanner;
+
+import com.qxu.transpath.utils.DateUtils;
+import com.qxu.transpath.utils.TransConst;
+
+ /**
+ * ClassName: NodeList <br/>
+ * Description: TODO <br/>
+ * Date: 2016-7-12 下午3:10:19 <br/>
+ * <br/>
+ * 
+ * @author qxu@
+ * 
+ * Change Log:
+ * @version yyyy-mm-dd qxu@<br/>
+ * 
+ */
+
+public abstract class NodeList {
+    public String version;
+    public int minId;
+    public int maxId;
+    public ArrayList<Node> nodeList;
+
+    public NodeList() {
+        refreshVersion();
+        minId = 0;
+        maxId = 0;
+        nodeList = new ArrayList<Node>();
+    }
+
+    public NodeList(NodeList pNodeList) {
+        refreshVersion();
+        nodeList = new ArrayList<Node>(pNodeList.nodeList);
+        recap();
+    }
+
+    public NodeList(ArrayList<Node> pList) {
+        refreshVersion();
+        nodeList = new ArrayList<Node>(pList);
+        recap();
+    }
+
+    public int size() {
+        return (null == nodeList) ? 0 : nodeList.size();
+    }
+
+    public void recap() {
+        minId = Integer.MAX_VALUE;
+        maxId = 0;
+        for (Node aNode : nodeList) {
+            if (aNode.id < minId) {
+                minId = aNode.id;
+            }
+            if (aNode.id > maxId) {
+                maxId = aNode.id;
+            }
+        }
+    }
+
+    public void clear() {
+        version = DateUtils.formatDateTimeLongToday();
+        minId = 0;
+        maxId = 0;
+        nodeList = new ArrayList<Node>();
+    }
+    
+    public Node get(int index) {
+        return nodeList.get(index);
+    }
+
+    public Node getById(int pId) {
+        for (Node aNode : nodeList) {
+            if (aNode.id == pId) {
+                return aNode;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasNode (Node pNode) {
+        return nodeList.contains(pNode);
+    }
+
+    public void addNode(Node pNode) {
+        if (0 == size()) {
+            minId = 1;
+        }
+        pNode.id = ++maxId;
+        nodeList.add(pNode);
+    }
+
+    public void attachList(NodeList pList) {
+        for (Node aNode : pList.nodeList) {
+            addNode(aNode);
+        }
+    }
+
+    public void removeByPath(String pPath) {
+        ArrayList<Node> removeList = new ArrayList<Node>();
+        for (Node aNode : nodeList) {
+            if (aNode.path.equals(pPath)) {
+                removeList.add(aNode);
+            }
+        }
+        nodeList.removeAll(removeList);
+        recap();
+    }
+
+    public void refreshVersion() {
+        version = DateUtils.formatDateTimeLongToday();
+    }
+
+    public HashMap<Integer, Integer> reorgId() {
+        HashMap<Integer, Integer> aMap = new HashMap<Integer, Integer>();
+        int newId = 0;
+        for (Node aNode : nodeList) {
+            newId++;
+            if (aNode.id != newId) {
+                aMap.put(aNode.id, newId);
+                aNode.id = newId;
+            }
+        }
+        return aMap;
+    }
+
+    public void load(String pFileName) {
+        load(new File(pFileName));
+    }
+
+    public void load(File pFile) {
+        clear();
+        Scanner aScan = null;
+        try {
+            aScan = new Scanner(new FileReader(pFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (aScan.hasNext()) {
+            loadVersion(aScan.nextLine());
+        }
+        while (aScan.hasNext()) {
+            nodeList.add(loadNode(aScan.nextLine()));
+        }
+        aScan.close();    
+    }
+    
+    public abstract Node loadNode(String pLine);
+
+    public void loadVersion(String pLine) {
+        version = pLine.split(TransConst.COLON)[0];
+    }
+
+    public void orderByPathAndName() {
+        Collections.sort(nodeList, new Comparator<Node>() {
+            @Override
+            public int compare(Node sn1, Node sn2) {
+                int cmp = sn1.path.compareTo(sn2.path);
+                if (cmp != 0) {
+                    return cmp;
+                }
+                return sn1.name.compareTo(sn2.name);
+            }
+        });
+    }
+    
+    public String keepHeader() {
+        return new StringBuffer(version).append(TransConst.COLON)
+                .append(String.format(TransConst.FORMAT_INT_08, minId)).append(TransConst.COLON)
+                .append(String.format(TransConst.FORMAT_INT_08, maxId)).append(TransConst.COLON)
+                .append(String.format(TransConst.FORMAT_INT_08, size())).toString();
+
+    }
+
+    public void keepFile(String pFileName) {
+        File aFile = new File(pFileName);
+        keepFile(aFile);
+    }
+
+    public void keepFile(File pFile) {
+        if (0 == size()) {
+            return;
+        }
+        try {
+            PrintWriter out = new PrintWriter(pFile);
+            out.println(keepHeader());
+            for (Node aNode : nodeList) {
+                out.println(keepLine(aNode));
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public abstract String keepLine(Node pNode);
+
+    public String toString() {
+        StringBuffer strBuff = new StringBuffer(keepHeader());
+        strBuff.append(TransConst.CRLN);
+        for (Node aNode : nodeList) {
+            strBuff.append(keepLine(aNode)).append(TransConst.CRLN);
+        }
+        return strBuff.toString();
+    }
+}

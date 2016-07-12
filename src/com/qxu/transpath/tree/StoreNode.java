@@ -35,23 +35,19 @@ public class StoreNode extends Node{
     public String md5;
     public String sha;
     public String crc32;
-    public String storePath;
 
     public StoreNode() {
-        id = 0;
-        name = "";
         length = 0;
         lastModified = 0;
         md5 = "";
         sha = "";
         crc32 = "";
-        storePath = "";
     }
     
     public StoreNode(String pRoot, File pFile) {
         id = 0;
         name = pFile.getName();
-        storePath = pFile.getParent().replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
+        path = pFile.getParent().replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
                 .replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
         length = pFile.length();
         lastModified = pFile.lastModified();
@@ -68,7 +64,7 @@ public class StoreNode extends Node{
         md5 = sItems[3];
         sha = sItems[4];
         crc32 = sItems[5];
-        storePath = sItems[6];
+        path = sItems[6];
         name = sItems[7];
     }
 
@@ -86,7 +82,7 @@ public class StoreNode extends Node{
                         .append(seperator)
                         .append(crc32)
                         .append(seperator)
-                        .append(storePath)
+                        .append(path)
                         .append(seperator)
                         .append(name)
                         .toString();
@@ -99,7 +95,7 @@ public class StoreNode extends Node{
                 && (this.md5.equals(pStoreNode.md5))
                 && (this.sha.equals(pStoreNode.sha)) 
                 && (this.crc32.equals(pStoreNode.crc32))
-                && (this.storePath.equals(pStoreNode.storePath)) 
+                && (this.path.equals(pStoreNode.path)) 
                 && (this.name.equals(pStoreNode.name));
     }
 

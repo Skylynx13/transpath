@@ -39,12 +39,12 @@ public class StoreListTest {
         StoreList sl = new StoreList();
         StoreNode sn = new StoreNode();
         assertEquals(0, sn.id);
-        assertEquals(0, sl.pidMax);
+        assertEquals(0, sl.maxId);
         assertEquals(0, sl.size());
         sl.addNode(sn);
         assertEquals(1, sn.id);
         assertEquals(1, sl.get(0).id);
-        assertEquals(1, sl.pidMax);
+        assertEquals(1, sl.maxId);
         assertEquals(1, sl.size());
     }
 
@@ -76,6 +76,7 @@ public class StoreListTest {
                 + "00000004:0000000000123:456:1:2:3:/aaa/bbb/:ccc22\r\n"
                 + "00000005:0000000000123:456:1:2:3:/aaa/bbb/:ccc23\r\n"
                 + "00000006:0000000000123:456:1:2:3:/aaa/bbb/:ccc24\r\n";
+        sl1.recap();
         assertEquals(expResult, sl1.toString().substring(sl1.toString().indexOf(':')+1));
     }
 
@@ -140,7 +141,8 @@ public class StoreListTest {
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/fff/:ccc24"));
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/fff/:ccc25"));
         sl1.removeByPath("/aaa/ddd/");
-        HashMap<Integer, Integer> aMap = sl1.reorgPid();
+        HashMap<Integer, Integer> aMap = sl1.reorgId();
+        sl1.recap();
         String expResult = "00000001:00000004:00000000000000000492:00000004\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
                 + "00000003:0000000000123:456:1:2:3:/aaa/fff/:ccc24\r\n"
@@ -165,7 +167,8 @@ public class StoreListTest {
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/eee/:ccc23"));
         //sl1.removeByPath("/aaa/ddd/");
         sl1.orderByPathAndName();
-        HashMap<Integer, Integer> aMap = sl1.reorgPid();
+        HashMap<Integer, Integer> aMap = sl1.reorgId();
+        sl1.recap();
         String expResult = "00000001:00000007:00000000000000000861:00000007\r\n" 
                 + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
