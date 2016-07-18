@@ -285,13 +285,13 @@ public class NodeTree implements MutableTreeNode {
         return bTree;
     }
 
-    public static NodeTree buildFromList(StoreList pList) {
+    public static NodeTree buildFromList(NodeList pList) {
         NodeTree aTree = new NodeTree();
         aTree.appendFromList(pList);
         return aTree;
     }
     
-    public void appendFromList(StoreList pList) {
+    public void appendFromList(NodeList pList) {
         for (Node aNode : pList.nodeList) {
             this.addBranch(aNode.path).addChildNode(aNode);
         }

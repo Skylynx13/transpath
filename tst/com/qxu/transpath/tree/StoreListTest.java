@@ -142,7 +142,6 @@ public class StoreListTest {
         sl1.addNode(new StoreNode("0:123:456:1:2:3:/aaa/fff/:ccc25"));
         sl1.removeByPath("/aaa/ddd/");
         HashMap<Integer, Integer> aMap = sl1.reorgId();
-        sl1.recap();
         String expResult = "00000001:00000004:00000000000000000492:00000004\r\n" + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"
                 + "00000003:0000000000123:456:1:2:3:/aaa/fff/:ccc24\r\n"
@@ -168,7 +167,6 @@ public class StoreListTest {
         //sl1.removeByPath("/aaa/ddd/");
         sl1.orderByPathAndName();
         HashMap<Integer, Integer> aMap = sl1.reorgId();
-        sl1.recap();
         String expResult = "00000001:00000007:00000000000000000861:00000007\r\n" 
                 + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12\r\n"

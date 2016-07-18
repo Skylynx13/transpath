@@ -28,12 +28,18 @@ import com.qxu.transpath.utils.TransConst;
 public class PubNode extends Node {
     public int order;
     
+    public PubNode() {
+        order = 0;
+    }
+    
     public PubNode(String sEntry) {
         String[] sItems = sEntry.split(TransConst.COLON);
         id = Integer.parseInt(sItems[0]);
         order = Integer.parseInt(sItems[1]);
         path = sItems[2];
-        name = sItems[3];
+        if (sItems.length == 4) {
+            name = sItems[3];
+        }
     }
 
     @Override

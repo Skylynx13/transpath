@@ -6,6 +6,7 @@ import javax.swing.tree.*;
 import java.awt.event.*;
 
 import com.qxu.transpath.tree.NodeTree;
+import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.SimpleNode;
 import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.utils.TransProp;
@@ -97,14 +98,14 @@ public class JTreeFrame extends JFrame {
 	
 	public void initJTree() {
 		this.setSize(1200, 600);
-		this.setTitle("STARS");
+		this.setTitle("Storage Archivist");
 		cp = (JPanel) this.getContentPane();
 		cp.setLayout(new BorderLayout());
         
 		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
         //NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST);
         StoreList aList = new StoreList();
-        aList.load(TransProp.get("SL_HOME") + "StoreList_20160710202559204.txt");
+        aList.load(TransProp.get("SL_HOME") + "StoreList_20160716164318955.txt");
         NodeTree ntree1 = NodeTree.buildFromList(aList);
 //      NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_1ST);
 //        NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
@@ -121,8 +122,8 @@ public class JTreeFrame extends JFrame {
         
 		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
 //        NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_2ND);
-        StoreList bList = new StoreList();
-        bList.load(TransProp.get("SL_HOME") + "StoreList_20160710202559204.txt");
+        PubList bList = new PubList();
+        bList.load(TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_001.txt");
         NodeTree ntree2 = NodeTree.buildFromList(bList);
         
 //      NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);

@@ -42,7 +42,7 @@ public class StoreKeeper {
     }
     
     private static String fileNameOfTag(String aTag, String bTag) {
-        return TransProp.get("SL_HOME") + "\\N\\TFLib_" + aTag + "_" + bTag + ".txt";
+        return TransProp.get("SL_HOME") + "N\\TFLib_" + aTag + "_" + bTag + ".txt";
     }
     
     public static void keepDelBat(StoreList pList, String pFileName) {
@@ -56,7 +56,6 @@ public class StoreKeeper {
         try {
             PrintWriter out = new PrintWriter(pFile);
             for (Node aNode : pList.nodeList) {
-                //System.out.println(aNode.storePath);
                 out.println("del \"" + TransProp.get("ST_HOME")
                         + aNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
                         + aNode.name + "\"");
@@ -139,7 +138,6 @@ public class StoreKeeper {
         }
         aList.orderByPathAndName();
         aList.reorgId();
-        aList.recap();
         aList.refreshVersion();
         aList.keepFile(fileNameOfVersion(aList.version));
         return aList.version;
@@ -148,8 +146,6 @@ public class StoreKeeper {
     @Deprecated
     public static void combineListInit() {
         System.out.println("combine Start...");
-//        String srcName = "D:\\Qdata\\update\\storelist\\B\\";
-//        String tarName = "D:\\Qdata\\update\\storelist\\A\\A2013.txt";
         String srcName = "D:\\Qdata\\update\\storelist\\A\\";
         
         File srcPath = new File(srcName);
@@ -172,7 +168,6 @@ public class StoreKeeper {
             System.out.println(aBlock.getName());
         }
         aList.reorgId();
-        aList.recap();
         aList.keepFile(tarName);
     }
     
@@ -215,26 +210,25 @@ public class StoreKeeper {
                 aNum++;
             }
         }
-        //System.out.println(dupList.toString());
         System.out.println("D Number: " + dNum);
         System.out.println("A Number: " + aNum);
-//        aList.reorgPid();
         dupList.recap();
         dupList.keepFile(dupName);
         
         resList.recap();
         resList.keepFile(resName);
+
         resList.orderByPathAndName();
         resList.reorgId();
-        resList.recap();
         resList.keepFile(fileNameOfVersion(resList.version));
         
         delList.recap();
         delList.keepFile(delName);
+
         delList.orderByPathAndName();
         delList.reorgId();
-        delList.recap();
         keepDelBat(delList, batName);
+
         System.out.println("Current Length: " + aList.size());
         System.out.println("Reserve Length: " + resList.size());
         System.out.println("Removal Length: " + delList.size());
@@ -251,20 +245,26 @@ public class StoreKeeper {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("StoreKeeper on job...");
+        System.out.println("StoreKeeper starts...");
         
-        String aTag = "A2016";
-        String[] bTags = {"B0626", "B0703", "B0740"};
-        String oldVer = "20160705164244895";
-        String comVer = null;
-        String newVer = null;
+        String aTag = TransProp.get("A_TAG");
+        String[] bTags = TransProp.get("B_TAGS").split(",");
+        String oldVer = TransProp.get("CURR_VER");
         
-//        buildList(aTag, bTags);
-        comVer = combineList(oldVer, aTag, bTags);
-        newVer = checkDup(comVer);
-        System.out.println("New version is: " + newVer + ".");
+        for(int bIndex = 0; bIndex < bTags.length; bIndex++) {
+            bTags[bIndex] = bTags[bIndex].trim();
+        }
         
-        System.out.println("StoreKeeper job done.");
+        System.out.println("A-Tag: " + aTag);
+        System.out.println("B-Tag: " + Arrays.toString(bTags));
+        System.out.println("Old version: " + oldVer);
+        
+        buildList(aTag, bTags);
+        String comVer = combineList(oldVer, aTag, bTags);
+        String newVer = checkDup(comVer);
+        System.out.println("New version: " + newVer + ".");
+        
+        System.out.println("StoreKeeper done.");
     }
 
 }

@@ -147,6 +147,8 @@ public class TaskKeeper {
                 keeper.checkTask();
             }
         }
+        keeper.keepRaw();
+        keeper.keepFresh();
         System.out.println("Keeper job done");
         //countMatchString();
     }

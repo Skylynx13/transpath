@@ -35,4 +35,18 @@ public class PubList extends NodeList {
         return ((PubNode)pNode).keepNode();
     }
 
+    public void reorgOrder() {
+        int newOrder = 0;
+        String lastPath = "";
+        for (Node aNode : nodeList) {
+            if (aNode.path.equals(lastPath)) {
+                newOrder++;
+            }
+            else {
+                lastPath = aNode.path;
+                newOrder = 0;
+            }
+            ((PubNode)aNode).order = newOrder;
+        }
+    }
 }

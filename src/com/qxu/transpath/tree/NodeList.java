@@ -141,6 +141,7 @@ public abstract class NodeList {
                 aNode.id = newId;
             }
         }
+        recap();
         return aMap;
     }
 
