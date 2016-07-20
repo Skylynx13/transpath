@@ -102,18 +102,25 @@ public abstract class NodeList {
         return nodeList.contains(pNode);
     }
 
-    public void addNode(Node pNode) {
+    public int addNode(Node pNode) {
         if (0 == size()) {
             minId = 1;
         }
         pNode.id = ++maxId;
         nodeList.add(pNode);
+        return pNode.id;
     }
 
-    public void attachList(NodeList pList) {
+    public HashMap<Integer, Integer> attachList(NodeList pList) {
+        HashMap<Integer, Integer> aMap = new HashMap<Integer, Integer>();
         for (Node aNode : pList.nodeList) {
+            int oldId = aNode.id;
             addNode(aNode);
+            if (oldId != aNode.id) {
+                aMap.put(oldId, aNode.id);
+            }
         }
+        return aMap;
     }
 
     public void removeByPath(String pPath) {
@@ -164,7 +171,8 @@ public abstract class NodeList {
         while (aScan.hasNext()) {
             nodeList.add(loadNode(aScan.nextLine()));
         }
-        aScan.close();    
+        aScan.close();
+        recap();
     }
     
     public abstract Node loadNode(String pLine);
@@ -173,6 +181,15 @@ public abstract class NodeList {
         version = pLine.split(TransConst.COLON)[0];
     }
 
+    public void orderById() {
+        Collections.sort(nodeList, new Comparator<Node>() {
+            @Override
+            public int compare(Node sn1, Node sn2) {
+                return ((Integer)sn1.id).compareTo(sn2.id);
+            }
+        });
+    }
+    
     public void orderByPathAndName() {
         Collections.sort(nodeList, new Comparator<Node>() {
             @Override

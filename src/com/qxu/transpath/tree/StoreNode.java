@@ -106,4 +106,5 @@ public class StoreNode extends Node{
                 && (pStoreNode.md5.equals(this.md5)) 
                 && (pStoreNode.sha.equals(this.sha));
     }
+    
 }

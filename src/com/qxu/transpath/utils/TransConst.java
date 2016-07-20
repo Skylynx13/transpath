@@ -40,6 +40,7 @@ public class TransConst {
     public static final int FIELDS_BRANCH = 3;
     
     public static final String INDEX_PRE_CATALOG = "/PreCatalog/";
+    public static final String PUB_PATH_DEFAULT = "/PreCatalog/";
 
 // Path info be moved to properties
 //    public static final String TP_HOME = "D:\\_TF\\_Update\\transpath\\";
@@ -65,4 +66,5 @@ public class TransConst {
     public static final String FMT_DATE_TIME = "yyyyMMddHHmmss";
     public static final String FMT_DATE_TIME_LONG = "yyyyMMddHHmmssSSS";
     public static final String FMT_DATE = "yyyyMMdd";
+    
 }

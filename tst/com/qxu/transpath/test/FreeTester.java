@@ -206,6 +206,9 @@ public class FreeTester {
         String rex = "(?i).*(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB).*";
         System.out.println(new String("gkk233.2 MB").matches(rex));
         System.out.println(new String("/a2016/b1234/").replaceAll("/", "\\\\"));
+        int aaa = 3;
+        int bbb = 3;
+        System.out.println(((Integer)aaa).compareTo(bbb));
     }
 }
 

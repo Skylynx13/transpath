@@ -10,8 +10,6 @@
  */
 package com.qxu.transpath.tree;
 
-import java.util.Hashtable;
-
 import com.qxu.transpath.utils.TransConst;
 
  /**

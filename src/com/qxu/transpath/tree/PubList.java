@@ -24,6 +24,14 @@ package com.qxu.transpath.tree;
  */
 
 public class PubList extends NodeList {
+    
+    public PubList() {
+        
+    }
+    
+    public PubList(PubList pList) {
+        super(pList);
+    }
 
     @Override
     public Node loadNode(String pLine) {

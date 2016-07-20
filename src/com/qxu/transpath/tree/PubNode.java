@@ -41,6 +41,13 @@ public class PubNode extends Node {
             name = sItems[3];
         }
     }
+    
+    public PubNode(StoreNode sNode) {
+        id = 0;
+        order = 0;
+        path = TransConst.PUB_PATH_DEFAULT;
+        name = sNode.name.replaceAll("( \\(.*\\))*\\.cb[rz]", "");
+    }
 
     @Override
     public String keepNode() {

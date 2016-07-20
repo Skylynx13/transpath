@@ -10,12 +10,9 @@
  */
 package com.qxu.transpath.tree;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-
-import com.qxu.transpath.utils.TransConst;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
  /**
  * ClassName: IdLinkList <br/>
@@ -31,7 +28,15 @@ import com.qxu.transpath.utils.TransConst;
  */
 
 public class LinkList extends NodeList{
-
+    
+    public LinkList() {
+        
+    }
+    
+    public LinkList(LinkList pList) {
+        super(pList);
+    }
+    
     @Override
     public Node loadNode(String pLine) {
         return new LinkNode(pLine);
@@ -41,5 +46,47 @@ public class LinkList extends NodeList{
     public String keepLine(Node pNode) {
         return ((LinkNode)pNode).keepNode();
     }
-   
+    
+    public void refreshPubId(HashMap<Integer, Integer> pMap) {
+        LinkList newLinkList = new LinkList(this);
+        this.clear();
+        for (Node aNode : newLinkList.nodeList) {
+            LinkNode lNode = (LinkNode)aNode;
+            if (pMap.containsKey(lNode.pubId)) {
+                lNode.pubId = pMap.get(lNode.pubId);
+            }
+            this.addNode(lNode);
+        }
+    }
+    
+    public void refreshStoreId(HashMap<Integer, Integer> pMap) {
+        LinkList newLinkList = new LinkList(this);
+        this.clear();
+        for (Node aNode : newLinkList.nodeList) {
+            LinkNode lNode = (LinkNode)aNode;
+            if (pMap.containsKey(lNode.storeId)) {
+                lNode.storeId = pMap.get(lNode.storeId);
+            }
+            this.addNode(lNode);
+        }
+    }
+
+    public void orderByStoreId() {
+        Collections.sort(nodeList, new Comparator<Node>() {
+            @Override
+            public int compare(Node sn1, Node sn2) {
+                return ((Integer)((LinkNode)sn1).storeId).compareTo(((LinkNode)sn2).storeId);
+            }
+        });
+    }
+
+    public void orderByPubId() {
+        Collections.sort(nodeList, new Comparator<Node>() {
+            @Override
+            public int compare(Node sn1, Node sn2) {
+                return ((Integer)((LinkNode)sn1).pubId).compareTo(((LinkNode)sn2).pubId);
+            }
+        });
+    }
+
 }

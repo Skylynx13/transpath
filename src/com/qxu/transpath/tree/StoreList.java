@@ -36,6 +36,10 @@ public class StoreList extends NodeList{
         fileSize = 0;
     }
     
+    public StoreList(StoreList pList) {
+        super(pList);
+    }
+    
     @Override
     public void clear() {
         super.clear();
