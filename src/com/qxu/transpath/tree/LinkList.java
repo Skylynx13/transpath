@@ -10,6 +10,7 @@
  */
 package com.qxu.transpath.tree;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -88,5 +89,43 @@ public class LinkList extends NodeList{
             }
         });
     }
+    
+    public ArrayList<Integer> getStoreIdList(int pPubId) {
+        ArrayList<Integer> storeIdList = new ArrayList<Integer>();
+        for (Node aNode : nodeList) {
+            LinkNode lNode = (LinkNode)aNode;
+            if (lNode.pubId == pPubId) {
+                storeIdList.add(lNode.storeId);
+            }
+        }
+        return storeIdList;
+    }
 
+    public ArrayList<Integer> getStoreIdList(ArrayList<Integer> pPubIdList) {
+        ArrayList<Integer> storeIdList = new ArrayList<Integer>();
+        for (int pPubId : pPubIdList) {
+            storeIdList.addAll(getStoreIdList(pPubId));
+        }
+        return storeIdList;
+    }
+    
+    public ArrayList<Integer> getPubIdList(int pStoreId) {
+        ArrayList<Integer> pubIdList = new ArrayList<Integer>();
+        for (Node aNode : nodeList) {
+            LinkNode lNode = (LinkNode)aNode;
+            if (lNode.storeId == pStoreId) {
+                pubIdList.add(lNode.pubId);
+            }
+        }
+        return pubIdList;
+    }
+    
+    public ArrayList<Integer> getPubIdList(ArrayList<Integer> pStoreIdList) {
+        ArrayList<Integer> pubIdList = new ArrayList<Integer>();
+        for (int pStoreId : pStoreIdList) {
+            pubIdList.addAll(getStoreIdList(pStoreId));
+        }
+        return pubIdList;
+    }
+    
 }

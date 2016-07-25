@@ -42,4 +42,10 @@ public abstract class Node {
     
     public abstract String keepNode();
 
+    public boolean checkDupNode(Node pNode) {
+        return (null != pNode) 
+                && (pNode.name.equals(this.name))
+                && (pNode.path.equals(this.path));
+    }
+
 }

@@ -10,6 +10,9 @@
  */
 package com.qxu.transpath.tree;
 
+import java.util.Collections;
+import java.util.Comparator;
+
  /**
  * ClassName: PubList <br/>
  * Description: TODO <br/>
@@ -57,4 +60,18 @@ public class PubList extends NodeList {
             ((PubNode)aNode).order = newOrder;
         }
     }
+    
+    public void orderByPathAndOrder() {
+        Collections.sort(nodeList, new Comparator<Node>() {
+            @Override
+            public int compare(Node sn1, Node sn2) {
+                int cmp = sn1.path.compareTo(sn2.path);
+                if (cmp != 0) {
+                    return cmp;
+                }
+                return ((Integer)((PubNode)sn1).order).compareTo(((PubNode)sn2).order);
+            }
+        });
+    }
+    
 }

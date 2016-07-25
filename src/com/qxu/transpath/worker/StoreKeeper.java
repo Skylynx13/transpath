@@ -16,7 +16,6 @@ import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import com.qxu.transpath.tree.LinkList;
 import com.qxu.transpath.tree.LinkNode;
@@ -25,6 +24,7 @@ import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.PubNode;
 import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.tree.StoreNode;
+import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransProp;
 
@@ -43,27 +43,11 @@ import com.qxu.transpath.utils.TransProp;
 
 public class StoreKeeper {
 
-    private static String storeNameOfVersion(String version) {
-        return TransProp.get("SL_HOME") + "StoreList_" + version + ".txt";
-    }
-    
-    private static String pubNameOfVersion(String version) {
-        return TransProp.get("SL_HOME") + "PubList_" + version + ".txt";
-    }
-    
-    private static String linkNameOfVersion(String version) {
-        return TransProp.get("SL_HOME") + "LinkList_" + version + ".txt";
-    }
-    
-    private static String storeNameOfTag(String aTag, String bTag) {
-        return TransProp.get("SL_HOME") + "N\\TFLib_" + aTag + "_" + bTag + ".txt";
-    }
-    
-    public static void keepDelBat(StoreList pList, String pFileName) {
+    private static void keepDelBat(StoreList pList, String pFileName) {
         keepDelBat(pList, new File(pFileName));
     }
 
-    public static void keepDelBat(StoreList pList, File pFile) {
+    private static void keepDelBat(StoreList pList, File pFile) {
         if (0 == pList.size()) {
             return;
         }
@@ -89,7 +73,7 @@ public class StoreKeeper {
             StoreList aList = new StoreList();
 
             aList.build(TransProp.get("ST_HOME"), "\\" + aTag + "\\" + bTag + "\\");
-            aList.keepFile(storeNameOfTag(aTag, bTag));
+            aList.keepFile(FileUtils.storeNameOfTag(aTag, bTag));
 
             int s1 = aList.size();
             long t1 = System.currentTimeMillis() - t0;
@@ -121,10 +105,10 @@ public class StoreKeeper {
         long t0 = System.currentTimeMillis();
         System.out.println("AttachTags started...");
         StoreList aList = new StoreList();
-        aList.load(storeNameOfVersion(oldVer));
+        aList.load(FileUtils.storeNameOfVersion(oldVer));
         
         for (String bTag : bTags) {
-            String bTagName = storeNameOfTag(aTag, bTag);
+            String bTagName = FileUtils.storeNameOfTag(aTag, bTag);
             StoreList bList = new StoreList();
             bList.load(bTagName);
             aList.attachList(bList);
@@ -138,11 +122,6 @@ public class StoreKeeper {
         long t0 = System.currentTimeMillis();
         System.out.println("CheckDup started...");
 
-        String resName = storeNameOfVersion(pVer + "_res");
-        String dupName = storeNameOfVersion(pVer + "_dup");
-        String delName = storeNameOfVersion(pVer + "_del");
-        String batName = TransProp.get("SL_HOME") + "ToDel.bat";
-        
         pList.orderByMd5();
 
         StoreNode dNode = null;
@@ -169,16 +148,16 @@ public class StoreKeeper {
         System.out.println("Redundant Number: " + delList.size());
         
         resList.recap();
-        resList.keepFile(resName);
+        resList.keepFile(FileUtils.storeNameOfVersion(pVer + "_res"));
 
         dupList.recap();
-        dupList.keepFile(dupName);
+        dupList.keepFile(FileUtils.storeNameOfVersion(pVer + "_dup"));
         
         delList.recap();
-        delList.keepFile(delName);
+        delList.keepFile(FileUtils.storeNameOfVersion(pVer + "_del"));
 
         delList.orderByPathAndName();
-        keepDelBat(delList, batName);
+        keepDelBat(delList, TransProp.get("SL_HOME") + "ToDel.bat");
 
         System.out.println("Current Length: " + pList.size());
         System.out.println("Reserve Length: " + resList.size());
@@ -194,10 +173,10 @@ public class StoreKeeper {
         System.out.println("GenPubLink started...");
 
         PubList pubList = new PubList();
-        pubList.load(pubNameOfVersion(oldVer));
+        pubList.load(FileUtils.pubNameOfVersion(oldVer));
         
         LinkList linkList = new LinkList();
-        linkList.load(linkNameOfVersion(oldVer));
+        linkList.load(FileUtils.linkNameOfVersion(oldVer));
         
         ArrayList<Integer> oldStoreIdList = new ArrayList<Integer>();
         for (Node aNode : linkList.nodeList) {
@@ -218,6 +197,7 @@ public class StoreKeeper {
         
         pubList.orderByPathAndName();
         linkList.refreshPubId(pubList.reorgId());
+        pubList.reorgOrder();
         
         linkList.orderByStoreId();
         linkList.reorgId();
@@ -225,22 +205,11 @@ public class StoreKeeper {
         String currVer = resList.version;
         pubList.version = currVer;
         linkList.version = currVer;
-        resList.keepFile(storeNameOfVersion(currVer));
-        pubList.keepFile(pubNameOfVersion(currVer));
-        linkList.keepFile(linkNameOfVersion(currVer));
+        resList.keepFile(FileUtils.storeNameOfVersion(currVer));
+        pubList.keepFile(FileUtils.pubNameOfVersion(currVer));
+        linkList.keepFile(FileUtils.linkNameOfVersion(currVer));
         
         System.out.println("GenPubLink done in " + (System.currentTimeMillis() - t0) + "ms.");
-    }
-
-    @SuppressWarnings("unused")
-    private static void printMap(String storeNameOfVersion, HashMap<Integer, Integer> reorgId) {
-        try {
-            PrintWriter out = new PrintWriter(storeNameOfVersion);
-            out.println(reorgId.toString());
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Deprecated
@@ -324,7 +293,7 @@ public class StoreKeeper {
         System.out.println("B-Tag: " + Arrays.toString(bTags));
         System.out.println("Old version: " + oldVer);
         
-//        buildList(aTag, bTags);
+        buildList(aTag, bTags);
         String comVer = combineList(oldVer, aTag, bTags);
 
         System.out.println("New version: " + comVer + ".");
