@@ -97,6 +97,14 @@ public abstract class NodeList {
         }
         return null;
     }
+    
+    public ArrayList<Integer> getIdList() {
+        ArrayList<Integer> idList = new ArrayList<Integer>();
+        for (Node aNode : nodeList) {
+            idList.add(aNode.id);
+        }
+        return idList;
+    }
 
     public boolean hasNode (Node pNode) {
         return nodeList.contains(pNode);
@@ -123,6 +131,17 @@ public abstract class NodeList {
         return aMap;
     }
 
+    public void removeById(int pId) {
+        ArrayList<Node> removeList = new ArrayList<Node>();
+        for (Node aNode : nodeList) {
+            if (aNode.id == pId) {
+                removeList.add(aNode);
+            }
+        }
+        nodeList.removeAll(removeList);
+        recap();
+    }
+    
     public void removeByPath(String pPath) {
         ArrayList<Node> removeList = new ArrayList<Node>();
         for (Node aNode : nodeList) {

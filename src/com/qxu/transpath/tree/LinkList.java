@@ -90,6 +90,14 @@ public class LinkList extends NodeList{
         });
     }
     
+    public ArrayList<Integer> getStoreIdList() {
+        ArrayList<Integer> storeIdList = new ArrayList<Integer>();
+        for (Node aNode : nodeList) {
+            storeIdList.add(((LinkNode)aNode).storeId);
+        }
+        return storeIdList;
+    }
+    
     public ArrayList<Integer> getStoreIdList(int pPubId) {
         ArrayList<Integer> storeIdList = new ArrayList<Integer>();
         for (Node aNode : nodeList) {
@@ -109,6 +117,14 @@ public class LinkList extends NodeList{
         return storeIdList;
     }
     
+    public ArrayList<Integer> getPubIdList() {
+        ArrayList<Integer> pubIdList = new ArrayList<Integer>();
+        for (Node aNode : nodeList) {
+            pubIdList.add(((LinkNode)aNode).pubId);
+        }
+        return pubIdList;
+    }
+
     public ArrayList<Integer> getPubIdList(int pStoreId) {
         ArrayList<Integer> pubIdList = new ArrayList<Integer>();
         for (Node aNode : nodeList) {

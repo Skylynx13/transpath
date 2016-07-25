@@ -178,11 +178,8 @@ public class StoreKeeper {
         LinkList linkList = new LinkList();
         linkList.load(FileUtils.linkNameOfVersion(oldVer));
         
-        ArrayList<Integer> oldStoreIdList = new ArrayList<Integer>();
-        for (Node aNode : linkList.nodeList) {
-            LinkNode lNode = (LinkNode)aNode;
-            oldStoreIdList.add(lNode.storeId);
-        }
+        ArrayList<Integer> oldStoreIdList = linkList.getStoreIdList();
+        
         for (Node aNode : resList.nodeList) {
             StoreNode sNode = (StoreNode)aNode;
             if (!oldStoreIdList.contains(sNode.id)){
