@@ -11,11 +11,11 @@
 package com.qxu.transpath.worker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import com.qxu.transpath.tree.LinkList;
 import com.qxu.transpath.tree.Node;
+import com.qxu.transpath.tree.NodeList;
 import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.PubNode;
 import com.qxu.transpath.tree.StoreList;
@@ -90,34 +90,29 @@ public class PubKeeper {
 
     public static void refreshPubList() {
         String currVer = TransProp.get("CURR_VER");
-        PubList resList = new PubList();
-        resList.load(TransProp.get("SL_HOME") + "PubList_" + currVer + ".txt");
-        resList.keepFile(TransProp.get("SL_HOME") 
-                + "PubList_" + currVer + "_" 
-                + DateUtils.formatDateTimeLongToday()
-                + ".txt");
+        PubList pList = new PubList();
+        pList.load(FileUtils.pubNameOfVersion(currVer));
+        String newVer = DateUtils.formatDateTimeLongToday();
+        pList.keepFile(FileUtils.pubNameOfVersion(currVer + "_" + newVer));
 
-        LinkList lnkList = new LinkList();
-        lnkList.load(TransProp.get("SL_HOME") + "LinkList_" + currVer + ".txt");
-        lnkList.keepFile(TransProp.get("SL_HOME") 
-                + "LinkList_" + currVer + "_" 
-                + DateUtils.formatDateTimeLongToday()
-                + ".txt");
+        LinkList lList = new LinkList();
+        lList.load(FileUtils.linkNameOfVersion(currVer));
+        lList.keepFile(FileUtils.linkNameOfVersion(currVer + "_" + newVer));
 
-        resList.orderByPathAndName();
-        lnkList.refreshPubId(resList.reorgId());
-        resList.reorgOrder();
+        pList.orderByPathAndName();
+        lList.refreshPubId(pList.reorgId());
+        pList.reorgOrder();
 
-        resList.keepFile(TransProp.get("SL_HOME") + "PubList_" + currVer + ".txt");
-        lnkList.keepFile(TransProp.get("SL_HOME") + "LinkList_" + currVer + ".txt");
+        pList.keepFile(FileUtils.pubNameOfVersion(currVer));
+        lList.keepFile(FileUtils.linkNameOfVersion(currVer));
     }
     
     public static void showStoreByPubId(ArrayList<Integer> pPubIdList) {
         String currVer = TransProp.get("CURR_VER");
         LinkList lnkList = new LinkList();
-        lnkList.load(TransProp.get("SL_HOME") + "LinkList_" + currVer + ".txt");
+        lnkList.load(FileUtils.linkNameOfVersion(currVer));
         StoreList strList = new StoreList();
-        strList.load(TransProp.get("SL_HOME") + "StoreList_" + currVer + ".txt");
+        strList.load(FileUtils.storeNameOfVersion(currVer));
         
         ArrayList<Integer> storeIdList = lnkList.getStoreIdList(pPubIdList);
         for (int sId : storeIdList) {
@@ -133,9 +128,9 @@ public class PubKeeper {
         long t0 = System.currentTimeMillis();
         System.out.println("CheckDup started...");
 
-        String pVer = TransProp.get("CURR_VER");
+        String currVer = TransProp.get("CURR_VER");
         PubList pList = new PubList();
-        pList.load(FileUtils.pubNameOfVersion(pVer));
+        pList.load(FileUtils.pubNameOfVersion(currVer));
         
         PubNode dNode = null;
         PubList resList = new PubList();
@@ -166,13 +161,13 @@ public class PubKeeper {
         System.out.println("Redundant Number: " + delList.size());
         
         resList.recap();
-        resList.keepFile(FileUtils.pubNameOfVersion(pVer + "_res"));
+        resList.keepFile(FileUtils.pubNameOfVersion(currVer + "_res"));
 
         dupList.recap();
-        dupList.keepFile(FileUtils.pubNameOfVersion(pVer + "_dup"));
+        dupList.keepFile(FileUtils.pubNameOfVersion(currVer + "_dup"));
         
         delList.recap();
-        delList.keepFile(FileUtils.pubNameOfVersion(pVer + "_del"));
+        delList.keepFile(FileUtils.pubNameOfVersion(currVer + "_del"));
 
         System.out.println("Current Length: " + pList.size());
         System.out.println("Reserve Length: " + resList.size());
@@ -183,23 +178,78 @@ public class PubKeeper {
         System.out.println("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
     }
     
-    public static void checkLinkOrphan() {
+    public static void mergeDup() {
+        String currVer = TransProp.get("CURR_VER");
+        PubList pList = new PubList();
+        pList.load(FileUtils.pubNameOfVersion(currVer));
+        String newVer = DateUtils.formatDateTimeLongToday();
+        pList.keepFile(FileUtils.pubNameOfVersion(currVer + "_" + newVer));
+        LinkList lList = new LinkList();
+        lList.load(FileUtils.linkNameOfVersion(currVer));
+        lList.keepFile(FileUtils.linkNameOfVersion(currVer + "_" + newVer));
+
+        HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();
         
+        lList.refreshPubId(dupMap);
+        pList.removeByIdMap(dupMap);
+        
+        pList.orderByPathAndName();
+        lList.refreshPubId(pList.reorgId());
+        pList.reorgOrder();
+
+        pList.keepFile(FileUtils.pubNameOfVersion(currVer));
+        lList.keepFile(FileUtils.linkNameOfVersion(currVer));
     }
     
+    /**
+     * checkLink: To find Free Id and Invalid Id for Store and Pub.<br/>
+     */
+    public static void checkLink() {
+        String pVer = TransProp.get("CURR_VER");
+        StoreList sList = new StoreList();
+        sList.load(FileUtils.storeNameOfVersion(pVer));
+        PubList pList = new PubList();
+        pList.load(FileUtils.pubNameOfVersion(pVer));
+        LinkList lList = new LinkList();
+        lList.load(FileUtils.linkNameOfVersion(pVer));
+
+        checkFreeStore(sList, lList);
+        checkInvalidStore(sList, lList);
+        checkFreePub(pList, lList);
+        checkInvalidPub(pList, lList);
+    }
+    
+    private static void checkFreeStore(StoreList sList, LinkList lList) {
+        System.out.println("Free Store: " + NodeList.FindIdOnlyInAList(sList.getIdList(), lList.getStoreIdList()).toString());
+    }
+
+    private static void checkInvalidStore(StoreList sList, LinkList lList) {
+        System.out.println("Invalid Store: " + NodeList.FindIdOnlyInAList(lList.getStoreIdList(), sList.getIdList()).toString());
+    }
+
+    private static void checkFreePub(PubList pList, LinkList lList) {
+        System.out.println("Free Pub: " + NodeList.FindIdOnlyInAList(pList.getIdList(), lList.getPubIdList()).toString());
+    }
+
+    private static void checkInvalidPub(PubList pList, LinkList lList) {
+        System.out.println("Invalid Pub: " + NodeList.FindIdOnlyInAList(lList.getPubIdList(), pList.getIdList()).toString());        
+    }
+
     public static void main(String[] args) {
         System.out.println("PubKeeper starts...");
         //System.out.println();
         // pubInit();
         // pubNameEdit();
         // findPath();
-        //refreshPubList();
-        ArrayList<Integer> idList = new ArrayList<Integer>();
-        Integer[] aaa = {233, 234};
-        Collections.addAll(idList, aaa);
+        refreshPubList();
+        //checkLink();
+        //mergeDup();
+        //ArrayList<Integer> idList = new ArrayList<Integer>();
+        //Integer[] aaa = {233, 234};
+        //Collections.addAll(idList, aaa);
         //idList.add(233);
         //idList.add(234);
-        showStoreByPubId(idList);
+        //showStoreByPubId(idList);
         //checkDup();
         System.out.println("PubKeeper ends.");
     }

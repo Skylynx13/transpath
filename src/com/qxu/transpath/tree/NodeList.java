@@ -142,6 +142,17 @@ public abstract class NodeList {
         recap();
     }
     
+    public void removeByIdMap(HashMap<Integer, Integer> idMap) {
+        ArrayList<Node> removeList = new ArrayList<Node>();
+        for (Node aNode : nodeList) {
+            if (idMap.containsKey(aNode.id)) {
+                removeList.add(aNode);
+            }
+        }
+        nodeList.removeAll(removeList);
+        recap();
+    }
+    
     public void removeByPath(String pPath) {
         ArrayList<Node> removeList = new ArrayList<Node>();
         for (Node aNode : nodeList) {
@@ -260,5 +271,15 @@ public abstract class NodeList {
             strBuff.append(keepLine(aNode)).append(TransConst.CRLN);
         }
         return strBuff.toString();
+    }
+    
+    public static ArrayList<Integer> FindIdOnlyInAList(ArrayList<Integer> aList, ArrayList<Integer> bList) {
+        ArrayList<Integer> idList = new ArrayList<Integer>();
+        for(int element : aList) {
+            if (!bList.contains(element)) {
+                idList.add(element);
+            }
+        }
+        return idList;
     }
 }

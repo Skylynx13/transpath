@@ -267,17 +267,8 @@ public class StoreKeeper {
         aList.reorgId();
         aList.keepFile(tarName);
     }
-
-    /**
-     * main:<br/>
-     * bin>java com.qxu.transpath.worker.StoreKeeper storehis<br/>
-     * bin>java com.qxu.transpath.worker.StoreKeeper b1112 istore<br/>
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-        System.out.println("StoreKeeper starts...");
-        
+    
+    public static void buildCombinedList() {
         String aTag = TransProp.get("A_TAG");
         String[] bTags = TransProp.get("B_TAGS").split(",");
         String oldVer = TransProp.get("CURR_VER");
@@ -294,6 +285,19 @@ public class StoreKeeper {
         String comVer = combineList(oldVer, aTag, bTags);
 
         System.out.println("New version: " + comVer + ".");
+    }
+
+    /**
+     * main:<br/>
+     * bin>java com.qxu.transpath.worker.StoreKeeper storehis<br/>
+     * bin>java com.qxu.transpath.worker.StoreKeeper b1112 istore<br/>
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+        System.out.println("StoreKeeper starts...");
+
+        buildCombinedList();
         
         System.out.println("StoreKeeper done.");
     }
