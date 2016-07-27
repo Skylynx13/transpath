@@ -191,6 +191,10 @@ public class FreeTester {
         
     }
     
+    private static int addOne(final int i) {
+        return i + 1;
+    }
+
     public static void main(String args[]) {
         FreeTester ft = new FreeTester();
         //ft.testNodeTree();
@@ -209,6 +213,10 @@ public class FreeTester {
         int aaa = 3;
         int bbb = 3;
         System.out.println(((Integer)aaa).compareTo(bbb));
+        
+        System.out.println(FreeTester.addOne(5));
+        FinalClass aClass = new FinalClass();
+        AbstractClass bClass = aClass;
+        
     }
 }
-
