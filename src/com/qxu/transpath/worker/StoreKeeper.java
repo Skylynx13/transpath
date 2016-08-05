@@ -122,6 +122,8 @@ public class StoreKeeper {
         long t0 = System.currentTimeMillis();
         System.out.println("CheckDup started...");
 
+        pList.keepFile(FileUtils.storeNameOfVersion(pVer + "_old"));
+
         pList.orderByMd5();
 
         StoreNode dNode = null;

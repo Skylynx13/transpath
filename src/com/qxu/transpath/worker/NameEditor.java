@@ -367,8 +367,8 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "Civil War Frontline ", 
-                                     "Civil War Frontline 0" } };
+        String[][] replaceOnce = { { "JSA All-Stars ", 
+                                     "JSA All-Stars v02 " } };
 
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }

@@ -11,6 +11,7 @@
 package com.qxu.transpath.worker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import com.qxu.transpath.tree.LinkList;
@@ -190,6 +191,8 @@ public class PubKeeper {
 
         HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();
         
+        //TODO:
+        
         lList.refreshPubId(dupMap);
         pList.removeByIdMap(dupMap);
         
@@ -206,6 +209,7 @@ public class PubKeeper {
      */
     public static void checkLink() {
         String pVer = TransProp.get("CURR_VER");
+        System.out.println("Checking version: " + pVer);
         StoreList sList = new StoreList();
         sList.load(FileUtils.storeNameOfVersion(pVer));
         PubList pList = new PubList();
@@ -235,6 +239,25 @@ public class PubKeeper {
         System.out.println("Invalid Pub: " + NodeList.FindIdOnlyInAList(lList.getPubIdList(), pList.getIdList()).toString());        
     }
 
+    public static void findSimilar(ArrayList<Integer> pPubIdList) {
+        String pVer = TransProp.get("CURR_VER");
+        System.out.println("Current version: " + pVer);
+        PubList pList = new PubList();
+        pList.load(FileUtils.pubNameOfVersion(pVer));
+
+        System.out.println("Find Similar Pub for: ");
+        for (int pubId : pPubIdList) {
+            String pubName = pList.getById(pubId).name;
+            System.out.println(pubId + " : " + pubName);
+            System.out.println("|" + pubName.substring(0, pubName.lastIndexOf(' ')) + "|");
+            for (Node aNode : pList.nodeList) {
+                if (aNode.name.contains(pubName.substring(0, pubName.lastIndexOf(' ')))) {
+                    System.out.println(aNode.path + aNode.name);
+                }
+            }
+        }
+    }
+    
     public static void main(String[] args) {
         System.out.println("PubKeeper starts...");
         //System.out.println();
@@ -245,12 +268,15 @@ public class PubKeeper {
         //checkLink();
         //mergeDup();
         //ArrayList<Integer> idList = new ArrayList<Integer>();
-        //Integer[] aaa = {233, 234};
+        //Integer[] aaa = {30371};
         //Collections.addAll(idList, aaa);
-        //idList.add(233);
-        //idList.add(234);
+        //idList.add(57176);
+        //idList.add(57187);
+        //idList.add(57331);
         //showStoreByPubId(idList);
         //checkDup();
+        //findSimilar(idList);
         System.out.println("PubKeeper ends.");
     }
+
 }
