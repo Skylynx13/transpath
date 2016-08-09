@@ -215,8 +215,6 @@ public class FreeTester {
         System.out.println(((Integer)aaa).compareTo(bbb));
         
         System.out.println(FreeTester.addOne(5));
-        FinalClass aClass = new FinalClass();
-        AbstractClass bClass = aClass;
         
     }
 }

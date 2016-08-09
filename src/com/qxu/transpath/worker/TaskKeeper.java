@@ -36,24 +36,19 @@ public class TaskKeeper {
         archDate = DateUtils.formatDateToday();
     }
     
+    @Deprecated
     public TaskKeeper(String dateString) {
         archDate = dateString;
     }
 
+    @Deprecated
     public void countMatchString() {
         int n = FileUtils.countMatch("resource/rawDump.txt", 
                 "^\\s*Last edited by.*$");
         System.out.println("Matched Lines: "+ n);        
     }
 
-    public void keepFresh() {
-        System.out.println("Keeping fresh...");
-        int n = new Arranger().readFromFile(TransProp.get("TP_HOME") + "raw.txt").sort().merge().writeToFile(TransProp.get("TP_HOME") + "fresh.txt");
-        FileUtils.copyFileBytes(TransProp.get("TP_HOME") + "fresh.txt", TransProp.get("TP_HOME") + "fresh_" + archDate + ".txt");
-        System.out.println("Totally " + n + " fresh entries processed.");
-        System.out.println("Done.");
-    }
-    
+    @Deprecated
     public void keepTask() {
         System.out.println("Keeping task...");
         FileUtils.copyFileBytes(TransProp.get("TP_HOME") + "task.txt", TransProp.get("TP_HOME") + "task_" + archDate + "_old.txt");
@@ -63,6 +58,7 @@ public class TaskKeeper {
         System.out.println("Done.");
     }
     
+    @Deprecated
     public void keepReadyIndex() {
         System.out.println("Keeping iReady...");
         int n = new Arranger().readFromFile(TransProp.get("TP_HOME") + "ready.txt").writeIndexToFile(TransProp.get("TP_HOME") + "iready.txt");
@@ -70,6 +66,7 @@ public class TaskKeeper {
         System.out.println("Done.");
     }
     
+    @Deprecated
     public void checkFresh() {
         System.out.println("Checking fresh...");
         Arranger arrFresh = new Arranger().readFromFile(TransProp.get("TP_HOME") + "fresh.txt");
@@ -91,6 +88,7 @@ public class TaskKeeper {
         System.out.println("Done.");
     }
     
+    @Deprecated
     public void checkTask() {
         System.out.println("Checking task...");
         Arranger arrTask = new Arranger().readFromFile(TransProp.get("TP_HOME") + "task.txt");
@@ -121,35 +119,41 @@ public class TaskKeeper {
         System.out.println("Done.");
     }
     
+    public void keepFresh() {
+        System.out.println("Keeping fresh...");
+        int n = new Arranger().readFromFile(TransProp.get("TP_HOME") + "raw.txt").sort().merge().writeToFile(TransProp.get("TP_HOME") + "fresh.txt");
+        FileUtils.copyFileBytes(TransProp.get("TP_HOME") + "fresh.txt", TransProp.get("TP_HOME") + "fresh_" + archDate + ".txt");
+        System.out.println("Totally " + n + " fresh entries processed.");
+        System.out.println("Done.");
+    }
+    
+    public static void weekFresh() {
+        TaskKeeper keeper = new TaskKeeper();
+        keeper.keepRaw();
+        keeper.keepFresh();
+    }
+    
+    public static void digNewFresh() {
+        CodeDigger.digKeywordFileDefault(TransProp.get("TP_HOME") + "fresh.txt", 
+                TransProp.get("TP_HOME") + "track001.txt");
+    }
+    
+    public static void retrieveFresh() {
+        String[] keys = {"street fighter"};
+        CodeDigger.digAllFreshSpecific(keys, 
+                TransProp.get("TP_HOME") + "track002.txt");    
+    }
+    
     /**
      * main:<br/>
-     * bin>java com.qxu.transpath.worker.TaskKeeper fresh check<br/>
-     * bin>java com.qxu.transpath.worker.TaskKeeper task<br/>
      * 
      * @param args
      */
     public static void main (String[] args) {
-        TaskKeeper keeper = new TaskKeeper();
         System.out.println("TaskKeeper on job...");
-        for (String arg : args){
-            if (arg.equals("fresh")) {
-                keeper.keepRaw();
-                keeper.keepFresh();
-            } else if (arg.equals("task")) {
-                keeper.keepRaw();
-                keeper.keepFresh();
-                keeper.keepTask();
-            } else if (arg.equals("iready")) {
-                keeper.keepReadyIndex();
-            } else if (arg.equals("checkfresh")) {
-                keeper.checkFresh();
-            } else if (arg.equals("checktask")) {
-                keeper.checkTask();
-            }
-        }
-        keeper.keepRaw();
-        keeper.keepFresh();
+        //weekFresh();
+        //digNewFresh();
+        retrieveFresh();
         System.out.println("Keeper job done");
-        //countMatchString();
     }
 }

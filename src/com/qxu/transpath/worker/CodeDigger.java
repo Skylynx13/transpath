@@ -10,11 +10,14 @@
  */
 package com.qxu.transpath.worker;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransProp;
 
@@ -35,31 +38,30 @@ public class CodeDigger {
 
     public static void digKeywordFileDefault(String src, String target) {
         CodeDigger.digKeywordFile(TransProp.get("TP_HOME") + TransConst.TP_KEYWORDS, 
-                                  TransProp.get("TP_HOME") + "fresh.txt", 
-                                  TransProp.get("TP_HOME") + "track001.txt");
+                                  src, target);
     }
 
     public static void digKeywordFile(String key, String src, String target) {
         String[] keywords = CodeDigger.readKeywordList(key);
+        System.out.println("Digging keywords " + Arrays.toString(keywords));
         CodeDigger.digKeyword(keywords, src, target);
     }
 
-    public static void digKeyword(String[] keywords, String src, String target) {
-        System.out.println("Digging keyword...");
-        System.out.println(Arrays.toString(keywords));
-        int n = new Arranger().readFromFile(src).applyFilter(keywords).writeToFile(target);
-        System.out.println("Totally " + n + " entries extracted.");
-        System.out.println("Done.");
+    public static int digKeyword(String[] keywords, String src, String target) {
+        int n = new Arranger().readFromFile(src).applyFilter(keywords).appendToFile(target);
+        System.out.println("" + n + " <- " + src);
+        return n;
     }
 
     public static void pickoutKeyword(String[] keys, String src, String target) {
         System.out.println("Digging keyword...");
-        int n = new Arranger().readFromFile(src).applyFilterReversely(keys).writeToFile(target);
+        int n = new Arranger().readFromFile(src).applyFilterReversely(keys).appendToFile(target);
         System.out.println("Totally " + n + " entries extracted.");
         System.out.println("Done.");
     }
 
     public static void digBigEntries(String src, String target) {
+        System.out.println("Digging keywords " + Arrays.toString(KEYS_BIG_ENTRY));
         CodeDigger.digKeyword(KEYS_BIG_ENTRY, src, target);
     }
 
@@ -82,11 +84,39 @@ public class CodeDigger {
         in.close();
         return (String[]) keywords.toArray(new String[keywords.size()]);
     }
+    
+    public static void digAllFreshSpecific(String[] keys, String target) {
+        long t0 = System.currentTimeMillis();
+        FileUtils.clearFile(target);
+        File path = new File(TransProp.get("TP_HOME"));
+        int total = 0;
+        System.out.println("Digging keywords " + Arrays.toString(keys));
+        for (File file : path.listFiles(new FilenameFilter() {
+            public boolean accept(File file, String name) {
+                return name.matches("fresh_.*.txt");
+            }
+        })) {
+            total += CodeDigger.digKeyword(keys, file.getAbsolutePath(), target);
+            //System.out.println(file.getAbsolutePath());
+        }
+        System.out.println("Totoally " + total + " entries extracted.");
+        System.out.println("Time: " + (System.currentTimeMillis() - t0));
+    }
+
+//    public static void clearFile(String fileName) {
+//        try {
+//            PrintWriter out = new PrintWriter(fileName);
+//            out.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static void main(String[] args) {
-        CodeDigger.digKeywordFileDefault(TransProp.get("TP_HOME") + "fresh.txt", 
-                                         TransProp.get("TP_HOME") + "track001.txt");
+//        CodeDigger.digKeywordFileDefault(TransProp.get("TP_HOME") + "fresh.txt", 
+//                                         TransProp.get("TP_HOME") + "track001.txt");
         // CodeDigger.pickoutBigEntries(TransProp.get("TP_HOME") + "task20160331_stone.txt", 
         //                              TransProp.get("TP_HOME") + "track001.txt");
+        //FileUtils.clearFile(TransProp.get("TP_HOME") + "track002.txt");
     }
 }

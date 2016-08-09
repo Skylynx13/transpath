@@ -31,6 +31,18 @@ import com.qxu.transpath.utils.FileUtils;
  */
 
 public class ArrangerTest {
+    
+    @Test
+    public void appendToFileTest() {
+        Arranger argr = new Arranger();
+        int n = argr.readFromFile("resource/tst/ArrangerTest_raw.txt").sort().merge().writeToFile("resource/tst/ArrangerTest_appendToFileTest.txt");
+        assertEquals(31, n);
+        assertEquals(true, FileUtils.compareFileBytes("resource/tst/ArrangerTest_appendToFileTest.txt", "resource/tst/ArrangerTest_task_000.txt"));
+        argr.clear();
+        n = argr.readFromFile("resource/tst/ArrangerTest_raw.txt").appendToFile("resource/tst/ArrangerTest_appendToFileTest.txt");
+        assertEquals(35, n);
+        assertEquals(true, FileUtils.compareFileBytes("resource/tst/ArrangerTest_appendToFileTest.txt", "resource/tst/ArrangerTest_task_004.txt"));
+    }
 
     @Test
     public void readSortMergeWriteTest_raw_task() {

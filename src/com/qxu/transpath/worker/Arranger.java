@@ -12,6 +12,8 @@ package com.qxu.transpath.worker;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +47,10 @@ public class Arranger {
     
     public Arranger(ArrayList<CdEntry> entries) {
         this.entries = entries;
+    }
+    
+    public void clear() {
+        this.entries = null;
     }
     
     public void addEntry(String name) {
@@ -104,7 +110,7 @@ public class Arranger {
             //System.out.println(line);
             cnt++;
         }
-        System.out.println(cnt);
+        //System.out.println(cnt);
         in.close();
         return this;
     }
@@ -115,6 +121,22 @@ public class Arranger {
             out.println(this.toOutput());
             out.close();
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return entries.size();
+    }
+    
+    public int appendToFile(String fileName) {
+        if (entries.size() == 0) {
+            return 0;
+        }
+        try {
+            PrintWriter out = new PrintWriter(new FileWriter(fileName,true));
+            out.println(this.toOutput());
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return entries.size();

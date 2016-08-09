@@ -11,7 +11,6 @@
 package com.qxu.transpath.worker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import com.qxu.transpath.tree.LinkList;
@@ -264,16 +263,16 @@ public class PubKeeper {
         // pubInit();
         // pubNameEdit();
         // findPath();
-        refreshPubList();
+        //refreshPubList();
         //checkLink();
         //mergeDup();
-        //ArrayList<Integer> idList = new ArrayList<Integer>();
+        ArrayList<Integer> idList = new ArrayList<Integer>();
         //Integer[] aaa = {30371};
         //Collections.addAll(idList, aaa);
-        //idList.add(57176);
+        idList.add(33996);
         //idList.add(57187);
         //idList.add(57331);
-        //showStoreByPubId(idList);
+        showStoreByPubId(idList);
         //checkDup();
         //findSimilar(idList);
         System.out.println("PubKeeper ends.");
