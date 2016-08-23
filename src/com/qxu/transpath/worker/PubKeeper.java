@@ -38,6 +38,7 @@ import com.qxu.transpath.utils.TransProp;
  */
 
 public class PubKeeper {
+    @Deprecated
     public static void pubInit() {
         String srcName = TransProp.get("LB_HOME") + "TFLib_L20160715_Ref.txt";
         String targetName = TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_000.txt";
@@ -49,6 +50,7 @@ public class PubKeeper {
         pubList.keepFile(targetName);
     }
 
+    @Deprecated
     public static void pubNameEdit() {
         String srcName = TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_000.txt";
         String targetName = TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_001.txt";
@@ -60,6 +62,7 @@ public class PubKeeper {
         pubList.keepFile(targetName);
     }
 
+    @Deprecated
     public static void findPath() {
         PubList refList = new PubList();
         refList.load(TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_001.txt");
@@ -107,6 +110,30 @@ public class PubKeeper {
         lList.keepFile(FileUtils.linkNameOfVersion(currVer));
     }
     
+    public static void mergeDup(HashMap<Integer, Integer> dupMap) {
+        String currVer = TransProp.get("CURR_VER");
+        PubList pList = new PubList();
+        pList.load(FileUtils.pubNameOfVersion(currVer));
+        String newVer = DateUtils.formatDateTimeLongToday();
+        pList.keepFile(FileUtils.pubNameOfVersion(currVer + "_" + newVer));
+        
+        LinkList lList = new LinkList();
+        lList.load(FileUtils.linkNameOfVersion(currVer));
+        lList.keepFile(FileUtils.linkNameOfVersion(currVer + "_" + newVer));
+    
+        if (dupMap != null && dupMap.size() > 0) {
+            lList.refreshPubId(dupMap);
+            pList.removeByIdMap(dupMap);
+        }
+        
+        pList.orderByPathAndName();
+        lList.refreshPubId(pList.reorgId());
+        pList.reorgOrder();
+    
+        pList.keepFile(FileUtils.pubNameOfVersion(currVer));
+        lList.keepFile(FileUtils.linkNameOfVersion(currVer));
+    }
+
     public static void showStoreByPubId(ArrayList<Integer> pPubIdList) {
         String currVer = TransProp.get("CURR_VER");
         LinkList lnkList = new LinkList();
@@ -178,31 +205,6 @@ public class PubKeeper {
         System.out.println("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
     }
     
-    public static void mergeDup() {
-        String currVer = TransProp.get("CURR_VER");
-        PubList pList = new PubList();
-        pList.load(FileUtils.pubNameOfVersion(currVer));
-        String newVer = DateUtils.formatDateTimeLongToday();
-        pList.keepFile(FileUtils.pubNameOfVersion(currVer + "_" + newVer));
-        LinkList lList = new LinkList();
-        lList.load(FileUtils.linkNameOfVersion(currVer));
-        lList.keepFile(FileUtils.linkNameOfVersion(currVer + "_" + newVer));
-
-        HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();
-        
-        //TODO:
-        
-        lList.refreshPubId(dupMap);
-        pList.removeByIdMap(dupMap);
-        
-        pList.orderByPathAndName();
-        lList.refreshPubId(pList.reorgId());
-        pList.reorgOrder();
-
-        pList.keepFile(FileUtils.pubNameOfVersion(currVer));
-        lList.keepFile(FileUtils.linkNameOfVersion(currVer));
-    }
-    
     /**
      * checkLink: To find Free Id and Invalid Id for Store and Pub.<br/>
      */
@@ -238,6 +240,7 @@ public class PubKeeper {
         System.out.println("Invalid Pub: " + NodeList.FindIdOnlyInAList(lList.getPubIdList(), pList.getIdList()).toString());        
     }
 
+    // To know where a new pub probably belong to.
     public static void findSimilar(ArrayList<Integer> pPubIdList) {
         String pVer = TransProp.get("CURR_VER");
         System.out.println("Current version: " + pVer);
@@ -265,16 +268,24 @@ public class PubKeeper {
         // findPath();
         //refreshPubList();
         //checkLink();
-        //mergeDup();
-        ArrayList<Integer> idList = new ArrayList<Integer>();
-        //Integer[] aaa = {30371};
-        //Collections.addAll(idList, aaa);
-        idList.add(33996);
-        //idList.add(57187);
-        //idList.add(57331);
-        showStoreByPubId(idList);
+
+        //Change intA to intB.
+        HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();
+        //dupMap.put(61482, 61481);
+        mergeDup(dupMap);
+
+//        ArrayList<Integer> idList = new ArrayList<Integer>();
+//        idList.add(41289);
+//        idList.add(41290);
+//        idList.add(41291);
+//        idList.add(41292);
+//        idList.add(41293);
+//        showStoreByPubId(idList);
+
         //checkDup();
+        
         //findSimilar(idList);
+        
         System.out.println("PubKeeper ends.");
     }
 

@@ -139,7 +139,7 @@ public class TaskKeeper {
     }
     
     public static void retrieveFresh() {
-        String[] keys = {"street fighter"};
+        String[] keys = {"Warcraft"};
         CodeDigger.digAllFreshSpecific(keys, 
                 TransProp.get("TP_HOME") + "track002.txt");    
     }
@@ -152,8 +152,8 @@ public class TaskKeeper {
     public static void main (String[] args) {
         System.out.println("TaskKeeper on job...");
         //weekFresh();
-        //digNewFresh();
-        retrieveFresh();
+        digNewFresh();
+        //retrieveFresh();
         System.out.println("Keeper job done");
     }
 }

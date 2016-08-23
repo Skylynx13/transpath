@@ -458,39 +458,25 @@ public class FileUtils {
     public static String storeNameOfTag(String aTag, String bTag) {
         return TransProp.get("SL_HOME") + "N\\TFLib_" + aTag + "_" + bTag + ".txt";
     }
+    
+    public static String listFiles(String pathName) {
+        File path = new File(pathName);
+        if (!path.exists()) {
+            return "Target N/A.";
+        }
+        if (path.isFile()) {
+            return path.getName();
+        }
+        StringBuffer strbuf = new StringBuffer();
+        for (File file : path.listFiles()) {
+            strbuf.append(file.getName()).append(TransConst.CRLN);
+        }
+        return strbuf.toString();
+    }
 
     public static void main(String[] args) {
             long t0 = System.currentTimeMillis();
-            System.out.println(FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_000.txt")) + ":" + (System.currentTimeMillis()-t0));
-            t0 = System.currentTimeMillis();
-            System.out.println(FileUtils.getFileSize(new File("resource/tst/ArrangerTest_task_002.txt")) + ":" + (System.currentTimeMillis()-t0));
-            t0 = System.currentTimeMillis();
-            System.out.println(FileUtils.getFileSize(new File("resource/tst")) + ":" + (System.currentTimeMillis()-t0));
-            t0 = System.currentTimeMillis();
-            System.out.println(FileUtils.getFileSize("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz") + ":" + (System.currentTimeMillis()-t0));
-    //        t0 = System.currentTimeMillis();
-    //        System.out.println(FileUtils.digestMd5("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz") + ":" + (System.currentTimeMillis()-t0));
-    //        t0 = System.currentTimeMillis();
-    //        System.out.println(FileUtils.digestSha("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz") + ":" + (System.currentTimeMillis()-t0));
-    //        System.out.println(FileUtils.digest("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz", "SHA-1"));
-    //        System.out.println(FileUtils.digest("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz", "SHA-256"));
-    //        System.out.println(FileUtils.digest("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz", "SHA-384"));
-    //        System.out.println(FileUtils.digest("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz", "SHA-512"));
-            t0 = System.currentTimeMillis();
-            System.out.println(FileUtils.digestCrc32("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz") + ":" + (System.currentTimeMillis()-t0));
-            t0 = System.currentTimeMillis();
-            System.out.println(FileUtils.digestCrc32("D:\\Book\\TFLib\\A2016\\B0653\\Batman - Superman 001.cbr") + ":" + (System.currentTimeMillis()-t0));
-            t0 = System.currentTimeMillis();
-            System.out.println(FileUtils.digestSha("D:\\Book\\TFLib\\A2016\\B0653\\Batman - Superman 001.cbr") + ":" + (System.currentTimeMillis()-t0));
-            t0 = System.currentTimeMillis();
-            System.out.println(FileUtils.digestMd5("D:\\Book\\TFLib\\A2016\\B0653\\Batman - Superman 001.cbr") + ":" + (System.currentTimeMillis()-t0));
-            
-    //        t0 = System.currentTimeMillis();
-    //        System.out.println(FileUtils.digestMd5(new File("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz")) + ":" + (System.currentTimeMillis()-t0));
-    //        t0 = System.currentTimeMillis();
-    //        System.out.println(FileUtils.digestSha(new File("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz")) + ":" + (System.currentTimeMillis()-t0));
-    //        t0 = System.currentTimeMillis();
-    //        System.out.println(FileUtils.digestCrc32(new File("D:\\Downloads\\spark-1.3.0-bin-hadoop2.4.tgz")) + ":" + (System.currentTimeMillis()-t0));
-    
+            System.out.println(listFiles("D:\\Quest\\_IC\\doc\\design"));
+            System.out.println("Time : " + (System.currentTimeMillis()-t0) + " ms.");
         }
 }

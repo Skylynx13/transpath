@@ -99,8 +99,8 @@ public class CodeDigger {
             total += CodeDigger.digKeyword(keys, file.getAbsolutePath(), target);
             //System.out.println(file.getAbsolutePath());
         }
-        System.out.println("Totoally " + total + " entries extracted.");
-        System.out.println("Time: " + (System.currentTimeMillis() - t0));
+        System.out.println("Total: " + total);
+        System.out.println("Time : " + (System.currentTimeMillis() - t0) + "ms");
     }
 
 //    public static void clearFile(String fileName) {

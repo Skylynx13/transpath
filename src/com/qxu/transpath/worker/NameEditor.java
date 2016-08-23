@@ -367,8 +367,8 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "JSA All-Stars ", 
-                                     "JSA All-Stars v02 " } };
+        String[][] replaceOnce = { { "\\+", 
+                                     " " } };
 
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
