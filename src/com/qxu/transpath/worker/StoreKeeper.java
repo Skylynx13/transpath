@@ -287,6 +287,7 @@ public class StoreKeeper {
         String comVer = combineList(oldVer, aTag, bTags);
 
         System.out.println("New version: " + comVer + ".");
+        System.out.println("Remember to move N/ files to B/.");
     }
 
     /**

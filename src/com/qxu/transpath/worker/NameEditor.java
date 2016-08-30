@@ -367,8 +367,8 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "\\+", 
-                                     " " } };
+        String[][] replaceOnce = { { "Tales of Suspense39-99TOS", 
+                                     "Iron Man - Tales of Suspense " } };
 
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
