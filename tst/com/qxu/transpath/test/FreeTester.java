@@ -21,9 +21,12 @@ import java.util.Properties;
 
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
+import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.SimpleNode;
 import com.qxu.transpath.utils.CdEntry;
+import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransProp;
 import com.qxu.transpath.worker.Arranger;
 import com.qxu.transpath.worker.TntKeeper;
 
@@ -216,5 +219,12 @@ public class FreeTester {
         
         System.out.println(FreeTester.addOne(5));
         
+        System.out.println(TransProp.get("CONFIG_PATH"));
+        
+        PubList pubList = new PubList();
+        pubList.load(TransProp.get("SL_HOME") + "PubList_test.txt");
+        System.out.println(pubList.toString());
+        pubList.hitShelf(FileUtils.hitShelfList());
+        System.out.println(pubList.toString());
     }
 }

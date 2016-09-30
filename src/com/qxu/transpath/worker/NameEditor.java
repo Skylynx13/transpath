@@ -367,8 +367,10 @@ public class NameEditor {
     }
 
     public static void renameSpecialReplace() {
-        String[][] replaceOnce = { { "Tales of Suspense39-99TOS", 
-                                     "Iron Man - Tales of Suspense " } };
+        String[][] replaceOnce = {
+                { "\\(c2c\\) \\(1999\\) \\(two covers\\) ",
+                "(1999) (2 covers) (c2c) "}
+        };
 
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
     }
@@ -379,8 +381,8 @@ public class NameEditor {
 
     public static void main(String[] args) {
         //cutHead();
-        renameNormalize();
-        //renameSpecialReplace();
+        //renameNormalize();
+        renameSpecialReplace();
         //renamePushDate();
         //renameUnPushDate();
     }

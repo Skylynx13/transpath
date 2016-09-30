@@ -92,22 +92,7 @@ public class PubKeeper {
     }
 
     public static void refreshPubList() {
-        String currVer = TransProp.get("CURR_VER");
-        PubList pList = new PubList();
-        pList.load(FileUtils.pubNameOfVersion(currVer));
-        String newVer = DateUtils.formatDateTimeLongToday();
-        pList.keepFile(FileUtils.pubNameOfVersion(currVer + "_" + newVer));
-
-        LinkList lList = new LinkList();
-        lList.load(FileUtils.linkNameOfVersion(currVer));
-        lList.keepFile(FileUtils.linkNameOfVersion(currVer + "_" + newVer));
-
-        pList.orderByPathAndName();
-        lList.refreshPubId(pList.reorgId());
-        pList.reorgOrder();
-
-        pList.keepFile(FileUtils.pubNameOfVersion(currVer));
-        lList.keepFile(FileUtils.linkNameOfVersion(currVer));
+        mergeDup(null);
     }
     
     public static void mergeDup(HashMap<Integer, Integer> dupMap) {
@@ -126,6 +111,7 @@ public class PubKeeper {
             pList.removeByIdMap(dupMap);
         }
         
+        pList.hitShelf(FileUtils.hitShelfList());
         pList.orderByPathAndName();
         lList.refreshPubId(pList.reorgId());
         pList.reorgOrder();

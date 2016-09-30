@@ -194,6 +194,7 @@ public class StoreKeeper {
         resList.orderByPathAndName();
         linkList.refreshStoreId(resList.reorgId());
         
+        pubList.hitShelf(FileUtils.hitShelfList());
         pubList.orderByPathAndName();
         linkList.refreshPubId(pubList.reorgId());
         pubList.reorgOrder();

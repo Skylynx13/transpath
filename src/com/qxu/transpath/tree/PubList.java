@@ -10,8 +10,13 @@
  */
 package com.qxu.transpath.tree;
 
+import java.io.FileReader;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Scanner;
+
+import com.qxu.transpath.utils.TransConst;
 
  /**
  * ClassName: PubList <br/>
@@ -74,4 +79,32 @@ public class PubList extends NodeList {
         });
     }
     
+    public void hitShelf(String hitShelfList) {
+        Scanner in = null;
+        HashMap<String, String> hitMapper = new HashMap<String, String>();
+        try {
+            in = new Scanner(new FileReader(hitShelfList));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        while (in.hasNext()) {
+            String[] hitPair= in.nextLine().split(TransConst.COLON);
+            hitMapper.put(hitPair[0], hitPair[1]);
+        }
+        in.close();
+
+        for (Node aNode : nodeList) {
+            for (String aKey : hitMapper.keySet()) {
+                if (aNode.path.equals(TransConst.PUB_PATH_DEFAULT) && aNode.name.contains(aKey)) {
+                    aNode.path = hitMapper.get(aKey);
+                    System.out.println(aNode.path + ":" + aNode.name);
+                }
+            }
+        }
+    }
+    
+    public static void main (String[] args) {
+        System.out.println("test hit shelf");
+        System.out.println("test end");
+    }
 }

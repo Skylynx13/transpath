@@ -135,13 +135,13 @@ public class TaskKeeper {
     
     public static void digNewFresh() {
         CodeDigger.digKeywordFileDefault(TransProp.get("TP_HOME") + "fresh.txt", 
-                TransProp.get("TP_HOME") + "track001.txt");
+                TransProp.get("TP_HOME") + "task_week.txt");
     }
     
     public static void retrieveFresh() {
-        String[] keys = {"Star_Trek"};
+        String[] keys = {"He-Man"};
         CodeDigger.digAllFreshSpecific(keys, 
-                TransProp.get("TP_HOME") + "track002.txt");    
+                TransProp.get("TP_HOME") + "task_spec.txt");    
     }
     
     /**
@@ -152,8 +152,8 @@ public class TaskKeeper {
     public static void main (String[] args) {
         System.out.println("TaskKeeper on job...");
         //weekFresh();
-        digNewFresh();
-        //retrieveFresh();
+        //digNewFresh();
+        retrieveFresh();
         System.out.println("Keeper job done");
     }
 }

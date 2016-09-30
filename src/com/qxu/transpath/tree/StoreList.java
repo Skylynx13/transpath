@@ -83,9 +83,8 @@ public class StoreList extends NodeList{
         for (File aFile : pPath.listFiles()) {
             if (aFile.isFile()) {
                 StoreNode aNode = new StoreNode(pRoot, aFile);
-                aNode.id = ++maxId;
+                addNode(aNode);
                 System.out.println(aNode.keepNode());
-                nodeList.add(aNode);
             }
             if (aFile.isDirectory()) {
                 StoreList aList = new StoreList();

@@ -459,6 +459,10 @@ public class FileUtils {
         return TransProp.get("SL_HOME") + "N\\TFLib_" + aTag + "_" + bTag + ".txt";
     }
     
+    public static String hitShelfList() {
+        return TransProp.get("CONFIG_PATH") + TransConst.TP_HITSHELF;
+    }
+    
     public static String listFiles(String pathName) {
         File path = new File(pathName);
         if (!path.exists()) {

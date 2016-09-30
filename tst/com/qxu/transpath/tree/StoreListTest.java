@@ -35,7 +35,7 @@ import com.qxu.transpath.tree.StoreNode;
 public class StoreListTest {
 
     @Test
-    public void testAddNode_add1() {
+    public void testAddNode_add() {
         StoreList sl = new StoreList();
         StoreNode sn = new StoreNode();
         assertEquals(0, sn.id);

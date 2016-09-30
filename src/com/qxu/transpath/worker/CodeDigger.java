@@ -37,7 +37,7 @@ public class CodeDigger {
     private static final String[] KEYS_BIG_ENTRY = { "(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB)" };
 
     public static void digKeywordFileDefault(String src, String target) {
-        CodeDigger.digKeywordFile(TransProp.get("TP_HOME") + TransConst.TP_KEYWORDS, 
+        CodeDigger.digKeywordFile(TransProp.get("CONFIG_PATH") + TransConst.TP_KEYWORDS, 
                                   src, target);
     }
 
