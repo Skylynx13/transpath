@@ -139,7 +139,7 @@ public class TaskKeeper {
     }
     
     public static void retrieveFresh() {
-        String[] keys = {"He-Man"};
+        String[] keys = {"Assassin's Creed"};
         CodeDigger.digAllFreshSpecific(keys, 
                 TransProp.get("TP_HOME") + "task_spec.txt");    
     }

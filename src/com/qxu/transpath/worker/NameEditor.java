@@ -368,8 +368,12 @@ public class NameEditor {
 
     public static void renameSpecialReplace() {
         String[][] replaceOnce = {
-                { "\\(c2c\\) \\(1999\\) \\(two covers\\) ",
-                "(1999) (2 covers) (c2c) "}
+                { " \\(2016\\) ",
+                " "},
+                { "\\.cbr",
+                " (2016).cbr"},
+                { " NMM \\(2016\\).cbr",
+                " (2016) (NMM).cbr"},
         };
 
         System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
@@ -381,8 +385,8 @@ public class NameEditor {
 
     public static void main(String[] args) {
         //cutHead();
-        //renameNormalize();
-        renameSpecialReplace();
+        renameNormalize();
+        //renameSpecialReplace();
         //renamePushDate();
         //renameUnPushDate();
     }
