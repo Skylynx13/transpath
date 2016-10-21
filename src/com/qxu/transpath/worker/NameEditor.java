@@ -366,6 +366,19 @@ public class NameEditor {
         //System.out.println("Result: " + new NameEditor(FULL_ROOT).reformatNumber() + ".");
     }
 
+    public static void renameComic07() {
+        String[][] replaceOnce = {
+                { " \\(2016\\) ",
+                " "},
+                { "\\.cbr",
+                " (2016).cbr"},
+                { " NMM \\(2016\\).cbr",
+                " (2016) (NMM).cbr"},
+        };
+
+        System.out.println("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
+    }
+    
     public static void renameSpecialReplace() {
         String[][] replaceOnce = {
                 { " \\(2016\\) ",
@@ -385,8 +398,9 @@ public class NameEditor {
 
     public static void main(String[] args) {
         //cutHead();
-        renameNormalize();
+        //renameNormalize();
         //renameSpecialReplace();
+        renameComic07();
         //renamePushDate();
         //renameUnPushDate();
     }

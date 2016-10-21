@@ -22,6 +22,7 @@ import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.tree.StoreNode;
 import com.qxu.transpath.utils.DateUtils;
 import com.qxu.transpath.utils.FileUtils;
+import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 
 /**
@@ -247,7 +248,10 @@ public class PubKeeper {
     }
     
     public static void main(String[] args) {
-        System.out.println("PubKeeper starts...");
+        //TransLog.setClass(PubKeeper.class);
+        TransLog.info("PubKeeper starts...");
+        TransLog.setClass(TransLog.class);
+        TransLog.info("PubKeeper startss...");
         //System.out.println();
         // pubInit();
         // pubNameEdit();
@@ -272,7 +276,7 @@ public class PubKeeper {
         
         //findSimilar(idList);
         
-        System.out.println("PubKeeper ends.");
+        TransLog.info("PubKeeper ends.");
     }
 
 }

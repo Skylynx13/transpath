@@ -18,7 +18,7 @@
  * Date:2014-4-12 下午9:10:46
  * 
  */
-package com.qxu.transpath.worker;
+package com.qxu.transpath.oldschool;
 
 import com.qxu.transpath.tree.NodeTree;
 

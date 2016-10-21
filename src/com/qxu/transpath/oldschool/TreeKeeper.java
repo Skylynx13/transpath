@@ -8,7 +8,7 @@
  * Date:Jun 3, 2014 9:15:40 PM
  * 
  */
-package com.qxu.transpath.worker;
+package com.qxu.transpath.oldschool;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

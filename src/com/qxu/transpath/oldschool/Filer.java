@@ -8,7 +8,7 @@
  * Date:2014-4-28 上午11:36:56
  * 
  */
-package com.qxu.transpath.worker;
+package com.qxu.transpath.oldschool;
 
  /**
  * ClassName: Filer <br/>

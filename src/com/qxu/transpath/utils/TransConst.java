@@ -46,6 +46,7 @@ public class TransConst {
 //    public static final String TP_HOME = "D:\\_TF\\_Update\\transpath\\";
 //    public static final String TP_HOME = "D:\\Qdata\\update\\transpath\\";
     public static final String TP_PROPS = "transpath.properties";
+    
     public static final String TP_KEYWORDS = "keywords.list";
     public static final String TP_HITSHELF = "hitshelf.list";
 //    public static final String TP_HOME = "TP_HOME";

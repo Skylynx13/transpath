@@ -8,7 +8,7 @@
  * Date:2014-4-12 下午11:07:12
  * 
  */
-package com.qxu.transpath.worker;
+package com.qxu.transpath.oldschool;
 
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.utils.TransConst;
