@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.qxu.transpath.utils.TransLog;
+
  /**
  * ClassName: PathFinder <br/>
  * Description: TODO <br/>
@@ -84,16 +86,16 @@ public class PathFinder {
         List<String> fl2 = Arrays.asList("abc", "def", "ghi", "tdir000", "tdir001");
         fl.addAll(fl2);
 //      for (String str: fl) {
-//      System.out.println(str);
+//      TransLog.getLogger().info(str);
 //  }
         for (File tfl: fl1) {
             String dInd = tfl.isDirectory()?">>>":"";
-            System.out.println(tfl.getPath() + dInd);
+            TransLog.getLogger().info(tfl.getPath() + dInd);
         }
-        System.out.println("=======================================");
+        TransLog.getLogger().info("=======================================");
         for (File tfl: fl1) {
             if (tfl.isFile()) {
-                System.out.println(tfl.getName() + "|" + tfl.getParent().replaceAll("\\\\", "/"));
+                TransLog.getLogger().info(tfl.getName() + "|" + tfl.getParent().replaceAll("\\\\", "/"));
             }
         }
 	}
@@ -103,26 +105,26 @@ public class PathFinder {
         String lr1 = "D:\\Book\\TFLib";
         //String lr1 = "D:\\temp";
         long strtMillis = System.currentTimeMillis();
-        System.out.println("Path(" + lr1 + ") write to File(" + fn1 + ").");
+        TransLog.getLogger().info("Path(" + lr1 + ") write to File(" + fn1 + ").");
 	    this.writeToFile(fn1, lr1);
-	    System.out.println("File written in " + (System.currentTimeMillis()-strtMillis) + "ms.");
+	    TransLog.getLogger().info("File written in " + (System.currentTimeMillis()-strtMillis) + "ms.");
 	}
 	
 	public void testBackslash() {
         String str1 = "F:\\Book\\TFLib\\A2014";
         String str2 = "F:\\Book\\TFLib\\A2014\\asdf\\asdfasd\\asdfasdf";
         str1 = str1.replaceAll("\\\\", "\\\\\\\\");
-        System.out.println(str1);
+        TransLog.getLogger().info(str1);
         str2 = str2.replaceAll(str1, "");
-        System.out.println(str2);
+        TransLog.getLogger().info(str2);
         str2 = str2.replaceAll("\\\\", "/");
-        System.out.println(str2);	    
+        TransLog.getLogger().info(str2);	    
 	}
 	
 	public static void main (String[] args) {
 		PathFinder pf1 = new PathFinder();
 		//pf1.testOutput();
 		pf1.testOutFile();
-        System.out.println("Done.");
+        TransLog.getLogger().info("Done.");
 	}
 }

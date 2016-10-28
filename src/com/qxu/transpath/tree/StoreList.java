@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransLog;
 
 /**
  * ClassName: StoreList <br/>
@@ -79,12 +80,12 @@ public class StoreList extends NodeList{
         if (pPath.listFiles() == null) {
             return;
         }
-        System.out.println(pPath);
+        TransLog.getLogger().info(pPath);
         for (File aFile : pPath.listFiles()) {
             if (aFile.isFile()) {
                 StoreNode aNode = new StoreNode(pRoot, aFile);
                 addNode(aNode);
-                System.out.println(aNode.keepNode());
+                TransLog.getLogger().info(aNode.keepNode());
             }
             if (aFile.isDirectory()) {
                 StoreList aList = new StoreList();

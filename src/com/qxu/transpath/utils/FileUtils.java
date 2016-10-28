@@ -259,7 +259,7 @@ public class FileUtils {
         while (in.hasNext()) {
             String inLine = in.nextLine();
             if (inLine.matches(inRegex)) {
-                System.out.println(inLine);
+                TransLog.getLogger().info(inLine);
                 matchedLine++;
             }
         }
@@ -310,17 +310,17 @@ public class FileUtils {
             if (isMagicStart) { // Magic Start found!
                 int commentLen = buffer[i + 20] + buffer[i + 22] * 256;
                 int realLen = buffLen - i - 22;
-                System.out.println("ZIP comment found at buffer position " + (i + 22) + " with len=" + commentLen
+                TransLog.getLogger().info("ZIP comment found at buffer position " + (i + 22) + " with len=" + commentLen
                         + ", good!");
                 if (commentLen != realLen) {
-                    System.out.println("WARNING! ZIP comment size mismatch: directory says len is " + commentLen
+                    TransLog.getLogger().info("WARNING! ZIP comment size mismatch: directory says len is " + commentLen
                             + ", but file ends after " + realLen + " bytes!");
                 }
                 String comment = new String(buffer, i + 22, Math.min(commentLen, realLen));
                 return comment;
             }
         }
-        System.out.println("ERROR! ZIP comment NOT found!");
+        TransLog.getLogger().info("ERROR! ZIP comment NOT found!");
         return null;
     }
 
@@ -480,7 +480,7 @@ public class FileUtils {
 
     public static void main(String[] args) {
             long t0 = System.currentTimeMillis();
-            System.out.println(listFiles("D:\\Quest\\_IC\\doc\\design"));
-            System.out.println("Time : " + (System.currentTimeMillis()-t0) + " ms.");
+            TransLog.getLogger().info(listFiles("D:\\Quest\\_IC\\doc\\design"));
+            TransLog.getLogger().info("Time : " + (System.currentTimeMillis()-t0) + " ms.");
         }
 }

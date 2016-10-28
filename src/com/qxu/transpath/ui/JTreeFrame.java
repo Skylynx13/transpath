@@ -3,13 +3,19 @@ package com.qxu.transpath.ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.tree.*;
+
+import org.apache.logging.log4j.LogManager;
 import java.awt.event.*;
 
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.SimpleNode;
 import com.qxu.transpath.tree.StoreList;
+import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
+import com.qxu.transpath.worker.PubKeeper;
+import com.qxu.transpath.worker.StoreKeeper;
+import com.qxu.transpath.worker.TaskKeeper;
 
 /**
  * 
@@ -59,26 +65,45 @@ public class JTreeFrame extends JFrame {
         
         JMenu taskMenu = new JMenu("Task");
         menuBar.add(taskMenu);	    
-	    JMenuItem taskKeepItem = new JMenuItem("Keep");
-	    taskMenu.add(taskKeepItem);
-        ActionListener listener = new ActionListener() {
+	    JMenuItem taskWeekItem = new JMenuItem("Weekly Digging");
+	    taskMenu.add(taskWeekItem);
+        ActionListener listenerWeek = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                TaskKeeper.weekFresh();
+                TaskKeeper.digNewFresh();
             }
         };
-        taskKeepItem.addActionListener(listener);
-
+        taskWeekItem.addActionListener(listenerWeek);
+        JMenuItem taskSpecItem = new JMenuItem("Spec Digging");
+        taskMenu.add(taskSpecItem);
+        ActionListener listenerSpec = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TaskKeeper.digSpecFresh();
+            }
+        };
+        taskSpecItem.addActionListener(listenerSpec);
 
         JMenu storeMenu = new JMenu("Store");
         menuBar.add(storeMenu);
-        JMenuItem storeKeepItem = new JMenuItem("Keep");
+        JMenuItem storeKeepItem = new JMenuItem("Combine");
         storeMenu.add(storeKeepItem);
         storeKeepItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.print(TransProp.get("test"));
-                System.exit(0);
+                StoreKeeper.buildCombinedList();
+            }
+        });
+        
+        JMenu pubMenu = new JMenu("Pub");
+        menuBar.add(pubMenu);
+        JMenuItem pubRefreshItem = new JMenuItem("Refresh");
+        pubMenu.add(pubRefreshItem);
+        pubRefreshItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PubKeeper.refreshPubList();
             }
         });
         
@@ -87,8 +112,11 @@ public class JTreeFrame extends JFrame {
         helpAboutItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.print("It's ok anyway.");
-                System.exit(0);
+                TransLog.getLogger().error("It's ok anyway.");
+                TransLog.getLogger().info("Info can be seen.");
+                LogManager.getLogger("com.qxu.transpath").info("Log it.");
+                TransLog.getLogger().info("Or log it.");
+//                System.exit(0);
             }
         });
         helpMenu.add(helpAboutItem);

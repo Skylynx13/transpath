@@ -22,6 +22,7 @@ import java.util.Scanner;
 import com.qxu.transpath.utils.CdEntry;
 import com.qxu.transpath.utils.StrUtils;
 import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransLog;
 
  /**
  * ClassName: Arranger <br/>
@@ -107,10 +108,10 @@ public class Arranger {
             } else {
                 this.addEntry(line);
             }
-            //System.out.println(line);
+            //TransLog.getLogger().info(line);
             cnt++;
         }
-        //System.out.println(cnt);
+        //TransLog.getLogger().info(cnt);
         in.close();
         return this;
     }
@@ -252,31 +253,31 @@ public class Arranger {
             iInLine++;
             String inLine = in.nextLine();
             if (!isInWindow && checkEndLine(inLine)) {
-                System.out.println("Error: End line out of window!");
-                System.out.println("Last End Line " + iLastClose + ": " + sLastClose);
-                System.out.println("This End Line " + iInLine + ": " + inLine);
+                TransLog.getLogger().info("Error: End line out of window!");
+                TransLog.getLogger().info("Last End Line " + iLastClose + ": " + sLastClose);
+                TransLog.getLogger().info("This End Line " + iInLine + ": " + inLine);
             }
             if (!isInWindow && checkLinkLine(inLine)) {
-                System.out.println("Error: Link line out of window!");
-                System.out.println("Last End Line: " + iLastClose + ": " + sLastClose);
-                System.out.println("This Link Line " + iInLine + ": " + inLine);
+                TransLog.getLogger().info("Error: Link line out of window!");
+                TransLog.getLogger().info("Last End Line: " + iLastClose + ": " + sLastClose);
+                TransLog.getLogger().info("This Link Line " + iInLine + ": " + inLine);
             }
             if (isInWindow && checkStartLine(inLine)) {
-                System.out.println("Error: Start line inside window!");
-                System.out.println("Last Start Line: " + iLastOpen + ": " + sLastOpen);
-                System.out.println("This Start Line " + iInLine + ": " + inLine);
+                TransLog.getLogger().info("Error: Start line inside window!");
+                TransLog.getLogger().info("Last Start Line: " + iLastOpen + ": " + sLastOpen);
+                TransLog.getLogger().info("This Start Line " + iInLine + ": " + inLine);
             }
             if (!isInWindow && checkStartLine(inLine)) {
                 isInWindow = true;
                 iLastOpen = iInLine;
                 sLastOpen = inLine;
-                //System.out.println("Line " + iInLine + " window opened.");
+                //TransLog.getLogger().info("Line " + iInLine + " window opened.");
            } 
             if (isInWindow && checkEndLine(inLine)) {
                 isInWindow = false;
                 iLastClose = iInLine;
                 sLastClose = inLine;
-                //System.out.println("Line " + iInLine + " window closed.");
+                //TransLog.getLogger().info("Line " + iInLine + " window closed.");
             }
             if (isInWindow && !checkIgnorableLine(inLine)) {
                 out.println(inLine);
@@ -334,7 +335,7 @@ public class Arranger {
                             +"Old Line " + i2 + ": " + cde2.getName() + TransConst.LINE_LINKER); 
                 }
                 if (i2%10000==0) {
-                    System.out.println("i1="+i1+"; i2="+i2);
+                    TransLog.getLogger().info("i1="+i1+"; i2="+i2);
                 }
             }
         }

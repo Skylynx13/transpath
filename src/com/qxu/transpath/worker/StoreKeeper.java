@@ -26,6 +26,7 @@ import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.tree.StoreNode;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 
  /**
@@ -64,7 +65,7 @@ public class StoreKeeper {
         }
     }
 
-    public static void buildList(String aTag, String[] bTags) {
+    private static void buildList(String aTag, String[] bTags) {
         int stotal = 0;
         int ttotal = 0;
         
@@ -77,33 +78,33 @@ public class StoreKeeper {
 
             int s1 = aList.size();
             long t1 = System.currentTimeMillis() - t0;
-            System.out.println("Store Listed: " + s1);
-            System.out.println("Store file size: " + aList.fileSize);
-            System.out.println("Time Used: " + t1);
-            System.out.println("Avg Speed: " + s1 / (t1 * 0.001) + "item/s.");
+            TransLog.getLogger().info("Store Listed: " + s1);
+            TransLog.getLogger().info("Store file size: " + aList.fileSize);
+            TransLog.getLogger().info("Time Used: " + t1);
+            TransLog.getLogger().info("Avg Speed: " + s1 / (t1 * 0.001) + "item/s.");
             stotal += s1;
             ttotal += t1;
         }
-        System.out.println("Total Store Listed: " + stotal + " : " + Arrays.toString(bTags));
-        System.out.println("Total Time Used: " + ttotal + " ms.");
-        System.out.println("Total Avg Speed: " + (stotal) * 1000000 / ttotal * 0.001 + " items/s.");        
+        TransLog.getLogger().info("Total Store Listed: " + stotal + " : " + Arrays.toString(bTags));
+        TransLog.getLogger().info("Total Time Used: " + ttotal + " ms.");
+        TransLog.getLogger().info("Total Avg Speed: " + (stotal) * 1000000 / ttotal * 0.001 + " items/s.");        
     }
     
-    public static String combineList(String oldVer, String aTag, String[] bTags) {
+    private static String combineList(String oldVer, String aTag, String[] bTags) {
         long t0 = System.currentTimeMillis();
-        System.out.println("Combine started...");
+        TransLog.getLogger().info("Combine started...");
 
         StoreList aList = attachTags(oldVer, aTag, bTags);
         StoreList resList = checkDup(oldVer, aList);
         genPubLink(oldVer, resList);
         
-        System.out.println("Combine done in " + (System.currentTimeMillis() - t0) + "ms.");
+        TransLog.getLogger().info("Combine done in " + (System.currentTimeMillis() - t0) + "ms.");
         return resList.version;
     }
 
     private static StoreList attachTags(String oldVer, String aTag, String[] bTags) {
         long t0 = System.currentTimeMillis();
-        System.out.println("AttachTags started...");
+        TransLog.getLogger().info("AttachTags started...");
         StoreList aList = new StoreList();
         aList.load(FileUtils.storeNameOfVersion(oldVer));
         
@@ -112,15 +113,15 @@ public class StoreKeeper {
             StoreList bList = new StoreList();
             bList.load(bTagName);
             aList.attachList(bList);
-            System.out.println(bTagName);
+            TransLog.getLogger().info(bTagName);
         }
-        System.out.println("AttachTags done in " + (System.currentTimeMillis() - t0) + "ms.");
+        TransLog.getLogger().info("AttachTags done in " + (System.currentTimeMillis() - t0) + "ms.");
         return aList;
     }
     
     private static StoreList checkDup(String pVer, StoreList pList) {
         long t0 = System.currentTimeMillis();
-        System.out.println("CheckDup started...");
+        TransLog.getLogger().info("CheckDup started...");
 
         pList.keepFile(FileUtils.storeNameOfVersion(pVer + "_old"));
 
@@ -146,8 +147,8 @@ public class StoreKeeper {
                 delList.nodeList.add(aNode);
             }
         }
-        System.out.println("Duplicated Number: " + (dupList.size()-delList.size()));
-        System.out.println("Redundant Number: " + delList.size());
+        TransLog.getLogger().info("Duplicated Number: " + (dupList.size()-delList.size()));
+        TransLog.getLogger().info("Redundant Number: " + delList.size());
         
         resList.recap();
         resList.keepFile(FileUtils.storeNameOfVersion(pVer + "_res"));
@@ -161,18 +162,18 @@ public class StoreKeeper {
         delList.orderByPathAndName();
         keepDelBat(delList, TransProp.get("SL_HOME") + "ToDel.bat");
 
-        System.out.println("Current Length: " + pList.size());
-        System.out.println("Reserve Length: " + resList.size());
-        System.out.println("Removal Length: " + delList.size());
-        System.out.println("Removal file size: " + delList.fileSize);
+        TransLog.getLogger().info("Current Length: " + pList.size());
+        TransLog.getLogger().info("Reserve Length: " + resList.size());
+        TransLog.getLogger().info("Removal Length: " + delList.size());
+        TransLog.getLogger().info("Removal file size: " + delList.fileSize);
         
-        System.out.println("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
+        TransLog.getLogger().info("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
         return resList;
     }
     
     private static void genPubLink(String oldVer, StoreList resList) {
         long t0 = System.currentTimeMillis();
-        System.out.println("GenPubLink started...");
+        TransLog.getLogger().info("GenPubLink started...");
 
         PubList pubList = new PubList();
         pubList.load(FileUtils.pubNameOfVersion(oldVer));
@@ -209,7 +210,7 @@ public class StoreKeeper {
         pubList.keepFile(FileUtils.pubNameOfVersion(currVer));
         linkList.keepFile(FileUtils.linkNameOfVersion(currVer));
         
-        System.out.println("GenPubLink done in " + (System.currentTimeMillis() - t0) + "ms.");
+        TransLog.getLogger().info("GenPubLink done in " + (System.currentTimeMillis() - t0) + "ms.");
     }
 
     @Deprecated
@@ -232,20 +233,20 @@ public class StoreKeeper {
     
             int s1 = aList.size();
             long t1 = System.currentTimeMillis() - t0;
-            System.out.println("Store Listed: " + s1);
-            System.out.println("Time Used: " + t1);
-            System.out.println("Avg Speed: " + s1 / (t1 * 0.001) + "item/s.");
+            TransLog.getLogger().info("Store Listed: " + s1);
+            TransLog.getLogger().info("Time Used: " + t1);
+            TransLog.getLogger().info("Avg Speed: " + s1 / (t1 * 0.001) + "item/s.");
             stotal += s1;
             ttotal += t1;
         }
-        System.out.println("Total Store Listed: " + stotal + ". From " + startNum + " to " + endNum + ".");
-        System.out.println("Total Time Used: " + ttotal + " ms.");
-        System.out.println("Total Avg Speed: " + (stotal) * 1000000 / ttotal * 0.001 + " items/s.");        
+        TransLog.getLogger().info("Total Store Listed: " + stotal + ". From " + startNum + " to " + endNum + ".");
+        TransLog.getLogger().info("Total Time Used: " + ttotal + " ms.");
+        TransLog.getLogger().info("Total Avg Speed: " + (stotal) * 1000000 / ttotal * 0.001 + " items/s.");        
     }
 
     @Deprecated
     public static void combineListInit() {
-        System.out.println("combine Start...");
+        TransLog.getLogger().info("combine Start...");
         String srcName = "D:\\Qdata\\update\\storelist\\A\\";
         
         File srcPath = new File(srcName);
@@ -265,13 +266,15 @@ public class StoreKeeper {
             StoreList bList = new StoreList();
             bList.load(aBlock);
             aList.attachList(bList);
-            System.out.println(aBlock.getName());
+            TransLog.getLogger().info(aBlock.getName());
         }
         aList.reorgId();
         aList.keepFile(tarName);
     }
     
     public static void buildCombinedList() {
+        TransLog.getLogger().info("StoreKeeper starts...");
+        
         String aTag = TransProp.get("A_TAG");
         String[] bTags = TransProp.get("B_TAGS").split(",");
         String oldVer = TransProp.get("CURR_VER");
@@ -280,15 +283,16 @@ public class StoreKeeper {
             bTags[bIndex] = bTags[bIndex].trim();
         }
         
-        System.out.println("A-Tag: " + aTag);
-        System.out.println("B-Tag: " + Arrays.toString(bTags));
-        System.out.println("Old version: " + oldVer);
+        TransLog.getLogger().info("A-Tag: " + aTag);
+        TransLog.getLogger().info("B-Tag: " + Arrays.toString(bTags));
+        TransLog.getLogger().info("Old version: " + oldVer);
         
         buildList(aTag, bTags);
         String comVer = combineList(oldVer, aTag, bTags);
 
-        System.out.println("New version: " + comVer + ".");
-        System.out.println("Remember to move N/ files to B/.");
+        TransLog.getLogger().info("New version: " + comVer + ".");
+        TransLog.getLogger().info("Remember to move N/ files to B/.");
+        TransLog.getLogger().info("StoreKeeper done.");
     }
 
     /**
@@ -299,11 +303,6 @@ public class StoreKeeper {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("StoreKeeper starts...");
-
-        buildCombinedList();
-        
-        System.out.println("StoreKeeper done.");
     }
 
 }

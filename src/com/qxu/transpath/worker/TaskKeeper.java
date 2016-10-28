@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import com.qxu.transpath.utils.DateUtils;
 import com.qxu.transpath.utils.FileUtils;
+import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 
  /**
@@ -45,30 +46,30 @@ public class TaskKeeper {
     public void countMatchString() {
         int n = FileUtils.countMatch("resource/rawDump.txt", 
                 "^\\s*Last edited by.*$");
-        System.out.println("Matched Lines: "+ n);        
+        TransLog.getLogger().info("Matched Lines: "+ n);        
     }
 
     @Deprecated
     public void keepTask() {
-        System.out.println("Keeping task...");
+        TransLog.getLogger().info("Keeping task...");
         FileUtils.copyFileBytes(TransProp.get("TP_HOME") + "task.txt", TransProp.get("TP_HOME") + "task_" + archDate + "_old.txt");
         int n = new Arranger().readFromFile(TransProp.get("TP_HOME") + "task.txt").merge(new Arranger().readFromFile(TransProp.get("TP_HOME") + "fresh.txt")).writeToFile(TransProp.get("TP_HOME") + "task.txt");
         FileUtils.copyFileBytes(TransProp.get("TP_HOME") + "task.txt", TransProp.get("TP_HOME") + "task_" + archDate + ".txt");
-        System.out.println("Totally " + n + " task entries processed.");
-        System.out.println("Done.");
+        TransLog.getLogger().info("Totally " + n + " task entries processed.");
+        TransLog.getLogger().info("Done.");
     }
     
     @Deprecated
     public void keepReadyIndex() {
-        System.out.println("Keeping iReady...");
+        TransLog.getLogger().info("Keeping iReady...");
         int n = new Arranger().readFromFile(TransProp.get("TP_HOME") + "ready.txt").writeIndexToFile(TransProp.get("TP_HOME") + "iready.txt");
-        System.out.println("Totally " + n + " ready index processed.");
-        System.out.println("Done.");
+        TransLog.getLogger().info("Totally " + n + " ready index processed.");
+        TransLog.getLogger().info("Done.");
     }
     
     @Deprecated
     public void checkFresh() {
-        System.out.println("Checking fresh...");
+        TransLog.getLogger().info("Checking fresh...");
         Arranger arrFresh = new Arranger().readFromFile(TransProp.get("TP_HOME") + "fresh.txt");
         String result = "";
         result += "==================================================================";
@@ -77,7 +78,7 @@ public class TaskKeeper {
         result += "==================================================================";
         result += "Fresh vs Ready: \n";
         result += arrFresh.findSameEntries(new Arranger().readFromFile(TransProp.get("TP_HOME") + "iready.txt"));
-        System.out.println(result);
+        TransLog.getLogger().info(result);
         try {
             PrintWriter out = new PrintWriter(TransProp.get("TP_HOME") + "compare.txt");
             out.println(result);
@@ -85,12 +86,12 @@ public class TaskKeeper {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println("Done.");
+        TransLog.getLogger().info("Done.");
     }
     
     @Deprecated
     public void checkTask() {
-        System.out.println("Checking task...");
+        TransLog.getLogger().info("Checking task...");
         Arranger arrTask = new Arranger().readFromFile(TransProp.get("TP_HOME") + "task.txt");
         String result = "";
         result += "==================================================================\n";
@@ -99,7 +100,7 @@ public class TaskKeeper {
         result += "==================================================================\n";
         result += "Task vs Ready: \n";
         result += arrTask.findSameEntries(new Arranger().readFromFile(TransProp.get("TP_HOME") + "iready.txt"));
-        System.out.println(result);
+        TransLog.getLogger().info(result);
         try {
             PrintWriter out = new PrintWriter(TransProp.get("TP_HOME") + "compare.txt");
             out.println(result);
@@ -107,24 +108,24 @@ public class TaskKeeper {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println("Done.");
+        TransLog.getLogger().info("Done.");
     }
     
     public void keepRaw() {
-        System.out.println("Keeping raw...");
+        TransLog.getLogger().info("Keeping raw...");
         FileUtils.copyFileBytes(TransProp.get("TP_HOME") + "dump.txt", TransProp.get("TP_HOME") + "dump_" + archDate + ".txt");
         int n = new Arranger().trimFile(TransProp.get("TP_HOME") + "dump.txt", TransProp.get("TP_HOME") + "raw.txt");
         FileUtils.copyFileBytes(TransProp.get("TP_HOME") + "raw.txt", TransProp.get("TP_HOME") + "raw_" + archDate + ".txt");
-        System.out.println("Raw Filtered to "+ n + " lines.");        
-        System.out.println("Done.");
+        TransLog.getLogger().info("Raw Filtered to "+ n + " lines.");        
+        TransLog.getLogger().info("Done.");
     }
     
     public void keepFresh() {
-        System.out.println("Keeping fresh...");
+        TransLog.getLogger().info("Keeping fresh...");
         int n = new Arranger().readFromFile(TransProp.get("TP_HOME") + "raw.txt").sort().merge().writeToFile(TransProp.get("TP_HOME") + "fresh.txt");
         FileUtils.copyFileBytes(TransProp.get("TP_HOME") + "fresh.txt", TransProp.get("TP_HOME") + "fresh_" + archDate + ".txt");
-        System.out.println("Totally " + n + " fresh entries processed.");
-        System.out.println("Done.");
+        TransLog.getLogger().info("Totally " + n + " fresh entries processed.");
+        TransLog.getLogger().info("Done.");
     }
     
     public static void weekFresh() {
@@ -150,10 +151,10 @@ public class TaskKeeper {
      * @param args
      */
     public static void main (String[] args) {
-        System.out.println("TaskKeeper on job...");
-        //weekFresh();
-        //digNewFresh();
-        digSpecFresh();
-        System.out.println("Keeper job done");
+//        TransLog.getLogger().info("TaskKeeper on job...");
+//        weekFresh();
+//        digNewFresh();
+//        //digSpecFresh();
+//        TransLog.getLogger().info("Keeper job done");
     }
 }

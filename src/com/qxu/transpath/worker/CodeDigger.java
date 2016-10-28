@@ -19,6 +19,7 @@ import java.util.Scanner;
 
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 
 /**
@@ -43,25 +44,25 @@ public class CodeDigger {
 
     public static void digKeywordFile(String key, String src, String target) {
         String[] keywords = CodeDigger.readKeywordList(key);
-        System.out.println("Digging keywords " + Arrays.toString(keywords));
+        TransLog.getLogger().info("Digging keywords " + Arrays.toString(keywords));
         CodeDigger.digKeyword(keywords, src, target);
     }
 
     public static int digKeyword(String[] keywords, String src, String target) {
         int n = new Arranger().readFromFile(src).applyFilter(keywords).appendToFile(target);
-        System.out.println("" + n + " <- " + src);
+        TransLog.getLogger().info("" + n + " entries digged from " + src + " are saved to " + target);
         return n;
     }
 
     public static void pickoutKeyword(String[] keys, String src, String target) {
-        System.out.println("Digging keyword...");
+        TransLog.getLogger().info("Digging keyword...");
         int n = new Arranger().readFromFile(src).applyFilterReversely(keys).appendToFile(target);
-        System.out.println("Totally " + n + " entries extracted.");
-        System.out.println("Done.");
+        TransLog.getLogger().info("Totally " + n + " entries extracted.");
+        TransLog.getLogger().info("Done.");
     }
 
     public static void digBigEntries(String src, String target) {
-        System.out.println("Digging keywords " + Arrays.toString(KEYS_BIG_ENTRY));
+        TransLog.getLogger().info("Digging keywords " + Arrays.toString(KEYS_BIG_ENTRY));
         CodeDigger.digKeyword(KEYS_BIG_ENTRY, src, target);
     }
 
@@ -90,17 +91,17 @@ public class CodeDigger {
         FileUtils.clearFile(target);
         File path = new File(TransProp.get("TP_HOME"));
         int total = 0;
-        System.out.println("Digging keywords " + Arrays.toString(keys));
+        TransLog.getLogger().info("Digging keywords " + Arrays.toString(keys));
         for (File file : path.listFiles(new FilenameFilter() {
             public boolean accept(File file, String name) {
                 return name.matches("fresh_.*.txt");
             }
         })) {
             total += CodeDigger.digKeyword(keys, file.getAbsolutePath(), target);
-            //System.out.println(file.getAbsolutePath());
+            //TransLog.getLogger().info(file.getAbsolutePath());
         }
-        System.out.println("Total: " + total);
-        System.out.println("Time : " + (System.currentTimeMillis() - t0) + "ms");
+        TransLog.getLogger().info("Total: " + total);
+        TransLog.getLogger().info("Time : " + (System.currentTimeMillis() - t0) + "ms");
     }
 
 //    public static void clearFile(String fileName) {

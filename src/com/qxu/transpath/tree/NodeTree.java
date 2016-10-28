@@ -22,6 +22,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransLog;
 
 /**
  * ClassName: NodeTree <br/>
@@ -278,7 +279,7 @@ public class NodeTree implements MutableTreeNode {
         NodeTree bTree = this;
         for (String nodeName : nodeNames) {
             if (null != nodeName && !nodeName.isEmpty()) {
-                // System.out.println(nodeName);
+                // TransLog.getLogger().info(nodeName);
                 bTree = bTree.getChildByNameOrAddIt(nodeName);
             }
         }
@@ -307,11 +308,11 @@ public class NodeTree implements MutableTreeNode {
         NodeTree tree2 = new NodeTree(new SimpleNode("tree2"));
         tree2.addChild(node3);
         tree1.addChild(tree2);
-        System.out.println(tree1.getNodePathName());
-        System.out.println(tree2.getNodePathName());
-        System.out.println(node1.getNodePathName());
-        System.out.println(node2.getNodePathName());
-        System.out.println(node3.getNodePathName());
+        TransLog.getLogger().info(tree1.getNodePathName());
+        TransLog.getLogger().info(tree2.getNodePathName());
+        TransLog.getLogger().info(node1.getNodePathName());
+        TransLog.getLogger().info(node2.getNodePathName());
+        TransLog.getLogger().info(node3.getNodePathName());
     }
 
     @Override

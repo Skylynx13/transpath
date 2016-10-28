@@ -75,7 +75,7 @@ public class PubKeeper {
         lnkList.load(TransProp.get("SL_HOME") + "LinkList_20160721102308967.txt");
 
         for (Node resNode : resList.nodeList) {
-            System.out.println(resNode.keepNode());
+            TransLog.getLogger().info(resNode.keepNode());
             for (Node refNode : refList.nodeList) {
                 if (resNode.name.equals(refNode.name)) {
                     resNode.path = refNode.path;
@@ -93,7 +93,9 @@ public class PubKeeper {
     }
 
     public static void refreshPubList() {
+        TransLog.getLogger().info("PubKeeper refreshPubList starts...");
         mergeDup(null);
+        TransLog.getLogger().info("PubKeeper refreshPubList ends.");
     }
     
     public static void mergeDup(HashMap<Integer, Integer> dupMap) {
@@ -131,16 +133,16 @@ public class PubKeeper {
         ArrayList<Integer> storeIdList = lnkList.getStoreIdList(pPubIdList);
         for (int sId : storeIdList) {
             StoreNode sNode = (StoreNode)strList.getById(sId);
-            System.out.println(sNode.name);
-            System.out.println(sNode.keepNode());
+            TransLog.getLogger().info(sNode.name);
+            TransLog.getLogger().info(sNode.keepNode());
         }
         
-        System.out.println();
+        TransLog.getLogger().info("");
     }
 
     public static void checkDup() {
         long t0 = System.currentTimeMillis();
-        System.out.println("CheckDup started...");
+        TransLog.getLogger().info("CheckDup started...");
 
         String currVer = TransProp.get("CURR_VER");
         PubList pList = new PubList();
@@ -171,8 +173,8 @@ public class PubKeeper {
                 dupMap.put(aNode.id, dNode.id);
             }
         }
-        System.out.println("Duplicated Number: " + (dupList.size()-delList.size()));
-        System.out.println("Redundant Number: " + delList.size());
+        TransLog.getLogger().info("Duplicated Number: " + (dupList.size()-delList.size()));
+        TransLog.getLogger().info("Redundant Number: " + delList.size());
         
         resList.recap();
         resList.keepFile(FileUtils.pubNameOfVersion(currVer + "_res"));
@@ -183,13 +185,13 @@ public class PubKeeper {
         delList.recap();
         delList.keepFile(FileUtils.pubNameOfVersion(currVer + "_del"));
 
-        System.out.println("Current Length: " + pList.size());
-        System.out.println("Reserve Length: " + resList.size());
-        System.out.println("Removal Length: " + delList.size());
+        TransLog.getLogger().info("Current Length: " + pList.size());
+        TransLog.getLogger().info("Reserve Length: " + resList.size());
+        TransLog.getLogger().info("Removal Length: " + delList.size());
         
-        System.out.println(dupMap.toString());
+        TransLog.getLogger().info(dupMap.toString());
         
-        System.out.println("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
+        TransLog.getLogger().info("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
     }
     
     /**
@@ -197,7 +199,7 @@ public class PubKeeper {
      */
     public static void checkLink() {
         String pVer = TransProp.get("CURR_VER");
-        System.out.println("Checking version: " + pVer);
+        TransLog.getLogger().info("Checking version: " + pVer);
         StoreList sList = new StoreList();
         sList.load(FileUtils.storeNameOfVersion(pVer));
         PubList pList = new PubList();
@@ -212,36 +214,36 @@ public class PubKeeper {
     }
     
     private static void checkFreeStore(StoreList sList, LinkList lList) {
-        System.out.println("Free Store: " + NodeList.FindIdOnlyInAList(sList.getIdList(), lList.getStoreIdList()).toString());
+        TransLog.getLogger().info("Free Store: " + NodeList.FindIdOnlyInAList(sList.getIdList(), lList.getStoreIdList()).toString());
     }
 
     private static void checkInvalidStore(StoreList sList, LinkList lList) {
-        System.out.println("Invalid Store: " + NodeList.FindIdOnlyInAList(lList.getStoreIdList(), sList.getIdList()).toString());
+        TransLog.getLogger().info("Invalid Store: " + NodeList.FindIdOnlyInAList(lList.getStoreIdList(), sList.getIdList()).toString());
     }
 
     private static void checkFreePub(PubList pList, LinkList lList) {
-        System.out.println("Free Pub: " + NodeList.FindIdOnlyInAList(pList.getIdList(), lList.getPubIdList()).toString());
+        TransLog.getLogger().info("Free Pub: " + NodeList.FindIdOnlyInAList(pList.getIdList(), lList.getPubIdList()).toString());
     }
 
     private static void checkInvalidPub(PubList pList, LinkList lList) {
-        System.out.println("Invalid Pub: " + NodeList.FindIdOnlyInAList(lList.getPubIdList(), pList.getIdList()).toString());        
+        TransLog.getLogger().info("Invalid Pub: " + NodeList.FindIdOnlyInAList(lList.getPubIdList(), pList.getIdList()).toString());        
     }
 
     // To know where a new pub probably belong to.
     public static void findSimilar(ArrayList<Integer> pPubIdList) {
         String pVer = TransProp.get("CURR_VER");
-        System.out.println("Current version: " + pVer);
+        TransLog.getLogger().info("Current version: " + pVer);
         PubList pList = new PubList();
         pList.load(FileUtils.pubNameOfVersion(pVer));
 
-        System.out.println("Find Similar Pub for: ");
+        TransLog.getLogger().info("Find Similar Pub for: ");
         for (int pubId : pPubIdList) {
             String pubName = pList.getById(pubId).name;
-            System.out.println(pubId + " : " + pubName);
-            System.out.println("|" + pubName.substring(0, pubName.lastIndexOf(' ')) + "|");
+            TransLog.getLogger().info(pubId + " : " + pubName);
+            TransLog.getLogger().info("|" + pubName.substring(0, pubName.lastIndexOf(' ')) + "|");
             for (Node aNode : pList.nodeList) {
                 if (aNode.name.contains(pubName.substring(0, pubName.lastIndexOf(' ')))) {
-                    System.out.println(aNode.path + aNode.name);
+                    TransLog.getLogger().info(aNode.path + aNode.name);
                 }
             }
         }
@@ -249,10 +251,10 @@ public class PubKeeper {
     
     public static void main(String[] args) {
         //TransLog.setClass(PubKeeper.class);
-        TransLog.info("PubKeeper starts...");
-        TransLog.setClass(TransLog.class);
-        TransLog.info("PubKeeper startss...");
-        //System.out.println();
+//////        TransLog.getLogger().info("PubKeeper starts...");
+        //TransLog.setClass(TransLog.class);
+        //TransLog.info("PubKeeper startss...");
+        //TransLog.getLogger().info();
         // pubInit();
         // pubNameEdit();
         // findPath();
@@ -260,9 +262,9 @@ public class PubKeeper {
         //checkLink();
 
         //Change intA to intB.
-        HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();
+//////        HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();
         //dupMap.put(61482, 61481);
-        mergeDup(dupMap);
+//////        mergeDup(dupMap);
 
 //        ArrayList<Integer> idList = new ArrayList<Integer>();
 //        idList.add(41289);
@@ -276,7 +278,7 @@ public class PubKeeper {
         
         //findSimilar(idList);
         
-        TransLog.info("PubKeeper ends.");
+//////        TransLog.getLogger().info("PubKeeper ends.");
     }
 
 }

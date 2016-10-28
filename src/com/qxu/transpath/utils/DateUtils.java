@@ -53,12 +53,12 @@ public class DateUtils {
     }
     
     public static void main (String[] args) {
-        System.out.println(DateUtils.formatDateToday());
+        TransLog.getLogger().info(DateUtils.formatDateToday());
 
         long aTime = System.currentTimeMillis();
         Date aDate = new Date();
-        System.out.println(aTime);
-        System.out.println(DateUtils.formatDateTimeLong(aTime));
-        System.out.println(DateUtils.formatDateTimeLong(aDate));
+        TransLog.getLogger().info(aTime);
+        TransLog.getLogger().info(DateUtils.formatDateTimeLong(aTime));
+        TransLog.getLogger().info(DateUtils.formatDateTimeLong(aDate));
     }
 }

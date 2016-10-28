@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransLog;
 
  /**
  * ClassName: PubList <br/>
@@ -97,14 +98,14 @@ public class PubList extends NodeList {
             for (String aKey : hitMapper.keySet()) {
                 if (aNode.path.equals(TransConst.PUB_PATH_DEFAULT) && aNode.name.contains(aKey)) {
                     aNode.path = hitMapper.get(aKey);
-                    System.out.println(aNode.path + ":" + aNode.name);
+                    TransLog.getLogger().info(aNode.path + ":" + aNode.name);
                 }
             }
         }
     }
     
     public static void main (String[] args) {
-        System.out.println("test hit shelf");
-        System.out.println("test end");
+        TransLog.getLogger().info("test hit shelf");
+        TransLog.getLogger().info("test end");
     }
 }
