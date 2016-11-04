@@ -1,4 +1,4 @@
-package com.qxu.transpath.utest;
+package com.qxu.transpath.oldschool;
 
 import static org.junit.Assert.*;
 

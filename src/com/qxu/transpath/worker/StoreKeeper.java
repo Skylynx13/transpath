@@ -291,7 +291,7 @@ public class StoreKeeper {
         String comVer = combineList(oldVer, aTag, bTags);
 
         TransLog.getLogger().info("New version: " + comVer + ".");
-        TransLog.getLogger().info("Remember to move N/ files to B/.");
+//        TransLog.getLogger().info("Remember to move N/ files to B/.");
         TransLog.getLogger().info("StoreKeeper done.");
     }
 

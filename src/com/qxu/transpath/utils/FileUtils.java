@@ -456,7 +456,7 @@ public class FileUtils {
     }
 
     public static String storeNameOfTag(String aTag, String bTag) {
-        return TransProp.get("SL_HOME") + "N\\TFLib_" + aTag + "_" + bTag + ".txt";
+        return TransProp.get("SL_HOME") + "B\\TFLib_" + aTag + "_" + bTag + ".txt";
     }
     
     public static String hitShelfList() {

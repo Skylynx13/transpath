@@ -1,4 +1,4 @@
-package com.qxu.transpath.path;
+package com.qxu.transpath.oldschool;
 
 import com.qxu.transpath.utils.TransConst;
 

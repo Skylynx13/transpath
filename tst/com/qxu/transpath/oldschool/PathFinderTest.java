@@ -8,7 +8,7 @@
  * Date:2014-3-29 下午8:44:54
  * 
  */
-package com.qxu.transpath.utest;
+package com.qxu.transpath.oldschool;
 
 import static org.junit.Assert.*;
 

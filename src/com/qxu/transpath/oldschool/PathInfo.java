@@ -1,4 +1,4 @@
-package com.qxu.transpath.path;
+package com.qxu.transpath.oldschool;
 
 public class PathInfo {
 	String fileName = null;

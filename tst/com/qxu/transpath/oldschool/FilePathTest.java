@@ -1,10 +1,10 @@
-package com.qxu.transpath.utest;
+package com.qxu.transpath.oldschool;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.qxu.transpath.path.FilePath;
+import com.qxu.transpath.oldschool.FilePath;
 
 public class FilePathTest {
 

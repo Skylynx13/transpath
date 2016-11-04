@@ -398,7 +398,7 @@ public class NameEditor {
 
     public static void main(String[] args) {
         //cutHead();
-        //renameNormalize();
+        renameNormalize();
         //renameSpecialReplace();
         //renameComic07();
         //renamePushDate();

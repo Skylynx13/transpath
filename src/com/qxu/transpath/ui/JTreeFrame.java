@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 
-import org.apache.logging.log4j.LogManager;
 import java.awt.event.*;
 
 import com.qxu.transpath.tree.NodeTree;
@@ -114,9 +113,6 @@ public class JTreeFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 TransLog.getLogger().error("It's ok anyway.");
                 TransLog.getLogger().info("Info can be seen.");
-                LogManager.getLogger("com.qxu.transpath").info("Log it.");
-                TransLog.getLogger().info("Or log it.");
-//                System.exit(0);
             }
         });
         helpMenu.add(helpAboutItem);
