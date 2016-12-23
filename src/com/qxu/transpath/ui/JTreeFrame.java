@@ -10,6 +10,7 @@ import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.SimpleNode;
 import com.qxu.transpath.tree.StoreList;
+import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 import com.qxu.transpath.worker.PubKeeper;
@@ -126,33 +127,20 @@ public class JTreeFrame extends JFrame {
 		cp = (JPanel) this.getContentPane();
 		cp.setLayout(new BorderLayout());
         
-		//NodeList.keepList("resource/pflist.txt", NodeList.buildFromRoot("qtest"));
-        //NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_1st_2nd_fin.txt"), TranspathConstants.BRANCH_1ST);
         StoreList aList = new StoreList();
-        aList.load(TransProp.get("SL_HOME") + "StoreList_" + TransProp.get("CURR_VER") + ".txt");
+        aList.load(FileUtils.storeNameOfVersion(TransProp.get("CURR_VER")));
         NodeTree ntree1 = NodeTree.buildFromList(aList);
-//      NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_1ST);
-//        NodeTree ntree1 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
-//        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_1ST);
-//        ntree1.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0928.txt"), TranspathConstants.BRANCH_1ST);
         ntree1.recursivelySort();
 		jtree1 = new JTree(ntree1);
-        //jtree1 = new JTree(this.buildTestTree());
         JScrollPane spaneLeft = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         spaneLeft.setViewportView(jtree1);
         jtree1.revalidate();
         
-		//NodeList.keepList("resource/tflist.txt", NodeList.buildFromRoot("D:\\Book\\TFLib\\"));
-//        NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile(TransProp.get("TP_HOME") + "store16.txt"), TransConst.BRANCH_2ND);
         PubList bList = new PubList();
-        bList.load(TransProp.get("SL_HOME") + "PubList_" + TransProp.get("CURR_VER") + ".txt");
+        bList.load(FileUtils.pubNameOfVersion(TransProp.get("CURR_VER")));
         NodeTree ntree2 = NodeTree.buildFromList(bList);
-        
-//      NodeTree ntree2 = NodeTree.buildFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2013_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
-//		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2014_0_1_2.txt"), TranspathConstants.BRANCH_2ND);
-//		ntree2.appendFromList(NodeList.buildFromFile("D:\\_TF\\_Update\\TFLib_A2015_b0726.txt"), TranspathConstants.BRANCH_2ND);
         ntree2.recursivelySort();
 		jtree2 = new JTree(ntree2);
 
@@ -181,10 +169,6 @@ public class JTreeFrame extends JFrame {
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         spaneRight.setViewportView(jtree2);
         jtree2.revalidate();
-
-        
-        
-        
         
         JSplitPane mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spaneLeft, spaneRight);
 		mPane.setContinuousLayout(true);
@@ -193,8 +177,6 @@ public class JTreeFrame extends JFrame {
 		mPane.setDividerLocation(0.5);
 		mPane.setDividerSize(8);
 		cp.add(mPane, BorderLayout.CENTER);
-		
-		
 	}
 	
 	@SuppressWarnings("unused")

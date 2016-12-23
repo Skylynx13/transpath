@@ -355,6 +355,7 @@ public class NameEditor {
         }
     }
 
+    @Deprecated
     public static void sampleListFiles() {
         String root = "I:\\Book\\TFLib\\A2013\\B0001\\Antarctic Press\\Robotech\\";
         File a = new File(root);
@@ -383,10 +384,10 @@ public class NameEditor {
     
     public static void renameSpecialReplace() {
         String[][] replaceOnce = {
-                { "Week ",
-                "Week 0"},
-                { "\\.zip",
-                ".cbz"}
+                { "two covers",
+                "2 covers"},
+                { " \\(c2c\\) \\(2001\\)",
+                " (2001) (c2c)"}
         };
 
         TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");

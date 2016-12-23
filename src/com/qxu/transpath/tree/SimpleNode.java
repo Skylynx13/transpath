@@ -31,7 +31,7 @@ public class SimpleNode extends Node {
 
     @Override
     public String keepNode() {
-        return null;
+        return name;
     }
 
 }

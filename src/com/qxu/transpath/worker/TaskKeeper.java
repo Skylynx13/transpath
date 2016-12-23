@@ -137,6 +137,7 @@ public class TaskKeeper {
     public static void digNewFresh() {
         CodeDigger.digKeywordFileDefault(TransProp.get("TP_HOME") + "fresh.txt", 
                 TransProp.get("TP_HOME") + "task_week.txt");
+        TransLog.getLogger().info("Done.");
     }
     
     public static void digSpecFresh() {

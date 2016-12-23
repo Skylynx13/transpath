@@ -295,7 +295,7 @@ public class Arranger {
     }
     
     public boolean checkStartLine (String line) {
-        return line.matches("^(Default|Video) Re: .*$") 
+        return line.matches("^(Default|Video|Post) Re: .*$") 
                 || line.matches("^Default$")
                 || line.matches("^(Today|Yesterday|\\d{2}-\\d{2}-\\d{4}) \\d{2}:\\d{2}$");
     }
