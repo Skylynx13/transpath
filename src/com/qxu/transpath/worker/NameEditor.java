@@ -384,10 +384,10 @@ public class NameEditor {
     
     public static void renameSpecialReplace() {
         String[][] replaceOnce = {
-                { "two covers",
-                "2 covers"},
-                { " \\(c2c\\) \\(2001\\)",
-                " (2001) (c2c)"}
+                { " \\(2016\\) TPB",
+                ""},
+                { "\\.cbr",
+                " TPB (2016).cbr"},
         };
 
         TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");

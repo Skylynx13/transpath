@@ -102,6 +102,16 @@ public class StoreKeeper {
         return resList.version;
     }
 
+    private static void combineTest(String oldVer, String aTag, String[] bTags) {
+        long t0 = System.currentTimeMillis();
+        TransLog.getLogger().info("Combine Test started...");
+
+        StoreList aList = attachTags(oldVer, aTag, bTags);
+        checkDupTest(aList);
+        
+        TransLog.getLogger().info("Combine Test done in " + (System.currentTimeMillis() - t0) + "ms.");
+    }
+
     private static StoreList attachTags(String oldVer, String aTag, String[] bTags) {
         long t0 = System.currentTimeMillis();
         TransLog.getLogger().info("AttachTags started...");
@@ -169,6 +179,57 @@ public class StoreKeeper {
         
         TransLog.getLogger().info("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
         return resList;
+    }
+    
+    public static void checkDupTest(StoreList pList) {
+        long t0 = System.currentTimeMillis();
+        TransLog.getLogger().info("CheckDupInPath started...");
+
+        
+        //TransLog.getLogger().info(pList.toString());
+        pList.orderByMd5();
+
+        StoreNode dNode = null;
+        StoreList resList = new StoreList();
+        StoreList dupList = new StoreList();
+        StoreList delList = new StoreList();
+        
+        for (Node aNode : pList.nodeList) {
+            if (null == aNode) {
+                continue;
+            } else if (!((StoreNode)aNode).checkDupNode(dNode)) {
+                dNode = ((StoreNode)aNode);
+                resList.nodeList.add(aNode);
+                continue;
+            } else {
+                if (!dupList.hasNode(dNode)) {
+                    dupList.nodeList.add(dNode);
+                }
+                dupList.nodeList.add(aNode);
+                delList.nodeList.add(aNode);
+            }
+        }
+        TransLog.getLogger().info("Duplicated Number: " + (dupList.size()-delList.size()));
+        TransLog.getLogger().info("Redundant Number: " + delList.size());
+        
+        resList.recap();
+        //resList.keepFile(FileUtils.storeNameOfVersion(pVer + "_res"));
+
+        dupList.recap();
+        TransLog.getLogger().info(dupList.toString());
+        
+        delList.recap();
+        //delList.keepFile(FileUtils.storeNameOfVersion(pVer + "_del"));
+
+        delList.orderByPathAndName();
+        keepDelBat(delList, TransProp.get("SL_HOME") + "ToDel.bat");
+
+        TransLog.getLogger().info("Current Length: " + pList.size());
+        TransLog.getLogger().info("Reserve Length: " + resList.size());
+        TransLog.getLogger().info("Removal Length: " + delList.size());
+        TransLog.getLogger().info("Removal file size: " + delList.fileSize);
+        
+        TransLog.getLogger().info("CheckDupInPath done in " + (System.currentTimeMillis() - t0) + "ms.");
     }
     
     private static void genPubLink(String oldVer, StoreList resList) {
@@ -273,7 +334,7 @@ public class StoreKeeper {
     }
     
     public static void buildCombinedList() {
-        TransLog.getLogger().info("StoreKeeper starts...");
+        TransLog.getLogger().info("StoreKeeper combining...");
         
         String aTag = TransProp.get("A_TAG");
         String[] bTags = TransProp.get("B_TAGS").split(",");
@@ -295,6 +356,27 @@ public class StoreKeeper {
         TransLog.getLogger().info("StoreKeeper done.");
     }
 
+    public static void testCombinedList() {
+        TransLog.getLogger().info("StoreKeeper test combining...");
+        
+        String aTag = TransProp.get("A_TAG");
+        String[] bTags = TransProp.get("B_TAGS").split(",");
+        String oldVer = TransProp.get("CURR_VER");
+        
+        for(int bIndex = 0; bIndex < bTags.length; bIndex++) {
+            bTags[bIndex] = bTags[bIndex].trim();
+        }
+        
+        TransLog.getLogger().info("A-Tag: " + aTag);
+        TransLog.getLogger().info("B-Tag: " + Arrays.toString(bTags));
+        TransLog.getLogger().info("Old version: " + oldVer);
+        
+        buildList(aTag, bTags);
+        combineTest(oldVer, aTag, bTags);
+
+        TransLog.getLogger().info("StoreKeeper done.");
+    }
+
     /**
      * main:<br/>
      * bin>java com.qxu.transpath.worker.StoreKeeper storehis<br/>
@@ -303,6 +385,9 @@ public class StoreKeeper {
      * @param args
      */
     public static void main(String[] args) {
+        StoreList aList = new StoreList();
+        aList.build("D:\\Book\\TFLib\\New\\full", "\\");
+        checkDupTest(aList);
     }
 
 }

@@ -87,12 +87,20 @@ public class JTreeFrame extends JFrame {
 
         JMenu storeMenu = new JMenu("Store");
         menuBar.add(storeMenu);
-        JMenuItem storeKeepItem = new JMenuItem("Combine");
-        storeMenu.add(storeKeepItem);
-        storeKeepItem.addActionListener(new ActionListener() {
+        JMenuItem storeCombineItem = new JMenuItem("Combine");
+        storeMenu.add(storeCombineItem);
+        storeCombineItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 StoreKeeper.buildCombinedList();
+            }
+        });
+        JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
+        storeMenu.add(storeCombineTestItem);
+        storeCombineTestItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StoreKeeper.testCombinedList();
             }
         });
         
