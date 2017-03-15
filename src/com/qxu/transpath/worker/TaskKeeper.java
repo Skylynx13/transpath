@@ -46,7 +46,7 @@ public class TaskKeeper {
     public void countMatchString() {
         int n = FileUtils.countMatch("resource/rawDump.txt", 
                 "^\\s*Last edited by.*$");
-        TransLog.getLogger().info("Matched Lines: "+ n);        
+        TransLog.getLogger().info("Matched Lines: " + n);        
     }
 
     @Deprecated

@@ -51,18 +51,18 @@ public class NameEditor {
             { " v4 ", " v04 " }, 
             { " v5 ", " v05 " }, 
             { " v6 ", " v06 " }, 
-            { " v01 ", " v01 - " }, 
-            { " v02 ", " v02 - " }, 
-            { " v03 ", " v03 - " }, 
-            { " v04 ", " v04 - " }, 
-            { " v05 ", " v05 - " }, 
-            { " v06 ", " v06 - " }, 
-            { " v01 - - ", " v01 - " }, 
-            { " v02 - - ", " v02 - " }, 
-            { " v03 - - ", " v03 - " }, 
-            { " v04 - - ", " v04 - " }, 
-            { " v05 - - ", " v05 - " }, 
-            { " v06 - - ", " v06 - " }, 
+//            { " v01 ", " v01 - " }, 
+//            { " v02 ", " v02 - " }, 
+//            { " v03 ", " v03 - " }, 
+//            { " v04 ", " v04 - " }, 
+//            { " v05 ", " v05 - " }, 
+//            { " v06 ", " v06 - " }, 
+//            { " v01 - - ", " v01 - " }, 
+//            { " v02 - - ", " v02 - " }, 
+//            { " v03 - - ", " v03 - " }, 
+//            { " v04 - - ", " v04 - " }, 
+//            { " v05 - - ", " v05 - " }, 
+//            { " v06 - - ", " v06 - " }, 
             { " Of ", " of " }, 
             { " of The", " of the" },
             { " From ", " from " }, 
@@ -136,6 +136,41 @@ public class NameEditor {
         }
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
+    }
+    
+    private static void renameInitUpper() {
+        int totalFile = 0;
+        int procFile = 0;
+        String pRoot = NameEditor.FULL_ROOT;
+        File dirRoot = new File(pRoot);
+        if (!dirRoot.isDirectory()) {
+            TransLog.getLogger().info("Path name error.");
+            TransLog.getLogger().info("Result: False.");
+        }
+        
+        for (File aFile : dirRoot.listFiles()) {
+            if (aFile.isFile()) {
+                char[] replacedChars = aFile.getName().toLowerCase().toCharArray();
+                for (int iChar = 0; iChar < replacedChars.length; iChar++) {
+                    if (((iChar == 0) || (replacedChars[iChar-1] == 32))
+                            &&((96<replacedChars[iChar]) && (replacedChars[iChar]<123))) {
+                        replacedChars[iChar]-=32;
+                    }
+                }
+                String replacedName = String.valueOf(replacedChars);
+                totalFile++;
+                if (!aFile.getName().equals(replacedName)) {
+                    procFile++;
+                    if (!aFile.renameTo(new File(pRoot + replacedName))) {
+                        TransLog.getLogger().info(aFile.getName() + " -e> " + replacedName);
+                        TransLog.getLogger().info("Result: False.");
+                    }
+                    TransLog.getLogger().info(aFile.getName() + " -> " + replacedName);
+                }
+            }
+        }
+        TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
+        TransLog.getLogger().info("Result: True.");
     }
     
     public boolean renamePathFileSwapDate() {
@@ -384,10 +419,19 @@ public class NameEditor {
     
     public static void renameSpecialReplace() {
         String[][] replaceOnce = {
-                { " \\(2016\\) TPB",
-                ""},
-                { "\\.cbr",
-                " TPB (2016).cbr"},
+//              { "Star Trek_ ([A-Za-z0-9'\\. ]+) (\\d{1,3}) - ([A-Za-z&-\\. ]+)\\.(epub|mobi)", 
+//              "Star Trek - $1 00$2 ($3).$4" }, 
+//              { "([A-Za-z0-9'\\. ]+) - ([A-Za-z0-9',&!_\\. ]+) \\(([A-Za-z&-\\. ]+)\\)\\.(epub|mobi)", 
+//              "$1 ($3).$4" }, 
+//                  { "Star Trek Myriad Universes - ([A-Za-z0-9'_!\\- ]+)\\.(epub|mobi)",
+//                  "Star Trek - Myriad Universes $1.$2" }, 
+//              { "Star Trek_ ([A-Za-z0-9'_!\\- ]+) - ([A-Za-z&-\\. ]+)\\.(epub|mobi)",
+//              "Star Trek - $1 ($2).$3" }, 
+//              { "\\(([A-Za-z0-9 ]+) - ([A-Za-z0-9 &\\.]+)\\)",
+//              "- $1 ($2)" }, 
+//                { "For Extreme Heroes v(\\d) (\\d{2})", "for Extreme Heroes v0$1 0$2" },
+         { "Digital -",
+         "Digital"},
         };
 
         TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
@@ -396,14 +440,23 @@ public class NameEditor {
     public static void cutHead() {
         TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameCutHead() + ".");
     }
+    
+    public static void renameTest() {
+        System.out.println(
+                new String("Star Trek_ The Original Series - 0 - Mission to Horatius - Mack Reynolds.epub")
+                .replaceAll("Star Trek_ ([A-Za-z0-9' ]+) - (\\d{1,3}) - ([A-Za-z0-9' ]+) - ([A-Za-z&\\. ]+)\\.(epub|mobi)", 
+                        "Star Trek - $1 $2 - $3 ($4).$5"));
+    }
 
     public static void main(String[] args) {
         //cutHead();
         renameNormalize();
-        //renameSpecialReplace();
+        renameSpecialReplace();
+        //renameInitUpper();
         //renameComic07();
         //renamePushDate();
         //renameUnPushDate();
+        //renameTest();
     }
     
 }
