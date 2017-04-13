@@ -32,6 +32,10 @@ public class NameEditor {
     //private static final String FULL_ROOT = "G:\\Book\\TFLib\\A2013\\B0015\\";
     private String rootDir;
     private String[][] replaceTemplates = {
+            {"\\+", " "},
+            {"%28", "("},
+            {"%29", ")"},
+            {"%23", "#"},
             {"_2C ", ", "},
             {"_\\.", ")."},
             {"___", ") ("},
@@ -430,8 +434,12 @@ public class NameEditor {
 //              { "\\(([A-Za-z0-9 ]+) - ([A-Za-z0-9 &\\.]+)\\)",
 //              "- $1 ($2)" }, 
 //                { "For Extreme Heroes v(\\d) (\\d{2})", "for Extreme Heroes v0$1 0$2" },
-         { "Digital -",
-         "Digital"},
+//                { "Immortal Iron Fist",
+//                "The Immortal Iron Fist"},
+//                { "Fist",
+//                "Fist v05 - Escape from the Eighth City"},
+//                { "\\(C2C\\)",
+//                "(c2c)"}, 
         };
 
         TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");

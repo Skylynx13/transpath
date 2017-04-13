@@ -43,9 +43,9 @@ public class JTreeFrame extends JFrame {
     DefaultMutableTreeNode root;
 
 	public JTreeFrame() {
-	    initJTree();
 	    initMenuBar();
-	    
+	    initJTree();
+        
 	}
 
     @SuppressWarnings({ "serial", "unused" })
@@ -55,6 +55,13 @@ public class JTreeFrame extends JFrame {
 	    
         JMenu sysMenu = new JMenu("Sys");
         menuBar.add(sysMenu);
+        Action reloadAction = new AbstractAction("Reload") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                initJTree();
+            }
+        };
+        JMenuItem sysReloadItem = sysMenu.add(reloadAction);
         Action exitAction = new AbstractAction("Exit") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -136,7 +143,9 @@ public class JTreeFrame extends JFrame {
 		cp.setLayout(new BorderLayout());
         
         StoreList aList = new StoreList();
-        aList.load(FileUtils.storeNameOfVersion(TransProp.get("CURR_VER")));
+        String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get("CURR_VER"));
+        aList.load(storeNameOfVersion);
+        TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
         NodeTree ntree1 = NodeTree.buildFromList(aList);
         ntree1.recursivelySort();
 		jtree1 = new JTree(ntree1);
@@ -185,6 +194,8 @@ public class JTreeFrame extends JFrame {
 		mPane.setDividerLocation(0.5);
 		mPane.setDividerSize(8);
 		cp.add(mPane, BorderLayout.CENTER);
+		
+		this.setVisible(true);
 	}
 	
 	@SuppressWarnings("unused")
