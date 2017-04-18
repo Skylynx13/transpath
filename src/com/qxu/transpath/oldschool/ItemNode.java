@@ -8,17 +8,6 @@
  * Date:Mar 13, 2014 12:07:10 AM
  * 
  */
-/**
- * Copyright (c) 2014,TravelSky. 
- * All Rights Reserved.
- * TravelSky CONFIDENTIAL
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath
- * File Name:ItemNode.java
- * Date:Mar 13, 2014 12:07:10 AM
- * 
- */
 package com.qxu.transpath.oldschool;
 
 import java.util.Iterator;

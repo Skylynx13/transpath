@@ -142,6 +142,7 @@ public class NameEditor {
         return true;
     }
     
+    @SuppressWarnings("unused")
     private static void renameInitUpper() {
         int totalFile = 0;
         int procFile = 0;

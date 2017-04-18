@@ -1,14 +1,3 @@
-/**
- * Copyright (c) 2014,TravelSky. 
- * All Rights Reserved.
- * TravelSky CONFIDENTIAL
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath
- * File Name:TBranch.java
- * Date:Mar 12, 2014 11:34:51 PM
- * 
- */
 package com.qxu.transpath.oldschool;
 
 import com.qxu.transpath.utils.TransConst;
