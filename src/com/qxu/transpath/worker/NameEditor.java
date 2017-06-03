@@ -439,8 +439,8 @@ public class NameEditor {
 //                "The Immortal Iron Fist"},
 //                { "Fist",
 //                "Fist v05 - Escape from the Eighth City"},
-//                { "\\(C2C\\)",
-//                "(c2c)"}, 
+//              { "([A-Za-z- ]+) (\\(\\d{4}\\)) ([\\dof \\(\\)]+)(\\.cbr)", 
+//              "$1 $3 $2$4" }, 
         };
 
         TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
