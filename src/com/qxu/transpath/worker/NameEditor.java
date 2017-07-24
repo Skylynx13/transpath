@@ -441,6 +441,8 @@ public class NameEditor {
 //                "Fist v05 - Escape from the Eighth City"},
 //              { "([A-Za-z- ]+) (\\(\\d{4}\\)) ([\\dof \\(\\)]+)(\\.cbr)", 
 //              "$1 $3 $2$4" }, 
+              { "([A-Za-z- ]+), (\\d{4}-\\d{2}-\\d{2}) \\(([ 0-9]+)\\) (\\(Digital\\) \\(Glorith-HD\\)\\.cbz)", 
+              "$1 0$3 ($2) $4" }, 
         };
 
         TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
