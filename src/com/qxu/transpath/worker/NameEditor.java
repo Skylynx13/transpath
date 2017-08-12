@@ -28,6 +28,7 @@ import com.qxu.transpath.utils.TransLog;
  */
 
 public class NameEditor {
+    boolean CHANGE = true;
     private static final String FULL_ROOT = "D:\\Book\\TFLib\\new\\full\\";
     //private static final String FULL_ROOT = "G:\\Book\\TFLib\\A2013\\B0015\\";
     private String rootDir;
@@ -98,7 +99,9 @@ public class NameEditor {
             { " 03\\.cbz", " 003.cbz" }, 
             { " 04\\.cbz", " 004.cbz" }, 
             { " 05\\.cbz", " 005.cbz" }, 
-            { " 06\\.cbz", " 006.cbz" }};
+            { " 06\\.cbz", " 006.cbz" },
+            { "([-+'A-Za-z0-9 ]+) (\\d{2}) ([-A-Za-z0-9 \\(\\)\\.]+)", "$1 0$2 $3" }
+        };
         
     public NameEditor(String root) {
         this.rootDir=root;
@@ -130,7 +133,7 @@ public class NameEditor {
                 totalFile++;
                 if (!aFile.getName().equals(replacedName)) {
                     procFile++;
-                    if (!aFile.renameTo(new File(pRoot + replacedName))) {
+                    if (CHANGE && !aFile.renameTo(new File(pRoot + replacedName))) {
                         TransLog.getLogger().info(aFile.getName() + " -e> " + replacedName);
                         return false;
                     }
@@ -441,8 +444,8 @@ public class NameEditor {
 //                "Fist v05 - Escape from the Eighth City"},
 //              { "([A-Za-z- ]+) (\\(\\d{4}\\)) ([\\dof \\(\\)]+)(\\.cbr)", 
 //              "$1 $3 $2$4" }, 
-              { "([A-Za-z- ]+), (\\d{4}-\\d{2}-\\d{2}) \\(([ 0-9]+)\\) (\\(Digital\\) \\(Glorith-HD\\)\\.cbz)", 
-              "$1 0$3 ($2) $4" }, 
+//                { "([A-Za-z- ]+), (\\d{4}-\\d{2}-\\d{2}) \\(([ 0-9]+)\\) (\\(Digital\\) \\(Glorith-HD\\)\\.cbz)", 
+//                "$1 0$3 ($2) $4" }, 
         };
 
         TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
