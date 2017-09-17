@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="17" failures="0" name="com.qxu.transpath.oldschool.NodeListTest" time="0.034" errors="0" skipped="0">
+<testsuite tests="17" failures="0" name="com.qxu.transpath.oldschool.NodeListTest" time="0.007" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="D:\app\jdk1.8.0_131\jre\bin"/>
@@ -46,7 +46,7 @@
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="D:\app\jdk1.8.0_131\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install -e"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="zh"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -66,18 +66,18 @@
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="combineTest_AHJ_BI" time="0"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromFileTest" time="0"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="combineTest_HAJ_AHBI" time="0"/>
-  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="storageKeepingTest" time="0.033"/>
+  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="storageKeepingTest" time="0.002"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="sortByNodeNameTest" time="0"/>
-  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromRootTest" time="0.001"/>
+  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromRootTest" time="0.002"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="sortByBranchNameTest_1st" time="0"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="sortByBranchNameTest_2nd" time="0"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="findNodeByNameTest" time="0"/>
-  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromFileTest_File_Corrupted" time="0"/>
+  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromFileTest_File_Corrupted" time="0.001"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromFileTest_No_Branches" time="0"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="combineTest_AHA_AHB" time="0"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="combineTest_AHA_AHBI" time="0"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="combineTest_AHAJ_AHBI" time="0"/>
   <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromFileTest_Triple_Colon" time="0"/>
-  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="checkDuplicatedNodeTest" time="0"/>
-  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromFileTest_Double_Colon" time="0"/>
+  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="checkDuplicatedNodeTest" time="0.001"/>
+  <testcase classname="com.qxu.transpath.oldschool.NodeListTest" name="buildFromFileTest_Double_Colon" time="0.001"/>
 </testsuite>

@@ -5,7 +5,35 @@
 	<artifactId>transpath</artifactId>
 	<version>1.0</version>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<pluginManagement>
+		  <plugins>
+		    <plugin>
+		      <groupId>org.eclipse.m2e</groupId>
+		      <artifactId>lifecycle-mapping</artifactId>
+		      <version>1.0.0</version>
+		      <configuration>
+		        <lifecycleMappingMetadata>
+		          <pluginExecutions>
+		            <pluginExecution>
+		              <pluginExecutionFilter>
+		                <groupId>org.apache.maven.plugins</groupId>
+		                <artifactId>maven-dependency-plugin</artifactId>
+		                <versionRange>[2.0,)</versionRange>
+		                <goals>
+		                  <goal>copy-dependencies</goal>
+		                </goals>
+		              </pluginExecutionFilter>
+		              <action>
+		                <execute />
+		              </action>
+		            </pluginExecution>
+		          </pluginExecutions>
+		        </lifecycleMappingMetadata>
+		      </configuration>
+		    </plugin>
+		  </plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -19,12 +47,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<configuration>
-					<outputDirectory>${project.build.directory}/lib</outputDirectory>
-					<excludeTransitive>false</excludeTransitive> <!-- 表示是否不包含间接依赖的包 -->
-					<stripVersion>false</stripVersion> <!-- 去除版本信息 -->
-				</configuration>
-<!-- 
+				<version>2.6</version>
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
@@ -38,15 +61,12 @@
 							<stripVersion>false</stripVersion>
 						</configuration>
 					</execution>
-				</executions> -->
+				</executions>
 			</plugin>
-
-			<!-- 项目资源插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
-				<!-- 
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -88,31 +108,24 @@
 							</resources>
 						</configuration>
 					</execution>
-				</executions> -->
+				</executions>
 			</plugin>
-
-			<!-- 打包插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.6</version>
 				<configuration>
 					<archive>
-						<!-- 生成MANIFEST.MF的设置 -->
 						<manifest>
-							<!-- 为依赖包添加路径, 这些路径会写在MANIFEST文件的Class-Path下 -->
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<!-- jar启动入口类 -->
 							<mainClass>com.qxu.transpath.ui.JTreeFrame</mainClass>
 						</manifest>
 						<manifestEntries>
-							<!-- 在Class-Path下添加配置文件的路径 -->
 							<Class-Path>conf/</Class-Path>
 						</manifestEntries>
 					</archive>
 					<includes>
-						<!-- 打jar包时，只打包class文件 -->
 						<include>**/*.class</include>
 					</includes>
 				</configuration>
@@ -136,9 +149,9 @@
 			<version>1.10</version>
 		</dependency>
 		<dependency>
-		    <groupId>junit</groupId>
-		    <artifactId>junit</artifactId>
-		    <version>4.12</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
 		</dependency>
 	</dependencies>
 </project>

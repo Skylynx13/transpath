@@ -32,24 +32,30 @@ import com.qxu.transpath.utils.FileUtils;
 
 public class ArrangerTest {
     
+    private static final String TEST_RESOURCES_LOC = "src/test/resources/tst/";
+    
+    private String testResource(String fileName) {
+        return (TEST_RESOURCES_LOC + fileName);
+    }
+    
     @Test
     public void appendToFileTest() {
         Arranger argr = new Arranger();
-        int n = argr.readFromFile("src/test/resource/tst/ArrangerTest_raw.txt").sort().merge().writeToFile("src/test/resource/tst/ArrangerTest_appendToFileTest.txt");
+        int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_appendToFileTest.txt"));
         assertEquals(31, n);
-        assertEquals(true, FileUtils.compareFileBytes("src/test/resource/tst/ArrangerTest_appendToFileTest.txt", "src/test/resource/tst/ArrangerTest_task_000.txt"));
+        assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendToFileTest.txt"), testResource("ArrangerTest_task_000.txt")));
         argr.clear();
-        n = argr.readFromFile("src/test/resource/tst/ArrangerTest_raw.txt").appendToFile("src/test/resource/tst/ArrangerTest_appendToFileTest.txt");
+        n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).appendToFile(testResource("ArrangerTest_appendToFileTest.txt"));
         assertEquals(35, n);
-        assertEquals(true, FileUtils.compareFileBytes("src/test/resource/tst/ArrangerTest_appendToFileTest.txt", "src/test/resource/tst/ArrangerTest_task_004.txt"));
+        assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendToFileTest.txt"), testResource("ArrangerTest_task_004.txt")));
     }
 
     @Test
     public void readSortMergeWriteTest_raw_task() {
         Arranger argr = new Arranger();
-        int n = argr.readFromFile("src/test/resource/tst/ArrangerTest_raw.txt").sort().merge().writeToFile("src/test/resource/tst/ArrangerTest_task.txt");
+        int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_task.txt"));
         assertEquals(31, n);
-        assertEquals(true, FileUtils.compareFileBytes("src/test/resource/tst/ArrangerTest_task.txt", "src/test/resource/tst/ArrangerTest_task_000.txt"));
+        assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_task.txt"), testResource("ArrangerTest_task_000.txt")));
     }
 
     @Test

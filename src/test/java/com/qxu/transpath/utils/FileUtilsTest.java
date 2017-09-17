@@ -31,48 +31,54 @@ import org.junit.Test;
  */
 public class FileUtilsTest {
 
+    private static final String TEST_RESOURCES_LOC = "src/test/resources/tst/";
+    
+    private String testResource(String fileName) {
+        return (TEST_RESOURCES_LOC + fileName);
+    }
+        
     @Test
     public void compareFileBytesTest_same_path() {
         assertEquals(true, FileUtils.compareFileBytes(
-                "src/test/resource/tst/ArrangerTest_task_000.txt",
-                "src/test/resource/tst/ArrangerTest_task_000.txt"));
+                testResource("ArrangerTest_task_000.txt"),
+                testResource("ArrangerTest_task_000.txt")));
     }
 
     @Test
     public void compareFileBytesTest_same_contents() {
         assertEquals(true, FileUtils.compareFileBytes(
-                "src/test/resource/tst/ArrangerTest_task_000.txt",
-                "src/test/resource/tst/ArrangerTest_task_001.txt"));
+                testResource("ArrangerTest_task_000.txt"),
+                testResource("ArrangerTest_task_001.txt")));
     }
 
     @Test
     public void compareFileBytesTest_different_length() {
         assertEquals(false, FileUtils.compareFileBytes(
-                "src/test/resource/tst/ArrangerTest_task_000.txt",
-                "src/test/resource/tst/ArrangerTest_task_002.txt"));
+                testResource("ArrangerTest_task_000.txt"),
+                testResource("ArrangerTest_task_002.txt")));
     }
 
     @Test
     public void compareFileBytesTest_different_contents() {
         assertEquals(false, FileUtils.compareFileBytes(
-                "src/test/resource/tst/ArrangerTest_task_000.txt",
-                "src/test/resource/tst/ArrangerTest_task_003.txt"));
+                testResource("ArrangerTest_task_000.txt"),
+                testResource("ArrangerTest_task_003.txt")));
     }
 
     @Test
     public void getFileSizeTest_file_size() {
-        assertEquals(9445, FileUtils.getFileSize(new File("src/test/resource/tst/ArrangerTest_raw.txt")));
-        assertEquals(8047, FileUtils.getFileSize(new File("src/test/resource/tst/ArrangerTest_task_000.txt")));
-        assertEquals(7715, FileUtils.getFileSize(new File("src/test/resource/tst/ArrangerTest_task_002.txt")));
-        assertEquals( 183, FileUtils.getFileSize(new File("src/test/resource/tst/mergeTest_source_001.txt")));
+        assertEquals(9445, FileUtils.getFileSize(new File(testResource("ArrangerTest_raw.txt"))));
+        assertEquals(8047, FileUtils.getFileSize(new File(testResource("ArrangerTest_task_000.txt"))));
+        assertEquals(7715, FileUtils.getFileSize(new File(testResource("ArrangerTest_task_002.txt"))));
+        assertEquals( 183, FileUtils.getFileSize(new File(testResource("mergeTest_source_001.txt"))));
     }
     @Test
     public void getFileSizeTest_dir_size() {
-        assertEquals(53706, FileUtils.getFileSize(new File("src/test/resource/tst/GetFileSizeTest")));
+        assertEquals(53706, FileUtils.getFileSize(new File(testResource("GetFileSizeTest"))));
     }
     @Test
     public void clearFileTest() {
-        String fn = "src/test/resource/tst/ClearTest_000.txt";
+        String fn = testResource("ClearTest_000.txt");
         
         PrintWriter pw = null;
         try {
@@ -90,8 +96,8 @@ public class FileUtilsTest {
     }
     @Test
     public void copyFileBytesTest() {
-        String fn1 = "src/test/resource/tst/CopyTest_001.txt";
-        String fn2 = "src/test/resource/tst/CopyTest_002.txt";
+        String fn1 = testResource("CopyTest_001.txt");
+        String fn2 = testResource("CopyTest_002.txt");
         File f1 = new File(fn1);
         File f2 = new File(fn2);
         
@@ -105,9 +111,9 @@ public class FileUtilsTest {
     
     @Test
     public void catFileBytesTest() {
-        String fn1 = "src/test/resource/tst/CatTest_001.txt";
-        String fn2 = "src/test/resource/tst/CatTest_002.txt";
-        String fn3 = "src/test/resource/tst/CatTest_003.txt";
+        String fn1 = testResource("CatTest_001.txt");
+        String fn2 = testResource("CatTest_002.txt");
+        String fn3 = testResource("CatTest_003.txt");
         File f1 = new File(fn1);
         File f2 = new File(fn2);
         File f3 = new File(fn3);
@@ -126,9 +132,9 @@ public class FileUtilsTest {
     
     @Test
     public void catFileBytesTest_copy_append() {
-        String fn1 = "src/test/resource/tst/CatTest_copy_append_001.txt";
-        String fn2 = "src/test/resource/tst/CatTest_copy_append_002.txt";
-        String fn3 = "src/test/resource/tst/CatTest_copy_append_003.txt";
+        String fn1 = testResource("CatTest_copy_append_001.txt");
+        String fn2 = testResource("CatTest_copy_append_002.txt");
+        String fn3 = testResource("CatTest_copy_append_003.txt");
         File f1 = new File(fn1);
         File f2 = new File(fn2);
         File f3 = new File(fn3);
@@ -150,25 +156,25 @@ public class FileUtilsTest {
     public void getFileMimeTypeTest() {
         //Look up: ${JRE_HOME}\lib\content-types.properties
         long tm1 = System.currentTimeMillis();
-        assertEquals("text/plain", FileUtils.getFileMimeType("src/test/resource/tst/getFileMimeType_000.txt"));
+        assertEquals("text/plain", FileUtils.getFileMimeType(testResource("getFileMimeType_000.txt")));
         System.out.println("getFileMimeTypeTest URLConnection: " + (
                 System.currentTimeMillis()-tm1) + " ms.");
-        assertEquals("text/qxu", FileUtils.getFileMimeType("src/test/resource/tst/getFileMimeType_001.qxu"));
-        assertEquals("archive/roshal", FileUtils.getFileMimeType("src/test/resource/tst/getFileMimeType_002.rar"));
-        assertEquals("archive/comic", FileUtils.getFileMimeType("src/test/resource/tst/getFileMimeType_003.cbr"));
-        assertEquals("archive/comic", FileUtils.getFileMimeType("src/test/resource/tst/getFileMimeType_004.cbz"));
+        assertEquals("text/qxu", FileUtils.getFileMimeType(testResource("getFileMimeType_001.qxu")));
+        assertEquals("archive/roshal", FileUtils.getFileMimeType(testResource("getFileMimeType_002.rar")));
+        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_003.cbr")));
+        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_004.cbz")));
     }
     
     @Test
     public void getLastModifiedStringTest() {
-        assertEquals("2015-03-19 14:11:42.114", FileUtils.getLastModifiedString("src/test/resource/tst/getLastModifiedString_000.txt"));
+        assertEquals("2015-03-19 14:11:42.114", FileUtils.getLastModifiedString(testResource("getLastModifiedString_000.txt")));
     }
     
     @SuppressWarnings("unused")
     @Test
     public void getRarCommentTest() {
-        String fn1 = "src/test/resource/tst/getSetRarCommentTest.rar";
-        String fn2 = "src/test/resource/tst/getSetZipCommentTest.zip";
+        String fn1 = testResource("getSetRarCommentTest.rar");
+        String fn2 = testResource("getSetZipCommentTest.zip");
         File f1 = new File(fn1);
 //        try {
 //            ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(fn2));

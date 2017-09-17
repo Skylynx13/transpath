@@ -13,6 +13,7 @@ import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
+import com.qxu.transpath.worker.NameEditor;
 import com.qxu.transpath.worker.PubKeeper;
 import com.qxu.transpath.worker.StoreKeeper;
 import com.qxu.transpath.worker.TaskKeeper;
@@ -91,6 +92,16 @@ public class JTreeFrame extends JFrame {
             }
         };
         taskSpecItem.addActionListener(listenerSpec);
+        JMenuItem taskNameItem = new JMenuItem("Name Revise");
+        taskMenu.add(taskNameItem);
+        ActionListener listenerName = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NameEditor.renameNormalize();
+                NameEditor.renameSpecialReplace();
+            }
+        };
+        taskNameItem.addActionListener(listenerName);
 
         JMenu storeMenu = new JMenu("Store");
         menuBar.add(storeMenu);

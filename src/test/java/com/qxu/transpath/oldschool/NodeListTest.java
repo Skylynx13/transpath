@@ -38,10 +38,15 @@ import com.qxu.transpath.utils.TransConst;
  */
 
 public class NodeListTest {
+    private static final String TEST_RESOURCES_LOC = "src/test/resources/tst/";
+    
+    private String testResource(String fileName) {
+        return (TEST_RESOURCES_LOC + fileName);
+    }
 
     @Test
     public void buildFromRootTest() {
-        ArrayList<BranchesNode> nodes = NodeList.buildFromRoot("src/test/resource/qtest");
+        ArrayList<BranchesNode> nodes = NodeList.buildFromRoot("src/test/resources/qtest");
         assertEquals("tfile004.txt", nodes.get(0).name);
         assertEquals("/tdir001/tdir102/", nodes.get(0).getBranch(TransConst.BRANCH_1ST));
         assertEquals("tfile005.txt", nodes.get(1).name);
@@ -62,7 +67,7 @@ public class NodeListTest {
     
     @Test
     public void buildFromFileTest() {
-        ArrayList<BranchesNode> nodes = NodeList.buildFromFile("src/test/resource/tst/NodeListTest_buildFromFileTest001.txt");
+        ArrayList<BranchesNode> nodes = NodeList.buildFromFile(testResource("NodeListTest_buildFromFileTest001.txt"));
         assertEquals("ABCDEFG.cbr", nodes.get(0).name);
         assertEquals("/abc/def/ghijklmn/", nodes.get(0).getBranch(TransConst.BRANCH_1ST));
         assertEquals("HIJKLMN.cbz", nodes.get(1).name);
@@ -71,22 +76,22 @@ public class NodeListTest {
     
     @Test
     public void buildFromFileTest_Double_Colon() {
-        assertEquals(null, NodeList.buildFromFile("src/test/resource/tst/NodeListTest_buildFromFileTest002.txt"));
+        assertEquals(null, NodeList.buildFromFile(testResource("NodeListTest_buildFromFileTest002.txt")));
     }
     
     @Test
     public void buildFromFileTest_Triple_Colon() {
-        assertEquals(null, NodeList.buildFromFile("src/test/resource/tst/NodeListTest_buildFromFileTest005.txt"));
+        assertEquals(null, NodeList.buildFromFile(testResource("NodeListTest_buildFromFileTest005.txt")));
     }
     
     @Test
     public void buildFromFileTest_File_Corrupted() {
-        assertEquals(null, NodeList.buildFromFile("src/test/resource/tst/NodeListTest_buildFromFileTest003.txt"));
+        assertEquals(null, NodeList.buildFromFile(testResource("NodeListTest_buildFromFileTest003.txt")));
     }
     
     @Test
     public void buildFromFileTest_No_Branches() {
-        ArrayList<BranchesNode> nodes = NodeList.buildFromFile("src/test/resource/tst/NodeListTest_buildFromFileTest004.txt");
+        ArrayList<BranchesNode> nodes = NodeList.buildFromFile(testResource("NodeListTest_buildFromFileTest004.txt"));
         assertEquals("ABCDEFG.cbr", nodes.get(0).name);
         assertEquals(null, nodes.get(0).getBranch(TransConst.BRANCH_1ST));
         assertEquals("HIJKLMN.cbz", nodes.get(1).name);
@@ -95,14 +100,14 @@ public class NodeListTest {
     
     @Test
     public void storageKeepingTest() {
-        String root = "src/test/resource/qtest/";
-        NodeList.keepList("src/test/resource/tst/pflist.txt", NodeList.buildFromRoot(root));
-        NodeList.keepList("src/test/resource/tst/pflist1st.txt", NodeList.buildFromFile("src/test/resource/tst/pflist.txt"));
+        String root = "src/test/resources/qtest/";
+        NodeList.keepList(testResource("pflist.txt"), NodeList.buildFromRoot(root));
+        NodeList.keepList(testResource("pflist1st.txt"), NodeList.buildFromFile(testResource("pflist.txt")));
         Scanner sc1 = null;
         Scanner sc2 = null;
         try {
-            sc1 = new Scanner(new FileReader("src/test/resource/tst/pflist.txt"));
-            sc2 = new Scanner(new FileReader("src/test/resource/tst/pflist1st.txt"));
+            sc1 = new Scanner(new FileReader(testResource("pflist.txt")));
+            sc2 = new Scanner(new FileReader(testResource("pflist1st.txt")));
             int cnt = 0;
             while (sc1.hasNext() && sc2.hasNext()) {
                 String line1 = sc1.nextLine().trim();
@@ -122,7 +127,7 @@ public class NodeListTest {
     @Test 
     public void findNodeByNameTest() {
         BranchesNode node = NodeList.findBranchesNodeByName(
-                NodeList.buildFromFile("src/test/resource/tst/NodeListTest_Default.txt"), 
+                NodeList.buildFromFile(testResource("NodeListTest_Default.txt")), 
                 "HIJKLMN.cbz");
         assertEquals(2, node.getId());
         assertEquals("HIJKLMN.cbz", node.name);
@@ -131,12 +136,12 @@ public class NodeListTest {
     
     @Test
     public void checkDuplicatedNodeTest() {
-        List<String> dupCheck = NodeList.checkDuplicatedBranchesNode(NodeList.buildFromFile("src/test/resource/tst/checkDuplicatedNodeTest_3.txt")); 
+        List<String> dupCheck = NodeList.checkDuplicatedBranchesNode(NodeList.buildFromFile(testResource("checkDuplicatedNodeTest_3.txt"))); 
         assertEquals(3, dupCheck.size());
         assertEquals("dup1", dupCheck.get(0));
         assertEquals("dup2", dupCheck.get(1));
         assertEquals("dup3", dupCheck.get(2));
-        dupCheck = NodeList.checkDuplicatedBranchesNode(NodeList.buildFromFile("src/test/resource/tst/checkDuplicatedNodeTest_0.txt"));
+        dupCheck = NodeList.checkDuplicatedBranchesNode(NodeList.buildFromFile(testResource("checkDuplicatedNodeTest_0.txt")));
         assertEquals(0, dupCheck.size());
     }
     
