@@ -1,7 +1,11 @@
 out/
 resource/
+src/main/resources/
+src/test/resources/
+target/
 .idea/
 *.iml
+*.sh
 .checkstyle
 .jupiter
 .pmd
