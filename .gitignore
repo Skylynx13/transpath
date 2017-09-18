@@ -1,5 +1,6 @@
 out/
 resource/
+target/
 .idea/
 *.iml
 .checkstyle
