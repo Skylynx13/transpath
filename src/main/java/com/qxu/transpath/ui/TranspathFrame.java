@@ -11,9 +11,11 @@
 package com.qxu.transpath.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -85,12 +87,24 @@ public class TranspathFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initJTree();
-                jtree1.validate();
-                jtree2.validate();
-                mPane.validate();
-                spaneLeft.validate();
-                spaneRight.validate();
-                cp.validate();
+//                jtree1.validate();
+//                //jtree1.updateUI();
+//                //jtree1.repaint();
+//                jtree2.validate();
+//                //jtree2.repaint();
+//                mPane.validate();
+//                //mPane.updateUI();
+//                //mPane.repaint();
+//                spaneLeft.validate();
+//                //spaneLeft.updateUI();
+//                //spaneLeft.repaint();
+//                spaneRight.validate();
+//                //spaneRight.updateUI();
+//                //spaneRight.repaint();
+//                cp.validate();
+//                //cp.updateUI();
+                //cp.repaint();
+                TransLog.getLogger().info("ok");
             }
         };
         JMenuItem sysReloadItem = sysMenu.add(reloadAction);
@@ -185,16 +199,82 @@ public class TranspathFrame extends JFrame {
         });
     }
     
-    public void initJTree() {
+    public void refreshJTree() {
+        this.remove(cp);
         cp = new JPanel();
         this.setSize(1200, 600);
         this.setTitle("Storage Archivist");
         this.add(cp);
 //        cp = (JPanel) this.getContentPane();
         cp.setLayout(new BorderLayout());
+//        cp.updateUI();
         
         StoreList aList = new StoreList();
         String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get("CURR_VER"));
+        aList.clear();
+        aList.load(storeNameOfVersion);
+        TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
+        NodeTree ntree1 = NodeTree.buildFromList(aList);
+        ntree1.recursivelySort();
+        jtree1 = new JTree(ntree1);
+        spaneLeft = new JScrollPane(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        spaneLeft.setViewportView(jtree1);
+        jtree1.revalidate();
+        
+        PubList bList = new PubList();
+        bList.load(FileUtils.pubNameOfVersion(TransProp.get("CURR_VER")));
+        NodeTree ntree2 = NodeTree.buildFromList(bList);
+        ntree2.recursivelySort();
+        jtree2 = new JTree(ntree2);
+
+        jtree2.setShowsRootHandles(true);
+        jtree2.setRootVisible(true);
+        jtree2.setEditable(true);
+        UIManager.getSystemLookAndFeelClassName();
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+            //UIManager.setLookAndFeel("javax.swing.plaf.mac.MacLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        SwingUtilities.updateComponentTreeUI(jtree2);
+        
+        spaneRight = new JScrollPane(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        spaneRight.setViewportView(jtree2);
+        jtree2.revalidate();
+        
+        mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spaneLeft, spaneRight);
+        mPane.setContinuousLayout(true);
+        mPane.setOneTouchExpandable(true);
+        mPane.setSize(super.getSize());
+        mPane.setDividerLocation(0.5);
+        mPane.setDividerSize(8);
+        cp.add(mPane, BorderLayout.CENTER);
+        
+        this.setVisible(true);
+    }
+    public void initJTree() {
+        this.setSize(1200, 600);
+        this.setTitle("Storage Archivist");
+        cp = (JPanel) this.getContentPane();
+        cp.removeAll();
+        cp.setLayout(new BorderLayout());
+        
+        StoreList aList = new StoreList();
+        String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get("CURR_VER"));
+        aList.clear();
         aList.load(storeNameOfVersion);
         TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
         NodeTree ntree1 = NodeTree.buildFromList(aList);
