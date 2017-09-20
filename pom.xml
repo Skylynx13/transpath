@@ -119,7 +119,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.qxu.transpath.ui.JTreeFrame</mainClass>
+							<mainClass>com.qxu.transpath.ui.TranspathFrame</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>conf/</Class-Path>
