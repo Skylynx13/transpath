@@ -11,12 +11,9 @@
 package com.qxu.transpath.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.util.Arrays;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
