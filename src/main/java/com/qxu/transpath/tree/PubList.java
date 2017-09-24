@@ -41,6 +41,10 @@ public class PubList extends NodeList {
     public PubList(PubList pList) {
         super(pList);
     }
+    
+    public PubList(String fileName) {
+        super(fileName);
+    }
 
     @Override
     public Node loadNode(String pLine) {

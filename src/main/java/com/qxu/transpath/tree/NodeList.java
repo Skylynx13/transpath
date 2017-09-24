@@ -55,6 +55,11 @@ public abstract class NodeList {
         recap();
     }
 
+    public NodeList(String fileName) {
+        nodeList = new ArrayList<Node>();
+        load(fileName);
+    }
+    
     public NodeList(ArrayList<Node> pList) {
         refreshVersion();
         nodeList = new ArrayList<Node>(pList);

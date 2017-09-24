@@ -58,16 +58,10 @@ import com.qxu.transpath.worker.TaskKeeper;
 public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    JPanel cp;
-    JFrame subFrame = new JFrame();
-    JTree jtree1;
-    JTree jtree2;
-    JSplitPane mPane;
-    JScrollPane spaneLeft;
-    JScrollPane spaneRight;
-    DefaultMutableTreeNode root;
 
     public TranspathFrame() {
+        this.setSize(1200, 600);
+        this.setTitle("Storage Archivist");
         initMenuBar();
         initJTree();
     }
@@ -84,24 +78,6 @@ public class TranspathFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initJTree();
-//                jtree1.validate();
-//                //jtree1.updateUI();
-//                //jtree1.repaint();
-//                jtree2.validate();
-//                //jtree2.repaint();
-//                mPane.validate();
-//                //mPane.updateUI();
-//                //mPane.repaint();
-//                spaneLeft.validate();
-//                //spaneLeft.updateUI();
-//                //spaneLeft.repaint();
-//                spaneRight.validate();
-//                //spaneRight.updateUI();
-//                //spaneRight.repaint();
-//                cp.validate();
-//                //cp.updateUI();
-                //cp.repaint();
-                TransLog.getLogger().info("ok");
             }
         };
         JMenuItem sysReloadItem = sysMenu.add(reloadAction);
@@ -196,108 +172,39 @@ public class TranspathFrame extends JFrame {
         });
     }
     
-    public void refreshJTree() {
-        this.remove(cp);
-        cp = new JPanel();
-        this.setSize(1200, 600);
-        this.setTitle("Storage Archivist");
-        this.add(cp);
-//        cp = (JPanel) this.getContentPane();
-        cp.setLayout(new BorderLayout());
-//        cp.updateUI();
-        
-        StoreList aList = new StoreList();
-        String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get("CURR_VER"));
-        aList.clear();
-        aList.load(storeNameOfVersion);
-        TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
-        NodeTree ntree1 = NodeTree.buildFromList(aList);
-        ntree1.recursivelySort();
-        jtree1 = new JTree(ntree1);
-        spaneLeft = new JScrollPane(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        spaneLeft.setViewportView(jtree1);
-        jtree1.revalidate();
-        
-        PubList bList = new PubList();
-        bList.load(FileUtils.pubNameOfVersion(TransProp.get("CURR_VER")));
-        NodeTree ntree2 = NodeTree.buildFromList(bList);
-        ntree2.recursivelySort();
-        jtree2 = new JTree(ntree2);
-
-        jtree2.setShowsRootHandles(true);
-        jtree2.setRootVisible(true);
-        jtree2.setEditable(true);
-        UIManager.getSystemLookAndFeelClassName();
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-            //UIManager.setLookAndFeel("javax.swing.plaf.mac.MacLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-        SwingUtilities.updateComponentTreeUI(jtree2);
-        
-        spaneRight = new JScrollPane(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        spaneRight.setViewportView(jtree2);
-        jtree2.revalidate();
-        
-        mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spaneLeft, spaneRight);
-        mPane.setContinuousLayout(true);
-        mPane.setOneTouchExpandable(true);
-        mPane.setSize(super.getSize());
-        mPane.setDividerLocation(0.5);
-        mPane.setDividerSize(8);
-        cp.add(mPane, BorderLayout.CENTER);
-        
-        this.setVisible(true);
-    }
     public void initJTree() {
-        this.setSize(1200, 600);
-        this.setTitle("Storage Archivist");
-        cp = (JPanel) this.getContentPane();
-        cp.removeAll();
-        cp.setLayout(new BorderLayout());
+        JPanel contentPanel = (JPanel) this.getContentPane();
+        contentPanel.removeAll();
+        contentPanel.setLayout(new BorderLayout());
         
-        StoreList aList = new StoreList();
         String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get("CURR_VER"));
-        aList.clear();
-        aList.load(storeNameOfVersion);
+        StoreList aList = new StoreList(storeNameOfVersion);
         TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
-        NodeTree ntree1 = NodeTree.buildFromList(aList);
-        ntree1.recursivelySort();
-        jtree1 = new JTree(ntree1);
-        spaneLeft = new JScrollPane(
+        NodeTree nodeTreeLeft = NodeTree.buildFromList(aList);
+        nodeTreeLeft.recursivelySort();
+        JTree jTreeLeft = new JTree(nodeTreeLeft);
+        JScrollPane spaneLeft = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        spaneLeft.setViewportView(jtree1);
-        jtree1.revalidate();
+        spaneLeft.setViewportView(jTreeLeft);
+        jTreeLeft.revalidate();
         
-        PubList bList = new PubList();
-        bList.load(FileUtils.pubNameOfVersion(TransProp.get("CURR_VER")));
-        NodeTree ntree2 = NodeTree.buildFromList(bList);
-        ntree2.recursivelySort();
-        jtree2 = new JTree(ntree2);
+        PubList bList = new PubList(FileUtils.pubNameOfVersion(TransProp.get("CURR_VER")));
+        NodeTree nodeTreeRight = NodeTree.buildFromList(bList);
+        nodeTreeRight.recursivelySort();
+        JTree jTreeRight = new JTree(nodeTreeRight);
 
-        jtree2.setShowsRootHandles(true);
-        jtree2.setRootVisible(true);
-        jtree2.setEditable(true);
+        jTreeRight.setShowsRootHandles(true);
+        jTreeRight.setRootVisible(true);
+        jTreeRight.setEditable(true);
+        
         UIManager.getSystemLookAndFeelClassName();
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
             //UIManager.setLookAndFeel("javax.swing.plaf.mac.MacLookAndFeel");
+            //UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -307,21 +214,21 @@ public class TranspathFrame extends JFrame {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        SwingUtilities.updateComponentTreeUI(jtree2);
+        SwingUtilities.updateComponentTreeUI(jTreeRight);
         
-        spaneRight = new JScrollPane(
+        JScrollPane spaneRight = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        spaneRight.setViewportView(jtree2);
-        jtree2.revalidate();
+        spaneRight.setViewportView(jTreeRight);
+        jTreeRight.revalidate();
         
-        mPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spaneLeft, spaneRight);
-        mPane.setContinuousLayout(true);
-        mPane.setOneTouchExpandable(true);
-        mPane.setSize(super.getSize());
-        mPane.setDividerLocation(0.5);
-        mPane.setDividerSize(8);
-        cp.add(mPane, BorderLayout.CENTER);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spaneLeft, spaneRight);
+        splitPane.setContinuousLayout(true);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setSize(super.getSize());
+        splitPane.setDividerLocation(0.5);
+        splitPane.setDividerSize(8);
+        contentPanel.add(splitPane, BorderLayout.CENTER);
         
         this.setVisible(true);
     }
@@ -368,8 +275,7 @@ public class TranspathFrame extends JFrame {
     }
     
     public static void main(String[] args) {
-        TranspathFrame tFrame = new TranspathFrame();
-        tFrame.setVisible(true);
+        new TranspathFrame();
     }
 
 }

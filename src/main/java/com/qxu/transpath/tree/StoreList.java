@@ -39,6 +39,12 @@ public class StoreList extends NodeList{
     
     public StoreList(StoreList pList) {
         super(pList);
+        calcFileSize();
+    }
+    
+    public StoreList(String fileName) {
+        super(fileName);
+        calcFileSize();
     }
     
     @Override
@@ -50,6 +56,10 @@ public class StoreList extends NodeList{
     @Override
     public void recap() {
         super.recap();
+        calcFileSize();
+    }
+
+    public void calcFileSize() {
         fileSize = 0;
         for (Node aNode : nodeList) {
             fileSize += ((StoreNode)aNode).length;
