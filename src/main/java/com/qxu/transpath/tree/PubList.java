@@ -56,7 +56,7 @@ public class PubList extends NodeList {
         return ((PubNode)pNode).keepNode();
     }
 
-    public void reorgOrder() {
+    public void reorder() {
         int newOrder = 0;
         String lastPath = "";
         for (Node aNode : nodeList) {

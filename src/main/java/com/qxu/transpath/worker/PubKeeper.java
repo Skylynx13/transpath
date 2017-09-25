@@ -46,8 +46,8 @@ public class PubKeeper {
         TransLog.getLogger().info("PubKeeper refreshPubList ends.");
     }
     
-    public static void mergeDup(HashMap<Integer, Integer> dupMap) {
-        String currVer = TransProp.get("CURR_VER");
+    private static void mergeDup(HashMap<Integer, Integer> dupMap) {
+        String currVer = TransProp.get(TransConst.VER_CURR);
         PubList pList = new PubList();
         pList.load(FileUtils.pubNameOfVersion(currVer));
         String newVer = DateUtils.formatDateTimeLongToday();
@@ -65,14 +65,14 @@ public class PubKeeper {
         pList.hitShelf(FileUtils.hitShelfList());
         pList.orderByPathAndName();
         lList.refreshPubId(pList.reorgId());
-        pList.reorgOrder();
+        pList.reorder();
     
         pList.keepFile(FileUtils.pubNameOfVersion(currVer));
         lList.keepFile(FileUtils.linkNameOfVersion(currVer));
     }
 
     public static void showStoreByPubId(ArrayList<Integer> pPubIdList) {
-        String currVer = TransProp.get("CURR_VER");
+        String currVer = TransProp.get(TransConst.VER_CURR);
         LinkList lnkList = new LinkList();
         lnkList.load(FileUtils.linkNameOfVersion(currVer));
         StoreList strList = new StoreList();
@@ -92,7 +92,7 @@ public class PubKeeper {
         long t0 = System.currentTimeMillis();
         TransLog.getLogger().info("CheckDup started...");
 
-        String currVer = TransProp.get("CURR_VER");
+        String currVer = TransProp.get(TransConst.VER_CURR);
         PubList pList = new PubList();
         pList.load(FileUtils.pubNameOfVersion(currVer));
         
@@ -146,7 +146,7 @@ public class PubKeeper {
      * checkLink: To find Free Id and Invalid Id for Store and Pub.<br/>
      */
     public static void checkLink() {
-        String pVer = TransProp.get("CURR_VER");
+        String pVer = TransProp.get(TransConst.VER_CURR);
         TransLog.getLogger().info("Checking version: " + pVer);
         StoreList sList = new StoreList();
         sList.load(FileUtils.storeNameOfVersion(pVer));
@@ -179,7 +179,7 @@ public class PubKeeper {
 
     // To know where a new pub probably belong to.
     public static void findSimilar(ArrayList<Integer> pPubIdList) {
-        String pVer = TransProp.get("CURR_VER");
+        String pVer = TransProp.get(TransConst.VER_CURR);
         TransLog.getLogger().info("Current version: " + pVer);
         PubList pList = new PubList();
         pList.load(FileUtils.pubNameOfVersion(pVer));
@@ -196,37 +196,4 @@ public class PubKeeper {
             }
         }
     }
-    
-    public static void main(String[] args) {
-        //TransLog.setClass(PubKeeper.class);
-//////        TransLog.getLogger().info("PubKeeper starts...");
-        //TransLog.setClass(TransLog.class);
-        //TransLog.info("PubKeeper startss...");
-        //TransLog.getLogger().info();
-        // pubInit();
-        // pubNameEdit();
-        // findPath();
-        //refreshPubList();
-        //checkLink();
-
-        //Change intA to intB.
-//////        HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();
-        //dupMap.put(61482, 61481);
-//////        mergeDup(dupMap);
-
-//        ArrayList<Integer> idList = new ArrayList<Integer>();
-//        idList.add(41289);
-//        idList.add(41290);
-//        idList.add(41291);
-//        idList.add(41292);
-//        idList.add(41293);
-//        showStoreByPubId(idList);
-
-        //checkDup();
-        
-        //findSimilar(idList);
-        
-//////        TransLog.getLogger().info("PubKeeper ends.");
-    }
-
 }

@@ -259,7 +259,7 @@ public class StoreKeeper {
         pubList.hitShelf(FileUtils.hitShelfList());
         pubList.orderByPathAndName();
         linkList.refreshPubId(pubList.reorgId());
-        pubList.reorgOrder();
+        pubList.reorder();
         
         linkList.orderByStoreId();
         linkList.reorgId();
@@ -336,9 +336,9 @@ public class StoreKeeper {
     public static void buildCombinedList() {
         TransLog.getLogger().info("StoreKeeper combining...");
         
-        String aTag = TransProp.get("A_TAG");
-        String[] bTags = TransProp.get("B_TAGS").split(",");
-        String oldVer = TransProp.get("CURR_VER");
+        String aTag = TransProp.get(TransConst.TAG_A);
+        String[] bTags = TransProp.get(TransConst.TAG_B).split(",");
+        String oldVer = TransProp.get(TransConst.VER_CURR);
         
         for(int bIndex = 0; bIndex < bTags.length; bIndex++) {
             bTags[bIndex] = bTags[bIndex].trim();
@@ -359,9 +359,9 @@ public class StoreKeeper {
     public static void testCombinedList() {
         TransLog.getLogger().info("StoreKeeper test combining...");
         
-        String aTag = TransProp.get("A_TAG");
-        String[] bTags = TransProp.get("B_TAGS").split(",");
-        String oldVer = TransProp.get("CURR_VER");
+        String aTag = TransProp.get(TransConst.TAG_A);
+        String[] bTags = TransProp.get(TransConst.TAG_B).split(",");
+        String oldVer = TransProp.get(TransConst.VER_CURR);
         
         for(int bIndex = 0; bIndex < bTags.length; bIndex++) {
             bTags[bIndex] = bTags[bIndex].trim();

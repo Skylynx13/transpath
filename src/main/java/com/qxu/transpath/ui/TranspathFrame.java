@@ -36,6 +36,7 @@ import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.SimpleNode;
 import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.utils.FileUtils;
+import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 import com.qxu.transpath.worker.NameEditor;
@@ -83,6 +84,9 @@ public class TranspathFrame extends JFrame {
         };
         JMenuItem sysReloadItem = sysMenu.add(reloadAction);
         
+        JSeparator sysSep = new JSeparator();
+        sysMenu.add(sysSep);
+        
         Action exitAction = new AbstractAction("Exit") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -114,9 +118,6 @@ public class TranspathFrame extends JFrame {
             }
         };
         taskSpecItem.addActionListener(listenerSpec);
-        
-        JSeparator taskSep = new JSeparator();
-        taskMenu.add(taskSep);
         
         JMenuItem taskNameItem = new JMenuItem("Name Revise");
         taskMenu.add(taskNameItem);
@@ -183,7 +184,7 @@ public class TranspathFrame extends JFrame {
         
         setLookAndFeel();
 
-        String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get("CURR_VER"));
+        String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR));
         StoreList aList = new StoreList(storeNameOfVersion);
         TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
         NodeTree nodeTreeLeft = NodeTree.buildFromList(aList);
@@ -195,7 +196,7 @@ public class TranspathFrame extends JFrame {
         spaneLeft.setViewportView(jTreeLeft);
         jTreeLeft.revalidate();
         
-        PubList bList = new PubList(FileUtils.pubNameOfVersion(TransProp.get("CURR_VER")));
+        PubList bList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
         NodeTree nodeTreeRight = NodeTree.buildFromList(bList);
         nodeTreeRight.recursivelySort();
         JTree jTreeRight = new JTree(nodeTreeRight);
