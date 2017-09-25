@@ -143,17 +143,6 @@ public class Arranger {
         return entries.size();
     }
     
-    public int writeIndexToFile(String fileName) {
-        try {
-            PrintWriter out = new PrintWriter(fileName);
-            out.println(this.toIndex());
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return entries.size();
-    }
-    
     public Arranger sort() {
         Collections.sort(entries);
         return this;
@@ -202,23 +191,13 @@ public class Arranger {
         if (this.entries == null) 
             return str;
         for (CdEntry cde:this.entries) {
-            str += cde.getName() + TransConst.LINE_LINKER;
+            str += cde.getName() + TransConst.LN;
             for (String cmt: cde.getComments()) {
-                str += cmt + TransConst.LINE_LINKER;
+                str += cmt + TransConst.LN;
             }
             for (String lnk: cde.getLinks()) {
-                str += lnk + TransConst.LINE_LINKER;
+                str += lnk + TransConst.LN;
             }
-        }
-        return str;
-    }
-
-    public String toIndex() {
-        String str = "";
-        if (this.entries == null) 
-            return str;
-        for (CdEntry cde:this.entries) {
-            str += cde.getName() + TransConst.LINE_LINKER;
         }
         return str;
     }
@@ -319,29 +298,6 @@ public class Arranger {
                 || line.matches("^\\s*This image has been resized.*$");
     }
     
-    public String findSameEntries(Arranger otherArranger) {
-        StringBuffer result = new StringBuffer();
-        int i1=0;
-        for (CdEntry cde1 : this.entries) {
-            i1++;
-            int i2 = 0;
-            for (CdEntry cde2 : otherArranger.entries) {
-                i2++;
-                String simpleName2 = StrUtils.getSimpleName(cde2.getName());
-                if (cde1.getName().equalsIgnoreCase(simpleName2) 
-                        || cde1.getName().startsWith(simpleName2)
-                        || simpleName2.startsWith(cde1.getName())) {
-                    result.append("New Line " + i1 + ": " + cde1.getName() + TransConst.LINE_LINKER
-                            +"Old Line " + i2 + ": " + cde2.getName() + TransConst.LINE_LINKER); 
-                }
-                if (i2%10000==0) {
-                    TransLog.getLogger().info("i1="+i1+"; i2="+i2);
-                }
-            }
-        }
-        return result.toString();
-    }
-
     public Arranger applyFilter(String[] keys) {
         Arranger newArranger = new Arranger();
         for (CdEntry currEntry : this.entries) {

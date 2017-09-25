@@ -19,7 +19,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Properties;
 
-import com.qxu.transpath.oldschool.TntKeeper;
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.SimpleNode;
@@ -62,16 +61,11 @@ public class FreeTester {
         NodeTree tree2 = new NodeTree(new SimpleNode("tree2"));
         tree2.addChild(node3);
         tree1.addChild(tree2);
-        TntKeeper tk1 = new TntKeeper();
-        System.out.println(tk1.listSomething(tree1));
-        System.out.println(tk1.listSomething(tree2));
         System.out.println(tree1.getNodePathName());
         System.out.println(tree2.getNodePathName());
         System.out.println(node1.getNodePathName());
         System.out.println(node2.getNodePathName());
         System.out.println(node3.getNodePathName());
-        System.out.println("===");
-        System.out.println(tk1.listAll(tree1));
         System.out.println("===");
     }
     public void testList() {
@@ -217,7 +211,7 @@ public class FreeTester {
         
         System.out.println(FreeTester.addOne(5));
         
-        System.out.println(TransProp.get("CONFIG_PATH"));
+        System.out.println(TransProp.get(TransConst.LOC_CONFIG));
 
         System.out.println(System.getProperty("qxu.test"));
 

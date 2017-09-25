@@ -29,7 +29,7 @@ import java.util.Properties;
  */
 
 public class TransProp {
-    // Retrieve file on every get.
+    // Retrieve file on every get so that props can change dynamically.
     public static String get(String propName) {
         Properties tProps = new Properties();
         try {

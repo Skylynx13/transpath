@@ -38,7 +38,7 @@ public class CodeDigger {
     private static final String[] KEYS_BIG_ENTRY = { "(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB)" };
 
     public static void digKeywordFileDefault(String src, String target) {
-        CodeDigger.digKeywordFile(TransProp.get("CONFIG_PATH") + TransConst.TP_KEYWORDS, 
+        CodeDigger.digKeywordFile(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_KEYWORDS, 
                                   src, target);
     }
 
@@ -89,7 +89,7 @@ public class CodeDigger {
     public static void digAllFreshSpecific(String[] keys, String target) {
         long t0 = System.currentTimeMillis();
         FileUtils.clearFile(target);
-        File path = new File(TransProp.get("TP_HOME"));
+        File path = new File(TransProp.get(TransConst.LOC_TASK));
         int total = 0;
         TransLog.getLogger().info("Digging keywords " + Arrays.toString(keys));
         for (File file : path.listFiles(new FilenameFilter() {
@@ -102,22 +102,5 @@ public class CodeDigger {
         }
         TransLog.getLogger().info("Total: " + total);
         TransLog.getLogger().info("Time : " + (System.currentTimeMillis() - t0) + "ms");
-    }
-
-//    public static void clearFile(String fileName) {
-//        try {
-//            PrintWriter out = new PrintWriter(fileName);
-//            out.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    public static void main(String[] args) {
-//        CodeDigger.digKeywordFileDefault(TransProp.get("TP_HOME") + "fresh.txt", 
-//                                         TransProp.get("TP_HOME") + "track001.txt");
-        // CodeDigger.pickoutBigEntries(TransProp.get("TP_HOME") + "task20160331_stone.txt", 
-        //                              TransProp.get("TP_HOME") + "track001.txt");
-        //FileUtils.clearFile(TransProp.get("TP_HOME") + "track002.txt");
     }
 }

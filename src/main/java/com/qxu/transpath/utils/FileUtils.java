@@ -444,23 +444,23 @@ public class FileUtils {
     }
 
     public static String storeNameOfVersion(String version) {
-        return TransProp.get("SL_HOME") + "StoreList_" + version + ".txt";
+        return TransProp.get(TransConst.LOC_LIST) + "StoreList_" + version + ".txt";
     }
 
     public static String pubNameOfVersion(String version) {
-        return TransProp.get("SL_HOME") + "PubList_" + version + ".txt";
+        return TransProp.get(TransConst.LOC_LIST) + "PubList_" + version + ".txt";
     }
 
     public static String linkNameOfVersion(String version) {
-        return TransProp.get("SL_HOME") + "LinkList_" + version + ".txt";
+        return TransProp.get(TransConst.LOC_LIST) + "LinkList_" + version + ".txt";
     }
 
     public static String storeNameOfTag(String aTag, String bTag) {
-        return TransProp.get("SL_HOME") + "B\\TFLib_" + aTag + "_" + bTag + ".txt";
+        return TransProp.get(TransConst.LOC_LIST) + "B\\TFLib_" + aTag + "_" + bTag + ".txt";
     }
     
     public static String hitShelfList() {
-        return TransProp.get("CONFIG_PATH") + TransConst.TP_HITSHELF;
+        return TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_HITSHELF;
     }
     
     public static String listFiles(String pathName) {

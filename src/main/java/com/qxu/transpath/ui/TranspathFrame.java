@@ -22,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
@@ -114,6 +115,9 @@ public class TranspathFrame extends JFrame {
         };
         taskSpecItem.addActionListener(listenerSpec);
         
+        JSeparator taskSep = new JSeparator();
+        taskMenu.add(taskSep);
+        
         JMenuItem taskNameItem = new JMenuItem("Name Revise");
         taskMenu.add(taskNameItem);
         ActionListener listenerName = new ActionListener() {
@@ -177,6 +181,8 @@ public class TranspathFrame extends JFrame {
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
         
+        setLookAndFeel();
+
         String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get("CURR_VER"));
         StoreList aList = new StoreList(storeNameOfVersion);
         TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
@@ -198,24 +204,6 @@ public class TranspathFrame extends JFrame {
         jTreeRight.setRootVisible(true);
         jTreeRight.setEditable(true);
         
-        UIManager.getSystemLookAndFeelClassName();
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-            //UIManager.setLookAndFeel("javax.swing.plaf.mac.MacLookAndFeel");
-            //UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-        SwingUtilities.updateComponentTreeUI(jTreeRight);
-        
         JScrollPane spaneRight = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -231,6 +219,21 @@ public class TranspathFrame extends JFrame {
         contentPanel.add(splitPane, BorderLayout.CENTER);
         
         this.setVisible(true);
+    }
+
+    private void setLookAndFeel() {
+        UIManager.getSystemLookAndFeelClassName();
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
     }
     
     @SuppressWarnings("unused")

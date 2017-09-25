@@ -22,6 +22,7 @@ import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.tree.StoreNode;
 import com.qxu.transpath.utils.DateUtils;
 import com.qxu.transpath.utils.FileUtils;
+import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 
@@ -39,59 +40,6 @@ import com.qxu.transpath.utils.TransProp;
  */
 
 public class PubKeeper {
-    @Deprecated
-    public static void pubInit() {
-        String srcName = TransProp.get("LB_HOME") + "TFLib_L20160715_Ref.txt";
-        String targetName = TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_000.txt";
-        PubList pubList = new PubList();
-        pubList.load(srcName);
-        pubList.orderByPathAndName();
-        pubList.reorgId();
-        pubList.reorgOrder();
-        pubList.keepFile(targetName);
-    }
-
-    @Deprecated
-    public static void pubNameEdit() {
-        String srcName = TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_000.txt";
-        String targetName = TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_001.txt";
-        PubList pubList = new PubList();
-        pubList.load(srcName);
-        for (Node aNode : pubList.nodeList) {
-            aNode.name = aNode.name.replaceAll("( \\(.*\\))*\\.cb[rz]", "");
-        }
-        pubList.keepFile(targetName);
-    }
-
-    @Deprecated
-    public static void findPath() {
-        PubList refList = new PubList();
-        refList.load(TransProp.get("LB_HOME") + "TFLib_L20160715_Ref_001.txt");
-
-        PubList resList = new PubList();
-        resList.load(TransProp.get("SL_HOME") + "PubList_20160721102308967.txt");
-
-        LinkList lnkList = new LinkList();
-        lnkList.load(TransProp.get("SL_HOME") + "LinkList_20160721102308967.txt");
-
-        for (Node resNode : resList.nodeList) {
-            TransLog.getLogger().info(resNode.keepNode());
-            for (Node refNode : refList.nodeList) {
-                if (resNode.name.equals(refNode.name)) {
-                    resNode.path = refNode.path;
-                    break;
-                }
-            }
-        }
-
-        resList.orderByPathAndName();
-        lnkList.refreshPubId(resList.reorgId());
-        resList.reorgOrder();
-
-        resList.keepFile(TransProp.get("SL_HOME") + "PubList_20160721102308967.txt");
-        lnkList.keepFile(TransProp.get("SL_HOME") + "LinkList_20160721102308967.txt");
-    }
-
     public static void refreshPubList() {
         TransLog.getLogger().info("PubKeeper refreshPubList starts...");
         mergeDup(null);

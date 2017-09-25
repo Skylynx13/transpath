@@ -175,21 +175,7 @@ public class NodeTree implements MutableTreeNode {
         if (!isRoot()) {
             pathName += this.parent.getNodePathName();
         }
-        pathName += TransConst.PATH_LINKER + this.getNodeName();
-        return pathName;
-    }
-
-    public String getNodePathName_style1() {
-        String pathName = TransConst.EMPTY;
-        if (isRoot()) {
-            pathName += TransConst.PATH_LINKER;
-        } else {
-            pathName += this.parent.getNodePathName();
-        }
-        pathName += this.getNodeName();
-        if (!isLeaf()) {
-            pathName += TransConst.PATH_LINKER;
-        }
+        pathName += TransConst.SLASH + this.getNodeName();
         return pathName;
     }
 
@@ -296,23 +282,6 @@ public class NodeTree implements MutableTreeNode {
         for (Node aNode : pList.nodeList) {
             this.addBranch(aNode.path).addChildNode(aNode);
         }
-    }
-
-    public static void main(String args[]) {
-        NodeTree tree1 = new NodeTree(new SimpleNode("tree1"));
-        NodeTree node1 = new NodeTree(new SimpleNode("node1"));
-        tree1.addChild(node1);
-        NodeTree node2 = new NodeTree(new SimpleNode("node2"));
-        tree1.addChild(node2);
-        NodeTree node3 = new NodeTree(new SimpleNode("node3"));
-        NodeTree tree2 = new NodeTree(new SimpleNode("tree2"));
-        tree2.addChild(node3);
-        tree1.addChild(tree2);
-        TransLog.getLogger().info(tree1.getNodePathName());
-        TransLog.getLogger().info(tree2.getNodePathName());
-        TransLog.getLogger().info(node1.getNodePathName());
-        TransLog.getLogger().info(node2.getNodePathName());
-        TransLog.getLogger().info(node3.getNodePathName());
     }
 
     @Override

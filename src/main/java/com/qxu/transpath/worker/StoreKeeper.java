@@ -55,7 +55,7 @@ public class StoreKeeper {
         try {
             PrintWriter out = new PrintWriter(pFile);
             for (Node aNode : pList.nodeList) {
-                out.println("del \"" + TransProp.get("ST_HOME")
+                out.println("del \"" + TransProp.get(TransConst.LOC_STORE)
                         + aNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
                         + aNode.name + "\"");
             }
@@ -73,7 +73,7 @@ public class StoreKeeper {
             long t0 = System.currentTimeMillis();
             StoreList aList = new StoreList();
 
-            aList.build(TransProp.get("ST_HOME"), "\\" + aTag + "\\" + bTag + "\\");
+            aList.build(TransProp.get(TransConst.LOC_STORE), "\\" + aTag + "\\" + bTag + "\\");
             aList.keepFile(FileUtils.storeNameOfTag(aTag, bTag));
 
             int s1 = aList.size();
@@ -170,7 +170,7 @@ public class StoreKeeper {
         delList.keepFile(FileUtils.storeNameOfVersion(pVer + "_del"));
 
         delList.orderByPathAndName();
-        keepDelBat(delList, TransProp.get("SL_HOME") + "ToDel.bat");
+        keepDelBat(delList, TransProp.get(TransConst.LOC_LIST) + "ToDel.bat");
 
         TransLog.getLogger().info("Current Length: " + pList.size());
         TransLog.getLogger().info("Reserve Length: " + resList.size());
@@ -222,7 +222,7 @@ public class StoreKeeper {
         //delList.keepFile(FileUtils.storeNameOfVersion(pVer + "_del"));
 
         delList.orderByPathAndName();
-        keepDelBat(delList, TransProp.get("SL_HOME") + "ToDel.bat");
+        keepDelBat(delList, TransProp.get(TransConst.LOC_LIST) + "ToDel.bat");
 
         TransLog.getLogger().info("Current Length: " + pList.size());
         TransLog.getLogger().info("Reserve Length: " + resList.size());
