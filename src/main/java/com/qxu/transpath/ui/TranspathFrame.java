@@ -67,6 +67,9 @@ import com.qxu.transpath.worker.TaskKeeper;
 public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
+    private static final Font GLOBAL_FONT = new Font("GLOBAL", Font.PLAIN, TransProp.getInt(TransConst.SIZE_TEXT));
+
+
     private static JTextArea logArea = new JTextArea();
     
     public static JTextArea getLogArea() {
@@ -82,6 +85,8 @@ public class TranspathFrame extends JFrame {
 
     @SuppressWarnings({ "serial", "unused" })
     public void initMenuBar() {
+        UIManager.put("Menu.font", GLOBAL_FONT);
+        UIManager.put("MenuItem.font", GLOBAL_FONT);
         JMenuBar menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
         
@@ -206,8 +211,7 @@ public class TranspathFrame extends JFrame {
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
-        Font treeFont = new Font("TREE", Font.PLAIN, TransProp.getInt(TransConst.SIZE_TEXT));
-        jTreeLeft.setFont(treeFont);
+        jTreeLeft.setFont(GLOBAL_FONT);
         
         paneLeft.setViewportView(jTreeLeft);
         jTreeLeft.revalidate();
@@ -224,7 +228,7 @@ public class TranspathFrame extends JFrame {
         JScrollPane paneRight = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jTreeRight.setFont(treeFont);
+        jTreeRight.setFont(GLOBAL_FONT);
         paneRight.setViewportView(jTreeRight);
         jTreeRight.revalidate();
         
@@ -242,7 +246,7 @@ public class TranspathFrame extends JFrame {
         JScrollPane paneLower = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneLower.setFont(treeFont);
+        paneLower.setFont(GLOBAL_FONT);
         paneLower.setViewportView(logArea);
         
         JSplitPane paneAll = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paneUpper, paneLower);
