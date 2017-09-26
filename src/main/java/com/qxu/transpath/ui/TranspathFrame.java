@@ -11,6 +11,9 @@
 package com.qxu.transpath.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -24,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -31,13 +35,16 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.apache.logging.log4j.LogManager;
+
+import com.qxu.transpath.log.LogAppender;
+import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.SimpleNode;
 import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
-import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 import com.qxu.transpath.worker.NameEditor;
 import com.qxu.transpath.worker.PubKeeper;
@@ -60,9 +67,14 @@ import com.qxu.transpath.worker.TaskKeeper;
 public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
-
+    private static JTextArea logArea = new JTextArea();
+    
+    public static JTextArea getLogArea() {
+        return logArea;
+    }
     public TranspathFrame() {
-        this.setSize(1200, 600);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setSize((int)screenSize.getWidth()*2/3, (int)screenSize.getHeight()*2/3);
         this.setTitle("Storage Archivist");
         initMenuBar();
         initJTree();
@@ -190,10 +202,14 @@ public class TranspathFrame extends JFrame {
         NodeTree nodeTreeLeft = NodeTree.buildFromList(aList);
         nodeTreeLeft.recursivelySort();
         JTree jTreeLeft = new JTree(nodeTreeLeft);
-        JScrollPane spaneLeft = new JScrollPane(
+        JScrollPane paneLeft = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        spaneLeft.setViewportView(jTreeLeft);
+        
+        Font treeFont = new Font("TREE", Font.PLAIN, TransProp.getInt(TransConst.SIZE_TEXT));
+        jTreeLeft.setFont(treeFont);
+        
+        paneLeft.setViewportView(jTreeLeft);
         jTreeLeft.revalidate();
         
         PubList bList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
@@ -205,19 +221,38 @@ public class TranspathFrame extends JFrame {
         jTreeRight.setRootVisible(true);
         jTreeRight.setEditable(true);
         
-        JScrollPane spaneRight = new JScrollPane(
+        JScrollPane paneRight = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        spaneRight.setViewportView(jTreeRight);
+        jTreeRight.setFont(treeFont);
+        paneRight.setViewportView(jTreeRight);
         jTreeRight.revalidate();
         
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spaneLeft, spaneRight);
-        splitPane.setContinuousLayout(true);
-        splitPane.setOneTouchExpandable(true);
-        splitPane.setSize(super.getSize());
-        splitPane.setDividerLocation(0.5);
-        splitPane.setDividerSize(8);
-        contentPanel.add(splitPane, BorderLayout.CENTER);
+        JSplitPane paneUpper = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paneLeft, paneRight);
+        paneUpper.setContinuousLayout(true);
+        paneUpper.setOneTouchExpandable(true);
+        paneUpper.setSize(super.getSize());
+        paneUpper.setDividerLocation(0.5);
+        paneUpper.setDividerSize(8);
+        
+        LogAppender logAppender = new LogAppender("x", null, null, true);
+        
+        TransLog.getLogger().info("X-ray logged.xxx");
+        
+        JScrollPane paneLower = new JScrollPane(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneLower.setFont(treeFont);
+        paneLower.setViewportView(logArea);
+        
+        JSplitPane paneAll = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paneUpper, paneLower);
+        paneAll.setContinuousLayout(true);
+        paneAll.setOneTouchExpandable(true);
+        paneAll.setSize(super.getSize());
+        paneAll.setDividerLocation(0.7);
+        paneAll.setDividerSize(8);
+        
+        contentPanel.add(paneAll, BorderLayout.CENTER);
         
         this.setVisible(true);
     }

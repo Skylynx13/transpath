@@ -8,7 +8,7 @@
  * Date:Oct 19, 2016 5:17:21 PM
  * 
  */
-package com.qxu.transpath.utils;
+package com.qxu.transpath.log;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

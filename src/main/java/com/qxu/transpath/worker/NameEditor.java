@@ -12,7 +12,7 @@ package com.qxu.transpath.worker;
 
 import java.io.File;
 
-import com.qxu.transpath.utils.TransLog;
+import com.qxu.transpath.log.TransLog;
 
  /**
  * ClassName: NameEditor <br/>

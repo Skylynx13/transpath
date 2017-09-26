@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.utils.CdEntry;
 import com.qxu.transpath.utils.StrUtils;
 import com.qxu.transpath.utils.TransConst;
-import com.qxu.transpath.utils.TransLog;
 
  /**
  * ClassName: Arranger <br/>

@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.tree.LinkList;
 import com.qxu.transpath.tree.LinkNode;
 import com.qxu.transpath.tree.Node;
@@ -26,7 +27,6 @@ import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.tree.StoreNode;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
-import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 
  /**

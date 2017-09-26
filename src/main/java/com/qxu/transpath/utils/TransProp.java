@@ -41,4 +41,8 @@ public class TransProp {
         }
         return tProps.getProperty(propName);
     }
+    
+    public static int getInt(String propName) {
+        return Integer.parseInt(get(propName));
+    }
 }

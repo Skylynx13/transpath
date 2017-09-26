@@ -30,6 +30,8 @@ import java.util.zip.CRC32;
 
 import org.apache.commons.codec.binary.Hex;
 
+import com.qxu.transpath.log.TransLog;
+
 /**
  * ClassName: FileUtils <br/>
  * Description: Utilities for file processing. <br/>

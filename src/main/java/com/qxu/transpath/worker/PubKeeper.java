@@ -13,6 +13,7 @@ package com.qxu.transpath.worker;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.tree.LinkList;
 import com.qxu.transpath.tree.Node;
 import com.qxu.transpath.tree.NodeList;
@@ -23,7 +24,6 @@ import com.qxu.transpath.tree.StoreNode;
 import com.qxu.transpath.utils.DateUtils;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
-import com.qxu.transpath.utils.TransLog;
 import com.qxu.transpath.utils.TransProp;
 
 /**

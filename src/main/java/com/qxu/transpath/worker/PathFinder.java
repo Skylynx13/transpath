@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.qxu.transpath.utils.TransLog;
+import com.qxu.transpath.log.TransLog;
 
  /**
  * ClassName: PathFinder <br/>

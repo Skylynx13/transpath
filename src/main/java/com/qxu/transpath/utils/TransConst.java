@@ -5,6 +5,8 @@ public class TransConst {
     public static final String LOC_LIST   = "LOC_LIST";
     public static final String LOC_TASK   = "LOC_TASK";
     public static final String LOC_STORE  = "LOC_STORE";
+
+    public static final String SIZE_TEXT  = "SIZE_TEXT";
     
     public static final String VER_CURR   = "VER_CURR";
     public static final String VER_LAST   = "VER_LAST";
