@@ -42,12 +42,15 @@ import com.qxu.transpath.ui.TranspathFrame;
  * @version yyyy-mm-dd qxu@<br/>
  * 
  */
-
-@Plugin(name="LogAppender", category="Core", elementType="appender", printObject=true)
-public class LogAppender extends AbstractAppender {  
+// See https://github.com/M-Razavi/log4j-swing-appender
+// http://www.howtobuildsoftware.com/index.php/how-do/chab/java-logging-log4j-log4j2-how-to-create-a-custom-appender-in-log4j2
+// http://logging.apache.org/log4j/2.x/manual/configuration.html#Properties
+// http://logging.apache.org/log4j/2.x/manual/extending.html#Appenders
+@Plugin(name="TextArea", category="Core", elementType="appender", printObject=true)
+public class TextAreaAppender extends AbstractAppender {  
     private final JTextArea logArea;
 
-    public LogAppender(String name, Filter filter,
+    private TextAreaAppender(String name, Filter filter,
             Layout<? extends Serializable> layout, final boolean ignoreExceptions) {
         super(name, filter, layout, ignoreExceptions);
         logArea = TranspathFrame.getLogArea();

@@ -37,7 +37,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.logging.log4j.LogManager;
 
-import com.qxu.transpath.log.LogAppender;
+import com.qxu.transpath.log.TextAreaAppender;
 import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.PubList;
@@ -239,7 +239,7 @@ public class TranspathFrame extends JFrame {
         paneUpper.setDividerLocation(0.5);
         paneUpper.setDividerSize(8);
         
-        LogAppender logAppender = new LogAppender("x", null, null, true);
+        TextAreaAppender logAppender = new TextAreaAppender("x", null, null, true);
         
         TransLog.getLogger().info("X-ray logged.xxx");
         
