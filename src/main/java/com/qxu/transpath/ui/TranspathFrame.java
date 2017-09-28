@@ -239,7 +239,7 @@ public class TranspathFrame extends JFrame {
         paneUpper.setDividerLocation(0.5);
         paneUpper.setDividerSize(8);
         
-        TextAreaAppender logAppender = new TextAreaAppender("x", null, null, true);
+//        TextAreaAppender logAppender = new TextAreaAppender("x", null, null, true);
         
         TransLog.getLogger().info("X-ray logged.xxx");
         

@@ -30,7 +30,7 @@ import org.apache.logging.log4j.core.config.plugins.Plugin;
 
 import com.qxu.transpath.ui.TranspathFrame;
 
- /**
+/**
  * ClassName: LogAppender <br/>
  * Description: TODO <br/>
  * Date: 2017-9-26 下午6:30:43 <br/>
