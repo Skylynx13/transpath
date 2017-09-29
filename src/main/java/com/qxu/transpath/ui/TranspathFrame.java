@@ -30,14 +30,10 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.apache.logging.log4j.LogManager;
-
-import com.qxu.transpath.log.TextAreaAppender;
 import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.PubList;
@@ -69,12 +65,12 @@ public class TranspathFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final Font GLOBAL_FONT = new Font("GLOBAL", Font.PLAIN, TransProp.getInt(TransConst.SIZE_TEXT));
 
-
     private static JTextArea logArea = new JTextArea();
-    
+
     public static JTextArea getLogArea() {
         return logArea;
     }
+    
     public TranspathFrame() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize((int)screenSize.getWidth()*2/3, (int)screenSize.getHeight()*2/3);
@@ -107,6 +103,7 @@ public class TranspathFrame extends JFrame {
         Action exitAction = new AbstractAction("Exit") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                TransLog.getLogger().info("Transpath Exit.");
                 System.exit(0);
             }
         };
@@ -232,24 +229,20 @@ public class TranspathFrame extends JFrame {
         paneRight.setViewportView(jTreeRight);
         jTreeRight.revalidate();
         
-        JSplitPane paneUpper = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paneLeft, paneRight);
-        paneUpper.setContinuousLayout(true);
-        paneUpper.setOneTouchExpandable(true);
-        paneUpper.setSize(super.getSize());
-        paneUpper.setDividerLocation(0.5);
-        paneUpper.setDividerSize(8);
+        JSplitPane paneTrees = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paneLeft, paneRight);
+        paneTrees.setContinuousLayout(true);
+        paneTrees.setOneTouchExpandable(true);
+        paneTrees.setSize(super.getSize());
+        paneTrees.setDividerLocation(0.5);
+        paneTrees.setDividerSize(8);
         
-//        TextAreaAppender logAppender = new TextAreaAppender("x", null, null, true);
-        
-        TransLog.getLogger().info("X-ray logged.xxx");
-        
-        JScrollPane paneLower = new JScrollPane(
+        JScrollPane paneLog = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneLower.setFont(GLOBAL_FONT);
-        paneLower.setViewportView(logArea);
+        paneLog.setFont(GLOBAL_FONT);
+        paneLog.setViewportView(logArea);
         
-        JSplitPane paneAll = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paneUpper, paneLower);
+        JSplitPane paneAll = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paneTrees, paneLog);
         paneAll.setContinuousLayout(true);
         paneAll.setOneTouchExpandable(true);
         paneAll.setSize(super.getSize());
@@ -264,6 +257,7 @@ public class TranspathFrame extends JFrame {
     private void setLookAndFeel() {
         UIManager.getSystemLookAndFeelClassName();
         try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");           
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
