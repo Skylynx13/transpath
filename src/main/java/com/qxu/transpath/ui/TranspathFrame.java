@@ -27,11 +27,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.qxu.transpath.log.TransLog;
@@ -65,10 +68,10 @@ public class TranspathFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final Font GLOBAL_FONT = new Font("GLOBAL", Font.PLAIN, TransProp.getInt(TransConst.SIZE_TEXT));
 
-    private static JTextArea logArea = new JTextArea();
+    private static JTextArea logTextArea = new JTextArea();
 
-    public static JTextArea getLogArea() {
-        return logArea;
+    public static JTextArea getLogTextArea() {
+        return logTextArea;
     }
     
     public TranspathFrame() {
@@ -199,57 +202,71 @@ public class TranspathFrame extends JFrame {
         setLookAndFeel();
 
         String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR));
-        StoreList aList = new StoreList(storeNameOfVersion);
+        StoreList storeList = new StoreList(storeNameOfVersion);
         TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
-        NodeTree nodeTreeLeft = NodeTree.buildFromList(aList);
-        nodeTreeLeft.recursivelySort();
-        JTree jTreeLeft = new JTree(nodeTreeLeft);
-        JScrollPane paneLeft = new JScrollPane(
+        NodeTree storeNodeTree = NodeTree.buildFromList(storeList);
+        storeNodeTree.recursivelySort();
+        JTree storeTree = new JTree(storeNodeTree);
+        JScrollPane storeScrollPane = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        storeScrollPane.setViewportView(storeTree);
+        storeTree.setFont(GLOBAL_FONT);
+        storeTree.revalidate();
         
-        jTreeLeft.setFont(GLOBAL_FONT);
-        
-        paneLeft.setViewportView(jTreeLeft);
-        jTreeLeft.revalidate();
-        
-        PubList bList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
-        NodeTree nodeTreeRight = NodeTree.buildFromList(bList);
-        nodeTreeRight.recursivelySort();
-        JTree jTreeRight = new JTree(nodeTreeRight);
+        PubList pubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+        NodeTree pubNodeTree = NodeTree.buildFromList(pubList);
+        pubNodeTree.recursivelySort();
+        JTree pubTree = new JTree(pubNodeTree);
 
-        jTreeRight.setShowsRootHandles(true);
-        jTreeRight.setRootVisible(true);
-        jTreeRight.setEditable(true);
+        pubTree.setShowsRootHandles(true);
+        pubTree.setRootVisible(true);
+        pubTree.setEditable(true);
         
-        JScrollPane paneRight = new JScrollPane(
+        JScrollPane pubScrollPane = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jTreeRight.setFont(GLOBAL_FONT);
-        paneRight.setViewportView(jTreeRight);
-        jTreeRight.revalidate();
+        pubScrollPane.setViewportView(pubTree);
+        pubTree.setFont(GLOBAL_FONT);
+        pubTree.revalidate();
         
-        JSplitPane paneTrees = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paneLeft, paneRight);
-        paneTrees.setContinuousLayout(true);
-        paneTrees.setOneTouchExpandable(true);
-        paneTrees.setSize(super.getSize());
-        paneTrees.setDividerLocation(0.5);
-        paneTrees.setDividerSize(8);
+        JTabbedPane treeTabbedPane = new JTabbedPane();
+        treeTabbedPane.setTabPlacement(JTabbedPane.TOP);
+        treeTabbedPane.addTab("Store Tree", storeScrollPane);
+        treeTabbedPane.addTab("Pub Tree", pubScrollPane);
+
+        JScrollPane infoScrollPane = new JScrollPane(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        infoScrollPane.setViewportView(new JTextArea());
+       
+        JSplitPane upperSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeTabbedPane, infoScrollPane);
+        upperSplitPane.setContinuousLayout(true);
+        upperSplitPane.setOneTouchExpandable(true);
+        upperSplitPane.setSize(super.getSize());
+        upperSplitPane.setDividerLocation(0.5);
+        upperSplitPane.setDividerSize(8);
         
-        JScrollPane paneLog = new JScrollPane(
+        JScrollPane logScrollPane = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneLog.setFont(GLOBAL_FONT);
-        paneLog.setViewportView(logArea);
+        logScrollPane.setFont(GLOBAL_FONT);
+        logScrollPane.setViewportView(logTextArea);
         
-        JSplitPane paneAll = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paneTrees, paneLog);
-        paneAll.setContinuousLayout(true);
-        paneAll.setOneTouchExpandable(true);
-        paneAll.setSize(super.getSize());
-        paneAll.setDividerLocation(0.7);
-        paneAll.setDividerSize(8);
+        JTabbedPane lowerTabbedPane = new JTabbedPane();
+        lowerTabbedPane.setTabPlacement(JTabbedPane.TOP);
+        lowerTabbedPane.addTab("TransLog", logScrollPane);
+        lowerTabbedPane.addTab("test", new JTextArea());
         
-        contentPanel.add(paneAll, BorderLayout.CENTER);
+//        JSplitPane paneAll = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paneTrees, paneLog);
+        JSplitPane allSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, upperSplitPane, lowerTabbedPane);
+        allSplitPane.setContinuousLayout(true);
+        allSplitPane.setOneTouchExpandable(true);
+        allSplitPane.setSize(super.getSize());
+        allSplitPane.setDividerLocation(0.7);
+        allSplitPane.setDividerSize(8);
+        
+        contentPanel.add(allSplitPane, BorderLayout.CENTER);
         
         this.setVisible(true);
     }

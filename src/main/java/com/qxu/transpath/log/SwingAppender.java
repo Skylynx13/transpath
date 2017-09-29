@@ -54,19 +54,20 @@ import com.qxu.transpath.utils.TransConst;
 // http://logging.apache.org/log4j/2.x/manual/extending.html#Appenders
 @Plugin(name="Swing", category="Core", elementType="appender", printObject=true)
 public class SwingAppender extends AbstractAppender {  
-    private final JTextArea logArea;
+    private final JTextArea logTextArea;
 
     private SwingAppender(String name, Filter filter,
             Layout<? extends Serializable> layout, final boolean ignoreExceptions) {
         super(name, filter, layout, ignoreExceptions);
-        logArea = TranspathFrame.getLogArea();
+        logTextArea = TranspathFrame.getLogTextArea();
     }
     
     @Override
     public void append(LogEvent event) {
-        logArea.append(new String(this.getLayout().toByteArray(event)));
-        logArea.append(TransConst.CR);
-        logArea.selectAll();
+        logTextArea.append(new String(this.getLayout().toByteArray(event)));
+        logTextArea.append(TransConst.CR);
+        //logArea.selectAll();
+        logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
     }  
     
     @PluginFactory
