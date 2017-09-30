@@ -164,7 +164,7 @@ public class NameEditor {
         TransLog.getLogger().info("Result: True.");
     }
     
-    private static String[][] readRenameList(String renameListName) {
+    protected static String[][] readRenameList(String renameListName) {
         
         Scanner in = null;
         ArrayList<String[]> namePairs = new ArrayList<String[]>();
@@ -175,7 +175,7 @@ public class NameEditor {
             return null;
         }
         while (in.hasNext()) {
-            String[] namePair = in.nextLine().split(TransConst.COLON);
+            String[] namePair = in.nextLine().split(TransConst.COLON, -1);
             namePairs.add(namePair);
         }
         in.close();

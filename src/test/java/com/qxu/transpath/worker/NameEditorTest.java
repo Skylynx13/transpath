@@ -15,6 +15,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransProp;
+
  /**
  * ClassName: NameEditorTest <br/>
  * Description: TODO <br/>
@@ -63,8 +66,8 @@ public class NameEditorTest {
             { " Vs ", " vs " },
             { " Vs\\. ", " vs " },
             { " vs\\. ", " vs " },
-            { "\\.zip", ".cbz" }, 
-            { "\\.rar", ".cbr" }, 
+            { "\\.zip|\\.ZIP", ".cbz" }, 
+            { "\\.rar|\\.RAR", ".cbr" }, 
             { "\\.CBZ", ".cbz" }, 
             { "\\.CBR", ".cbr" }, 
             { "([-+'A-Za-z0-9 ]+) (\\d{2}) ([-A-Za-z0-9 \\(\\)\\.]+)", "$1 0$2 $3" }
@@ -74,10 +77,22 @@ public class NameEditorTest {
     public void setup() {
         
     }
+    
     @Test
     public void testGetReplacedName() {
         assertEquals("", nameEditor.getReplacedName(replaceTemplates, ""));
         assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameEditor.getReplacedName(replaceTemplates, "Abcde fg Hijklmn 07 (of 05) (2017) (digital) (opq-rst).CBR"));
+        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameEditor.getReplacedName(replaceTemplates, "Abcde+fg+Hijklmn+07+(of+05)+(2017)_(digital)_%28opq-rst%29.rar"));
+        assertEquals("Abcde and fg from of the vs Hijklmn v06 v02 007 (of 05) (2017) (Digital) (opq-rst).cbz", nameEditor.getReplacedName(replaceTemplates, "Abcde And fg From Of The Vs. Hijklmn v6 Vol.2 #07 (of 05) (2017) (digital) (opq-rst).ZIP"));
+    }
+    
+    @Test
+    public void testGetReplaceNameByReplaceList() {
+        String[][] repList = NameEditor.readRenameList(TEST_RENAMELIST);
+        assertEquals("", nameEditor.getReplacedName(repList, ""));
+        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameEditor.getReplacedName(repList, "Abcde fg Hijklmn 07 (of 05) (2017) (digital) (opq-rst).CBR"));
+        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameEditor.getReplacedName(repList, "Abcde+fg+Hijklmn+07+(of+05)+(2017)_(digital)_%28opq-rst%29.rar"));
+        assertEquals("Abcde and fg from of the vs Hijklmn v06 v02 007 (of 05) (2017) (Digital) (opq-rst).cbz", nameEditor.getReplacedName(repList, "Abcde And fg From Of The Vs. Hijklmn v6 Vol.2 #07 (of 05) (2017) (digital) (opq-rst).ZIP"));
     }
 
 }
