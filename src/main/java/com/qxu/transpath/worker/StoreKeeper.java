@@ -165,6 +165,7 @@ public class StoreKeeper {
 
         dupList.recap();
         dupList.keepFile(FileUtils.storeNameOfVersion(pVer + "_dup"));
+        TransLog.getLogger().info(dupList.toString());
         
         delList.recap();
         delList.keepFile(FileUtils.storeNameOfVersion(pVer + "_del"));
