@@ -21,7 +21,6 @@ import java.util.Scanner;
 
 import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.utils.CdEntry;
-import com.qxu.transpath.utils.StrUtils;
 import com.qxu.transpath.utils.TransConst;
 
  /**
@@ -96,12 +95,14 @@ public class Arranger {
             if (this.checkLinkLine(line)) {
                 if (this.entry == null || !this.entry.hasName()) {
                     status = 200000 + cnt; // Error: Entry no name at line cnt.
+                    in.close();
                     return null;
                 }
                 entry.addUniqueLink(line);
             } else if (this.checkCommentLine(line)) {
                 if (this.entry == null && !this.entry.hasName()) {
                     status = 200000 + cnt; // Error: Entry no name at line cnt.
+                    in.close();
                     return null;
                 }
                 entry.addComment(line);                    

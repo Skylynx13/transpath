@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.utils.TransConst;
 
 /**

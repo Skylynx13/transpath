@@ -50,8 +50,11 @@ public class FileUtils {
 
     public static void clearFile(String pFileName) {
         try {
-            new FileOutputStream(pFileName);
+            FileOutputStream file = new FileOutputStream(pFileName);
+            file.close();
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

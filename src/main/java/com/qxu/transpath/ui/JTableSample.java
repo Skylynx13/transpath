@@ -157,6 +157,7 @@ public class JTableSample extends DefaultMutableTreeNode {
     public String size(File file) throws IOException {// 读取文件的大小
         FileInputStream fileLength = new FileInputStream(file);
         String sizefile = fileLength.available() + "字节";
+        fileLength.close();
         return sizefile;
     }
 

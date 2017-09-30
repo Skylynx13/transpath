@@ -10,23 +10,13 @@
  */
 package com.qxu.transpath.log;
 
-import java.io.IOException;
-import java.io.PipedReader;
-import java.io.PipedWriter;
 import java.io.Serializable;
-import java.io.Writer;
-
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
-import org.apache.logging.log4j.core.appender.WriterAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;

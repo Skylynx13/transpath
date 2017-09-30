@@ -15,9 +15,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.qxu.transpath.utils.TransConst;
-import com.qxu.transpath.utils.TransProp;
-
  /**
  * ClassName: NameEditorTest <br/>
  * Description: TODO <br/>

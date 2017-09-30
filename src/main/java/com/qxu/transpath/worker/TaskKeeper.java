@@ -10,9 +10,6 @@
  */
 package com.qxu.transpath.worker;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.utils.DateUtils;
 import com.qxu.transpath.utils.FileUtils;
