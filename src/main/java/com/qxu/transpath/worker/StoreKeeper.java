@@ -165,6 +165,7 @@ public class StoreKeeper {
 
         dupList.recap();
         dupList.keepFile(FileUtils.storeNameOfVersion(pVer + "_dup"));
+        TransLog.getLogger().info(dupList.toString());
         
         delList.recap();
         delList.keepFile(FileUtils.storeNameOfVersion(pVer + "_del"));
@@ -184,9 +185,7 @@ public class StoreKeeper {
     public static void checkDupTest(StoreList pList) {
         long t0 = System.currentTimeMillis();
         TransLog.getLogger().info("CheckDupInPath started...");
-
         
-        //TransLog.getLogger().info(pList.toString());
         pList.orderByMd5();
 
         StoreNode dNode = null;
@@ -213,14 +212,12 @@ public class StoreKeeper {
         TransLog.getLogger().info("Redundant Number: " + delList.size());
         
         resList.recap();
-        //resList.keepFile(FileUtils.storeNameOfVersion(pVer + "_res"));
 
         dupList.recap();
         TransLog.getLogger().info(dupList.toString());
         
         delList.recap();
-        //delList.keepFile(FileUtils.storeNameOfVersion(pVer + "_del"));
-
+ 
         delList.orderByPathAndName();
         keepDelBat(delList, TransProp.get(TransConst.LOC_LIST) + "ToDel.bat");
 
