@@ -142,7 +142,6 @@ public class TranspathFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 NameEditor.renameNormalize();
-                NameEditor.renameSpecialReplace();
             }
         };
         taskNameItem.addActionListener(listenerName);

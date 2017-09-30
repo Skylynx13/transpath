@@ -5,6 +5,7 @@ public class TransConst {
     public static final String LOC_LIST   = "LOC_LIST";
     public static final String LOC_TASK   = "LOC_TASK";
     public static final String LOC_STORE  = "LOC_STORE";
+    public static final String LOC_TRANS  = "LOC_TRANS";
 
     public static final String SIZE_TEXT  = "SIZE_TEXT";
     
@@ -34,6 +35,7 @@ public class TransConst {
     
     public static final String LIST_KEYWORDS = "keywords.list";
     public static final String LIST_HITSHELF = "hitshelf.list";
+    public static final String LIST_RENAME   = "rename.list";
 
     public static final String MD5    = "MD5";
     public static final String SHA    = "SHA";

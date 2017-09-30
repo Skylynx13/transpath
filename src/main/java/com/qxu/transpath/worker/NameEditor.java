@@ -11,8 +11,13 @@
 package com.qxu.transpath.worker;
 
 import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.qxu.transpath.log.TransLog;
+import com.qxu.transpath.utils.TransConst;
+import com.qxu.transpath.utils.TransProp;
 
  /**
  * ClassName: NameEditor <br/>
@@ -29,9 +34,6 @@ import com.qxu.transpath.log.TransLog;
 
 public class NameEditor {
     boolean CHANGE = true;
-    private static final String FULL_ROOT = "D:\\Book\\TFLib\\new\\full\\";
-    //private static final String FULL_ROOT = "G:\\Book\\TFLib\\A2013\\B0015\\";
-    private String rootDir;
     private String[][] replaceTemplates = {
             {"\\+", " "},
             {"%28", "("},
@@ -56,18 +58,6 @@ public class NameEditor {
             { " v4 ", " v04 " }, 
             { " v5 ", " v05 " }, 
             { " v6 ", " v06 " }, 
-//            { " v01 ", " v01 - " }, 
-//            { " v02 ", " v02 - " }, 
-//            { " v03 ", " v03 - " }, 
-//            { " v04 ", " v04 - " }, 
-//            { " v05 ", " v05 - " }, 
-//            { " v06 ", " v06 - " }, 
-//            { " v01 - - ", " v01 - " }, 
-//            { " v02 - - ", " v02 - " }, 
-//            { " v03 - - ", " v03 - " }, 
-//            { " v04 - - ", " v04 - " }, 
-//            { " v05 - - ", " v05 - " }, 
-//            { " v06 - - ", " v06 - " }, 
             { " Of ", " of " }, 
             { " of The", " of the" },
             { " From ", " from " }, 
@@ -80,45 +70,33 @@ public class NameEditor {
             { "\\.rar", ".cbr" }, 
             { "\\.CBZ", ".cbz" }, 
             { "\\.CBR", ".cbr" }, 
-            { "02 of 02 covers", "(2 covers)" },
-            { "03 of 03 covers", "(3 covers)" },
-            { "04 of 04 covers", "(4 covers)" },
-            { "05 of 05 covers", "(5 covers)" },
-            { "06 of 06 covers", "(6 covers)" },
-            { "07 of 07 covers", "(7 covers)" },
-            { "08 of 08 covers", "(8 covers)" },
-            { "09 of 09 covers", "(9 covers)" },
-            { " 01\\.cbr", " 001.cbr" },
-            { " 02\\.cbr", " 002.cbr" },
-            { " 03\\.cbr", " 003.cbr" },
-            { " 04\\.cbr", " 004.cbr" }, 
-            { " 05\\.cbr", " 005.cbr" }, 
-            { " 06\\.cbr", " 006.cbr" }, 
-            { " 01\\.cbz", " 001.cbz" }, 
-            { " 02\\.cbz", " 002.cbz" }, 
-            { " 03\\.cbz", " 003.cbz" }, 
-            { " 04\\.cbz", " 004.cbz" }, 
-            { " 05\\.cbz", " 005.cbz" }, 
-            { " 06\\.cbz", " 006.cbz" },
             { "([-+'A-Za-z0-9 ]+) (\\d{2}) ([-A-Za-z0-9 \\(\\)\\.]+)", "$1 0$2 $3" }
         };
-        
-    public NameEditor(String root) {
-        this.rootDir=root;
+    
+    private String getRootDir() {
+        return TransProp.get(TransConst.LOC_TRANS);
+    };
+
+    public NameEditor() {
     }
     
+    private boolean renameFileByRenameList(String renameListName) {
+        return renameRootPathFile(readRenameList(renameListName));
+    }
+
     public boolean renameFileByTemplate() {
-        return renamePathFile(this.rootDir, this.replaceTemplates);
+        return renameRootPathFile(this.replaceTemplates);
     }
     
     public boolean renameFileOnce(String[][] replaceOnce) {
-        return renamePathFile(this.rootDir, replaceOnce);
+        return renameRootPathFile(replaceOnce);
     }
     
-    public boolean renamePathFile(String pRoot, String[][] replaceList) {
+    private boolean renameRootPathFile(String[][] replaceList) {
         int totalFile = 0;
         int procFile = 0;
-        File dirRoot = new File(pRoot);
+        String rootDir = getRootDir();
+        File dirRoot = new File(rootDir);
         if (!dirRoot.isDirectory()) {
             TransLog.getLogger().info("Path name error.");
             return false;
@@ -126,14 +104,11 @@ public class NameEditor {
         
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
-                String replacedName = aFile.getName();
-                for (String[] repTempl: replaceList){
-                    replacedName = replacedName.replaceAll(repTempl[0], repTempl[1]);
-                }
+                String replacedName = getReplacedName(replaceList, aFile.getName());
                 totalFile++;
                 if (!aFile.getName().equals(replacedName)) {
                     procFile++;
-                    if (CHANGE && !aFile.renameTo(new File(pRoot + replacedName))) {
+                    if (CHANGE && !aFile.renameTo(new File(rootDir + replacedName))) {
                         TransLog.getLogger().info(aFile.getName() + " -e> " + replacedName);
                         return false;
                     }
@@ -144,12 +119,20 @@ public class NameEditor {
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
     }
+
+    protected String getReplacedName(String[][] replaceList, String originalName) {
+        String replacedName = originalName;
+        for (String[] repTempl: replaceList){
+            replacedName = replacedName.replaceAll(repTempl[0], repTempl[1]);
+        }
+        return replacedName;
+    }
     
     @SuppressWarnings("unused")
     private static void renameInitUpper() {
         int totalFile = 0;
         int procFile = 0;
-        String pRoot = NameEditor.FULL_ROOT;
+        String pRoot = TransProp.get(TransConst.LOC_TRANS);
         File dirRoot = new File(pRoot);
         if (!dirRoot.isDirectory()) {
             TransLog.getLogger().info("Path name error.");
@@ -181,11 +164,29 @@ public class NameEditor {
         TransLog.getLogger().info("Result: True.");
     }
     
+    private static String[][] readRenameList(String renameListName) {
+        
+        Scanner in = null;
+        ArrayList<String[]> namePairs = new ArrayList<String[]>();
+        try {
+            in = new Scanner(new FileReader(renameListName));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        while (in.hasNext()) {
+            String[] namePair = in.nextLine().split(TransConst.COLON);
+            namePairs.add(namePair);
+        }
+        in.close();
+        return (String[][]) namePairs.toArray(new String[namePairs.size()][2]);
+    }
+
     public boolean renamePathFileSwapDate() {
         int totalFile = 0;
         int procFile = 0;
-        String pRoot = this.rootDir;
-        File dirRoot = new File(pRoot);
+        String rootDir = getRootDir();
+        File dirRoot = new File(rootDir);
         if (!dirRoot.isDirectory()) {
             TransLog.getLogger().info("Path name error.");
             return false;
@@ -203,7 +204,7 @@ public class NameEditor {
                 totalFile++;
                 if (!oldName.equals(newName)) {
                     procFile++;
-                    if (!aFile.renameTo(new File(pRoot + newName))) {
+                    if (!aFile.renameTo(new File(rootDir + newName))) {
                         TransLog.getLogger().info(aFile.getName() + " -e> " + newName);
                         return false;
                     }
@@ -218,8 +219,8 @@ public class NameEditor {
     public boolean renamePathFilePushDate() {
         int totalFile = 0;
         int procFile = 0;
-        String pRoot = this.rootDir;
-        File dirRoot = new File(pRoot);
+        String rootDir = getRootDir();
+        File dirRoot = new File(rootDir);
         if (!dirRoot.isDirectory()) {
             TransLog.getLogger().info("Path name error.");
             return false;
@@ -240,7 +241,7 @@ public class NameEditor {
                 totalFile++;
                 if (!oldName.equals(newName)) {
                     procFile++;
-                    if (!aFile.renameTo(new File(pRoot + newName))) {
+                    if (!aFile.renameTo(new File(rootDir + newName))) {
                         TransLog.getLogger().info(aFile.getName() + " -e> " + newName);
                         return false;
                     }
@@ -255,8 +256,8 @@ public class NameEditor {
     private boolean renameCutHead() {
         int totalFile = 0;
         int procFile = 0;
-        String pRoot = this.rootDir;
-        File dirRoot = new File(pRoot);
+        String rootDir = getRootDir();
+        File dirRoot = new File(rootDir);
         if (!dirRoot.isDirectory()) {
             TransLog.getLogger().info("Path name error.");
             return false;
@@ -270,7 +271,7 @@ public class NameEditor {
                 totalFile++;
                 if (!oldName.equals(newName)) {
                     procFile++;
-                    if (!aFile.renameTo(new File(pRoot + newName))) {
+                    if (!aFile.renameTo(new File(rootDir + newName))) {
                         TransLog.getLogger().info(aFile.getName() + " -e> " + newName);
                         return false;
                     }
@@ -285,8 +286,8 @@ public class NameEditor {
     public boolean renamePathFileUnPushDate() {
         int totalFile = 0;
         int procFile = 0;
-        String pRoot = this.rootDir;
-        File dirRoot = new File(pRoot);
+        String rootDir = getRootDir();
+        File dirRoot = new File(rootDir);
         if (!dirRoot.isDirectory()) {
             TransLog.getLogger().info("Path name error.");
             return false;
@@ -302,7 +303,7 @@ public class NameEditor {
                 totalFile++;
                 if (!oldName.equals(newName)) {
                     procFile++;
-                    if (!aFile.renameTo(new File(pRoot + newName))) {
+                    if (!aFile.renameTo(new File(rootDir + newName))) {
                         TransLog.getLogger().info(aFile.getName() + " -e> " + newName);
                         return false;
                     }
@@ -317,8 +318,8 @@ public class NameEditor {
     public boolean reformatNumber() {
         int totalFile = 0;
         int procFile = 0;
-        String pRoot = this.rootDir;
-        File dirRoot = new File(pRoot);
+        String rootDir = getRootDir();
+        File dirRoot = new File(rootDir);
         if (!dirRoot.isDirectory())
             return false;
         
@@ -337,7 +338,7 @@ public class NameEditor {
                 totalFile++;
                 if (!aFile.getName().equals(replacedName)) {
                     procFile++;
-                    if (!aFile.renameTo(new File(pRoot + replacedName))) {
+                    if (!aFile.renameTo(new File(rootDir + replacedName))) {
                         TransLog.getLogger().info(aFile.getName() + " -e> " + replacedName);
                         return false;
                     }
@@ -350,7 +351,7 @@ public class NameEditor {
     }
     
     public boolean moveFileToRoot() {
-        return movePathFileToRoot(this.rootDir, this.rootDir);       
+        return movePathFileToRoot(getRootDir(), getRootDir());       
     }
     
     private boolean movePathFileToRoot(String pPath, String pRoot) {
@@ -377,39 +378,20 @@ public class NameEditor {
     }
 
     public static void renamePushDate() {
-        TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renamePathFilePushDate() + ".");
+        TransLog.getLogger().info("Result: " + new NameEditor().renamePathFilePushDate() + ".");
     }
 
     public static void renameUnPushDate() {
-        TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renamePathFileUnPushDate() + ".");
-    }
-
-    @Deprecated
-    public static void sampleMoveFileToRoot() {
-        String root0 = "I:\\Book\\TFLib\\A2013\\B00";
-        for (int i = 32; i < 51; i++) {
-            String root = root0 + i;
-            TransLog.getLogger().info("Processing " + root + " ...");
-            if (!root.endsWith("\\")) {
-                root += "\\";
-            }
-            new File(root);
-            TransLog.getLogger().info("Result: " + new NameEditor(root).moveFileToRoot());
-        }
-    }
-
-    @Deprecated
-    public static void sampleListFiles() {
-        String root = "I:\\Book\\TFLib\\A2013\\B0001\\Antarctic Press\\Robotech\\";
-        File a = new File(root);
-        for (File b : a.listFiles()) {
-            TransLog.getLogger().info("T: " + b.getPath() + "; F: " + b.getName() + "; P: " + b.getParent());
-        }
+        TransLog.getLogger().info("Result: " + new NameEditor().renamePathFileUnPushDate() + ".");
     }
 
     public static void renameNormalize() {
-        TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileByTemplate() + ".");
+        TransLog.getLogger().info("Result: " + new NameEditor().renameFileByTemplate() + ".");
         //TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).reformatNumber() + ".");
+    }
+
+    public static void rename() {
+        TransLog.getLogger().info("Result: " + new NameEditor().renameFileByRenameList(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_RENAME) + ".");
     }
 
     public static void renameComic07() {
@@ -422,7 +404,7 @@ public class NameEditor {
                 " (2016) (NMM).cbr"},
         };
 
-        TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
+        TransLog.getLogger().info("Result: " + new NameEditor().renameFileOnce(replaceOnce) + ".");
     }
     
     public static void renameSpecialReplace() {
@@ -448,11 +430,11 @@ public class NameEditor {
 //                "$1 0$3 ($2) $4" }, 
         };
 
-        TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameFileOnce(replaceOnce) + ".");
+        TransLog.getLogger().info("Result: " + new NameEditor().renameFileOnce(replaceOnce) + ".");
     }
     
     public static void cutHead() {
-        TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).renameCutHead() + ".");
+        TransLog.getLogger().info("Result: " + new NameEditor().renameCutHead() + ".");
     }
     
     public static void renameTest() {
@@ -464,13 +446,20 @@ public class NameEditor {
 
     public static void main(String[] args) {
         //cutHead();
-        renameNormalize();
-        renameSpecialReplace();
+        
+        //renameNormalize();
+        //renameSpecialReplace();
+        
         //renameInitUpper();
         //renameComic07();
         //renamePushDate();
         //renameUnPushDate();
         //renameTest();
+        String[][] abc = readRenameList(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_RENAME);
+        System.out.println(abc.length);
+        for (String[] aaa:abc) {
+            System.out.println(aaa[0] + ":::::" + aaa[1]);
+        }
     }
     
 }
