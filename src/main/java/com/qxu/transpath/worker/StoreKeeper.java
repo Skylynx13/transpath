@@ -185,7 +185,7 @@ public class StoreKeeper {
     public static void checkDupTest(StoreList pList) {
         long t0 = System.currentTimeMillis();
         TransLog.getLogger().info("CheckDupInPath started...");
-        
+
         pList.orderByMd5();
 
         StoreNode dNode = null;
@@ -217,7 +217,6 @@ public class StoreKeeper {
         TransLog.getLogger().info(dupList.toString());
         
         delList.recap();
- 
         delList.orderByPathAndName();
         keepDelBat(delList, TransProp.get(TransConst.LOC_LIST) + "ToDel.bat");
 

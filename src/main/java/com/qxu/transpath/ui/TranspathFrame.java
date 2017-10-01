@@ -139,7 +139,7 @@ public class TranspathFrame extends JFrame {
         ActionListener listenerName = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NameEditor.renameNormalize();
+                NameEditor.rename();
             }
         };
         taskNameItem.addActionListener(listenerName);

@@ -387,7 +387,6 @@ public class NameEditor {
 
     public static void renameNormalize() {
         TransLog.getLogger().info("Result: " + new NameEditor().renameFileByTemplate() + ".");
-        //TransLog.getLogger().info("Result: " + new NameEditor(FULL_ROOT).reformatNumber() + ".");
     }
 
     public static void rename() {
