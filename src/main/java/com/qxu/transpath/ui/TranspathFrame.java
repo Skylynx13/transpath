@@ -17,8 +17,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -34,12 +32,9 @@ import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.PubList;
-import com.qxu.transpath.tree.SimpleNode;
 import com.qxu.transpath.tree.StoreList;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
@@ -82,7 +77,6 @@ public class TranspathFrame extends JFrame {
         initJTree();
     }
 
-    @SuppressWarnings({ "serial", "unused" })
     public void initMenuBar() {
         UIManager.put("Menu.font", GLOBAL_FONT);
         UIManager.put("MenuItem.font", GLOBAL_FONT);
@@ -92,25 +86,28 @@ public class TranspathFrame extends JFrame {
         JMenu sysMenu = new JMenu("Sys");
         menuBar.add(sysMenu);
         
-        Action reloadAction = new AbstractAction("Reload") {
+        JMenuItem sysReloadItem = new JMenuItem("Reload");
+        sysMenu.add(sysReloadItem);
+        ActionListener reloadListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initJTree();
             }
         };
-        JMenuItem sysReloadItem = sysMenu.add(reloadAction);
+        sysReloadItem.addActionListener(reloadListener);
         
         JSeparator sysSep = new JSeparator();
         sysMenu.add(sysSep);
         
-        Action exitAction = new AbstractAction("Exit") {
+        JMenuItem sysExitItem = new JMenuItem("Exit");
+        sysMenu.add(sysExitItem);
+        ActionListener exitListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TransLog.getLogger().info("Transpath Exit.");
-                System.exit(0);
+                exit();
             }
         };
-        JMenuItem sysExitItem = sysMenu.add(exitAction);
+        sysExitItem.addActionListener(exitListener);
         
         JMenu taskMenu = new JMenu("Task");
         menuBar.add(taskMenu);      
@@ -257,7 +254,6 @@ public class TranspathFrame extends JFrame {
         lowerTabbedPane.addTab("TransLog", logScrollPane);
         lowerTabbedPane.addTab("test", new JTextArea());
         
-//        JSplitPane paneAll = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paneTrees, paneLog);
         JSplitPane allSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, upperSplitPane, lowerTabbedPane);
         allSplitPane.setContinuousLayout(true);
         allSplitPane.setOneTouchExpandable(true);
@@ -286,45 +282,16 @@ public class TranspathFrame extends JFrame {
         }
     }
     
-    @SuppressWarnings("unused")
-    private NodeTree buildTestTree() {
-        NodeTree tree1 = new NodeTree(new SimpleNode("tree1"));
-        NodeTree node1 = new NodeTree(new SimpleNode("node1"));
-        tree1.addChild(node1);
-        NodeTree node2 = new NodeTree(new SimpleNode("node2"));
-        tree1.addChild(node2);
-        NodeTree node3 = new NodeTree(new SimpleNode("node3"));
-        NodeTree tree2 = new NodeTree(new SimpleNode("tree2"));
-        tree2.addChild(node3);
-        tree1.addChild(tree2);
-        node3.addChild(new NodeTree(new SimpleNode("node4")));
-        return tree1;
-    }
-
-    @SuppressWarnings("unused")
-    private void createTree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("school");
-        DefaultMutableTreeNode classroom = null;
-        DefaultMutableTreeNode number = null;
-        classroom = new DefaultMutableTreeNode("classroom");
-        root.add(classroom);
-        for (int i = 1; i <= 8; i++) {
-            number = new DefaultMutableTreeNode("No." + String.valueOf(i));
-            if (i == 4) {
-                for (int j = 1; j <= 5; j++) {
-                    number.add(new DefaultMutableTreeNode("seat"
-                            + String.valueOf(j)));
-                }
-            }
-            classroom.add(number);
-        }
-    }
-
     @Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-            System.exit(0);
+            exit();
         }
+    }
+
+    private void exit() {
+        TransLog.getLogger().info("Transpath Exit.");
+        System.exit(0);
     }
     
     public static void main(String[] args) {
