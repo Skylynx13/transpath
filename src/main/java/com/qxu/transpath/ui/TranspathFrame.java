@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -76,6 +77,7 @@ public class TranspathFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize((int)screenSize.getWidth()*2/3, (int)screenSize.getHeight()*2/3);
         this.setTitle("Storage Archivist");
+        this.setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG)+"star16.png").getImage());
         initMenuBar();
         initJTree();
     }
