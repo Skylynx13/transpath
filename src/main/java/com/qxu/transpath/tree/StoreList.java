@@ -134,4 +134,9 @@ public class StoreList extends NodeList{
     public String keepLine(Node pNode) {
         return ((StoreNode)pNode).keepNode();
     }
+
+    @Override
+    public Object[] toRow(Node pNode) {
+        return ((StoreNode)pNode).toRow();
+    }
 }

@@ -267,7 +267,7 @@ public abstract class NodeList {
         }
     }
     
-    public abstract String keepLine(Node pNode);
+    protected abstract String keepLine(Node pNode);
 
     public String toString() {
         StringBuffer strBuff = new StringBuffer(keepHeader());
@@ -287,4 +287,19 @@ public abstract class NodeList {
         }
         return idList;
     }
+    
+    public Object[][] toRows() {
+        if (0 == size()) {
+            return null;
+        }
+        Object[][] rows = new Object[size()][];
+        int iNode = 0;
+        for (Node aNode : nodeList) {
+            rows[iNode] = toRow(aNode);
+            iNode++;
+        }
+        return rows;
+    }
+
+    protected abstract Object[] toRow(Node aNode);
 }

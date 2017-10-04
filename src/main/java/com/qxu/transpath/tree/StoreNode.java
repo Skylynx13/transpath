@@ -106,5 +106,10 @@ public class StoreNode extends Node{
                 && (pStoreNode.md5.equals(this.md5)) 
                 && (pStoreNode.sha.equals(this.sha));
     }
+
+    public Object[] toRow() {
+        Object[] row = {id, length, lastModified, md5, sha, crc32, path, name};
+        return row;
+    }
     
 }

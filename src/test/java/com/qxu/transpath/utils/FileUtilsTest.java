@@ -152,9 +152,22 @@ public class FileUtilsTest {
 //        assertEquals(true, FileUtils.compareFileBytes(fn0, fn3));
     }
     
+    /**
+     * To pass this test, add following entries to ${JRE_HOME}\lib\content-types.properties <br/>
+     * text/qxu: \
+     *     description=QXU text;\
+     *     file_extensions=.qxu
+     *
+     * archive/roshal: \
+     *     description=rar package;\
+     *     file_extensions=.rar
+     *
+     * archive/comic: \
+     *     description=comic package;\
+     *     file_extensions=.cbr,.cbz
+     */
     @Test
     public void getFileMimeTypeTest() {
-        //Look up: ${JRE_HOME}\lib\content-types.properties
         long tm1 = System.currentTimeMillis();
         assertEquals("text/plain", FileUtils.getFileMimeType(testResource("getFileMimeType_000.txt")));
         System.out.println("getFileMimeTypeTest URLConnection: " + (

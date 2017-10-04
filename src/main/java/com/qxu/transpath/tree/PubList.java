@@ -56,6 +56,11 @@ public class PubList extends NodeList {
         return ((PubNode)pNode).keepNode();
     }
 
+    @Override
+    public Object[] toRow(Node pNode) {
+        return ((PubNode)pNode).toRow();
+    }
+
     public void reorder() {
         int newOrder = 0;
         String lastPath = "";

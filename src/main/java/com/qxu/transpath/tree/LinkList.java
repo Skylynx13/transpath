@@ -143,5 +143,10 @@ public class LinkList extends NodeList{
         }
         return pubIdList;
     }
+
+    @Override
+    protected Object[] toRow(Node pNode) {
+        return ((LinkNode)pNode).toRow();
+    }
     
 }

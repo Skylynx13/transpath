@@ -27,11 +27,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
+
 import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.PubList;
@@ -230,13 +233,35 @@ public class TranspathFrame extends JFrame {
         treeTabbedPane.setTabPlacement(JTabbedPane.TOP);
         treeTabbedPane.addTab("Store Tree", storeScrollPane);
         treeTabbedPane.addTab("Pub Tree", pubScrollPane);
-
-        JScrollPane infoScrollPane = new JScrollPane(
+        
+        Object[][] tableData = storeList.toRows();
+        String[] tableTitle = {"Id", "Length", "Update Time", "MD5", "SHA", "CRC32", "Store Path", "Name"}; 
+        DefaultTableModel tableModel = new DefaultTableModel(tableData, tableTitle);
+        int iRow = 0;
+        for (Object[] rowData : tableData) {
+            tableModel.addRow(rowData);
+            iRow++;
+            if (iRow >100) break;
+        }
+        JTable infoTable = new JTable(tableModel);        
+        JScrollPane infoTableScrollPane = new JScrollPane(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        infoTableScrollPane.setViewportView(infoTable);
+                
+        JTextArea infoText = new JTextArea();
+        infoText.setText("information");
+        JScrollPane infoTextScrollPane = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        infoScrollPane.setViewportView(new JTextArea());
+        infoTextScrollPane.setViewportView(infoText);
        
-        JSplitPane upperSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeTabbedPane, infoScrollPane);
+        JTabbedPane infoTabbedPane = new JTabbedPane();
+        infoTabbedPane.setTabPlacement(JTabbedPane.TOP);
+        infoTabbedPane.addTab("Info Table", infoTableScrollPane);
+        infoTabbedPane.addTab("Info Page", infoTextScrollPane);
+
+        JSplitPane upperSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeTabbedPane, infoTabbedPane);
         upperSplitPane.setContinuousLayout(true);
         upperSplitPane.setOneTouchExpandable(true);
         upperSplitPane.setSize(super.getSize());

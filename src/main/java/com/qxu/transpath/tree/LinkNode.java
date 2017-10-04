@@ -53,4 +53,9 @@ public class LinkNode extends Node{
                         .append(String.format(TransConst.FORMAT_INT_08, pubId))
                         .toString();
     }
+
+    public Object[] toRow() {
+        Object[] row = {storeId, pubId};
+        return row;
+    }
 }
