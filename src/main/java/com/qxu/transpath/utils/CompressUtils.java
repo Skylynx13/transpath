@@ -48,9 +48,10 @@ public class CompressUtils {
      */  
     @SuppressWarnings("unchecked")  
     public synchronized void unzipFile(String zipFileName) throws Exception {  
+        ZipFile zipFile = null;
         try {  
             File f = new File(zipFileName);  
-            ZipFile zipFile = new ZipFile(zipFileName);  
+            zipFile = new ZipFile(zipFileName);  
             if((!f.exists()) && (f.length() <= 0)) {  
                 throw new Exception("要解压的文件不存在!");  
             }  
@@ -96,7 +97,11 @@ public class CompressUtils {
         } catch(Exception e) {  
             e.printStackTrace();  
             throw e;  
-        }  
+        } finally {
+            if (null != zipFile) {
+                zipFile.close();
+            }
+        }
     }  
       
     /** 
@@ -107,10 +112,11 @@ public class CompressUtils {
      */  
     @SuppressWarnings("unchecked")  
     public synchronized void unzip(String zipFileName, String extPlace) throws Exception {  
+        ZipFile zipFile = null;
         try {  
             (new File(extPlace)).mkdirs();  
             File f = new File(zipFileName);  
-            ZipFile zipFile = new ZipFile(zipFileName);  
+            zipFile = new ZipFile(zipFileName);  
             if((!f.exists()) && (f.length() <= 0)) {  
                 throw new Exception("要解压的文件不存在!");  
             }  
@@ -156,6 +162,10 @@ public class CompressUtils {
         } catch(Exception e) {  
             e.printStackTrace();  
             throw e;  
+        } finally {
+            if (null != zipFile) {
+                zipFile.close();
+            }
         }  
     }  
       
@@ -167,10 +177,11 @@ public class CompressUtils {
      */  
     @SuppressWarnings("unchecked")  
     public synchronized void unzip(String zipFileName, String extPlace,boolean whether) throws Exception {  
+        ZipFile zipFile = null;
         try {  
             (new File(extPlace)).mkdirs();  
             File f = new File(zipFileName);  
-            ZipFile zipFile = new ZipFile(zipFileName);  
+            zipFile = new ZipFile(zipFileName);  
             if((!f.exists()) && (f.length() <= 0)) {  
                 throw new Exception("要解压的文件不存在!");  
             }  
@@ -216,6 +227,10 @@ public class CompressUtils {
         } catch(Exception e) {  
             e.printStackTrace();  
             throw e;  
+        } finally {
+            if (null != zipFile) {
+                zipFile.close();
+            }
         }  
     }  
     /** 
@@ -304,7 +319,7 @@ public class CompressUtils {
 //    }  
       
     public static void main(String[] args) throws Exception {  
-        CompressUtils decompression=new CompressUtils();  
+        //CompressUtils decompression=new CompressUtils();  
         //decompression.unzipFile("d:/Inetpub.zip");  
         //decompression.unzip("d:/Inetpub.zip","d://Inetpub");  
         //decompression.zip("c:/Inetpub", "c:/Inetpub.zip");  
