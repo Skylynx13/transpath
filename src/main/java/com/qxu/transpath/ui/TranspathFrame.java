@@ -237,12 +237,12 @@ public class TranspathFrame extends JFrame {
         Object[][] tableData = storeList.toRows();
         String[] tableTitle = {"Id", "Length", "Update Time", "MD5", "SHA", "CRC32", "Store Path", "Name"}; 
         DefaultTableModel tableModel = new DefaultTableModel(tableData, tableTitle);
-        int iRow = 0;
-        for (Object[] rowData : tableData) {
-            tableModel.addRow(rowData);
-            iRow++;
-            if (iRow >100) break;
-        }
+//        int iRow = 0;
+//        for (Object[] rowData : tableData) {
+//            tableModel.addRow(rowData);
+//            iRow++;
+//            if (iRow >100) break;
+//        }
         JTable infoTable = new JTable(tableModel);        
         JScrollPane infoTableScrollPane = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
