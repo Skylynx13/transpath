@@ -22,6 +22,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import com.github.junrar.Archive;
+
 /**
  * ClassName: CompressUtils <br/>
  * Description: TODO <br/>
@@ -297,29 +299,34 @@ public class CompressUtils {
         }  
     }  
 
-//     /** 
-//     * 解压rar格式的压缩文件到指定目录下 
-//     * @param rarFileName 压缩文件 
-//     * @param extPlace 解压目录 
-//     * @throws Exception 
-//     */  
-//    public synchronized void unrar(String rarFileName, String extPlace) throws Exception{  
-//        try {  
-//            (new File(extPlace)).mkdirs();  
-//            // 构建测解压缩类  
-//            Archive archive = new Archive();  
-//            archive.setEnabledLog(false); //不输出日志  
-//            // 设置rar文件  
-//            archive.setFile(rarFileName);  
-//            archive.setExtractPath(extPlace);  
-//            archive.extractAllFile();  
-//        } catch (Exception e) {  
-//            // TODO: handle exception  
-//        }  
-//    }  
+     /** 
+     * 解压rar格式的压缩文件到指定目录下 
+     * @param rarFileName 压缩文件 
+     * @param extPlace 解压目录 
+     * @throws Exception 
+     */  
+    @SuppressWarnings("resource")
+    public synchronized void unrar(String rarFileName, String extPlace) throws Exception{  
+        try {  
+            (new File(extPlace)).mkdirs();  
+            // 构建测解压缩类  
+            Archive arch = new Archive(new File(rarFileName));  
+            //archive.setEnabledLog(false); //不输出日志  
+            // 设置rar文件  
+            //archive.setFile(rarFileName);  
+            //archive.setExtractPath(extPlace);  
+            //archive.extractAllFile();
+            FileOutputStream output = new FileOutputStream(new File(extPlace));
+            arch.extractFile(arch.nextFileHeader(), output);
+        } catch (Exception e) {  
+            // TODO: handle exception  
+            e.printStackTrace();
+        }  
+    }  
       
     public static void main(String[] args) throws Exception {  
-        //CompressUtils decompression=new CompressUtils();  
+        CompressUtils decompression=new CompressUtils();  
+        decompression.unrar("D:/temp/test.rar", "d:/temp/test01");
         //decompression.unzipFile("d:/Inetpub.zip");  
         //decompression.unzip("d:/Inetpub.zip","d://Inetpub");  
         //decompression.zip("c:/Inetpub", "c:/Inetpub.zip");  
