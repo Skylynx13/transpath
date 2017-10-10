@@ -17,6 +17,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -79,7 +83,13 @@ public class TranspathFrame extends JFrame {
         initMenuBar();
         initJTree();
     }
-
+    private ExecutorService service = Executors.newCachedThreadPool(new ThreadFactory() {
+        
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "output");
+        }
+    });
     public void initMenuBar() {
         UIManager.put("Menu.font", GLOBAL_FONT);
         UIManager.put("MenuItem.font", GLOBAL_FONT);
@@ -131,7 +141,12 @@ public class TranspathFrame extends JFrame {
         ActionListener listenerSpec = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TaskKeeper.digSpecFresh();
+                service.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        TaskKeeper.digSpecFresh();
+                    }
+                });
             }
         };
         taskSpecItem.addActionListener(listenerSpec);
@@ -163,7 +178,12 @@ public class TranspathFrame extends JFrame {
         storeCombineTestItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                StoreKeeper.testCombinedList();
+                service.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        StoreKeeper.testCombinedList();
+                    }
+                });
             }
         });
         

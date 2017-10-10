@@ -56,7 +56,6 @@ public class SwingAppender extends AbstractAppender {
     public void append(LogEvent event) {
         logTextArea.append(new String(this.getLayout().toByteArray(event)));
         logTextArea.append(TransConst.CR);
-        //logArea.selectAll();
         logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
     }  
     
