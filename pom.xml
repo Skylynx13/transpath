@@ -177,9 +177,9 @@
 		</dependency-->
 		<!-- https://mvnrepository.com/artifact/com.github.junrar/junrar -->
 		<dependency>
-		    <groupId>com.github.junrar</groupId>
+		    <groupId>com.github</groupId>
 		    <artifactId>junrar</artifactId>
-		    <version>0.7</version>
+		    <version>0.7-SKL</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -43,6 +43,7 @@ import com.qxu.transpath.log.TransLog;
 import com.qxu.transpath.tree.NodeTree;
 import com.qxu.transpath.tree.PubList;
 import com.qxu.transpath.tree.StoreList;
+import com.qxu.transpath.utils.CompressUtils;
 import com.qxu.transpath.utils.FileUtils;
 import com.qxu.transpath.utils.TransConst;
 import com.qxu.transpath.utils.TransProp;
@@ -51,7 +52,7 @@ import com.qxu.transpath.worker.PubKeeper;
 import com.qxu.transpath.worker.StoreKeeper;
 import com.qxu.transpath.worker.TaskKeeper;
 
- /**
+/**
  * ClassName: TranspathFrame <br/>
  * Description: Transpath Main Frame <br/>
  * Date: 2015-11-16 上午12:59:46 <br/>
@@ -59,7 +60,7 @@ import com.qxu.transpath.worker.TaskKeeper;
  * 
  * @author qxu@
  * 
- * Change Log:
+ *         Change Log:
  * @version yyyy-mm-dd qxu@<br/>
  * 
  */
@@ -74,71 +75,74 @@ public class TranspathFrame extends JFrame {
     public static JTextArea getLogTextArea() {
         return logTextArea;
     }
-    
+
     public TranspathFrame() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize((int)screenSize.getWidth()*2/3, (int)screenSize.getHeight()*2/3);
+        this.setSize((int) screenSize.getWidth() * 2 / 3, (int) screenSize.getHeight() * 2 / 3);
         this.setTitle("Storage Archivist");
-        this.setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG)+"star16.png").getImage());
+        this.setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
         initMenuBar();
         initJTree();
     }
+
     private ExecutorService service = Executors.newCachedThreadPool(new ThreadFactory() {
-        
+
         @Override
         public Thread newThread(Runnable r) {
             return new Thread(r, "output");
         }
     });
+
     public void initMenuBar() {
         UIManager.put("Menu.font", GLOBAL_FONT);
         UIManager.put("MenuItem.font", GLOBAL_FONT);
         JMenuBar menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
-        
+
         JMenu sysMenu = new JMenu("Sys");
         menuBar.add(sysMenu);
-        
+
         JMenuItem sysReloadItem = new JMenuItem("Reload");
         sysMenu.add(sysReloadItem);
-        ActionListener reloadListener = new ActionListener() {
+        sysReloadItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initJTree();
             }
-        };
-        sysReloadItem.addActionListener(reloadListener);
-        
-        JSeparator sysSep = new JSeparator();
-        sysMenu.add(sysSep);
-        
+        });
+
+        sysMenu.add(new JSeparator());
+
         JMenuItem sysExitItem = new JMenuItem("Exit");
         sysMenu.add(sysExitItem);
-        ActionListener exitListener = new ActionListener() {
+        sysExitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 exit();
             }
-        };
-        sysExitItem.addActionListener(exitListener);
-        
+        });
+
         JMenu taskMenu = new JMenu("Task");
-        menuBar.add(taskMenu);      
-        
+        menuBar.add(taskMenu);
+
         JMenuItem taskWeekItem = new JMenuItem("Weekly Digging");
         taskMenu.add(taskWeekItem);
-        ActionListener listenerWeek = new ActionListener() {
+        taskWeekItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TaskKeeper.weekFresh();
-                TaskKeeper.digNewFresh();
+                service.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        TaskKeeper.weekFresh();
+                        TaskKeeper.digNewFresh();
+                    }
+                });
             }
-        };
-        taskWeekItem.addActionListener(listenerWeek);
-        
+        });
+
         JMenuItem taskSpecItem = new JMenuItem("Spec Digging");
         taskMenu.add(taskSpecItem);
-        ActionListener listenerSpec = new ActionListener() {
+        taskSpecItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 service.submit(new Runnable() {
@@ -148,31 +152,53 @@ public class TranspathFrame extends JFrame {
                     }
                 });
             }
-        };
-        taskSpecItem.addActionListener(listenerSpec);
-        
+        });
+
         JMenuItem taskNameItem = new JMenuItem("Name Revise");
         taskMenu.add(taskNameItem);
-        ActionListener listenerName = new ActionListener() {
+        taskNameItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NameEditor.rename();
+                service.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        NameEditor.rename();
+                    }
+                });
             }
-        };
-        taskNameItem.addActionListener(listenerName);
+        });
+
+        JMenuItem taskPackageItem = new JMenuItem("Package Check");
+        taskMenu.add(taskPackageItem);
+        taskPackageItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                service.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        CompressUtils.unrar("D:/temp/test.rar", "d:/temp/test01/");
+                    }
+                });
+            }
+        });
 
         JMenu storeMenu = new JMenu("Store");
         menuBar.add(storeMenu);
-        
+
         JMenuItem storeCombineItem = new JMenuItem("Combine");
         storeMenu.add(storeCombineItem);
         storeCombineItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                StoreKeeper.buildCombinedList();
+                service.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        StoreKeeper.buildCombinedList();
+                    }
+                });
             }
         });
-        
+
         JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
         storeMenu.add(storeCombineTestItem);
         storeCombineTestItem.addActionListener(new ActionListener() {
@@ -186,19 +212,24 @@ public class TranspathFrame extends JFrame {
                 });
             }
         });
-        
+
         JMenu pubMenu = new JMenu("Pub");
         menuBar.add(pubMenu);
-        
+
         JMenuItem pubRefreshItem = new JMenuItem("Refresh");
         pubMenu.add(pubRefreshItem);
         pubRefreshItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PubKeeper.refreshPubList();
+                service.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        PubKeeper.refreshPubList();
+                    }
+                });
             }
         });
-        
+
         JMenu helpMenu = new JMenu("Help");
         menuBar.add(helpMenu);
 
@@ -207,17 +238,22 @@ public class TranspathFrame extends JFrame {
         helpAboutItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TransLog.getLogger().error("It's ok anyway.");
-                TransLog.getLogger().info("Info can be seen.");
+                service.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        TransLog.getLogger().error("It's ok anyway.");
+                        TransLog.getLogger().info("Info can be seen.");
+                    }
+                });
             }
         });
     }
-    
+
     public void initJTree() {
         JPanel contentPanel = (JPanel) this.getContentPane();
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
-        
+
         setLookAndFeel();
 
         String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR));
@@ -226,13 +262,12 @@ public class TranspathFrame extends JFrame {
         NodeTree storeNodeTree = NodeTree.buildFromList(storeList);
         storeNodeTree.recursivelySort();
         JTree storeTree = new JTree(storeNodeTree);
-        JScrollPane storeScrollPane = new JScrollPane(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+        JScrollPane storeScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         storeScrollPane.setViewportView(storeTree);
         storeTree.setFont(GLOBAL_FONT);
         storeTree.revalidate();
-        
+
         PubList pubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
         NodeTree pubNodeTree = NodeTree.buildFromList(pubList);
         pubNodeTree.recursivelySort();
@@ -241,41 +276,33 @@ public class TranspathFrame extends JFrame {
         pubTree.setShowsRootHandles(true);
         pubTree.setRootVisible(true);
         pubTree.setEditable(true);
-        
-        JScrollPane pubScrollPane = new JScrollPane(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+
+        JScrollPane pubScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         pubScrollPane.setViewportView(pubTree);
         pubTree.setFont(GLOBAL_FONT);
         pubTree.revalidate();
-        
+
         JTabbedPane treeTabbedPane = new JTabbedPane();
         treeTabbedPane.setTabPlacement(JTabbedPane.TOP);
         treeTabbedPane.addTab("Store Tree", storeScrollPane);
         treeTabbedPane.addTab("Pub Tree", pubScrollPane);
-        
+
         Object[][] tableData = storeList.toRows();
-        String[] tableTitle = {"Id", "Length", "Update Time", "MD5", "SHA", "CRC32", "Store Path", "Name"}; 
+        String[] tableTitle = { "Id", "Length", "Update Time", "MD5", "SHA", "CRC32", "Store Path", "Name" };
         DefaultTableModel tableModel = new DefaultTableModel(tableData, tableTitle);
-//        int iRow = 0;
-//        for (Object[] rowData : tableData) {
-//            tableModel.addRow(rowData);
-//            iRow++;
-//            if (iRow >100) break;
-//        }
-        JTable infoTable = new JTable(tableModel);        
-        JScrollPane infoTableScrollPane = new JScrollPane(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+
+        JTable infoTable = new JTable(tableModel);
+        JScrollPane infoTableScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         infoTableScrollPane.setViewportView(infoTable);
-                
+
         JTextArea infoText = new JTextArea();
         infoText.setText("information");
-        JScrollPane infoTextScrollPane = new JScrollPane(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+        JScrollPane infoTextScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         infoTextScrollPane.setViewportView(infoText);
-       
+
         JTabbedPane infoTabbedPane = new JTabbedPane();
         infoTabbedPane.setTabPlacement(JTabbedPane.TOP);
         infoTabbedPane.addTab("Info Table", infoTableScrollPane);
@@ -285,36 +312,35 @@ public class TranspathFrame extends JFrame {
         upperSplitPane.setContinuousLayout(true);
         upperSplitPane.setOneTouchExpandable(true);
         upperSplitPane.setSize(super.getSize());
-        upperSplitPane.setDividerLocation(0.5);
+        upperSplitPane.setDividerLocation(0.2);
         upperSplitPane.setDividerSize(8);
-        
-        JScrollPane logScrollPane = new JScrollPane(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+
+        JScrollPane logScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         logScrollPane.setFont(GLOBAL_FONT);
         logScrollPane.setViewportView(logTextArea);
-        
+
         JTabbedPane lowerTabbedPane = new JTabbedPane();
         lowerTabbedPane.setTabPlacement(JTabbedPane.TOP);
         lowerTabbedPane.addTab("TransLog", logScrollPane);
         lowerTabbedPane.addTab("test", new JTextArea());
-        
+
         JSplitPane allSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, upperSplitPane, lowerTabbedPane);
         allSplitPane.setContinuousLayout(true);
         allSplitPane.setOneTouchExpandable(true);
         allSplitPane.setSize(super.getSize());
         allSplitPane.setDividerLocation(0.7);
         allSplitPane.setDividerSize(8);
-        
+
         contentPanel.add(allSplitPane, BorderLayout.CENTER);
-        
+
         this.setVisible(true);
     }
 
     private void setLookAndFeel() {
         UIManager.getSystemLookAndFeelClassName();
         try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");           
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -326,7 +352,7 @@ public class TranspathFrame extends JFrame {
             e.printStackTrace();
         }
     }
-    
+
     @Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -338,7 +364,7 @@ public class TranspathFrame extends JFrame {
         TransLog.getLogger().info("Transpath Exit.");
         System.exit(0);
     }
-    
+
     public static void main(String[] args) {
         new TranspathFrame();
     }
