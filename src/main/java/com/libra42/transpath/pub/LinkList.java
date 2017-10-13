@@ -8,12 +8,15 @@
  * Date:2016-7-18 下午5:07:33
  * 
  */
-package com.libra42.transpath.tree;
+package com.libra42.transpath.pub;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+
+import com.libra42.transpath.tree.Node;
+import com.libra42.transpath.tree.NodeList;
 
  /**
  * ClassName: IdLinkList <br/>

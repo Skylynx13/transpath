@@ -8,7 +8,7 @@
  * Date:2016-7-20 下午3:28:13
  * 
  */
-package com.libra42.transpath.tree;
+package com.libra42.transpath.pub;
 
 import static org.junit.Assert.*;
 
@@ -16,8 +16,8 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.libra42.transpath.tree.LinkList;
-import com.libra42.transpath.tree.LinkNode;
+import com.libra42.transpath.pub.LinkList;
+import com.libra42.transpath.pub.LinkNode;
 
  /**
  * ClassName: LinkListTest <br/>

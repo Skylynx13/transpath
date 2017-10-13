@@ -8,7 +8,7 @@
  * Date:2016-7-12 下午3:08:02
  * 
  */
-package com.libra42.transpath.tree;
+package com.libra42.transpath.pub;
 
 import java.io.FileReader;
 import java.util.Collections;
@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import com.libra42.transpath.log.TransLog;
+import com.libra42.transpath.tree.Node;
+import com.libra42.transpath.tree.NodeList;
 import com.libra42.transpath.utils.TransConst;
 
  /**

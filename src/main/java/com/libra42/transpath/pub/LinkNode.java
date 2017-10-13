@@ -8,8 +8,9 @@
  * Date:2016-7-18 下午4:34:48
  * 
  */
-package com.libra42.transpath.tree;
+package com.libra42.transpath.pub;
 
+import com.libra42.transpath.tree.Node;
 import com.libra42.transpath.utils.TransConst;
 
  /**

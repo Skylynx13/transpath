@@ -8,10 +8,11 @@
  * Date:2016-5-16 下午2:04:15
  * 
  */
-package com.libra42.transpath.tree;
+package com.libra42.transpath.store;
 
 import java.io.File;
 
+import com.libra42.transpath.tree.Node;
 import com.libra42.transpath.utils.FileUtils;
 import com.libra42.transpath.utils.TransConst;
 

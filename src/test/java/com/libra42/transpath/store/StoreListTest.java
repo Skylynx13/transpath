@@ -8,7 +8,7 @@
  * Date:2016-6-17 上午12:29:56
  * 
  */
-package com.libra42.transpath.tree;
+package com.libra42.transpath.store;
 
 import static org.junit.Assert.*;
 
@@ -16,8 +16,8 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.libra42.transpath.tree.StoreList;
-import com.libra42.transpath.tree.StoreNode;
+import com.libra42.transpath.store.StoreList;
+import com.libra42.transpath.store.StoreNode;
 
 /**
  * ClassName: StoreListTest <br/>
