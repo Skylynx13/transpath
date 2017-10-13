@@ -8,7 +8,7 @@
  * Date:2015-11-4 下午4:26:14
  * 
  */
-package com.libra42.transpath.worker;
+package com.libra42.transpath.store;
 
 import java.io.File;
 import java.io.FileNotFoundException;

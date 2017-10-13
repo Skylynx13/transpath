@@ -8,7 +8,7 @@
  * Date:2015-11-4 下午11:23:27
  * 
  */
-package com.libra42.transpath.worker;
+package com.libra42.transpath.task;
 
 import com.libra42.transpath.log.TransLog;
 import com.libra42.transpath.utils.DateUtils;

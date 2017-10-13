@@ -8,15 +8,15 @@
  * Date:2015-2-17 上午10:13:07
  * 
  */
-package com.libra42.transpath.worker;
+package com.libra42.transpath.task;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.libra42.transpath.utils.CdEntry;
+import com.libra42.transpath.task.Arranger;
+import com.libra42.transpath.task.CdEntry;
 import com.libra42.transpath.utils.FileUtils;
-import com.libra42.transpath.worker.Arranger;
 
  /**
  * ClassName: ArrangerTest <br/>

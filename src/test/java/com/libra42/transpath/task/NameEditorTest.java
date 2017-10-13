@@ -8,14 +8,14 @@
  * Date:2017-9-30 下午1:47:47
  * 
  */
-package com.libra42.transpath.worker;
+package com.libra42.transpath.task;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.libra42.transpath.worker.NameEditor;
+import com.libra42.transpath.task.NameEditor;
 
  /**
  * ClassName: NameEditorTest <br/>

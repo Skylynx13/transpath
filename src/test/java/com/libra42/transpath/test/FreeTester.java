@@ -19,13 +19,13 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Properties;
 
+import com.libra42.transpath.task.Arranger;
+import com.libra42.transpath.task.CdEntry;
 import com.libra42.transpath.tree.Node;
 import com.libra42.transpath.tree.NodeTree;
 import com.libra42.transpath.tree.SimpleNode;
-import com.libra42.transpath.utils.CdEntry;
 import com.libra42.transpath.utils.TransConst;
 import com.libra42.transpath.utils.TransProp;
-import com.libra42.transpath.worker.Arranger;
 
 /**
  * ClassName: FreeTester <br/>

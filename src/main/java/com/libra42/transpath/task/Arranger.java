@@ -8,7 +8,7 @@
  * Date:Apr 23, 2014 11:32:59 PM
  * 
  */
-package com.libra42.transpath.worker;
+package com.libra42.transpath.task;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Scanner;
 
 import com.libra42.transpath.log.TransLog;
-import com.libra42.transpath.utils.CdEntry;
 import com.libra42.transpath.utils.TransConst;
 
  /**

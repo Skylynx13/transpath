@@ -8,7 +8,7 @@
  * Date:2016-7-15 上午11:13:49
  * 
  */
-package com.libra42.transpath.worker;
+package com.libra42.transpath.pub;
 
 import java.util.ArrayList;
 import java.util.HashMap;

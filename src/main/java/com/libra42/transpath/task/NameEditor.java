@@ -8,7 +8,7 @@
  * Date:2015-2-3 上午11:08:20
  * 
  */
-package com.libra42.transpath.worker;
+package com.libra42.transpath.task;
 
 import java.io.File;
 import java.io.FileReader;
