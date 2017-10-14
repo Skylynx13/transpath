@@ -12,23 +12,12 @@ package com.libra42.transpath.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -40,14 +29,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
 import com.libra42.transpath.log.TransLog;
-import com.libra42.transpath.pub.PubKeeper;
 import com.libra42.transpath.pub.PubList;
-import com.libra42.transpath.store.StoreKeeper;
 import com.libra42.transpath.store.StoreList;
-import com.libra42.transpath.task.NameEditor;
-import com.libra42.transpath.task.TaskKeeper;
 import com.libra42.transpath.tree.NodeTree;
-import com.libra42.transpath.utils.CompressUtils;
 import com.libra42.transpath.utils.FileUtils;
 import com.libra42.transpath.utils.TransConst;
 import com.libra42.transpath.utils.TransProp;
@@ -68,7 +52,6 @@ import com.libra42.transpath.utils.TransProp;
 public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    private static final Font GLOBAL_FONT = new Font("GLOBAL", Font.PLAIN, TransProp.getInt(TransConst.SIZE_TEXT));
 
     private static JTextArea logTextArea = new JTextArea();
 
@@ -81,172 +64,8 @@ public class TranspathFrame extends JFrame {
         this.setSize((int) screenSize.getWidth() * 2 / 3, (int) screenSize.getHeight() * 2 / 3);
         this.setTitle("Storage Archivist");
         this.setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
-        initMenuBar();
+        this.setJMenuBar(new TranspathMenuBar(this));
         initJTree();
-    }
-
-    private ExecutorService service = Executors.newCachedThreadPool(new ThreadFactory() {
-
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, "output");
-        }
-    });
-
-    public void initMenuBar() {
-        UIManager.put("Menu.font", GLOBAL_FONT);
-        UIManager.put("MenuItem.font", GLOBAL_FONT);
-        JMenuBar menuBar = new JMenuBar();
-        this.setJMenuBar(menuBar);
-
-        JMenu sysMenu = new JMenu("Sys");
-        menuBar.add(sysMenu);
-
-        JMenuItem sysReloadItem = new JMenuItem("Reload");
-        sysMenu.add(sysReloadItem);
-        sysReloadItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                initJTree();
-            }
-        });
-
-        sysMenu.add(new JSeparator());
-
-        JMenuItem sysExitItem = new JMenuItem("Exit");
-        sysMenu.add(sysExitItem);
-        sysExitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                exit();
-            }
-        });
-
-        JMenu taskMenu = new JMenu("Task");
-        menuBar.add(taskMenu);
-
-        JMenuItem taskWeekItem = new JMenuItem("Weekly Digging");
-        taskMenu.add(taskWeekItem);
-        taskWeekItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        TaskKeeper.weekFresh();
-                        TaskKeeper.digNewFresh();
-                    }
-                });
-            }
-        });
-
-        JMenuItem taskSpecItem = new JMenuItem("Spec Digging");
-        taskMenu.add(taskSpecItem);
-        taskSpecItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        TaskKeeper.digSpecFresh();
-                    }
-                });
-            }
-        });
-
-        JMenuItem taskNameItem = new JMenuItem("Name Revise");
-        taskMenu.add(taskNameItem);
-        taskNameItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        NameEditor.rename();
-                    }
-                });
-            }
-        });
-
-        JMenuItem taskPackageItem = new JMenuItem("Package Check");
-        taskMenu.add(taskPackageItem);
-        taskPackageItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        CompressUtils.unrar("D:/temp/test.rar", "d:/temp/test01/");
-                    }
-                });
-            }
-        });
-
-        JMenu storeMenu = new JMenu("Store");
-        menuBar.add(storeMenu);
-
-        JMenuItem storeCombineItem = new JMenuItem("Combine");
-        storeMenu.add(storeCombineItem);
-        storeCombineItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        StoreKeeper.buildCombinedList();
-                    }
-                });
-            }
-        });
-
-        JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
-        storeMenu.add(storeCombineTestItem);
-        storeCombineTestItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        StoreKeeper.testCombinedList();
-                    }
-                });
-            }
-        });
-
-        JMenu pubMenu = new JMenu("Pub");
-        menuBar.add(pubMenu);
-
-        JMenuItem pubRefreshItem = new JMenuItem("Refresh");
-        pubMenu.add(pubRefreshItem);
-        pubRefreshItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        PubKeeper.refreshPubList();
-                    }
-                });
-            }
-        });
-
-        JMenu helpMenu = new JMenu("Help");
-        menuBar.add(helpMenu);
-
-        JMenuItem helpAboutItem = new JMenuItem("About");
-        helpMenu.add(helpAboutItem);
-        helpAboutItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        TransLog.getLogger().error("It's ok anyway.");
-                        TransLog.getLogger().info("Info can be seen.");
-                    }
-                });
-            }
-        });
     }
 
     public void initJTree() {
@@ -265,7 +84,7 @@ public class TranspathFrame extends JFrame {
         JScrollPane storeScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         storeScrollPane.setViewportView(storeTree);
-        storeTree.setFont(GLOBAL_FONT);
+        storeTree.setFont(TransConst.GLOBAL_FONT);
         storeTree.revalidate();
 
         PubList pubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
@@ -280,7 +99,7 @@ public class TranspathFrame extends JFrame {
         JScrollPane pubScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         pubScrollPane.setViewportView(pubTree);
-        pubTree.setFont(GLOBAL_FONT);
+        pubTree.setFont(TransConst.GLOBAL_FONT);
         pubTree.revalidate();
 
         JTabbedPane treeTabbedPane = new JTabbedPane();
@@ -317,7 +136,7 @@ public class TranspathFrame extends JFrame {
 
         JScrollPane logScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        logScrollPane.setFont(GLOBAL_FONT);
+        logScrollPane.setFont(TransConst.GLOBAL_FONT);
         logScrollPane.setViewportView(logTextArea);
 
         JTabbedPane lowerTabbedPane = new JTabbedPane();

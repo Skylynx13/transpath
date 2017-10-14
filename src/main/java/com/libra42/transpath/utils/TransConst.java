@@ -1,5 +1,7 @@
 package com.libra42.transpath.utils;
 
+import java.awt.Font;
+
 public class TransConst {
     public static final String LOC_CONFIG = "LOC_CONFIG";
     public static final String LOC_LIST   = "LOC_LIST";
@@ -56,4 +58,6 @@ public class TransConst {
     public static final String FMT_DATE_TIME_LONG  = "yyyyMMddHHmmssSSS";
     public static final String FMT_DATE            = "yyyyMMdd";
     
+    public static final Font GLOBAL_FONT = new Font("GLOBAL", Font.PLAIN, TransProp.getInt(SIZE_TEXT));
+
 }
