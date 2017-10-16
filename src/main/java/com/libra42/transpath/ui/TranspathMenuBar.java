@@ -68,7 +68,7 @@ public class TranspathMenuBar extends JMenuBar {
         sysReloadItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                transpathFrame.initJTree();
+                transpathFrame.initPanel();
             }
         });
 
@@ -79,8 +79,7 @@ public class TranspathMenuBar extends JMenuBar {
         sysExitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TransLog.getLogger().info("Transpath Exit.");
-                System.exit(0);
+                transpathFrame.exit();
             }
         });
         return sysMenu;

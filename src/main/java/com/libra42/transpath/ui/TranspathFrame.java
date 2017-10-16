@@ -11,6 +11,7 @@
 package com.libra42.transpath.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
@@ -31,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 import com.libra42.transpath.log.TransLog;
 import com.libra42.transpath.pub.PubList;
 import com.libra42.transpath.store.StoreList;
+import com.libra42.transpath.tree.NodeList;
 import com.libra42.transpath.tree.NodeTree;
 import com.libra42.transpath.utils.FileUtils;
 import com.libra42.transpath.utils.TransConst;
@@ -65,94 +67,17 @@ public class TranspathFrame extends JFrame {
         this.setTitle("Storage Archivist");
         this.setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
         this.setJMenuBar(new TranspathMenuBar(this));
-        initJTree();
+        initPanel();
     }
 
-    public void initJTree() {
+    protected void initPanel() {
         JPanel contentPanel = (JPanel) this.getContentPane();
         contentPanel.removeAll();
-        contentPanel.setLayout(new BorderLayout());
 
+        contentPanel.setLayout(new BorderLayout());
         setLookAndFeel();
 
-        String storeNameOfVersion = FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR));
-        StoreList storeList = new StoreList(storeNameOfVersion);
-        TransLog.getLogger().info("List: " + storeNameOfVersion + " loaded.");
-        NodeTree storeNodeTree = NodeTree.buildFromList(storeList);
-        storeNodeTree.recursivelySort();
-        JTree storeTree = new JTree(storeNodeTree);
-        JScrollPane storeScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        storeScrollPane.setViewportView(storeTree);
-        storeTree.setFont(TransConst.GLOBAL_FONT);
-        storeTree.revalidate();
-
-        PubList pubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
-        NodeTree pubNodeTree = NodeTree.buildFromList(pubList);
-        pubNodeTree.recursivelySort();
-        JTree pubTree = new JTree(pubNodeTree);
-
-        pubTree.setShowsRootHandles(true);
-        pubTree.setRootVisible(true);
-        pubTree.setEditable(true);
-
-        JScrollPane pubScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        pubScrollPane.setViewportView(pubTree);
-        pubTree.setFont(TransConst.GLOBAL_FONT);
-        pubTree.revalidate();
-
-        JTabbedPane treeTabbedPane = new JTabbedPane();
-        treeTabbedPane.setTabPlacement(JTabbedPane.TOP);
-        treeTabbedPane.addTab("Store Tree", storeScrollPane);
-        treeTabbedPane.addTab("Pub Tree", pubScrollPane);
-
-        Object[][] tableData = storeList.toRows();
-        String[] tableTitle = { "Id", "Length", "Update Time", "MD5", "SHA", "CRC32", "Store Path", "Name" };
-        DefaultTableModel tableModel = new DefaultTableModel(tableData, tableTitle);
-
-        JTable infoTable = new JTable(tableModel);
-        JScrollPane infoTableScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        infoTableScrollPane.setViewportView(infoTable);
-
-        JTextArea infoText = new JTextArea();
-        infoText.setText("information");
-        JScrollPane infoTextScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        infoTextScrollPane.setViewportView(infoText);
-
-        JTabbedPane infoTabbedPane = new JTabbedPane();
-        infoTabbedPane.setTabPlacement(JTabbedPane.TOP);
-        infoTabbedPane.addTab("Info Table", infoTableScrollPane);
-        infoTabbedPane.addTab("Info Page", infoTextScrollPane);
-
-        JSplitPane upperSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeTabbedPane, infoTabbedPane);
-        upperSplitPane.setContinuousLayout(true);
-        upperSplitPane.setOneTouchExpandable(true);
-        upperSplitPane.setSize(super.getSize());
-        upperSplitPane.setDividerLocation(0.2);
-        upperSplitPane.setDividerSize(8);
-
-        JScrollPane logScrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        logScrollPane.setFont(TransConst.GLOBAL_FONT);
-        logScrollPane.setViewportView(logTextArea);
-
-        JTabbedPane lowerTabbedPane = new JTabbedPane();
-        lowerTabbedPane.setTabPlacement(JTabbedPane.TOP);
-        lowerTabbedPane.addTab("TransLog", logScrollPane);
-        lowerTabbedPane.addTab("test", new JTextArea());
-
-        JSplitPane allSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, upperSplitPane, lowerTabbedPane);
-        allSplitPane.setContinuousLayout(true);
-        allSplitPane.setOneTouchExpandable(true);
-        allSplitPane.setSize(super.getSize());
-        allSplitPane.setDividerLocation(0.7);
-        allSplitPane.setDividerSize(8);
-
-        contentPanel.add(allSplitPane, BorderLayout.CENTER);
-
+        contentPanel.add(createAllSplitPane(), BorderLayout.CENTER);
         this.setVisible(true);
     }
 
@@ -172,6 +97,96 @@ public class TranspathFrame extends JFrame {
         }
     }
 
+    private JSplitPane createAllSplitPane() {
+        return createSplitPane(JSplitPane.VERTICAL_SPLIT, createUpperSplitPane(), createLowerTabbedPane(), 0.7);
+    }
+
+    private JSplitPane createUpperSplitPane() {
+        return createSplitPane(JSplitPane.HORIZONTAL_SPLIT, createTreeTabbedPane(), createInfoTabbedPane(), 0.2);
+    }
+
+    private JSplitPane createSplitPane(int newOrientation, Component newLeftComponent, Component newRightComponent,
+            double proportionalLocation) {
+        JSplitPane splitPane = new JSplitPane(newOrientation, newLeftComponent, newRightComponent);
+        splitPane.setContinuousLayout(true);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setSize(super.getSize());
+        splitPane.setDividerLocation(proportionalLocation);
+        splitPane.setDividerSize(8);
+
+        return splitPane;
+    }
+
+    private JTabbedPane createTreeTabbedPane() {
+        JTabbedPane treeTabbedPane = createTabbedPane();
+        treeTabbedPane.addTab("Store Tree", createScrollPane(createCurrentStoreTree()));
+        treeTabbedPane.addTab("Pub Tree", createScrollPane(createCurrentPubTree()));
+
+        TransLog.getLogger()
+                .info("List: " + FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR)) + " loaded.");
+
+        return treeTabbedPane;
+    }
+
+    private JTree createCurrentStoreTree() {
+        return createTree(new StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR))));
+    }
+
+    private JTree createCurrentPubTree() {
+        return createTree(new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR))));
+    }
+
+    private JTree createTree(NodeList nodeList) {
+        NodeTree nodeTree = NodeTree.buildFromList(nodeList);
+        nodeTree.recursivelySort();
+
+        JTree jTree = new JTree(nodeTree);
+        jTree.setShowsRootHandles(true);
+        jTree.setRootVisible(false);
+        jTree.setEditable(true);
+        jTree.setFont(TransConst.GLOBAL_FONT);
+
+        return jTree;
+    }
+
+    private JTabbedPane createInfoTabbedPane() {
+        // Object[][] tableData = new
+        // StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR))).toRows();
+        // String[] tableTitle = { "Id", "Length", "Update Time", "MD5", "SHA", "CRC32",
+        // "Store Path", "Name" };
+        // DefaultTableModel tableModel = new DefaultTableModel(tableData, tableTitle);
+        // JTable infoTable = new JTable(tableModel);
+        JTabbedPane infoTabbedPane = createTabbedPane();
+        infoTabbedPane.addTab("Info Table", createScrollPane(null));
+        infoTabbedPane.addTab("Info Page", createScrollPane(new JTextArea("information")));
+
+        return infoTabbedPane;
+    }
+
+    private JTabbedPane createLowerTabbedPane() {
+        JTabbedPane lowerTabbedPane = createTabbedPane();
+        lowerTabbedPane.addTab("Console", createScrollPane(logTextArea));
+
+        return lowerTabbedPane;
+    }
+    
+    private JTabbedPane createTabbedPane() {
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setTabPlacement(JTabbedPane.TOP);
+        tabbedPane.setFont(TransConst.GLOBAL_FONT);
+        return tabbedPane;
+    }
+
+    private JScrollPane createScrollPane(Component comp) {
+        JScrollPane scrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setFont(TransConst.GLOBAL_FONT);
+        if (comp != null) {
+            scrollPane.setViewportView(comp);
+        }
+        return scrollPane;
+    }
+
     @Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -179,7 +194,7 @@ public class TranspathFrame extends JFrame {
         }
     }
 
-    private void exit() {
+    protected void exit() {
         TransLog.getLogger().info("Transpath Exit.");
         System.exit(0);
     }
