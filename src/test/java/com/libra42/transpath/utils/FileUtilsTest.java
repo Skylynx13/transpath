@@ -33,7 +33,7 @@ import com.libra42.transpath.utils.FileUtils;
  */
 public class FileUtilsTest {
 
-    private static final String TEST_RESOURCES_LOC = "src/test/resources/tst/";
+    private static final String TEST_RESOURCES_LOC = "src/test/resources/";
     
     private String testResource(String fileName) {
         return (TEST_RESOURCES_LOC + fileName);
@@ -76,7 +76,7 @@ public class FileUtilsTest {
     }
     @Test
     public void getFileSizeTest_dir_size() {
-        assertEquals(53706, FileUtils.getFileSize(new File(testResource("GetFileSizeTest"))));
+        assertEquals(32885201, FileUtils.getFileSize(new File(testResource(""))));
     }
     @Test
     public void clearFileTest() {

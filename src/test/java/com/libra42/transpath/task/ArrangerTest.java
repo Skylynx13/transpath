@@ -33,7 +33,7 @@ import com.libra42.transpath.utils.FileUtils;
 
 public class ArrangerTest {
     
-    private static final String TEST_RESOURCES_LOC = "src/test/resources/tst/";
+    private static final String TEST_RESOURCES_LOC = "src/test/resources/";
     
     private String testResource(String fileName) {
         return (TEST_RESOURCES_LOC + fileName);

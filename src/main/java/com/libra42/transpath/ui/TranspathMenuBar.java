@@ -38,7 +38,7 @@ import com.libra42.transpath.utils.TransConst;
  * 
  * @author qxu@
  * 
- * Change Log:
+ *         Change Log:
  * @version yyyy-mm-dd qxu@<br/>
  * 
  */
@@ -51,7 +51,7 @@ public class TranspathMenuBar extends JMenuBar {
     private static final long serialVersionUID = 1L;
 
     private TranspathFrame transpathFrame;
-    
+
     private ExecutorService transpathMenuAction = Executors.newCachedThreadPool(new ThreadFactory() {
 
         @Override
@@ -62,7 +62,7 @@ public class TranspathMenuBar extends JMenuBar {
 
     private JMenu createSysMenu() {
         JMenu sysMenu = new JMenu("Sys");
-        
+
         JMenuItem sysReloadItem = new JMenuItem("Reload");
         sysMenu.add(sysReloadItem);
         sysReloadItem.addActionListener(new ActionListener() {
@@ -84,7 +84,7 @@ public class TranspathMenuBar extends JMenuBar {
         });
         return sysMenu;
     }
-    
+
     private JMenu createTaskMenu() {
         JMenu taskMenu = new JMenu("Task");
 
@@ -146,7 +146,7 @@ public class TranspathMenuBar extends JMenuBar {
         });
         return taskMenu;
     }
-    
+
     private JMenu createStoreMenu() {
         JMenu storeMenu = new JMenu("Store");
 
@@ -179,7 +179,7 @@ public class TranspathMenuBar extends JMenuBar {
         });
         return storeMenu;
     }
-    
+
     private JMenu createPubMenu() {
         JMenu pubMenu = new JMenu("Pub");
 
@@ -198,7 +198,7 @@ public class TranspathMenuBar extends JMenuBar {
         });
         return pubMenu;
     }
-    
+
     private JMenu createHelpMenu() {
         JMenu helpMenu = new JMenu("Help");
 
@@ -218,7 +218,7 @@ public class TranspathMenuBar extends JMenuBar {
         });
         return helpMenu;
     }
-    
+
     private void setFont() {
         UIManager.put("Menu.font", TransConst.GLOBAL_FONT);
         UIManager.put("MenuItem.font", TransConst.GLOBAL_FONT);
@@ -226,7 +226,7 @@ public class TranspathMenuBar extends JMenuBar {
 
     public TranspathMenuBar(TranspathFrame transpathFrame) {
         this.transpathFrame = transpathFrame;
-        
+
         setFont();
 
         this.add(createSysMenu());
@@ -234,7 +234,6 @@ public class TranspathMenuBar extends JMenuBar {
         this.add(createStoreMenu());
         this.add(createPubMenu());
         this.add(createHelpMenu());
-
 
     }
 
