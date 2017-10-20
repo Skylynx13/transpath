@@ -14,6 +14,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -29,6 +31,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import com.libra42.transpath.log.TransLog;
 import com.libra42.transpath.pub.PubList;
 import com.libra42.transpath.store.StoreList;
+import com.libra42.transpath.tree.Node;
 import com.libra42.transpath.tree.NodeList;
 import com.libra42.transpath.tree.NodeTree;
 import com.libra42.transpath.utils.FileUtils;
@@ -53,7 +56,9 @@ public class TranspathFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private static JTextArea logTextArea = new JTextArea();
-
+    
+    private static JTextArea infoTextArea = new JTextArea("information");
+    
     public static JTextArea getLogTextArea() {
         return logTextArea;
     }
@@ -143,6 +148,35 @@ public class TranspathFrame extends JFrame {
         jTree.setEditable(true);
         jTree.setFont(TransConst.GLOBAL_FONT);
 
+        jTree.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                NodeTree selectTree = (NodeTree)jTree.getSelectionPath().getLastPathComponent();
+                Node selectNode = selectTree.getNode();
+                infoTextArea.setText("Tree Selected: " + selectTree.toString()+"\n");
+//                if (selectNode instanceof StoreNode) {
+                    infoTextArea.append("Node Selected: " + selectNode.keepNode()+"\n");
+//                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+            
+        });
         return jTree;
     }
 
@@ -153,9 +187,11 @@ public class TranspathFrame extends JFrame {
         // "Store Path", "Name" };
         // DefaultTableModel tableModel = new DefaultTableModel(tableData, tableTitle);
         // JTable infoTable = new JTable(tableModel);
+        
+        
         JTabbedPane infoTabbedPane = createTabbedPane();
         infoTabbedPane.addTab("Info Table", createScrollPane(null));
-        infoTabbedPane.addTab("Info Page", createScrollPane(new JTextArea("information")));
+        infoTabbedPane.addTab("Info Page", createScrollPane(infoTextArea));
 
         return infoTabbedPane;
     }
