@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.libra42.transpath.task.Arranger;
-import com.libra42.transpath.task.CdEntry;
+import com.libra42.transpath.task.TaskArranger;
+import com.libra42.transpath.task.TaskEntry;
 import com.libra42.transpath.utils.FileUtils;
 
  /**
@@ -41,7 +41,7 @@ public class ArrangerTest {
     
     @Test
     public void appendToFileTest() {
-        Arranger argr = new Arranger();
+        TaskArranger argr = new TaskArranger();
         int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_appendToFileTest.txt"));
         assertEquals(31, n);
         assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendToFileTest.txt"), testResource("ArrangerTest_task_000.txt")));
@@ -53,7 +53,7 @@ public class ArrangerTest {
 
     @Test
     public void readSortMergeWriteTest_raw_task() {
-        Arranger argr = new Arranger();
+        TaskArranger argr = new TaskArranger();
         int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_task.txt"));
         assertEquals(31, n);
         assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_task.txt"), testResource("ArrangerTest_task_000.txt")));
@@ -62,46 +62,46 @@ public class ArrangerTest {
     @Test
     public void applyFilterTest_keywords_filter() {
         String[] keys = {".*123.*", ".*4.6.*"};
-        CdEntry ent1 = new CdEntry("entry123 c2c");
+        TaskEntry ent1 = new TaskEntry("entry123 c2c");
         ent1.addComment("comm1");
         ent1.addLink("link1");
-        CdEntry ent2 = new CdEntry("entry467 b2b");
+        TaskEntry ent2 = new TaskEntry("entry467 b2b");
         ent2.addComment("comm2");
         ent2.addLink("link2");
         ent2.addLink("link123/467:6666");
-        CdEntry ent3 = new CdEntry("entry456 b2b");
+        TaskEntry ent3 = new TaskEntry("entry456 b2b");
         ent3.addComment("comm3");
         ent3.addLink("link3");
-        CdEntry ent4 = new CdEntry("entry789 b2b");
+        TaskEntry ent4 = new TaskEntry("entry789 b2b");
         ent4.addComment("comm4");
         ent4.addLink("link://console4g6f.html");
         ent4.addLink("link4");
-        CdEntry ent5 = new CdEntry("nomatch (yes it is)");
+        TaskEntry ent5 = new TaskEntry("nomatch (yes it is)");
         ent5.addComment("comm5");
         ent5.addLink("link5");
         ent5.addLink("link55");
-        Arranger arr1 = new Arranger();
+        TaskArranger arr1 = new TaskArranger();
         arr1.addEntry(ent1);
         arr1.addEntry(ent2);
         arr1.addEntry(ent3);
         arr1.addEntry(ent4);
         arr1.addEntry(ent5);
         
-        CdEntry ent11 = new CdEntry("entry123 c2c");
+        TaskEntry ent11 = new TaskEntry("entry123 c2c");
         ent11.addComment("comm1");
         ent11.addLink("link1");
-        CdEntry ent12 = new CdEntry("entry467 b2b");
+        TaskEntry ent12 = new TaskEntry("entry467 b2b");
         ent12.addComment("comm2");
         ent12.addLink("link2");
         ent12.addLink("link123/467:6666");
-        CdEntry ent13 = new CdEntry("entry456 b2b");
+        TaskEntry ent13 = new TaskEntry("entry456 b2b");
         ent13.addComment("comm3");
         ent13.addLink("link3");
-        CdEntry ent14 = new CdEntry("entry789 b2b");
+        TaskEntry ent14 = new TaskEntry("entry789 b2b");
         ent14.addComment("comm4");
         ent14.addLink("link://console4g6f.html");
         ent14.addLink("link4");
-        Arranger arr11 = new Arranger();
+        TaskArranger arr11 = new TaskArranger();
         arr11.addEntry(ent11);
         arr11.addEntry(ent12);
         arr11.addEntry(ent13);
@@ -112,23 +112,23 @@ public class ArrangerTest {
     @Test
     public void applyFilterTest_keywords_filter_upper_lower_cases() {
         String[] keys = {"123", "B2B"};
-        CdEntry ent1 = new CdEntry("entry123 c2c");
-        CdEntry ent2 = new CdEntry("entry467 B2B");
-        CdEntry ent3 = new CdEntry("entry456 B2b");
-        CdEntry ent4 = new CdEntry("entry789 b2b");
-        CdEntry ent5 = new CdEntry("nomatch (yes it is)");
-        Arranger arr1 = new Arranger();
+        TaskEntry ent1 = new TaskEntry("entry123 c2c");
+        TaskEntry ent2 = new TaskEntry("entry467 B2B");
+        TaskEntry ent3 = new TaskEntry("entry456 B2b");
+        TaskEntry ent4 = new TaskEntry("entry789 b2b");
+        TaskEntry ent5 = new TaskEntry("nomatch (yes it is)");
+        TaskArranger arr1 = new TaskArranger();
         arr1.addEntry(ent1);
         arr1.addEntry(ent2);
         arr1.addEntry(ent3);
         arr1.addEntry(ent4);
         arr1.addEntry(ent5);
         
-        CdEntry ent11 = new CdEntry("entry123 c2c");
-        CdEntry ent12 = new CdEntry("entry467 B2B");
-        CdEntry ent13 = new CdEntry("entry456 B2b");
-        CdEntry ent14 = new CdEntry("entry789 b2b");
-        Arranger arr11 = new Arranger();
+        TaskEntry ent11 = new TaskEntry("entry123 c2c");
+        TaskEntry ent12 = new TaskEntry("entry467 B2B");
+        TaskEntry ent13 = new TaskEntry("entry456 B2b");
+        TaskEntry ent14 = new TaskEntry("entry789 b2b");
+        TaskArranger arr11 = new TaskArranger();
         arr11.addEntry(ent11);
         arr11.addEntry(ent12);
         arr11.addEntry(ent13);
@@ -139,8 +139,8 @@ public class ArrangerTest {
     
     @Test
     public void equalsTest_equals_entries() {
-        Arranger firstArranger = new Arranger();
-        Arranger secondArranger = new Arranger();
+        TaskArranger firstArranger = new TaskArranger();
+        TaskArranger secondArranger = new TaskArranger();
         firstArranger.addEntry("abc");
         secondArranger.addEntry("abc");
         assertEquals(true, firstArranger.equals(secondArranger));
@@ -150,16 +150,16 @@ public class ArrangerTest {
     }
     @Test
     public void equalsTest_not_equals_entry() {
-        Arranger firstArranger = new Arranger();
-        Arranger secondArranger = new Arranger();
+        TaskArranger firstArranger = new TaskArranger();
+        TaskArranger secondArranger = new TaskArranger();
         firstArranger.addEntry("abc");
         secondArranger.addEntry("def");
         assertEquals(false, firstArranger.equals(secondArranger));
     }
     @Test
     public void equalsTest_not_equals_entries() {
-        Arranger firstArranger = new Arranger();
-        Arranger secondArranger = new Arranger();
+        TaskArranger firstArranger = new TaskArranger();
+        TaskArranger secondArranger = new TaskArranger();
         firstArranger.addEntry("abc");
         secondArranger.addEntry("abc");
         assertEquals(true, firstArranger.equals(secondArranger));
@@ -169,15 +169,15 @@ public class ArrangerTest {
     }
     @Test
     public void equalsTest_equals_comments_links() {
-        Arranger firstArranger = new Arranger();
-        Arranger secondArranger = new Arranger();
-        CdEntry ent = new CdEntry("abc");
+        TaskArranger firstArranger = new TaskArranger();
+        TaskArranger secondArranger = new TaskArranger();
+        TaskEntry ent = new TaskEntry("abc");
         ent.addComment("comm1");
         ent.addComment("comm2");
         ent.addLink("link1");
         ent.addLink("link2");
         firstArranger.addEntry(ent);
-        CdEntry ent1 = new CdEntry("abc");
+        TaskEntry ent1 = new TaskEntry("abc");
         ent1.addComment("comm1");
         ent1.addComment("comm2");
         ent1.addLink("link1");
@@ -188,27 +188,27 @@ public class ArrangerTest {
 
     @Test
     public void equalsTest_not_equals_comments_links() {
-        Arranger firstArranger = new Arranger();
-        CdEntry ent = new CdEntry("abc");
+        TaskArranger firstArranger = new TaskArranger();
+        TaskEntry ent = new TaskEntry("abc");
         ent.addComment("comm1");
         ent.addComment("comm2");
         ent.addLink("link1");
         ent.addLink("link2");
         firstArranger.addEntry(ent);
-        CdEntry ent1 = new CdEntry("abc");
+        TaskEntry ent1 = new TaskEntry("abc");
         ent1.addComment("comm1");
         ent1.addComment("comm2");
         ent1.addLink("link2");
         ent1.addLink("link1");
-        Arranger secondArranger = new Arranger();
+        TaskArranger secondArranger = new TaskArranger();
         secondArranger.addEntry(ent1);
         assertEquals(false, firstArranger.equals(secondArranger));
-        CdEntry ent2 = new CdEntry("abc");
+        TaskEntry ent2 = new TaskEntry("abc");
         ent2.addComment("comm2");
         ent2.addComment("comm1");
         ent2.addLink("link1");
         ent2.addLink("link2");
-        Arranger thirdArranger = new Arranger();
+        TaskArranger thirdArranger = new TaskArranger();
         thirdArranger.addEntry(ent2);
         assertEquals(false, firstArranger.equals(thirdArranger));
     }

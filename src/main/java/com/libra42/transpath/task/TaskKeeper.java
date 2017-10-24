@@ -39,7 +39,7 @@ public class TaskKeeper {
     public void keepRaw() {
         TransLog.getLogger().info("Keeping raw...");
         FileUtils.copyFileBytes(TransProp.get(TransConst.LOC_TASK) + "dump.txt", TransProp.get(TransConst.LOC_TASK) + "dump_" + archDate + ".txt");
-        int n = new Arranger().trimFile(TransProp.get(TransConst.LOC_TASK) + "dump.txt", TransProp.get(TransConst.LOC_TASK) + "raw.txt");
+        int n = new TaskArranger().trimFile(TransProp.get(TransConst.LOC_TASK) + "dump.txt", TransProp.get(TransConst.LOC_TASK) + "raw.txt");
         FileUtils.copyFileBytes(TransProp.get(TransConst.LOC_TASK) + "raw.txt", TransProp.get(TransConst.LOC_TASK) + "raw_" + archDate + ".txt");
         TransLog.getLogger().info("Raw Filtered to "+ n + " lines.");        
         TransLog.getLogger().info("Done.");
@@ -47,7 +47,7 @@ public class TaskKeeper {
     
     public void keepFresh() {
         TransLog.getLogger().info("Keeping fresh...");
-        int n = new Arranger().readFromFile(TransProp.get(TransConst.LOC_TASK) + "raw.txt").sort().merge().writeToFile(TransProp.get(TransConst.LOC_TASK) + "fresh.txt");
+        int n = new TaskArranger().readFromFile(TransProp.get(TransConst.LOC_TASK) + "raw.txt").sort().merge().writeToFile(TransProp.get(TransConst.LOC_TASK) + "fresh.txt");
         FileUtils.copyFileBytes(TransProp.get(TransConst.LOC_TASK) + "fresh.txt", TransProp.get(TransConst.LOC_TASK) + "fresh_" + archDate + ".txt");
         TransLog.getLogger().info("Totally " + n + " fresh entries processed.");
         TransLog.getLogger().info("Done.");
@@ -60,14 +60,14 @@ public class TaskKeeper {
     }
     
     public static void digNewFresh() {
-        CodeDigger.digKeywordFileDefault(TransProp.get(TransConst.LOC_TASK) + "fresh.txt", 
+        TaskDigger.digKeywordFileDefault(TransProp.get(TransConst.LOC_TASK) + "fresh.txt", 
                 TransProp.get(TransConst.LOC_TASK) + "task_week.txt");
         TransLog.getLogger().info("Done.");
     }
     
     public static void digSpecFresh() {
         String[] keys = TransProp.get("DIG_SPEC").split("/");
-        CodeDigger.digAllFreshSpecific(keys, 
+        TaskDigger.digAllFreshSpecific(keys, 
                 TransProp.get(TransConst.LOC_TASK) + "task_spec.txt");    
     }
 }

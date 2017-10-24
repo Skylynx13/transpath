@@ -14,8 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -31,7 +30,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import com.libra42.transpath.log.TransLog;
 import com.libra42.transpath.pub.PubList;
 import com.libra42.transpath.store.StoreList;
-import com.libra42.transpath.tree.Node;
 import com.libra42.transpath.tree.NodeList;
 import com.libra42.transpath.tree.NodeTree;
 import com.libra42.transpath.utils.FileUtils;
@@ -61,6 +59,10 @@ public class TranspathFrame extends JFrame {
     
     public static JTextArea getLogTextArea() {
         return logTextArea;
+    }
+
+    public static JTextArea getInfoTextArea() {
+        return infoTextArea;
     }
 
     public TranspathFrame() {
@@ -146,37 +148,11 @@ public class TranspathFrame extends JFrame {
         jTree.setShowsRootHandles(true);
         jTree.setRootVisible(false);
         jTree.setEditable(true);
+        jTree.setDragEnabled(true);
+        jTree.setDropTarget(new DropTarget());
         jTree.setFont(TransConst.GLOBAL_FONT);
+        jTree.addMouseListener(new TreeMouseListener(jTree));
 
-        jTree.addMouseListener(new MouseListener() {
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                NodeTree selectTree = (NodeTree)jTree.getSelectionPath().getLastPathComponent();
-                Node selectNode = selectTree.getNode();
-                infoTextArea.setText("Tree Selected: " + selectTree.toString()+"\n");
-//                if (selectNode instanceof StoreNode) {
-                    infoTextArea.append("Node Selected: " + selectNode.keepNode()+"\n");
-//                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-            
-        });
         return jTree;
     }
 

@@ -16,14 +16,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
 
-import com.libra42.transpath.task.Arranger;
-import com.libra42.transpath.task.CdEntry;
+import com.libra42.transpath.task.TaskArranger;
+import com.libra42.transpath.task.TaskEntry;
 import com.libra42.transpath.tree.Node;
 import com.libra42.transpath.tree.NodeTree;
 import com.libra42.transpath.tree.SimpleNode;
+import com.libra42.transpath.utils.DateUtils;
 import com.libra42.transpath.utils.TransConst;
 import com.libra42.transpath.utils.TransProp;
 
@@ -80,24 +82,24 @@ public class FreeTester {
         System.out.println(aStrList.toString());
     }
     public void testArrangerBasic() {
-        CdEntry cde1 = new CdEntry("name1");
+        TaskEntry cde1 = new TaskEntry("name1");
         //cde1.addComment("comment11");
         cde1.addLink("link11");
-        CdEntry cde2 = new CdEntry("name2", "comment2", "link2");
+        TaskEntry cde2 = new TaskEntry("name2", "comment2", "link2");
         cde2.addComment("comment21");
         cde2.addLink("link21");
-        CdEntry cde3 = new CdEntry("name3", "comment3", "link3");
+        TaskEntry cde3 = new TaskEntry("name3", "comment3", "link3");
         cde3.addComment("comment31");
         cde3.addLink("link32");
-        ArrayList<CdEntry> cdEntries = new ArrayList<CdEntry>();
+        ArrayList<TaskEntry> cdEntries = new ArrayList<TaskEntry>();
         cdEntries.add(cde3);
         cdEntries.add(cde1);
         cdEntries.add(cde2);
-        cde3 = new CdEntry("name4", "comment4", "link4");
+        cde3 = new TaskEntry("name4", "comment4", "link4");
         cde3.addComment("comment41");
         cde3.addLink("link42");
         cdEntries.add(cde3);
-        Arranger argr = new Arranger(cdEntries);
+        TaskArranger argr = new TaskArranger(cdEntries);
         System.out.println(argr.toString());
         System.out.println(argr.toOutput());
         
@@ -110,7 +112,7 @@ public class FreeTester {
     }
     
     public void testArranger() {
-        Arranger argr = new Arranger();
+        TaskArranger argr = new TaskArranger();
         try {
             int n = argr.readFromFile("src/test/resources/raw.txt").sort().merge().writeToFile("src/test/resources/task.txt");
             System.out.println("Totally " + n + " entries processed.");
@@ -214,6 +216,8 @@ public class FreeTester {
         System.out.println(TransProp.get(TransConst.LOC_CONFIG));
 
         System.out.println(System.getProperty("qxu.test"));
+        long lastM = 1508560299855L;
+        System.out.println("Long: " + lastM + "; Date: " + new Date(lastM) + "; Formatted: " + DateUtils.formatDateTimeLong(lastM));
 
     }
 }

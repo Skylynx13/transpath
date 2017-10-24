@@ -25,29 +25,29 @@ import java.util.ArrayList;
  * 
  */
 
-public class CdEntry implements Comparable<CdEntry>{
+public class TaskEntry implements Comparable<TaskEntry>{
     private String name;
     private ArrayList<String> comments;
     private ArrayList<String> links;
-    public CdEntry() {
+    public TaskEntry() {
         this.name = "";
         this.comments = new ArrayList<String>();
         this.links = new ArrayList<String>();
     }
-    public CdEntry(String name) {
+    public TaskEntry(String name) {
         this.name = name;
         this.comments = new ArrayList<String>();
         this.links = new ArrayList<String>();
     }
-    public CdEntry(String name, String comment, String link) {
+    public TaskEntry(String name, String comment, String link) {
         this.name = name;
         this.comments = new ArrayList<String>();
         this.comments.add(comment);
         this.links = new ArrayList<String>();
         this.links.add(link);
     }
-    public CdEntry copy() {
-        CdEntry newCde = new CdEntry();
+    public TaskEntry copy() {
+        TaskEntry newCde = new TaskEntry();
         newCde.setName(this.name);
         newCde.addComments(this.comments);
         newCde.addLinks(this.links);
@@ -135,7 +135,7 @@ public class CdEntry implements Comparable<CdEntry>{
     }
     
     @Override
-    public int compareTo(CdEntry cde) {
+    public int compareTo(TaskEntry cde) {
         return this.name.compareTo(cde.name);
     }
     
@@ -143,14 +143,14 @@ public class CdEntry implements Comparable<CdEntry>{
         return name + this.comments.toString() + this.links.toString();
     }
     
-    public CdEntry mergeEntry(CdEntry otherEntry) {
-        CdEntry newCde = this.copy();
+    public TaskEntry mergeEntry(TaskEntry otherEntry) {
+        TaskEntry newCde = this.copy();
         newCde.addComments(otherEntry.getComments());
         newCde.addUniqueLinks(otherEntry.getLinks());
         return newCde;
     }
     
-    public boolean equals(CdEntry another) {
+    public boolean equals(TaskEntry another) {
         if (!this.name.equals(another.name))
             return false;
         if (this.comments.size() != another.comments.size())

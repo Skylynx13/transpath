@@ -33,41 +33,41 @@ import com.libra42.transpath.utils.TransProp;
  * 
  */
 
-public class CodeDigger {
+public class TaskDigger {
 
     private static final String[] KEYS_BIG_ENTRY = { "(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB)" };
 
     public static void digKeywordFileDefault(String src, String target) {
-        CodeDigger.digKeywordFile(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_KEYWORDS, 
+        TaskDigger.digKeywordFile(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_KEYWORDS, 
                                   src, target);
     }
 
     public static void digKeywordFile(String key, String src, String target) {
-        String[] keywords = CodeDigger.readKeywordList(key);
+        String[] keywords = TaskDigger.readKeywordList(key);
         TransLog.getLogger().info("Digging keywords " + Arrays.toString(keywords));
-        CodeDigger.digKeyword(keywords, src, target);
+        TaskDigger.digKeyword(keywords, src, target);
     }
 
     public static int digKeyword(String[] keywords, String src, String target) {
-        int n = new Arranger().readFromFile(src).applyFilter(keywords).appendToFile(target);
+        int n = new TaskArranger().readFromFile(src).applyFilter(keywords).appendToFile(target);
         TransLog.getLogger().info("" + n + " entries digged from " + src + " are saved to " + target);
         return n;
     }
 
     public static void pickoutKeyword(String[] keys, String src, String target) {
         TransLog.getLogger().info("Digging keyword...");
-        int n = new Arranger().readFromFile(src).applyFilterReversely(keys).appendToFile(target);
+        int n = new TaskArranger().readFromFile(src).applyFilterReversely(keys).appendToFile(target);
         TransLog.getLogger().info("Totally " + n + " entries extracted.");
         TransLog.getLogger().info("Done.");
     }
 
     public static void digBigEntries(String src, String target) {
         TransLog.getLogger().info("Digging keywords " + Arrays.toString(KEYS_BIG_ENTRY));
-        CodeDigger.digKeyword(KEYS_BIG_ENTRY, src, target);
+        TaskDigger.digKeyword(KEYS_BIG_ENTRY, src, target);
     }
 
     public static void pickoutBigEntries(String src, String target) {
-        CodeDigger.pickoutKeyword(KEYS_BIG_ENTRY, src, target);
+        TaskDigger.pickoutKeyword(KEYS_BIG_ENTRY, src, target);
     }
 
     public static String[] readKeywordList(String key) {
@@ -97,7 +97,7 @@ public class CodeDigger {
                 return name.matches("fresh_.*.txt");
             }
         })) {
-            total += CodeDigger.digKeyword(keys, file.getAbsolutePath(), target);
+            total += TaskDigger.digKeyword(keys, file.getAbsolutePath(), target);
             //TransLog.getLogger().info(file.getAbsolutePath());
         }
         TransLog.getLogger().info("Total: " + total);

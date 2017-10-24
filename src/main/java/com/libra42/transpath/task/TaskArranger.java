@@ -35,16 +35,16 @@ import com.libra42.transpath.utils.TransConst;
  * 
  */
 
-public class Arranger {
-    private ArrayList<CdEntry> entries;
-    private CdEntry entry;
+public class TaskArranger {
+    private ArrayList<TaskEntry> entries;
+    private TaskEntry entry;
     private int status;
     
-    public Arranger() {
-        this.entries = new ArrayList<CdEntry>();
+    public TaskArranger() {
+        this.entries = new ArrayList<TaskEntry>();
     }
     
-    public Arranger(ArrayList<CdEntry> entries) {
+    public TaskArranger(ArrayList<TaskEntry> entries) {
         this.entries = entries;
     }
     
@@ -54,15 +54,15 @@ public class Arranger {
     
     public void addEntry(String name) {
         if (this.entries == null) {
-            this.entries = new ArrayList<CdEntry>();
+            this.entries = new ArrayList<TaskEntry>();
         }
-        entry = new CdEntry(name);
+        entry = new TaskEntry(name);
         this.entries.add(entry);
     }
     
-    public void addEntry(CdEntry cde) {
+    public void addEntry(TaskEntry cde) {
         if (this.entries == null) {
-            this.entries = new ArrayList<CdEntry>();
+            this.entries = new ArrayList<TaskEntry>();
         }
         this.entries.add(cde);
     }
@@ -75,7 +75,7 @@ public class Arranger {
         return line.matches("//.*");
     }
     
-    public Arranger readFromFile(String fileName) {
+    public TaskArranger readFromFile(String fileName) {
         Scanner in = null;
         String line = "";
         try {
@@ -143,15 +143,15 @@ public class Arranger {
         return entries.size();
     }
     
-    public Arranger sort() {
+    public TaskArranger sort() {
         Collections.sort(entries);
         return this;
     }
     
-    public Arranger merge() {
-        Arranger newArranger = new Arranger();
-        CdEntry newEntry = null;
-        for (CdEntry currEntry:this.entries) {
+    public TaskArranger merge() {
+        TaskArranger newArranger = new TaskArranger();
+        TaskEntry newEntry = null;
+        for (TaskEntry currEntry:this.entries) {
             if (newEntry == null) {
                 newEntry = currEntry.copy();
                 continue;
@@ -175,8 +175,8 @@ public class Arranger {
         return newArranger;
     }
     
-    public Arranger merge(Arranger otherArranger) {
-        Arranger newArranger = new Arranger();
+    public TaskArranger merge(TaskArranger otherArranger) {
+        TaskArranger newArranger = new TaskArranger();
         newArranger.entries.addAll(this.entries);
         newArranger.entries.addAll(otherArranger.entries);
         return newArranger.sort().merge();
@@ -190,7 +190,7 @@ public class Arranger {
         String str = "";
         if (this.entries == null) 
             return str;
-        for (CdEntry cde:this.entries) {
+        for (TaskEntry cde:this.entries) {
             str += cde.getName() + TransConst.LN;
             for (String cmt: cde.getComments()) {
                 str += cmt + TransConst.LN;
@@ -298,31 +298,31 @@ public class Arranger {
                 || line.matches("^\\s*This image has been resized.*$");
     }
     
-    public Arranger applyFilter(String[] keys) {
-        Arranger newArranger = new Arranger();
-        for (CdEntry currEntry : this.entries) {
+    public TaskArranger applyFilter(String[] keys) {
+        TaskArranger newArranger = new TaskArranger();
+        for (TaskEntry currEntry : this.entries) {
             if (currEntry.matches(keys))
                 newArranger.addEntry(currEntry);
         }
         return newArranger;
     }
     
-    public Arranger applyFilterReversely(String[] keys) {
-        Arranger newArranger = new Arranger();
-        for (CdEntry currEntry : this.entries) {
+    public TaskArranger applyFilterReversely(String[] keys) {
+        TaskArranger newArranger = new TaskArranger();
+        for (TaskEntry currEntry : this.entries) {
             if (!currEntry.matches(keys))
                 newArranger.addEntry(currEntry);
         }
         return newArranger;
     }
     
-    public boolean equals(Arranger another) {
+    public boolean equals(TaskArranger another) {
         if (this.entries.size() != another.entries.size())
             return false;
 
         for (int iLength = 0; iLength < this.entries.size(); iLength++) {
-            CdEntry thisEntry = this.entries.get(iLength);
-            CdEntry anotherEntry = another.entries.get(iLength);
+            TaskEntry thisEntry = this.entries.get(iLength);
+            TaskEntry anotherEntry = another.entries.get(iLength);
             if (!thisEntry.equals(anotherEntry))
                 return false;
         }
