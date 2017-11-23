@@ -13,6 +13,7 @@ package com.skylynx13.transpath.test;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -218,6 +219,10 @@ public class FreeTester {
         System.out.println(System.getProperty("qxu.test"));
         long lastM = 1508560299855L;
         System.out.println("Long: " + lastM + "; Date: " + new Date(lastM) + "; Formatted: " + DateUtils.formatDateTimeLong(lastM));
-
+        // Construct the current date
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        String tsDate10 = ts.toString().substring(0, 10);
+        String tsDate16 = ts.toString().substring(0, 16);
+        System.out.println(tsDate10 + ":::" + tsDate16);
     }
 }
