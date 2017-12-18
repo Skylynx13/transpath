@@ -58,6 +58,8 @@ public class TransConst {
     public static final String FMT_DATE_TIME_LONG  = "yyyyMMddHHmmssSSS";
     public static final String FMT_DATE            = "yyyyMMdd";
     
+    public static final String NAME_CHARS = "[\\-\\+!@#$%^&,.'A-Za-z0-9 \\(\\)]+";
+
     public static final Font GLOBAL_FONT = new Font("GLOBAL", Font.PLAIN, TransProp.getInt(SIZE_TEXT));
 
 }

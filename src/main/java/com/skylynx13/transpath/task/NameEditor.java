@@ -114,10 +114,17 @@ public class NameEditor {
                     }
                     TransLog.getLogger().info(aFile.getName() + " -> " + replacedName);
                 }
+                checkChars(aFile.getName());
             }
         }
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
+    }
+    
+    private void checkChars(String fileName) {
+        if (!fileName.matches(TransConst.NAME_CHARS)) {
+            TransLog.getLogger().info("Check Characters: " + fileName);
+        }
     }
 
     protected String getReplacedName(String[][] replaceList, String originalName) {
@@ -459,7 +466,7 @@ public class NameEditor {
         for (String[] aaa:abc) {
             System.out.println(aaa[0] + ":::::" + aaa[1]);
         }
+        NameEditor.rename();
     }
-    
 }
 
