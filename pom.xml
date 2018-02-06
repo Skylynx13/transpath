@@ -148,7 +148,7 @@
 			<version>2.8.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons.codec</groupId>
+			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
 		</dependency>

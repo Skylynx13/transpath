@@ -193,6 +193,24 @@ public class FreeTester {
         return i + 1;
     }
 
+    private void workoutAbc() {
+        System.out.println("abc ready");
+        for (int a = 1; a<1000; a++) {
+            for (int b=1; b<1000; b++) {
+                for (int c=1; c<1000; c++) {
+                    //float d = a/(b+c)+b/(a+c)+c/(a+b);
+                    //System.out.println(d);
+                    //if (Math.abs(d-4) <0.001) {
+                    boolean d = (a*(a+c)*(a+b)+b*(b+c)*(a+b)+c*(a+c)*(b+c)) == (4*(a+b)*(b+c)*(a+c));
+                    if (d) {
+                        System.out.println("your abc: " + a + "," + b + "," + c + "," + d);
+                    }
+                }
+            }
+        }
+        System.out.println("abc done");
+    }
+
     public static void main(String[] args) {
         FreeTester ft = new FreeTester();
         //ft.testNodeTree();
@@ -224,5 +242,7 @@ public class FreeTester {
         String tsDate10 = ts.toString().substring(0, 10);
         String tsDate16 = ts.toString().substring(0, 16);
         System.out.println(tsDate10 + ":::" + tsDate16);
+
+        ft.workoutAbc();
     }
 }
