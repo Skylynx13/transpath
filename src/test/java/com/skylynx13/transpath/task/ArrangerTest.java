@@ -40,26 +40,26 @@ public class ArrangerTest {
     }
     
     @Test
-    public void appendToFileTest() {
-        TaskArranger argr = new TaskArranger();
-        int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_appendToFileTest.txt"));
-        assertEquals(31, n);
-        assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendToFileTest.txt"), testResource("ArrangerTest_task_000.txt")));
-        argr.clear();
-        n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).appendToFile(testResource("ArrangerTest_appendToFileTest.txt"));
-        assertEquals(35, n);
-        assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendToFileTest.txt"), testResource("ArrangerTest_task_004.txt")));
-    }
-
-    @Test
     public void readSortMergeWriteTest_raw_task() {
         TaskArranger argr = new TaskArranger();
-        int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_task.txt"));
-        assertEquals(31, n);
-        assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_task.txt"), testResource("ArrangerTest_task_000.txt")));
+        int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_appendTo_001.txt"));
+        assertEquals(32, n);
+        assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendTo_001.txt"), testResource("ArrangerTest_appendTo_Expected_001.txt")));
     }
 
-    @Test
+     @Test
+     public void appendToFileTest() {
+         TaskArranger argr = new TaskArranger();
+         int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_appendTo_002.txt"));
+         assertEquals(32, n);
+         assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendTo_002.txt"), testResource("ArrangerTest_appendTo_Expected_001.txt")));
+         argr.clear();
+         n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).appendToFile(testResource("ArrangerTest_appendTo_002.txt"));
+         assertEquals(35, n);
+         assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendTo_002.txt"), testResource("ArrangerTest_appendTo_Expected_002.txt")));
+     }
+
+     @Test
     public void applyFilterTest_keywords_filter() {
         String[] keys = {".*123.*", ".*4.6.*"};
         TaskEntry ent1 = new TaskEntry("entry123 c2c");

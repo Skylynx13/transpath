@@ -42,41 +42,41 @@ public class FileUtilsTest {
     @Test
     public void compareFileBytesTest_same_path() {
         assertEquals(true, FileUtils.compareFileBytes(
-                testResource("ArrangerTest_task_000.txt"),
-                testResource("ArrangerTest_task_000.txt")));
+                testResource("CompareTest_base.txt"),
+                testResource("CompareTest_base.txt")));
     }
 
     @Test
     public void compareFileBytesTest_same_contents() {
         assertEquals(true, FileUtils.compareFileBytes(
-                testResource("ArrangerTest_task_000.txt"),
-                testResource("ArrangerTest_task_001.txt")));
+                testResource("CompareTest_base.txt"),
+                testResource("CompareTest_same.txt")));
     }
 
     @Test
     public void compareFileBytesTest_different_length() {
         assertEquals(false, FileUtils.compareFileBytes(
-                testResource("ArrangerTest_task_000.txt"),
-                testResource("ArrangerTest_task_002.txt")));
+                testResource("CompareTest_base.txt"),
+                testResource("CompareTest_short.txt")));
     }
 
     @Test
     public void compareFileBytesTest_different_contents() {
         assertEquals(false, FileUtils.compareFileBytes(
-                testResource("ArrangerTest_task_000.txt"),
-                testResource("ArrangerTest_task_003.txt")));
+                testResource("CompareTest_base.txt"),
+                testResource("CompareTest_change.txt")));
     }
 
     @Test
     public void getFileSizeTest_file_size() {
-        assertEquals(9445, FileUtils.getFileSize(new File(testResource("ArrangerTest_raw.txt"))));
-        assertEquals(8047, FileUtils.getFileSize(new File(testResource("ArrangerTest_task_000.txt"))));
-        assertEquals(7715, FileUtils.getFileSize(new File(testResource("ArrangerTest_task_002.txt"))));
-        assertEquals( 183, FileUtils.getFileSize(new File(testResource("mergeTest_source_001.txt"))));
+        assertEquals(10318, FileUtils.getFileSize(new File(testResource("ArrangerTest_raw.txt"))));
+        assertEquals(10205, FileUtils.getFileSize(new File(testResource("CompareTest_base.txt"))));
+        assertEquals(8990, FileUtils.getFileSize(new File(testResource("CompareTest_short.txt"))));
+        assertEquals( 10205, FileUtils.getFileSize(new File(testResource("CompareTest_change.txt"))));
     }
     @Test
     public void getFileSizeTest_dir_size() {
-        assertEquals(32885201, FileUtils.getFileSize(new File(testResource(""))));
+        assertEquals(32907186, FileUtils.getFileSize(new File(testResource(""))));
     }
     @Test
     public void clearFileTest() {
