@@ -12,3 +12,8 @@ export PATH=${JAVA_HOME}/bin:${M2}:${PATH}
 
 # install lib
 mvn install:install-file -DgroupId=org.apache.commons.codec -DartifactId=commons-codec -Dversion=1.10 -Dpackaging=jar -Dfile=commons-codec-1.10.jar
+
+# use ssh-add to get github permission
+ssh-agent bash
+ssh-add ~/.ssh/skylynx13_rsa
+

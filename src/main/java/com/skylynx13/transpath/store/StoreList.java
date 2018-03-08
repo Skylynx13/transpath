@@ -81,16 +81,13 @@ public class StoreList extends NodeList{
         recap();
     }
 
-    public void buildByPath(String pRoot, String pPathName) {
+    private void buildByPath(String pRoot, String pPathName) {
         buildByPath(pRoot, new File(pPathName));
     }
 
-    public void buildByPath(String pRoot, File pPath) {
+    private void buildByPath(String pRoot, File pPath) {
         clear();
-        if (pPath.isFile()) {
-            return;
-        }
-        if (pPath.listFiles() == null) {
+        if (!pPath.isDirectory() || pPath.listFiles() == null) {
             return;
         }
         TransLog.getLogger().info(pPath);
@@ -102,7 +99,7 @@ public class StoreList extends NodeList{
             }
             if (aFile.isDirectory()) {
                 StoreList aList = new StoreList();
-                aList.buildByPath(pRoot, aFile.getPath());
+                aList.buildByPath(pRoot, aFile);
                 attachList(aList);
             }
         }

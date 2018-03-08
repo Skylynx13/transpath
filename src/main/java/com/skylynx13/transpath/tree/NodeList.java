@@ -133,6 +133,8 @@ public abstract class NodeList {
                 aMap.put(oldId, aNode.id);
             }
         }
+
+        //Return value only used by test.
         return aMap;
     }
 
@@ -146,7 +148,7 @@ public abstract class NodeList {
         nodeList.removeAll(removeList);
         recap();
     }
-    
+
     public void removeByIdMap(HashMap<Integer, Integer> idMap) {
         ArrayList<Node> removeList = new ArrayList<Node>();
         for (Node aNode : nodeList) {
@@ -157,7 +159,7 @@ public abstract class NodeList {
         nodeList.removeAll(removeList);
         recap();
     }
-    
+
     public void removeByPath(String pPath) {
         ArrayList<Node> removeList = new ArrayList<Node>();
         for (Node aNode : nodeList) {
