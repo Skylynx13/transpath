@@ -105,7 +105,7 @@ public class StoreList extends NodeList{
         }
     }
 
-    public void orderByMd5() {
+    protected void orderByMd5() {
         Collections.sort(nodeList, new Comparator<Node>() {
             @Override
             public int compare(Node sn1, Node sn2) {
