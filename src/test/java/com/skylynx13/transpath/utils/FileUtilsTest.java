@@ -15,6 +15,8 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.skylynx13.transpath.utils.FileUtils;
@@ -180,6 +182,7 @@ public class FileUtilsTest {
         assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_004.cbz")));
     }
     
+    @Ignore
     @Test
     public void getLastModifiedStringTest() {
         assertEquals("2015-03-19 14:11:42.114", FileUtils.getLastModifiedString(testResource("getLastModifiedString_000.txt")));
