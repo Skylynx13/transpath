@@ -1,12 +1,11 @@
 /**
- * Copyright (c) 2016,qxu. 
+ * Copyright (c) 2016,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.qxu.transpath.tree
  * File Name:StoreList.java
  * Date:2016-6-17 上午12:05:40
- * 
  */
 package com.skylynx13.transpath.store;
 
@@ -25,31 +24,31 @@ import com.skylynx13.transpath.utils.TransConst;
  * Description: TODO <br/>
  * Date: 2016-6-17 上午12:05:40 <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
+ *
  *         Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
+ *
  */
 
-public class StoreList extends NodeList{
+public class StoreList extends NodeList {
     public long fileSize; // recap, clear
 
     public StoreList() {
         fileSize = 0;
     }
-    
+
     public StoreList(StoreList pList) {
         super(pList);
         calcFileSize();
     }
-    
+
     public StoreList(String fileName) {
         super(fileName);
         calcFileSize();
     }
-    
+
     @Override
     public void clear() {
         super.clear();
@@ -65,14 +64,14 @@ public class StoreList extends NodeList{
     public void calcFileSize() {
         fileSize = 0;
         for (Node aNode : nodeList) {
-            fileSize += ((StoreNode)aNode).length;
+            fileSize += ((StoreNode) aNode).length;
         }
     }
-    
+
     public void build(String pRoot, String pPathName) {
         String aRoot = FileUtils.regulateSlash(pRoot);
         String aPathName = aRoot + FileUtils.regulateSlash(pPathName);
-        
+
         if (new File(aRoot).isFile() || new File(aPathName).isFile()) {
             return;
         }
@@ -109,11 +108,11 @@ public class StoreList extends NodeList{
         Collections.sort(nodeList, new Comparator<Node>() {
             @Override
             public int compare(Node sn1, Node sn2) {
-                return ((StoreNode)sn1).md5.compareTo(((StoreNode)sn2).md5);
+                return ((StoreNode) sn1).md5.compareTo(((StoreNode) sn2).md5);
             }
         });
     }
-    
+
     @Override
     public String keepHeader() {
         return new StringBuffer(version).append(TransConst.COLON)
@@ -131,11 +130,16 @@ public class StoreList extends NodeList{
 
     @Override
     public String keepLine(Node pNode) {
-        return ((StoreNode)pNode).keepNode();
+        return ((StoreNode) pNode).keepNode();
     }
 
     @Override
     public Object[] toRow(Node pNode) {
-        return ((StoreNode)pNode).toRow();
+        return ((StoreNode) pNode).toRow();
+    }
+
+    @Override
+    protected NodeList getNewList() {
+        return new StoreList();
     }
 }

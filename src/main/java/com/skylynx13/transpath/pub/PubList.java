@@ -1,12 +1,11 @@
 /**
- * Copyright (c) 2016,qxu. 
+ * Copyright (c) 2016,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.qxu.transpath.tree
  * File Name:PubList.java
  * Date:2016-7-12 下午3:08:02
- * 
  */
 package com.skylynx13.transpath.pub;
 
@@ -21,29 +20,29 @@ import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeList;
 import com.skylynx13.transpath.utils.TransConst;
 
- /**
+/**
  * ClassName: PubList <br/>
  * Description: TODO <br/>
  * Date: 2016-7-12 下午3:08:02 <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
+ *
  * Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
+ *
  */
 
 public class PubList extends NodeList {
-    
+
     public PubList() {
-        
+
     }
-    
+
     public PubList(PubList pList) {
         super(pList);
     }
-    
+
     public PubList(String fileName) {
         super(fileName);
     }
@@ -55,12 +54,17 @@ public class PubList extends NodeList {
 
     @Override
     public String keepLine(Node pNode) {
-        return ((PubNode)pNode).keepNode();
+        return ((PubNode) pNode).keepNode();
     }
 
     @Override
     public Object[] toRow(Node pNode) {
-        return ((PubNode)pNode).toRow();
+        return ((PubNode) pNode).toRow();
+    }
+
+    @Override
+    protected NodeList getNewList() {
+        return new PubList();
     }
 
     public void reorder() {
@@ -69,15 +73,14 @@ public class PubList extends NodeList {
         for (Node aNode : nodeList) {
             if (aNode.path.equals(lastPath)) {
                 newOrder++;
-            }
-            else {
+            } else {
                 lastPath = aNode.path;
                 newOrder = 0;
             }
-            ((PubNode)aNode).order = newOrder;
+            ((PubNode) aNode).order = newOrder;
         }
     }
-    
+
     public void orderByPathAndOrder() {
         Collections.sort(nodeList, new Comparator<Node>() {
             @Override
@@ -86,11 +89,11 @@ public class PubList extends NodeList {
                 if (cmp != 0) {
                     return cmp;
                 }
-                return ((Integer)((PubNode)sn1).order).compareTo(((PubNode)sn2).order);
+                return ((Integer) ((PubNode) sn1).order).compareTo(((PubNode) sn2).order);
             }
         });
     }
-    
+
     public void hitShelf(String hitShelfList) {
         Scanner in = null;
         HashMap<String, String> hitMapper = new HashMap<String, String>();
@@ -100,7 +103,7 @@ public class PubList extends NodeList {
             e.printStackTrace();
         }
         while (in.hasNext()) {
-            String[] hitPair= in.nextLine().split(TransConst.COLON);
+            String[] hitPair = in.nextLine().split(TransConst.COLON);
             hitMapper.put(hitPair[0], hitPair[1]);
         }
         in.close();
@@ -114,8 +117,8 @@ public class PubList extends NodeList {
             }
         }
     }
-    
-    public static void main (String[] args) {
+
+    public static void main(String[] args) {
         TransLog.getLogger().info("test hit shelf");
         TransLog.getLogger().info("test end");
     }

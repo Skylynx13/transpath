@@ -20,6 +20,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.skylynx13.transpath.task.TaskArranger;
 import com.skylynx13.transpath.task.TaskEntry;
@@ -212,6 +214,7 @@ public class FreeTester {
     }
 
     public static void main(String[] args) {
+        double timeTag = System.currentTimeMillis();
         FreeTester ft = new FreeTester();
         //ft.testNodeTree();
         //ft.testList();
@@ -219,7 +222,7 @@ public class FreeTester {
         //ft.testReplaceStr();
         //ft.testReformat();
         
-        //System.out.println(StrUtils.getSimpleName("G.I. Joe Action Force Mini Comic.cbr"));
+        //System.out.println(StringUtils.getSimpleName("G.I. Joe Action Force Mini Comic.cbr"));
         
         ft.testProps();
         System.out.println(new String(" Week of 02/04/2016  ").matches("^\\s*Week of \\d{2}/\\d{2}/\\d{4}\\s*$"));
@@ -234,6 +237,7 @@ public class FreeTester {
         
         System.out.println(TransProp.get(TransConst.LOC_CONFIG));
 
+        System.out.println("Time elapsed: " + (System.currentTimeMillis()-timeTag) + " ms.");
         System.out.println(System.getProperty("qxu.test"));
         long lastM = 1508560299855L;
         System.out.println("Long: " + lastM + "; Date: " + new Date(lastM) + "; Formatted: " + DateUtils.formatDateTimeLong(lastM));
@@ -243,6 +247,21 @@ public class FreeTester {
         String tsDate16 = ts.toString().substring(0, 16);
         System.out.println(tsDate10 + ":::" + tsDate16);
 
-        ft.workoutAbc();
+//        ft.workoutAbc();
+
+        System.out.println("Time elapsed: " + (System.currentTimeMillis()-timeTag) + " ms.");
+        String inputString = "A8123PEKAA";
+        String regex = "(\\w{2})(\\d{3,4})([A-Z]{0,1})(\\w{3})";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(inputString);
+        boolean matched = matcher.find();
+        if (matched) {
+            String airline = matcher.group(1);
+            String flightNumber = matcher.group(2);
+            String suffix = matcher.group(3).equals("")?"^":matcher.group(3);
+            String more = matcher.group(4);
+            System.out.println("airline is [" + airline + "]; flightNumber is [" + flightNumber + "]; suffix is [" + suffix + "]; more is [" + more + "]");
+            System.out.println("Time elapsed: " + (System.currentTimeMillis()-timeTag) + " ms.");
+        }
     }
 }

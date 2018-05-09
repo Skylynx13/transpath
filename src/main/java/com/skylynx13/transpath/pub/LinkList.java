@@ -1,12 +1,11 @@
 /**
- * Copyright (c) 2016,qxu. 
+ * Copyright (c) 2016,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.qxu.transpath.tree
  * File Name:IdLinkList.java
  * Date:2016-7-18 下午5:07:33
- * 
  */
 package com.skylynx13.transpath.pub;
 
@@ -18,29 +17,29 @@ import java.util.HashMap;
 import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeList;
 
- /**
+/**
  * ClassName: IdLinkList <br/>
  * Description: TODO <br/>
  * Date: 2016-7-18 下午5:07:33 <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
+ *
  * Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
+ *
  */
 
-public class LinkList extends NodeList{
-    
+public class LinkList extends NodeList {
+
     public LinkList() {
-        
+
     }
-    
+
     public LinkList(LinkList pList) {
         super(pList);
     }
-    
+
     @Override
     public Node loadNode(String pLine) {
         return new LinkNode(pLine);
@@ -48,26 +47,26 @@ public class LinkList extends NodeList{
 
     @Override
     public String keepLine(Node pNode) {
-        return ((LinkNode)pNode).keepNode();
+        return ((LinkNode) pNode).keepNode();
     }
-    
+
     public void refreshPubId(HashMap<Integer, Integer> pMap) {
         LinkList newLinkList = new LinkList(this);
         this.clear();
         for (Node aNode : newLinkList.nodeList) {
-            LinkNode lNode = (LinkNode)aNode;
+            LinkNode lNode = (LinkNode) aNode;
             if (pMap.containsKey(lNode.pubId)) {
                 lNode.pubId = pMap.get(lNode.pubId);
             }
             this.addNode(lNode);
         }
     }
-    
+
     public void refreshStoreId(HashMap<Integer, Integer> pMap) {
         LinkList newLinkList = new LinkList(this);
         this.clear();
         for (Node aNode : newLinkList.nodeList) {
-            LinkNode lNode = (LinkNode)aNode;
+            LinkNode lNode = (LinkNode) aNode;
             if (pMap.containsKey(lNode.storeId)) {
                 lNode.storeId = pMap.get(lNode.storeId);
             }
@@ -79,7 +78,7 @@ public class LinkList extends NodeList{
         Collections.sort(nodeList, new Comparator<Node>() {
             @Override
             public int compare(Node sn1, Node sn2) {
-                return ((Integer)((LinkNode)sn1).storeId).compareTo(((LinkNode)sn2).storeId);
+                return ((Integer) ((LinkNode) sn1).storeId).compareTo(((LinkNode) sn2).storeId);
             }
         });
     }
@@ -88,23 +87,23 @@ public class LinkList extends NodeList{
         Collections.sort(nodeList, new Comparator<Node>() {
             @Override
             public int compare(Node sn1, Node sn2) {
-                return ((Integer)((LinkNode)sn1).pubId).compareTo(((LinkNode)sn2).pubId);
+                return ((Integer) ((LinkNode) sn1).pubId).compareTo(((LinkNode) sn2).pubId);
             }
         });
     }
-    
+
     public ArrayList<Integer> getStoreIdList() {
         ArrayList<Integer> storeIdList = new ArrayList<Integer>();
         for (Node aNode : nodeList) {
-            storeIdList.add(((LinkNode)aNode).storeId);
+            storeIdList.add(((LinkNode) aNode).storeId);
         }
         return storeIdList;
     }
-    
+
     public ArrayList<Integer> getStoreIdList(int pPubId) {
         ArrayList<Integer> storeIdList = new ArrayList<Integer>();
         for (Node aNode : nodeList) {
-            LinkNode lNode = (LinkNode)aNode;
+            LinkNode lNode = (LinkNode) aNode;
             if (lNode.pubId == pPubId) {
                 storeIdList.add(lNode.storeId);
             }
@@ -119,11 +118,11 @@ public class LinkList extends NodeList{
         }
         return storeIdList;
     }
-    
+
     public ArrayList<Integer> getPubIdList() {
         ArrayList<Integer> pubIdList = new ArrayList<Integer>();
         for (Node aNode : nodeList) {
-            pubIdList.add(((LinkNode)aNode).pubId);
+            pubIdList.add(((LinkNode) aNode).pubId);
         }
         return pubIdList;
     }
@@ -131,14 +130,14 @@ public class LinkList extends NodeList{
     public ArrayList<Integer> getPubIdList(int pStoreId) {
         ArrayList<Integer> pubIdList = new ArrayList<Integer>();
         for (Node aNode : nodeList) {
-            LinkNode lNode = (LinkNode)aNode;
+            LinkNode lNode = (LinkNode) aNode;
             if (lNode.storeId == pStoreId) {
                 pubIdList.add(lNode.pubId);
             }
         }
         return pubIdList;
     }
-    
+
     public ArrayList<Integer> getPubIdList(ArrayList<Integer> pStoreIdList) {
         ArrayList<Integer> pubIdList = new ArrayList<Integer>();
         for (int pStoreId : pStoreIdList) {
@@ -149,7 +148,12 @@ public class LinkList extends NodeList{
 
     @Override
     protected Object[] toRow(Node pNode) {
-        return ((LinkNode)pNode).toRow();
+        return ((LinkNode) pNode).toRow();
     }
-    
+
+    @Override
+    protected NodeList getNewList() {
+        return new LinkList();
+    }
+
 }

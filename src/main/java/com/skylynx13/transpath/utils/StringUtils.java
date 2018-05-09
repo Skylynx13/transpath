@@ -1,29 +1,28 @@
 /**
- * Copyright (c) 2015,qxu. 
+ * Copyright (c) 2015,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.qxu.transpath.utils
- * File Name:StrUtils.java
+ * File Name:StringUtils.java
  * Date:Aug 6, 2015 5:08:23 PM
- * 
  */
 package com.skylynx13.transpath.utils;
 
 /**
- * ClassName: StrUtils <br/>
+ * ClassName: StringUtils <br/>
  * Description: TODO <br/>
  * Date: Aug 6, 2015 5:08:23 PM <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
+ *
  *         Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
+ *
  */
 
-public class StrUtils {
+public class StringUtils {
     public static final String EMPTY_STRING = "";
 
     public static boolean isBlankString(String pString) {
@@ -50,7 +49,7 @@ public class StrUtils {
     public static boolean isNumeric(String pString) {
         return pString.matches("\\d*");
     }
-    
+
     public static String parseContent(String pString, String startAfter, String endBefore, int startIndex) {
         if (isEmpty(pString) || isEmpty(startAfter) || isEmpty(endBefore) || startIndex > pString.length()) {
             return null;
@@ -89,7 +88,7 @@ public class StrUtils {
     public static String getSimpleName(String name) {
         int iEnd = name.length();
         if (name.lastIndexOf('.') > 0) {
-            iEnd = name.lastIndexOf('.');            
+            iEnd = name.lastIndexOf('.');
         }
         if (name.indexOf('(') > 0) {
             iEnd = name.indexOf('(');

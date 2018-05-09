@@ -1,12 +1,11 @@
 /**
- * Copyright (c) 2016,qxu. 
+ * Copyright (c) 2016,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.qxu.transpath.tree
  * File Name:NodeList.java
  * Date:2016-7-12 下午3:10:19
- * 
  */
 package com.skylynx13.transpath.tree;
 
@@ -20,20 +19,22 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import com.skylynx13.transpath.store.StoreList;
 import com.skylynx13.transpath.utils.DateUtils;
+import com.skylynx13.transpath.utils.StringUtils;
 import com.skylynx13.transpath.utils.TransConst;
 
- /**
+/**
  * ClassName: NodeList <br/>
  * Description: TODO <br/>
  * Date: 2016-7-12 下午3:10:19 <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
+ *
  * Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
+ *
  */
 
 public abstract class NodeList {
@@ -59,7 +60,7 @@ public abstract class NodeList {
         nodeList = new ArrayList<Node>();
         load(fileName);
     }
-    
+
     public NodeList(ArrayList<Node> pList) {
         refreshVersion();
         nodeList = new ArrayList<Node>(pList);
@@ -89,7 +90,7 @@ public abstract class NodeList {
         maxId = 0;
         nodeList = new ArrayList<Node>();
     }
-    
+
     public Node get(int index) {
         return nodeList.get(index);
     }
@@ -102,7 +103,7 @@ public abstract class NodeList {
         }
         return null;
     }
-    
+
     public ArrayList<Integer> getIdList() {
         ArrayList<Integer> idList = new ArrayList<Integer>();
         for (Node aNode : nodeList) {
@@ -111,7 +112,7 @@ public abstract class NodeList {
         return idList;
     }
 
-    public boolean hasNode (Node pNode) {
+    public boolean hasNode(Node pNode) {
         return nodeList.contains(pNode);
     }
 
@@ -211,7 +212,7 @@ public abstract class NodeList {
         aScan.close();
         recap();
     }
-    
+
     public abstract Node loadNode(String pLine);
 
     public void loadVersion(String pLine) {
@@ -222,11 +223,11 @@ public abstract class NodeList {
         Collections.sort(nodeList, new Comparator<Node>() {
             @Override
             public int compare(Node sn1, Node sn2) {
-                return ((Integer)sn1.id).compareTo(sn2.id);
+                return ((Integer) sn1.id).compareTo(sn2.id);
             }
         });
     }
-    
+
     public void orderByPathAndName() {
         Collections.sort(nodeList, new Comparator<Node>() {
             @Override
@@ -239,7 +240,7 @@ public abstract class NodeList {
             }
         });
     }
-    
+
     public String keepHeader() {
         return new StringBuffer(version).append(TransConst.COLON)
                 .append(String.format(TransConst.FORMAT_INT_08, minId)).append(TransConst.COLON)
@@ -268,7 +269,7 @@ public abstract class NodeList {
             e.printStackTrace();
         }
     }
-    
+
     protected abstract String keepLine(Node pNode);
 
     public String toString() {
@@ -279,17 +280,17 @@ public abstract class NodeList {
         }
         return strBuff.toString();
     }
-    
+
     public static ArrayList<Integer> FindIdOnlyInAList(ArrayList<Integer> aList, ArrayList<Integer> bList) {
         ArrayList<Integer> idList = new ArrayList<Integer>();
-        for(int element : aList) {
+        for (int element : aList) {
             if (!bList.contains(element)) {
                 idList.add(element);
             }
         }
         return idList;
     }
-    
+
     public Object[][] toRows() {
         if (0 == size()) {
             return null;
@@ -304,4 +305,20 @@ public abstract class NodeList {
     }
 
     protected abstract Object[] toRow(Node aNode);
+
+    public NodeList searchName(String searchText) {
+        NodeList foundList = getNewList();
+        if (0 == size() || StringUtils.isEmpty(searchText)) {
+            return foundList;
+        }
+        for (Node aNode : nodeList) {
+            if (aNode.searchName(searchText)) {
+                foundList.addNode(aNode);
+            }
+        }
+        return foundList;
+    }
+
+    protected abstract NodeList getNewList();
+
 }

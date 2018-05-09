@@ -1,12 +1,11 @@
 /**
- * Copyright (c) 2017,qxu. 
+ * Copyright (c) 2017,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.libra42.transpath.ui
  * File Name:TransMenuBar.java
  * Date:2017年10月14日 下午4:00:27
- * 
  */
 package com.skylynx13.transpath.ui;
 
@@ -16,11 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.pub.PubKeeper;
@@ -35,18 +30,18 @@ import com.skylynx13.transpath.utils.TransConst;
  * Description: TODO <br/>
  * Date: 2017年10月14日 下午4:00:27 <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
+ *
  *         Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
+ *
  */
 
 public class TranspathMenuBar extends JMenuBar {
     /**
      * serialVersionUID:TODO.
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -177,6 +172,24 @@ public class TranspathMenuBar extends JMenuBar {
                 });
             }
         });
+
+        storeMenu.add(new JSeparator());
+
+        JMenuItem storeSearchItem = new JMenuItem("Search...");
+        storeMenu.add(storeSearchItem);
+        storeSearchItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                transpathMenuAction.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        String searchText = JOptionPane.showInputDialog("Search Text:");
+                        StoreKeeper.searchList(searchText);
+                    }
+                });
+            }
+        });
+
         return storeMenu;
     }
 
