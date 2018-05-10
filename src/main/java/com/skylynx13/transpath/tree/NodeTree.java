@@ -263,7 +263,7 @@ public class NodeTree implements MutableTreeNode {
     public NodeTree getChildByNameOrAddIt(String aName) {
         NodeTree aNodeTree = getChildByName(aName);
         if (null == aNodeTree) {
-            aNodeTree = new NodeTree(new SimpleNode(aName));
+            aNodeTree = new NodeTree(new SimpleNode(aName, this.getNodePathName()));
             this.addChild(aNodeTree);
         }
         return aNodeTree;
@@ -330,7 +330,7 @@ public class NodeTree implements MutableTreeNode {
 
     public NodeTree addBranch(String pPath) {
         if (this.isNull()) {
-            this.setNode(new SimpleNode(TransConst.ROOT));
+            this.setNode(new SimpleNode(TransConst.ROOT, "/"));
         }
         String[] nodeNames = pPath.split(TransConst.SLASH);
         NodeTree bTree = this;

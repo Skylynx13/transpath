@@ -19,12 +19,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.pub.PubList;
 import com.skylynx13.transpath.store.StoreList;
-import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeList;
 import com.skylynx13.transpath.tree.NodeTree;
 import com.skylynx13.transpath.utils.FileUtils;
@@ -53,6 +51,24 @@ public class TranspathFrame extends JFrame {
 
     private static JTable infoTable = new JTable();
 
+    private static StoreList currStoreList = null;
+
+    private static PubList currPubList = null;
+
+    public static StoreList getCurrStoreList() {
+        if (null == currStoreList) {
+            currStoreList = new StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+        }
+        return currStoreList;
+    }
+
+    public static PubList getCurrPubList() {
+        if (null == currPubList) {
+            currPubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+        }
+        return currPubList;
+    }
+
     public static JTable getInfoTable() {
         return infoTable;
     }
@@ -72,6 +88,14 @@ public class TranspathFrame extends JFrame {
         this.setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
         this.setJMenuBar(new TranspathMenuBar(this));
         initPanel();
+    }
+
+    public static void searchList(String searchText) {
+        TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
+        StoreList aList = getCurrStoreList();
+        StoreList sList = (StoreList) aList.searchName(searchText);
+        setInfoTable(sList);
+        TransLog.getLogger().info(sList.toString());
     }
 
     protected void initPanel() {
@@ -133,11 +157,11 @@ public class TranspathFrame extends JFrame {
     }
 
     private JTree createCurrentStoreTree() {
-        return createTree(new StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR))));
+        return createTree(getCurrStoreList());
     }
 
     private JTree createCurrentPubTree() {
-        return createTree(new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR))));
+        return createTree(getCurrPubList());
     }
 
     private JTree createTree(NodeList nodeList) {
@@ -212,8 +236,6 @@ public class TranspathFrame extends JFrame {
             Object headerValue = table.getColumnModel().getColumn(column).getHeaderValue();
             Component headerComp = headerRenderer.getTableCellRendererComponent(table, headerValue, false, false, 0, column);
             maxComponentWidth = Math.max(maxComponentWidth, headerComp.getPreferredSize().width);
-            table.getColumnModel().getColumn(column).setMinWidth(maxComponentWidth + table.getIntercellSpacing().width);
-            table.getColumnModel().getColumn(column).setMaxWidth(maxComponentWidth + table.getIntercellSpacing().width);
             table.getColumnModel().getColumn(column).setPreferredWidth(maxComponentWidth + table.getIntercellSpacing().width);
         }
     }

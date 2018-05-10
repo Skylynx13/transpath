@@ -384,11 +384,4 @@ public class StoreKeeper {
         checkDupTest(aList);
     }
 
-    public static void searchList(String searchText) {
-        TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
-        StoreList aList = new StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR)));
-        StoreList sList = (StoreList) aList.searchName(searchText);
-        TranspathFrame.setInfoTable(sList);
-        TransLog.getLogger().info(sList.toString());
-    }
 }

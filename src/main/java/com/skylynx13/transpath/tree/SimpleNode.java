@@ -32,6 +32,11 @@ public class SimpleNode extends Node {
         name = pName;
     }
 
+    public SimpleNode(String pName, String pPath) {
+        name = pName;
+        path = pPath;
+    }
+
     @Override
     public String keepNode() {
         return name;

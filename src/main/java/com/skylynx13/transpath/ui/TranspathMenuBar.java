@@ -184,7 +184,7 @@ public class TranspathMenuBar extends JMenuBar {
                     @Override
                     public void run() {
                         String searchText = JOptionPane.showInputDialog("Search Text:");
-                        StoreKeeper.searchList(searchText);
+                        TranspathFrame.searchList(searchText);
                     }
                 });
             }
