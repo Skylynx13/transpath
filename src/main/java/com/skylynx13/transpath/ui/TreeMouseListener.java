@@ -51,6 +51,7 @@ public class TreeMouseListener implements MouseListener {
         Node selectNode = selectTree.getNode();
         TranspathFrame.getInfoTextArea().setText("Tree Selected: " + selectTree.toString()+"\n");
         TranspathFrame.getInfoTextArea().append("Node Selected: " + selectNode.keepNode()+"\n");
+        TranspathFrame.setInfoTable(selectTree);
     }
 
     @Override

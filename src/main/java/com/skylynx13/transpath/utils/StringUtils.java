@@ -9,6 +9,8 @@
  */
 package com.skylynx13.transpath.utils;
 
+import java.text.DecimalFormat;
+
 /**
  * ClassName: StringUtils <br/>
  * Description: TODO <br/>
@@ -96,5 +98,8 @@ public class StringUtils {
         return name.substring(0, iEnd);
     }
 
+    public static String formatLongInt(Long longInt) {
+        return new DecimalFormat("#,###").format(longInt);
+    }
 
 }

@@ -22,6 +22,7 @@ import com.skylynx13.transpath.pub.LinkNode;
 import com.skylynx13.transpath.pub.PubList;
 import com.skylynx13.transpath.pub.PubNode;
 import com.skylynx13.transpath.tree.Node;
+import com.skylynx13.transpath.ui.TranspathFrame;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
@@ -387,6 +388,7 @@ public class StoreKeeper {
         TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
         StoreList aList = new StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR)));
         StoreList sList = (StoreList) aList.searchName(searchText);
+        TranspathFrame.setInfoTable(sList);
         TransLog.getLogger().info(sList.toString());
     }
 }

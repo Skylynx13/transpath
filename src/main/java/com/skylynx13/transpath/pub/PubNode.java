@@ -65,7 +65,7 @@ public class PubNode extends Node {
     }
 
     public Object[] toRow() {
-        Object[] row = {id, order, path, name};
+        Object[] row = {id, path, name, order};
         return row;
     }
 

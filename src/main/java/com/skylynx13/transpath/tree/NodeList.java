@@ -319,6 +319,19 @@ public abstract class NodeList {
         return foundList;
     }
 
+    public NodeList searchPath(String searchText) {
+        NodeList foundList = getNewList();
+        if (0 == size() || StringUtils.isEmpty(searchText)) {
+            return foundList;
+        }
+        for (Node aNode : nodeList) {
+            if (aNode.searchPath(searchText)) {
+                foundList.addNode(aNode);
+            }
+        }
+        return foundList;
+    }
+
     protected abstract NodeList getNewList();
 
 }

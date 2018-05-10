@@ -11,9 +11,12 @@
 package com.skylynx13.transpath.store;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
 import com.skylynx13.transpath.tree.Node;
+import com.skylynx13.transpath.utils.DateUtils;
 import com.skylynx13.transpath.utils.FileUtils;
+import com.skylynx13.transpath.utils.StringUtils;
 import com.skylynx13.transpath.utils.TransConst;
 
 /**
@@ -109,7 +112,7 @@ public class StoreNode extends Node{
     }
 
     public Object[] toRow() {
-        Object[] row = {id, length, lastModified, md5, sha, crc32, path, name};
+        Object[] row = {id, path, name, StringUtils.formatLongInt(length), DateUtils.formatDateTimeLong(lastModified), md5, sha, crc32};
         return row;
     }
     

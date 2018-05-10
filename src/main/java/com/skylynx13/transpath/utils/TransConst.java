@@ -55,11 +55,17 @@ public class TransConst {
     
     public static final String FMT_DATE_TIME_SHORT = "yyyyMMddHHmm";
     public static final String FMT_DATE_TIME       = "yyyyMMddHHmmss";
-    public static final String FMT_DATE_TIME_LONG  = "yyyyMMddHHmmssSSS";
+    public static final String FMT_DATE_TIME_LONG  = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final String FMT_DATE            = "yyyyMMdd";
     
     public static final String NAME_CHARS = "[\\-\\+!@#$%^&½,.'A-Za-z0-9 \\(\\)]+";
 
     public static final Font GLOBAL_FONT = new Font("GLOBAL", Font.PLAIN, TransProp.getInt(SIZE_TEXT));
+
+    public static String[] TABLE_TITLE_STORE = {"Id", "Path", "Name", "Length", "Update Time", "MD5", "SHA", "CRC32"};
+
+    public static String[] TABLE_TITLE_SIMPLE = {"Id", "Path", "Name", "Length"};
+
+    public static String[] TABLE_TITLE_PUB = {"Id", "Path", "Name", "Order"};
 
 }

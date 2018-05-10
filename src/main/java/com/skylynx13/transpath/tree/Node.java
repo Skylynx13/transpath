@@ -48,9 +48,20 @@ public abstract class Node {
     }
 
     public boolean searchName(String searchText) {
-        if (this.name.matches(".*" + searchText + ".*")) {
+        return search(this.name, searchText);
+    }
+
+    public boolean searchPath(String searchText) {
+        return search(this.path, searchText);
+    }
+
+    private boolean search(String member, String searchText) {
+//        if (member.matches(".*" + searchText + ".*")) {
+        if (member.contains(searchText)) {
             return true;
         }
         return false;
     }
+
+
 }

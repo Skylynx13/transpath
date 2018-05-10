@@ -1,12 +1,11 @@
 /**
- * Copyright (c) 2015,qxu. 
+ * Copyright (c) 2015,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.qxu.transpath.ui
  * File Name:TranspathFrame.java
  * Date:2015-11-16 上午12:59:46
- * 
  */
 package com.skylynx13.transpath.ui;
 
@@ -16,21 +15,16 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTree;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.pub.PubList;
 import com.skylynx13.transpath.store.StoreList;
+import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeList;
 import com.skylynx13.transpath.tree.NodeTree;
 import com.skylynx13.transpath.utils.FileUtils;
@@ -42,12 +36,11 @@ import com.skylynx13.transpath.utils.TransProp;
  * Description: Transpath Main Frame <br/>
  * Date: 2015-11-16 上午12:59:46 <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
- *         Change Log:
+ * <p>
+ * Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
  */
 
 public class TranspathFrame extends JFrame {
@@ -55,9 +48,15 @@ public class TranspathFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private static JTextArea logTextArea = new JTextArea();
-    
+
     private static JTextArea infoTextArea = new JTextArea("information");
-    
+
+    private static JTable infoTable = new JTable();
+
+    public static JTable getInfoTable() {
+        return infoTable;
+    }
+
     public static JTextArea getLogTextArea() {
         return logTextArea;
     }
@@ -111,7 +110,7 @@ public class TranspathFrame extends JFrame {
     }
 
     private JSplitPane createSplitPane(int newOrientation, Component newLeftComponent, Component newRightComponent,
-            double proportionalLocation) {
+                                       double proportionalLocation) {
         JSplitPane splitPane = new JSplitPane(newOrientation, newLeftComponent, newRightComponent);
         splitPane.setContinuousLayout(true);
         splitPane.setOneTouchExpandable(true);
@@ -147,7 +146,7 @@ public class TranspathFrame extends JFrame {
 
         JTree jTree = new JTree(nodeTree);
         jTree.setShowsRootHandles(true);
-        jTree.setRootVisible(false);
+        jTree.setRootVisible(true);
         jTree.setEditable(true);
         jTree.setDragEnabled(true);
         jTree.setDropTarget(new DropTarget());
@@ -157,20 +156,66 @@ public class TranspathFrame extends JFrame {
         return jTree;
     }
 
-    private JTabbedPane createInfoTabbedPane() {
-        // Object[][] tableData = new
-        // StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR))).toRows();
-        // String[] tableTitle = { "Id", "Length", "Update Time", "MD5", "SHA", "CRC32",
-        // "Store Path", "Name" };
-        // DefaultTableModel tableModel = new DefaultTableModel(tableData, tableTitle);
-        // JTable infoTable = new JTable(tableModel);
-        
-        
-        JTabbedPane infoTabbedPane = createTabbedPane();
-        infoTabbedPane.addTab("Info Table", createScrollPane(null));
-        infoTabbedPane.addTab("Info Page", createScrollPane(infoTextArea));
+    public static void setInfoTable(NodeList nodeList) {
+        DefaultTableModel tableModel = null;
+        if (nodeList instanceof StoreList) {
+            tableModel = new DefaultTableModel(((StoreList)nodeList).toRows(), TransConst.TABLE_TITLE_STORE);
+        } else if (nodeList instanceof PubList) {
+            tableModel = new DefaultTableModel(((PubList) nodeList).toRows(), TransConst.TABLE_TITLE_PUB);
+        }
+        setInfoTable(tableModel);
+    }
 
+    public static void setInfoTable(NodeTree selectTree) {
+        DefaultTableModel tableModel = new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle());
+        setInfoTable(tableModel);
+    }
+
+    public static void setInfoTable(DefaultTableModel tableModel) {
+        if (null == tableModel) {
+            return;
+        }
+        infoTable.setModel(tableModel);
+
+        columnSizeFitContents(infoTable);
+
+        try {
+            DefaultTableCellRenderer alignRight = new DefaultTableCellRenderer();
+            alignRight.setHorizontalAlignment(JLabel.RIGHT);
+            infoTable.getColumn("Id").setCellRenderer(alignRight);
+            infoTable.getColumn("Length").setCellRenderer(alignRight);
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
+    private JTabbedPane createInfoTabbedPane() {
+        JTabbedPane infoTabbedPane = createTabbedPane();
+        infoTabbedPane.addTab("Info Table", createScrollPane(infoTable));
+        infoTabbedPane.addTab("Info Page", createScrollPane(infoTextArea));
         return infoTabbedPane;
+    }
+
+    public static void columnSizeFitContents(JTable table) {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int maxComponentWidth = 0;
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer rend = table.getCellRenderer(row, column);
+                Object value = table.getValueAt(row, column);
+                Component component = rend.getTableCellRendererComponent(table, value, false, false, row, column);
+                maxComponentWidth = Math.max(component.getPreferredSize().width, maxComponentWidth);
+            }
+            TableCellRenderer headerRenderer = table.getColumnModel().getColumn(column).getHeaderRenderer();
+            if (headerRenderer == null) {
+                headerRenderer = table.getTableHeader().getDefaultRenderer();
+            }
+            Object headerValue = table.getColumnModel().getColumn(column).getHeaderValue();
+            Component headerComp = headerRenderer.getTableCellRendererComponent(table, headerValue, false, false, 0, column);
+            maxComponentWidth = Math.max(maxComponentWidth, headerComp.getPreferredSize().width);
+            table.getColumnModel().getColumn(column).setMinWidth(maxComponentWidth + table.getIntercellSpacing().width);
+            table.getColumnModel().getColumn(column).setMaxWidth(maxComponentWidth + table.getIntercellSpacing().width);
+            table.getColumnModel().getColumn(column).setPreferredWidth(maxComponentWidth + table.getIntercellSpacing().width);
+        }
     }
 
     private JTabbedPane createLowerTabbedPane() {
@@ -179,7 +224,7 @@ public class TranspathFrame extends JFrame {
 
         return lowerTabbedPane;
     }
-    
+
     private JTabbedPane createTabbedPane() {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setTabPlacement(JTabbedPane.TOP);

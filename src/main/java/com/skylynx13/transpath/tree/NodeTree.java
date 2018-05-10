@@ -21,6 +21,9 @@ import java.util.NoSuchElementException;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import com.skylynx13.transpath.pub.PubNode;
+import com.skylynx13.transpath.store.StoreNode;
+import com.skylynx13.transpath.utils.StringUtils;
 import com.skylynx13.transpath.utils.TransConst;
 
 /**
@@ -103,6 +106,75 @@ public class NodeTree implements MutableTreeNode {
 
     public List<NodeTree> getChildren() {
         return children;
+    }
+
+    public String[] getChildrenTitle() {
+        if (0 == getChildCount()) {
+            if (getNode() instanceof StoreNode) {
+                return TransConst.TABLE_TITLE_STORE;
+            } else if (getNode() instanceof PubNode) {
+                return TransConst.TABLE_TITLE_PUB;
+            } else {
+                return null;
+            }
+        }
+        Node node = getChildAt(0).getNode();
+        if (node instanceof StoreNode) {
+            return TransConst.TABLE_TITLE_STORE;
+        } else if (node instanceof PubNode) {
+            return TransConst.TABLE_TITLE_PUB;
+        } else {
+            return TransConst.TABLE_TITLE_SIMPLE;
+        }
+    }
+
+    public Object[][] getChildrenAsRows() {
+        Object[][] rows;
+        if (0 == getChildCount()) {
+            rows = new Object[1][];
+            rows[0] = toRow(this);
+            return rows;
+        }
+        rows = new Object[getChildCount()][];
+        int iNode = 0;
+        for (NodeTree aNodeTree : getChildren()) {
+            rows[iNode] = toRow(aNodeTree);
+            iNode++;
+        }
+        return rows;
+    }
+
+    public Object[] toRow(NodeTree nodeTree) {
+        Object[] row;
+        Node aNode = nodeTree.getNode();
+        if (aNode instanceof StoreNode) {
+            row = ((StoreNode) aNode).toRow();
+        } else if (aNode instanceof PubNode) {
+            row = ((PubNode) aNode).toRow();
+        } else if (aNode instanceof SimpleNode) {
+            long length = nodeTree.sumLength();
+            row = ((SimpleNode) aNode).toRow(length);
+        } else {
+            row = null;
+        }
+        return row;
+    }
+
+    public long sumLength() {
+        long length = 0;
+        for (NodeTree nodeTree : this.getChildren()) {
+            Node aNode = nodeTree.getNode();
+            if (aNode instanceof StoreNode) {
+                length += ((StoreNode) aNode).length;
+            } else if (aNode instanceof PubNode) {
+                return 0;
+            } else if (aNode instanceof SimpleNode) {
+                length += nodeTree.sumLength();
+            } else {
+                return 0;
+            }
+        }
+        return length;
     }
 
     public void setChildren(List<NodeTree> children) {
