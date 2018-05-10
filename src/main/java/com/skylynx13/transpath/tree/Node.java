@@ -48,7 +48,7 @@ public abstract class Node {
     }
 
     public boolean searchName(String searchText) {
-        if (this.name.contains(searchText)) {
+        if (this.name.matches(".*" + searchText + ".*")) {
             return true;
         }
         return false;
