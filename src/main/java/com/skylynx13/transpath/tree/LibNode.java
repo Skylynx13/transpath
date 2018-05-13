@@ -34,6 +34,11 @@ public class LibNode extends Node {
     }
 
     @Override
+    public Node clone() {
+        return null;
+    }
+
+    @Override
     public String keepNode() {
         // TODO: format tobe decided.
         return null;

@@ -34,8 +34,19 @@ public class LinkNode extends Node{
         storeId = 0;
         pubId = 0;
     }
-    
-    public LinkNode(int pStoreId, int pPubId) {
+
+     @Override
+     public Node clone() {
+         LinkNode node = new LinkNode();
+         node.id = this.id;
+         node.name = this.name;
+         node.path = this.path;
+         node.storeId = this.storeId;
+         node.pubId = this.pubId;
+         return node;
+     }
+
+     public LinkNode(int pStoreId, int pPubId) {
         storeId = pStoreId;
         pubId = pPubId;
     }

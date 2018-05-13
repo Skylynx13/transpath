@@ -23,6 +23,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.task.TaskArranger;
 import com.skylynx13.transpath.task.TaskEntry;
 import com.skylynx13.transpath.tree.Node;
@@ -263,5 +264,24 @@ public class FreeTester {
             System.out.println("airline is [" + airline + "]; flightNumber is [" + flightNumber + "]; suffix is [" + suffix + "]; more is [" + more + "]");
             System.out.println("Time elapsed: " + (System.currentTimeMillis()-timeTag) + " ms.");
         }
+
+        int a = 1;
+        int b = a;
+        b = 2;
+        System.out.println("a="+a+"; b=" + b);
+
+        String sa = "1";
+        String sb = new String(sa);
+        sb="2";
+        System.out.println("a="+sa+"; b=" + sb);
+
+        StoreNode na = new StoreNode();
+        na.id=1;
+        na.name = "namea";
+        na.path = "patha";
+
+        StoreNode nb = na;
+        nb.id=2;
+        System.out.println("na=" + na.id + "; nb=" + nb.id);
     }
 }

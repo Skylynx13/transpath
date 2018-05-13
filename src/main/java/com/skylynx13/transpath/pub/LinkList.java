@@ -50,6 +50,10 @@ public class LinkList extends NodeList {
         return ((LinkNode) pNode).keepNode();
     }
 
+    public LinkList(String fileName) {
+        super(fileName);
+    }
+
     public void refreshPubId(HashMap<Integer, Integer> pMap) {
         LinkList newLinkList = new LinkList(this);
         this.clear();

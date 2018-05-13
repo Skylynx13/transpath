@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import com.skylynx13.transpath.log.TransLog;
+import com.skylynx13.transpath.pub.LinkList;
 import com.skylynx13.transpath.pub.PubList;
 import com.skylynx13.transpath.store.StoreList;
 import com.skylynx13.transpath.tree.NodeList;
@@ -52,8 +53,8 @@ public class TranspathFrame extends JFrame {
     private static JTable infoTable = new JTable();
 
     private static StoreList currStoreList = null;
-
     private static PubList currPubList = null;
+    private static LinkList currLinkList = null;
 
     public static StoreList getCurrStoreList() {
         if (null == currStoreList) {
@@ -67,6 +68,13 @@ public class TranspathFrame extends JFrame {
             currPubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
         }
         return currPubList;
+    }
+
+    public static LinkList getCurrLinkList() {
+        if (null == currLinkList) {
+            currLinkList = new LinkList(FileUtils.linkNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+        }
+        return currLinkList;
     }
 
     public static JTable getInfoTable() {
@@ -156,6 +164,37 @@ public class TranspathFrame extends JFrame {
         return treeTabbedPane;
     }
 
+    private JTabbedPane createInfoTabbedPane() {
+        JTabbedPane infoTabbedPane = createTabbedPane();
+        infoTabbedPane.addTab("Info Table", createScrollPane(infoTable));
+        infoTabbedPane.addTab("Info Page", createScrollPane(infoTextArea));
+        return infoTabbedPane;
+    }
+
+    private JTabbedPane createLowerTabbedPane() {
+        JTabbedPane lowerTabbedPane = createTabbedPane();
+        lowerTabbedPane.addTab("Console", createScrollPane(logTextArea));
+
+        return lowerTabbedPane;
+    }
+
+    private JTabbedPane createTabbedPane() {
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setTabPlacement(JTabbedPane.TOP);
+        tabbedPane.setFont(TransConst.GLOBAL_FONT);
+        return tabbedPane;
+    }
+
+    private JScrollPane createScrollPane(Component comp) {
+        JScrollPane scrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setFont(TransConst.GLOBAL_FONT);
+        if (comp != null) {
+            scrollPane.setViewportView(comp);
+        }
+        return scrollPane;
+    }
+
     private JTree createCurrentStoreTree() {
         return createTree(getCurrStoreList());
     }
@@ -212,13 +251,6 @@ public class TranspathFrame extends JFrame {
         }
     }
 
-    private JTabbedPane createInfoTabbedPane() {
-        JTabbedPane infoTabbedPane = createTabbedPane();
-        infoTabbedPane.addTab("Info Table", createScrollPane(infoTable));
-        infoTabbedPane.addTab("Info Page", createScrollPane(infoTextArea));
-        return infoTabbedPane;
-    }
-
     public static void columnSizeFitContents(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         for (int column = 0; column < table.getColumnCount(); column++) {
@@ -238,30 +270,6 @@ public class TranspathFrame extends JFrame {
             maxComponentWidth = Math.max(maxComponentWidth, headerComp.getPreferredSize().width);
             table.getColumnModel().getColumn(column).setPreferredWidth(maxComponentWidth + table.getIntercellSpacing().width);
         }
-    }
-
-    private JTabbedPane createLowerTabbedPane() {
-        JTabbedPane lowerTabbedPane = createTabbedPane();
-        lowerTabbedPane.addTab("Console", createScrollPane(logTextArea));
-
-        return lowerTabbedPane;
-    }
-
-    private JTabbedPane createTabbedPane() {
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setTabPlacement(JTabbedPane.TOP);
-        tabbedPane.setFont(TransConst.GLOBAL_FONT);
-        return tabbedPane;
-    }
-
-    private JScrollPane createScrollPane(Component comp) {
-        JScrollPane scrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setFont(TransConst.GLOBAL_FONT);
-        if (comp != null) {
-            scrollPane.setViewportView(comp);
-        }
-        return scrollPane;
     }
 
     @Override

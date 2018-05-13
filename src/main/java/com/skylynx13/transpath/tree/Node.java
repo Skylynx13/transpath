@@ -22,7 +22,7 @@ package com.skylynx13.transpath.tree;
  *
  */
 
-public abstract class Node {
+public abstract class Node{
     public int id;
     public String path;
     public String name;
@@ -32,6 +32,8 @@ public abstract class Node {
         this.path = "";
         this.name = "";
     }
+
+    public abstract Node clone();
 
     public Node(int pId, String pPath, String pName) {
         this.id = pId;

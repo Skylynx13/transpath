@@ -112,6 +112,16 @@ public abstract class NodeList {
         return idList;
     }
 
+    public NodeList getListByIds(ArrayList<Integer> ids) {
+        NodeList rNodeList = getNewList();
+        for (Node node : nodeList) {
+            if (ids.contains(node.id)) {
+                rNodeList.addNode(node.clone());
+            }
+        }
+        return rNodeList;
+    }
+
     public boolean hasNode(Node pNode) {
         return nodeList.contains(pNode);
     }

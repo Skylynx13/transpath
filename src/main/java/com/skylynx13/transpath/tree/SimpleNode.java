@@ -38,6 +38,13 @@ public class SimpleNode extends Node {
     }
 
     @Override
+    public Node clone() {
+        SimpleNode node = new SimpleNode(this.name, this.path);
+        node.id = this.id;
+        return node;
+    }
+
+    @Override
     public String keepNode() {
         return name;
     }

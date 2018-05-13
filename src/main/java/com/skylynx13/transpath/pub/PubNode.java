@@ -1,12 +1,11 @@
 /**
- * Copyright (c) 2016,qxu. 
+ * Copyright (c) 2016,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.qxu.transpath.tree
  * File Name:PubNode.java
  * Date:2016-7-12 下午1:23:56
- * 
  */
 package com.skylynx13.transpath.pub;
 
@@ -14,26 +13,37 @@ import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.utils.TransConst;
 
- /**
+/**
  * ClassName: PubNode <br/>
  * Description: TODO <br/>
  * Date: 2016-7-12 下午1:23:56 <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
+ *
  * Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
+ *
  */
 
 public class PubNode extends Node {
     public int order;
-    
+
     public PubNode() {
         order = 0;
     }
-    
+
+    @Override
+    public Node clone() {
+        PubNode node = new PubNode();
+        node.id = this.id;
+        node.name = this.name;
+        node.path = this.path;
+        node.order = this.order;
+        return node;
+    }
+
+
     public PubNode(String sEntry) {
         String[] sItems = sEntry.split(TransConst.COLON);
         id = Integer.parseInt(sItems[0]);
@@ -43,7 +53,7 @@ public class PubNode extends Node {
             name = sItems[3];
         }
     }
-    
+
     public PubNode(StoreNode sNode) {
         id = 0;
         order = 0;
@@ -55,18 +65,17 @@ public class PubNode extends Node {
     public String keepNode() {
         String seperator = TransConst.COLON;
         return new StringBuffer(String.format(TransConst.FORMAT_INT_08, id))
-                        .append(seperator)
-                        .append(String.format(TransConst.FORMAT_INT_08, order))
-                        .append(seperator)
-                        .append(path)
-                        .append(seperator)
-                        .append(name)
-                        .toString();
+                .append(seperator)
+                .append(String.format(TransConst.FORMAT_INT_08, order))
+                .append(seperator)
+                .append(path)
+                .append(seperator)
+                .append(name)
+                .toString();
     }
 
     public Object[] toRow() {
         Object[] row = {id, path, name, order};
         return row;
     }
-
 }

@@ -18,8 +18,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import com.skylynx13.transpath.pub.PubNode;
+import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeTree;
+import com.skylynx13.transpath.tree.SimpleNode;
 
 /**
  * ClassName: TreeMouseListener <br/>
@@ -50,7 +53,16 @@ public class TreeMouseListener implements MouseListener {
         NodeTree selectTree = (NodeTree)jTree.getSelectionPath().getLastPathComponent();
         Node selectNode = selectTree.getNode();
         TranspathFrame.getInfoTextArea().setText("Tree Selected: " + selectTree.toString()+"\n");
-        TranspathFrame.getInfoTextArea().append("Node Selected: " + selectNode.keepNode()+"\n");
+        String nodeType = "";
+        if (selectNode instanceof StoreNode) {
+            TranspathFrame.getInfoTextArea().append("Store Node Selected: " + selectNode.keepNode()+"\n");
+            TranspathFrame.getInfoTextArea().append("Related Pub Node: " + TranspathFrame.getCurrPubList().getListByIds(TranspathFrame.getCurrLinkList().getPubIdList(selectNode.id))+"\n");
+        } else if (selectNode instanceof PubNode) {
+            TranspathFrame.getInfoTextArea().append("Pub Node Selected: " + selectNode.keepNode()+"\n");
+            TranspathFrame.getInfoTextArea().append("Related Store Node: " + TranspathFrame.getCurrStoreList().getListByIds(TranspathFrame.getCurrLinkList().getStoreIdList(selectNode.id))+"\n");
+        } else if (selectNode instanceof SimpleNode) {
+            TranspathFrame.getInfoTextArea().append("Simple Node Selected: " + selectNode.keepNode()+"\n");
+        }
         TranspathFrame.setInfoTable(selectTree);
     }
 
