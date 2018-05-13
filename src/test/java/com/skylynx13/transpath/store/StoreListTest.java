@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 
+import com.skylynx13.transpath.utils.TransConst;
 import org.junit.Test;
 
 import com.skylynx13.transpath.store.StoreList;
@@ -33,7 +34,7 @@ import com.skylynx13.transpath.store.StoreNode;
  */
 
 public class StoreListTest {
-    public static final int LOC_AFTER_TIME = 24;
+    public static final int LOC_AFTER_TIME = TransConst.FMT_DATE_TIME_LONG.length()+1;
 
     @Test
     public void testAddNode_add() {
