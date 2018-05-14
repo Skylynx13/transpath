@@ -77,6 +77,12 @@ public class TranspathFrame extends JFrame {
         return currLinkList;
     }
 
+    private void refreshLists() {
+        currStoreList = new StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+        currPubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+        currLinkList = new LinkList(FileUtils.linkNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+    }
+
     public static JTable getInfoTable() {
         return infoTable;
     }
@@ -112,6 +118,8 @@ public class TranspathFrame extends JFrame {
 
         contentPanel.setLayout(new BorderLayout());
         setLookAndFeel();
+
+        refreshLists();
 
         contentPanel.add(createAllSplitPane(), BorderLayout.CENTER);
         this.setVisible(true);
