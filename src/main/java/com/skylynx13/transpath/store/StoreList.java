@@ -142,4 +142,11 @@ public class StoreList extends NodeList {
     protected NodeList getNewList() {
         return new StoreList();
     }
+
+    @Override
+    public StoreList searchName(String searchText) {
+        StoreList storeList = (StoreList) super.searchName(searchText);
+        storeList.calcFileSize();
+        return storeList;
+    }
 }

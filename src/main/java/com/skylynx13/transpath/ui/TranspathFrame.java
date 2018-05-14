@@ -106,8 +106,7 @@ public class TranspathFrame extends JFrame {
 
     public static void searchList(String searchText) {
         TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
-        StoreList aList = getCurrStoreList();
-        StoreList sList = (StoreList) aList.searchName(searchText);
+        StoreList sList = getCurrStoreList().searchName(searchText);
         setInfoTable(sList);
         TransLog.getLogger().info(sList.toString());
     }
