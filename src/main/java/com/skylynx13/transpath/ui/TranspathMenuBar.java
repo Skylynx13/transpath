@@ -11,6 +11,7 @@ package com.skylynx13.transpath.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -189,6 +190,7 @@ public class TranspathMenuBar extends JMenuBar {
                 });
             }
         });
+        storeSearchItem.setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_MASK));
 
         return storeMenu;
     }
