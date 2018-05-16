@@ -10,9 +10,7 @@
  */
 package com.skylynx13.transpath.test;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -283,5 +281,28 @@ public class FreeTester {
         StoreNode nb = na;
         nb.id=2;
         System.out.println("na=" + na.id + "; nb=" + nb.id);
+
+        try {
+            Process proc = Runtime.getRuntime().exec("cmd /c chcp 437|copy D:\\tesp\\head110.jpg D:\\temp\\head120.jpg" );
+            BufferedReader iReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getInputStream())));
+            BufferedReader eReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getErrorStream())));
+            String inLine;
+            while ((inLine = iReader.readLine()) != null) {
+                System.out.println("Return: " + inLine);
+            }
+            while ((inLine = eReader.readLine()) != null) {
+                System.out.println("Error: " + inLine);
+            }
+            if (proc.waitFor() != 0) {
+                if (proc.exitValue() == 1) {
+                    System.err.println("Error executing.");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }

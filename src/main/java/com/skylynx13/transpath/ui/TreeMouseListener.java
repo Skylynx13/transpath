@@ -74,9 +74,12 @@ public class TreeMouseListener implements MouseListener {
         }
         if (e.getButton() == MouseEvent.BUTTON3) {
             JPopupMenu popupMenu = new JPopupMenu();
+            popupMenu.add(new JMenuItem("New Child"));
+            popupMenu.add(new JMenuItem("Rename"));
             popupMenu.add(new JMenuItem("Cut"));
             popupMenu.add(new JMenuItem("Copy"));
             popupMenu.add(new JMenuItem("Paste"));
+            popupMenu.add(new JMenuItem("Delete"));
             popupMenu.show(jTree, e.getX(), e.getY());
         }
     }
