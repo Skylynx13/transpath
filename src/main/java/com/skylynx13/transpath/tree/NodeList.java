@@ -135,6 +135,16 @@ public abstract class NodeList {
         return pNode.id;
     }
 
+    public void enlist(Node pNode) {
+        if (0 == size()) {
+            minId = pNode.id;
+            maxId = pNode.id;
+        }
+        minId = Math.min(minId, pNode.id);
+        maxId = Math.max(maxId, pNode.id);
+        nodeList.add(pNode);
+    }
+
     public HashMap<Integer, Integer> attachList(NodeList pList) {
         HashMap<Integer, Integer> aMap = new HashMap<Integer, Integer>();
         for (Node aNode : pList.nodeList) {
@@ -323,7 +333,7 @@ public abstract class NodeList {
         }
         for (Node aNode : nodeList) {
             if (aNode.searchName(searchText)) {
-                foundList.addNode(aNode);
+                foundList.enlist(aNode);
             }
         }
         return foundList;
@@ -336,7 +346,7 @@ public abstract class NodeList {
         }
         for (Node aNode : nodeList) {
             if (aNode.searchPath(searchText)) {
-                foundList.addNode(aNode);
+                foundList.enlist(aNode);
             }
         }
         return foundList;

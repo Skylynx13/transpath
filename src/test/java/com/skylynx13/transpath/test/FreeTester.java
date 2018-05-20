@@ -24,9 +24,9 @@ import java.util.regex.Pattern;
 import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.task.TaskArranger;
 import com.skylynx13.transpath.task.TaskEntry;
+import com.skylynx13.transpath.tree.BranchNode;
 import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeTree;
-import com.skylynx13.transpath.tree.SimpleNode;
 import com.skylynx13.transpath.utils.DateUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
@@ -56,13 +56,13 @@ public class FreeTester {
     }
 
     public void testNodeTree() {
-        NodeTree tree1 = new NodeTree(new SimpleNode("tree1"));
-        NodeTree node1 = new NodeTree(new SimpleNode("node1"));
+        NodeTree tree1 = new NodeTree(new BranchNode("tree1"));
+        NodeTree node1 = new NodeTree(new BranchNode("node1"));
         tree1.addChild(node1);
-        NodeTree node2 = new NodeTree(new SimpleNode("node2"));
+        NodeTree node2 = new NodeTree(new BranchNode("node2"));
         tree1.addChild(node2);
-        NodeTree node3 = new NodeTree(new SimpleNode("node3"));
-        NodeTree tree2 = new NodeTree(new SimpleNode("tree2"));
+        NodeTree node3 = new NodeTree(new BranchNode("node3"));
+        NodeTree tree2 = new NodeTree(new BranchNode("tree2"));
         tree2.addChild(node3);
         tree1.addChild(tree2);
         System.out.println(tree1.getNodePathName());
@@ -146,7 +146,7 @@ public class FreeTester {
     public void testArrayListAddAll() {
         ArrayList<Node> nl1 = null;
         ArrayList<Node> nl2 = new ArrayList<Node>();
-        nl2.add(new SimpleNode("a"));
+        nl2.add(new BranchNode("a"));
         ArrayList<Node> nl3 = new ArrayList<Node>();
         nl3.addAll(nl1);
         nl3.addAll(nl2);

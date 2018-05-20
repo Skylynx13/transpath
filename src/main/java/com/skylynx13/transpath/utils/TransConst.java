@@ -63,10 +63,10 @@ public class TransConst {
 
     public static final Font GLOBAL_FONT = new Font("GLOBAL", Font.PLAIN, TransProp.getInt(SIZE_TEXT));
 
-    public static String[] TABLE_TITLE_STORE = {"Id", "Path", "Name", "Length", "Update Time", "MD5", "SHA", "CRC32"};
+    public static String[] TABLE_TITLE_BRANCH = {"BranchId", "BranchPath", "BranchName", "Length"};
 
-    public static String[] TABLE_TITLE_SIMPLE = {"Id", "Path", "Name", "Length"};
+    public static String[] TABLE_TITLE_STORE = {"StoreId", "StorePath", "StoreName", "Length", "Update Time", "MD5", "SHA", "CRC32"};
 
-    public static String[] TABLE_TITLE_PUB = {"Id", "Path", "Name", "Order"};
+    public static String[] TABLE_TITLE_PUB = {"PubId", "PubPath", "PubName", "Order"};
 
 }

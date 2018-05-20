@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -249,11 +250,18 @@ public class TranspathFrame extends JFrame {
 
         columnSizeFitContents(infoTable);
 
+        columnAlignRight("StoreId");
+        columnAlignRight("Length");
+        columnAlignRight("PubId");
+        columnAlignRight("Order");
+        columnAlignRight("BranchId");
+    }
+
+    private static void columnAlignRight(String columnTitle) {
+        DefaultTableCellRenderer alignRight = new DefaultTableCellRenderer();
+        alignRight.setHorizontalAlignment(JLabel.RIGHT);
         try {
-            DefaultTableCellRenderer alignRight = new DefaultTableCellRenderer();
-            alignRight.setHorizontalAlignment(JLabel.RIGHT);
-            infoTable.getColumn("Id").setCellRenderer(alignRight);
-            infoTable.getColumn("Length").setCellRenderer(alignRight);
+            infoTable.getColumn(columnTitle).setCellRenderer(alignRight);
         } catch (IllegalArgumentException e) {
         }
     }
@@ -276,6 +284,42 @@ public class TranspathFrame extends JFrame {
             Component headerComp = headerRenderer.getTableCellRendererComponent(table, headerValue, false, false, 0, column);
             maxComponentWidth = Math.max(maxComponentWidth, headerComp.getPreferredSize().width);
             table.getColumnModel().getColumn(column).setPreferredWidth(maxComponentWidth + table.getIntercellSpacing().width);
+        }
+    }
+
+    public static void fetchSelectedStores() {
+        int columnIndex = -1;
+        boolean usePubId = false;
+        try {
+            columnIndex = infoTable.getColumnModel().getColumnIndex("StoreId");
+        } catch (IllegalArgumentException e) {
+            TransLog.getLogger().info("StoreId not found.");
+            columnIndex = fetchSelectedPubs();
+            if (columnIndex == -1) {
+                return;
+            }
+            usePubId = true;
+        }
+        TransLog.getLogger().info("Column index = " + columnIndex);
+        ArrayList<Integer> selectedId = new ArrayList<>();
+        for (int iSelectedRow : infoTable.getSelectedRows()) {
+            int id = (Integer)infoTable.getValueAt(iSelectedRow, columnIndex);
+            TransLog.getLogger().info("id is: " + id);
+            selectedId.add(id);
+        }
+        if (usePubId) {
+            //selectedId = getStoreIdFromPubId(selectedId);
+        }
+
+    }
+
+    public static int fetchSelectedPubs() {
+        int columnIndex = 0;
+        try {
+            return infoTable.getColumnModel().getColumnIndex("PubId");
+        } catch (IllegalArgumentException e) {
+            TransLog.getLogger().info("PubId not found. No fetch performed.");
+            return -1;
         }
     }
 

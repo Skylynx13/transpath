@@ -192,6 +192,20 @@ public class TranspathMenuBar extends JMenuBar {
         });
         storeSearchItem.setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_MASK));
 
+        JMenuItem fetchSelectedItem = new JMenuItem("Fetch Selected");
+        storeMenu.add(fetchSelectedItem);
+        fetchSelectedItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                transpathMenuAction.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        TranspathFrame.fetchSelectedStores();
+                    }
+                });
+            }
+        });
+
         return storeMenu;
     }
 

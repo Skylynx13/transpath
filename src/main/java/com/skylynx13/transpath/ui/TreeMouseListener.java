@@ -20,9 +20,9 @@ import javax.swing.tree.TreePath;
 
 import com.skylynx13.transpath.pub.PubNode;
 import com.skylynx13.transpath.store.StoreNode;
+import com.skylynx13.transpath.tree.BranchNode;
 import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeTree;
-import com.skylynx13.transpath.tree.SimpleNode;
 
 /**
  * ClassName: TreeMouseListener <br/>
@@ -60,7 +60,7 @@ public class TreeMouseListener implements MouseListener {
         } else if (selectNode instanceof PubNode) {
             TranspathFrame.getInfoTextArea().append("Pub Node Selected: " + selectNode.keepNode()+"\n");
             TranspathFrame.getInfoTextArea().append("Related Store Node: " + TranspathFrame.getCurrStoreList().getListByIds(TranspathFrame.getCurrLinkList().getStoreIdList(selectNode.id))+"\n");
-        } else if (selectNode instanceof SimpleNode) {
+        } else if (selectNode instanceof BranchNode) {
             TranspathFrame.getInfoTextArea().append("Simple Node Selected: " + selectNode.keepNode()+"\n");
         }
         TranspathFrame.setInfoTable(selectTree);
