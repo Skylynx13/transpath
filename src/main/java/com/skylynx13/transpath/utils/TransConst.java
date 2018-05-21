@@ -8,6 +8,8 @@ public class TransConst {
     public static final String LOC_TASK   = "LOC_TASK";
     public static final String LOC_STORE  = "LOC_STORE";
     public static final String LOC_TRANS  = "LOC_TRANS";
+    public static final String LOC_SOURCE  = "LOC_SOURCE";
+    public static final String LOC_TARGET  = "LOC_TARGET";
 
     public static final String SIZE_TEXT  = "SIZE_TEXT";
     
@@ -68,5 +70,7 @@ public class TransConst {
     public static String[] TABLE_TITLE_STORE = {"StoreId", "StorePath", "StoreName", "Length", "Update Time", "MD5", "SHA", "CRC32"};
 
     public static String[] TABLE_TITLE_PUB = {"PubId", "PubPath", "PubName", "Order"};
+
+    public static final String CMD_COPY_TO_TARGET = "cmd /c chcp 437|copy ";
 
 }

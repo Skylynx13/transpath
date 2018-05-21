@@ -15,6 +15,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -25,6 +29,8 @@ import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.pub.LinkList;
 import com.skylynx13.transpath.pub.PubList;
 import com.skylynx13.transpath.store.StoreList;
+import com.skylynx13.transpath.store.StoreNode;
+import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeList;
 import com.skylynx13.transpath.tree.NodeTree;
 import com.skylynx13.transpath.utils.FileUtils;
@@ -289,36 +295,79 @@ public class TranspathFrame extends JFrame {
 
     public static void fetchSelectedStores() {
         int columnIndex = -1;
-        boolean usePubId = false;
-        try {
-            columnIndex = infoTable.getColumnModel().getColumnIndex("StoreId");
-        } catch (IllegalArgumentException e) {
-            TransLog.getLogger().info("StoreId not found.");
-            columnIndex = fetchSelectedPubs();
-            if (columnIndex == -1) {
-                return;
-            }
-            usePubId = true;
-        }
+        columnIndex = getIdColumnIndex("StoreId");
         TransLog.getLogger().info("Column index = " + columnIndex);
-        ArrayList<Integer> selectedId = new ArrayList<>();
+        if (columnIndex != -1) {
+            ArrayList<Integer> storeIdList = getSelectedIdList(columnIndex);
+            fetchStore(storeIdList);
+            return;
+        }
+        columnIndex = getIdColumnIndex("PubId");
+        TransLog.getLogger().info("Column index = " + columnIndex);
+        if (columnIndex != -1) {
+            ArrayList<Integer> pubIdList = getSelectedIdList(columnIndex);
+            ArrayList<Integer> storeIdList = TranspathFrame.getCurrLinkList().getStoreIdList(pubIdList);
+            fetchStore(storeIdList);
+            return;
+        }
+        TransLog.getLogger().info("No fetch performed.");
+        return;
+    }
+
+    private static void fetchStore(ArrayList<Integer> storeIdList) {
+        //get source path-name list
+        NodeList sList = TranspathFrame.getCurrStoreList().getListByIds(storeIdList);
+        //get target
+        String sourceBase = TransProp.get(TransConst.LOC_SOURCE);
+        String target = TransProp.get(TransConst.LOC_TARGET);
+        //exec and feedback
+        for (Node sNode : sList.nodeList) {
+            String pathName = sNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4) + sNode.name;
+            String cmd = TransConst.CMD_COPY_TO_TARGET + "\"" + sourceBase + pathName + "\" " + target;
+            TransLog.getLogger().info("Command: " + cmd);
+            //execCmd(cmd);
+        }
+    }
+
+    private static void execCmd(String cmd) {
+        try {
+            Process proc = Runtime.getRuntime().exec(cmd);
+            BufferedReader iReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getInputStream())));
+            BufferedReader eReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getErrorStream())));
+            String inLine;
+            while ((inLine = iReader.readLine()) != null) {
+                TransLog.getLogger().info("Return: " + inLine);
+            }
+            while ((inLine = eReader.readLine()) != null) {
+                TransLog.getLogger().info("Error: " + inLine);
+            }
+            if (proc.waitFor() != 0) {
+                if (proc.exitValue() == 1) {
+                    TransLog.getLogger().info("Error executing.");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static ArrayList<Integer> getSelectedIdList(int columnIndex) {
+        ArrayList<Integer> selectedIds = new ArrayList<>();
         for (int iSelectedRow : infoTable.getSelectedRows()) {
             int id = (Integer)infoTable.getValueAt(iSelectedRow, columnIndex);
             TransLog.getLogger().info("id is: " + id);
-            selectedId.add(id);
+            selectedIds.add(id);
         }
-        if (usePubId) {
-            //selectedId = getStoreIdFromPubId(selectedId);
-        }
-
+        return selectedIds;
     }
 
-    public static int fetchSelectedPubs() {
-        int columnIndex = 0;
+    private static int getIdColumnIndex(String columnTitle) {
         try {
-            return infoTable.getColumnModel().getColumnIndex("PubId");
+            return infoTable.getColumnModel().getColumnIndex(columnTitle);
         } catch (IllegalArgumentException e) {
-            TransLog.getLogger().info("PubId not found. No fetch performed.");
+            TransLog.getLogger().info(columnTitle + " not found.");
             return -1;
         }
     }
