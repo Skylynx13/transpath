@@ -126,6 +126,7 @@ public class TranspathMenuBar extends JMenuBar {
                 });
             }
         });
+        taskNameItem.setAccelerator(KeyStroke.getKeyStroke('R', InputEvent.CTRL_MASK));
 
         JMenuItem taskPackageItem = new JMenuItem("Package Check");
         taskMenu.add(taskPackageItem);
