@@ -58,8 +58,8 @@ public abstract class Node{
     }
 
     private boolean search(String member, String searchText) {
-//        if (member.matches(".*" + searchText + ".*")) {
-        if (member.contains(searchText)) {
+        if (member.matches("(?i).*" + searchText + ".*")) {
+//        if (member.contains(searchText)) {
             return true;
         }
         return false;
