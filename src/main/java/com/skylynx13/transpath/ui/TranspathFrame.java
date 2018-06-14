@@ -105,7 +105,6 @@ public class TranspathFrame extends JFrame {
     public TranspathFrame() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize((int) screenSize.getWidth() * 2 / 3, (int) screenSize.getHeight() * 2 / 3);
-        this.setTitle("Storage Archivist");
         this.setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
         this.setJMenuBar(new TranspathMenuBar(this));
         initPanel();
@@ -128,6 +127,7 @@ public class TranspathFrame extends JFrame {
         refreshLists();
 
         contentPanel.add(createAllSplitPane(), BorderLayout.CENTER);
+        this.setTitle("Storage Archivist - " + TransProp.get(TransConst.VER_CURR));
         this.setVisible(true);
     }
 

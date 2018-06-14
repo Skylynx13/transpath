@@ -86,15 +86,19 @@ public class StoreList extends NodeList {
 
     private void buildByPath(String pRoot, File pPath) {
         clear();
+
         if (!pPath.isDirectory() || pPath.listFiles() == null) {
             return;
         }
         TransLog.getLogger().info(pPath);
+        long processedBytes = 0;
         for (File aFile : pPath.listFiles()) {
             if (aFile.isFile()) {
                 StoreNode aNode = new StoreNode(pRoot, aFile);
                 addNode(aNode);
                 TransLog.getLogger().info(aNode.keepNode());
+                processedBytes += aNode.length;
+                TransLog.getLogger().info("Processed Bytes: " + processedBytes);
             }
             if (aFile.isDirectory()) {
                 StoreList aList = new StoreList();
