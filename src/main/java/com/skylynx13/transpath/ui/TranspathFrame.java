@@ -127,6 +127,17 @@ public class TranspathFrame extends JFrame {
         refreshLists();
 
         contentPanel.add(createAllSplitPane(), BorderLayout.CENTER);
+
+        JToolBar statusBar = new JToolBar();
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setMaximum(100);
+        progressBar.setMinimum(0);
+        progressBar.setValue(88);
+        statusBar.add(progressBar);
+        statusBar.add(new JLabel("8,800 of 10,000 bytes processed. Status Normal."));
+        statusBar.setFloatable(false);
+        contentPanel.add(statusBar, BorderLayout.SOUTH);
+
         this.setTitle("Storage Archivist - " + TransProp.get(TransConst.VER_CURR));
         this.setVisible(true);
     }
