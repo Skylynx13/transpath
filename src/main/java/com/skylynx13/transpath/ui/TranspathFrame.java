@@ -9,10 +9,7 @@
  */
 package com.skylynx13.transpath.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
@@ -142,6 +139,11 @@ public class TranspathFrame extends JFrame {
         progressBar.setMaximum(100);
         progressBar.setMinimum(0);
         progressBar.setValue(88);
+        progressBar.setStringPainted(true);
+        progressBar.setIndeterminate(false);
+        //Color change unavailable when using NimbusLookAndFeel;
+        //progressBar.setBackground(Color.gray);
+        //progressBar.setForeground(Color.green);
         statusBar.add(progressBar);
 
         statusBar.add(new JLabel("8,800 of 10,000 bytes processed. Status Normal."));
