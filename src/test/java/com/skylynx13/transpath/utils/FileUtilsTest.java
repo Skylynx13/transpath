@@ -70,6 +70,7 @@ public class FileUtilsTest {
     }
 
     @Test
+    @Ignore
     public void getFileSizeTest_file_size() {
 //        assertEquals(10318, FileUtils.getFileSize(new File(testResource("ArrangerTest_raw.txt"))));
 //        assertEquals(10205, FileUtils.getFileSize(new File(testResource("CompareTest_base.txt"))));
