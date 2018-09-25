@@ -10,22 +10,13 @@
  */
 package com.skylynx13.transpath.utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URLConnection;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.CRC32;
 
 import org.apache.commons.codec.binary.Hex;
@@ -484,8 +475,109 @@ public class FileUtils {
     }
 
     public static void main(String[] args) {
-            long t0 = System.currentTimeMillis();
-            TransLog.getLogger().info(listFiles("D:\\Quest\\_IC\\doc\\design"));
-            TransLog.getLogger().info("Time : " + (System.currentTimeMillis()-t0) + " ms.");
+    }
+
+    public static String checkPackage(String fileName) {
+        String suffix = getSuffix(fileName);
+        if (!isValidType(suffix)) {
+            return TransConst.PKG_TYPE;
         }
+
+        File packFile = new File(fileName);
+        if (packFile.isDirectory()) {
+            return TransConst.PKG_TYPE;
+        }
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.redirectErrorStream();
+        List<String> rarCmd = new ArrayList<>();
+        rarCmd.add("rar");
+        rarCmd.add("t");
+        rarCmd.add(fileName);
+        processBuilder.command(rarCmd);
+        processBuilder.redirectErrorStream(true);
+        TransLog.getLogger().info("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+        try {
+            Process process = processBuilder.start();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            String lastLine = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                lastLine = line;
+            }
+            TransLog.getLogger().info("Last line: " + lastLine);
+            if (lastLine.equalsIgnoreCase("ALL OK")) {
+                return TransConst.PKG_OK;
+            }
+            else {
+                return TransConst.PKG_DAMAGED;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return TransConst.PKG_UNKNOWN;
+    }
+
+    public static Map<String, String> checkPackage(List<String> fileNames) {
+        Map<String, String> resultMap = new HashMap<>();
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.redirectErrorStream(true);
+        String[] checkCmd = new String[3];
+        for (String fileName : fileNames) {
+            if (!isValidType(getSuffix(fileName)) || new File(fileName).isDirectory()) {
+                TransLog.getLogger().info("File Type: " + fileName);
+                resultMap.put(fileName, TransConst.PKG_TYPE);
+                continue;
+            }
+            if (isRar(getSuffix(fileName))) {
+                checkCmd[0] = "rar";
+                checkCmd[1] = "t";
+            } else if (isZip(getSuffix(fileName))) {
+                checkCmd[0] = "zip";
+                checkCmd[1] = "-T";
+            }
+            checkCmd[2] = fileName;
+
+            processBuilder.command(checkCmd);
+            TransLog.getLogger().info("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+            try {
+                Process process = processBuilder.start();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line;
+                String lastLine = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    lastLine = line;
+                }
+                TransLog.getLogger().info("Last line: " + lastLine);
+                if (lastLine.substring(lastLine.length()-3).equalsIgnoreCase(" OK")) {
+//                    resultMap.put(fileName, TransConst.PKG_OK);
+                    continue;
+                }
+                else {
+                    resultMap.put(fileName, lastLine);
+                    continue;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultMap;
+    }
+
+    private static String getSuffix(String fileName) {
+        return fileName.substring(fileName.lastIndexOf('.') + 1);
+    }
+
+    private static boolean isValidType(String suffix) {
+        return isRar(suffix) || isZip(suffix);
+    }
+    private static boolean isRar(String suffix) {
+        return suffix.equalsIgnoreCase(TransConst.PKG_RAR)
+                || suffix.equalsIgnoreCase(TransConst.PKG_CBR);
+    }
+    private static boolean isZip(String suffix) {
+        return suffix.equalsIgnoreCase(TransConst.PKG_ZIP)
+                || suffix.equalsIgnoreCase(TransConst.PKG_CBZ);
+    }
 }

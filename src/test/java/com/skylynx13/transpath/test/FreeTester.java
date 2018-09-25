@@ -12,15 +12,12 @@ package com.skylynx13.transpath.test;
 
 import java.io.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import com.github.junrar.Archive;
 import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.task.TaskArranger;
 import com.skylynx13.transpath.task.TaskEntry;
@@ -213,6 +210,92 @@ public class FreeTester {
     }
 
     public static void main(String[] args) {
+        runLinuxCommand();
+
+    }
+
+    private static void runLinuxCommand() {
+        String sandboxPath = "/home/qxu/sandbox";
+        File packPath = new File(sandboxPath);
+        if (!packPath.isDirectory()) {
+            System.out.println(packPath.getName() + " is not a directory.");
+            return;
+        }
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.directory(packPath);
+        processBuilder.redirectErrorStream();
+        String[] rarCmd = new String[3];
+        rarCmd[0] = "rar";
+        rarCmd[1] = "t";
+        for (File packFile : packPath.listFiles()) {
+//            System.out.println("Checking " + packFile.getName());
+            if (packFile.isDirectory()) {
+                System.out.println(packFile.getName() + " is a directory.");
+                continue;
+            }
+            String fileName = packFile.getName();
+            String suffix = fileName.substring(fileName.lastIndexOf('.')+1);
+            if (suffix.equalsIgnoreCase("rar") ||suffix.equalsIgnoreCase("cbr")) {
+                //rarCmd[2] = "\'" + fileName.replaceAll(" ", "\\\\ ").replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)") + "\'";
+                //rarCmd[2] = packPath + "/" + fileName.replaceAll(" ", "\\\\ ").replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
+                //rarCmd[2] = "\'" + packPath + "/" + fileName + "\'";
+                rarCmd[2] = packPath + "/" + fileName;
+                processBuilder.command(rarCmd);
+                System.out.println("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+                try {
+                    Process process = processBuilder.start();
+                    //process.waitFor();
+                    InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        System.out.println("Output: " + line);
+                    }
+                    InputStreamReader errStreamReader = new InputStreamReader(process.getErrorStream());
+                    BufferedReader errbufferedReader = new BufferedReader(errStreamReader);
+                    String eline;
+                    while ((eline = errbufferedReader.readLine()) != null) {
+                        System.out.println("Error: " + eline);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                //} catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            System.out.println("The type of file [" + fileName + "] is [" + suffix + "].");
+        }
+}
+
+    public static void simpleExec() {
+
+        String fileName = "/home/qxu/sandbox/Amazing\\ Spider-Man\\ 005\\ \\(2018\\)\\ \\(digital\\)\\ \\(Oroboros-DCP\\).cbr";
+        fileName = "/home/qxu/sandbox/testEmpty.rar";
+        fileName = "/home/qxu/sandbox/Amazing Spider-Man 005 (2018) (digital) (Oroboros-DCP).cbr";
+        ProcessBuilder processBuilder = new ProcessBuilder().command("rar", "t", fileName);//.inheritIO();
+        processBuilder.redirectErrorStream(true);
+        System.out.println("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+        try {
+            Process process = processBuilder.start();
+            process.waitFor();
+            InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println("Output: " + line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void someTest() {
         double timeTag = System.currentTimeMillis();
         FreeTester ft = new FreeTester();
         //ft.testNodeTree();

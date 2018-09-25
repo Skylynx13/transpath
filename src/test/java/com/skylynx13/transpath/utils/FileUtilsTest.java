@@ -15,7 +15,11 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import com.skylynx13.transpath.log.TransLog;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -84,7 +88,7 @@ public class FileUtilsTest {
     @Test
     public void getFileSizeTest_dir_size() {
         //assertEquals(32907186, FileUtils.getFileSize(new File(testResource(""))));
-        assertEquals(32506701, FileUtils.getFileSize(new File(testResource(""))));
+        assertEquals(32510106, FileUtils.getFileSize(new File(testResource(""))));
     }
 
     @Test
@@ -149,18 +153,56 @@ public class FileUtilsTest {
         File f1 = new File(fn1);
         File f2 = new File(fn2);
         File f3 = new File(fn3);
-        
+
         FileUtils.clearFile(fn3);
         assertEquals(0, f3.length());
-        
+
         long tm1 = System.currentTimeMillis();
         assertEquals(true, FileUtils.copyFileBytes(fn1, fn3));
         assertEquals(true, FileUtils.appendFileBytes(fn2, fn3));
         System.out.println("catFileBytesTest_copy_append: " + (
                 System.currentTimeMillis()-tm1) + " ms.");
-        
+
         assertEquals(f1.length() + f2.length(), f3.length());
 //        assertEquals(true, FileUtils.compareFileBytes(fn0, fn3));
+    }
+
+    @Test
+    public void checkPackageTest() {
+        long t0 = System.currentTimeMillis();
+        assertEquals(TransConst.PKG_OK, FileUtils.checkPackage(testResource("testFiles.rar")));
+        TransLog.getLogger().info("Single Time = " + (System.currentTimeMillis() - t0));
+        t0 = System.currentTimeMillis();
+        assertEquals(TransConst.PKG_DAMAGED, FileUtils.checkPackage(testResource("testZipFakeRar.rar")));
+        TransLog.getLogger().info("Single Time = " + (System.currentTimeMillis() - t0));
+        t0 = System.currentTimeMillis();
+        assertEquals(TransConst.PKG_DAMAGED, FileUtils.checkPackage(testResource("testEmpty.rar")));
+        TransLog.getLogger().info("Single Time = " + (System.currentTimeMillis() - t0));
+        t0 = System.currentTimeMillis();
+        assertEquals(TransConst.PKG_OK, FileUtils.checkPackage(testResource("testFiles.cbr")));
+        TransLog.getLogger().info("Single Time = " + (System.currentTimeMillis() - t0));
+        t0 = System.currentTimeMillis();
+        assertEquals(TransConst.PKG_TYPE, FileUtils.checkPackage(testResource("testWrongType.txt")));
+        TransLog.getLogger().info("Single Time = " + (System.currentTimeMillis() - t0));
+        t0 = System.currentTimeMillis();
+        List<String> testFiles = new ArrayList<>();
+        testFiles.add(testResource("testFiles.rar"));
+        testFiles.add(testResource("testZipFakeRar.rar"));
+        testFiles.add(testResource("testEmpty.rar"));
+        testFiles.add(testResource("testFiles.cbr"));
+        testFiles.add(testResource("testFiles.zip"));
+        testFiles.add(testResource("testRarFakeZip.zip"));
+        testFiles.add(testResource("testEmpty.zip"));
+        testFiles.add(testResource("testFiles.cbz"));
+        testFiles.add(testResource("testWrongType.txt"));
+        Map<String, String> result = FileUtils.checkPackage(testFiles);
+        assertEquals(5, result.size());
+        assertEquals("No files to extract", result.get(testResource("testZipFakeRar.rar")));
+        assertEquals("No files to extract", result.get(testResource("testEmpty.rar")));
+        assertTrue(result.get(testResource("testRarFakeZip.zip")).startsWith("zip error: "));
+        assertTrue(result.get(testResource("testEmpty.zip")).startsWith("zip error: "));
+        assertEquals(TransConst.PKG_TYPE, result.get(testResource("testWrongType.txt")));
+        TransLog.getLogger().info("Multiple Time = " + (System.currentTimeMillis() - t0));
     }
     
     /**
@@ -178,18 +220,17 @@ public class FileUtilsTest {
      *     file_extensions=.cbr,.cbz
      */
     @Test
-    @Ignore
     public void getFileMimeTypeTest() {
         long tm1 = System.currentTimeMillis();
         assertEquals("text/plain", FileUtils.getFileMimeType(testResource("getFileMimeType_000.txt")));
         System.out.println("getFileMimeTypeTest URLConnection: " + (
                 System.currentTimeMillis()-tm1) + " ms.");
-        assertEquals("text/qxu", FileUtils.getFileMimeType(testResource("getFileMimeType_001.qxu")));
-        assertEquals("archive/roshal", FileUtils.getFileMimeType(testResource("getFileMimeType_002.rar")));
-        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_003.cbr")));
-        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_004.cbz")));
+//        assertEquals("text/qxu", FileUtils.getFileMimeType(testResource("getFileMimeType_001.qxu")));
+//        assertEquals("archive/roshal", FileUtils.getFileMimeType(testResource("getFileMimeType_002.rar")));
+//        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_003.cbr")));
+//        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_004.cbz")));
     }
-    
+
     @Ignore
     @Test
     public void getLastModifiedStringTest() {

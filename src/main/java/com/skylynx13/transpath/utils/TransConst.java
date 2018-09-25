@@ -73,4 +73,13 @@ public class TransConst {
 
     public static final String CMD_COPY_TO_TARGET = "cmd /c chcp 437|copy ";
 
+    public static final String PKG_OK = "OK";
+    public static final String PKG_TYPE = "File type not recognized";
+    public static final String PKG_DAMAGED = "File damaged";
+    public static final String PKG_UNKNOWN = "Unknown error";
+    public static final String PKG_RAR = "rar";
+    public static final String PKG_CBR = "cbr";
+    public static final String PKG_ZIP = "zip";
+    public static final String PKG_CBZ = "cbz";
+
 }
