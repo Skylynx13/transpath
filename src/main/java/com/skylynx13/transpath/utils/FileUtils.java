@@ -518,15 +518,15 @@ public class FileUtils {
         return TransConst.PKG_UNKNOWN;
     }
 
-    public static Map<String, String> checkPackage(List<String> fileNames) {
-        Map<String, String> resultMap = new HashMap<>();
+    public static Map<String, String> checkPackages(List<String> fileNames) {
+        Map<String, String> errorPackages = new HashMap<>();
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.redirectErrorStream(true);
         String[] checkCmd = new String[3];
         for (String fileName : fileNames) {
             if (!isValidType(getSuffix(fileName)) || new File(fileName).isDirectory()) {
                 TransLog.getLogger().info("File Type: " + fileName);
-                resultMap.put(fileName, TransConst.PKG_TYPE);
+                errorPackages.put(fileName, TransConst.PKG_TYPE);
                 continue;
             }
             if (isRar(getSuffix(fileName))) {
@@ -554,7 +554,7 @@ public class FileUtils {
                     continue;
                 }
                 else {
-                    resultMap.put(fileName, lastLine);
+                    errorPackages.put(fileName, lastLine);
                     continue;
                 }
             } catch (IOException e) {
@@ -562,7 +562,7 @@ public class FileUtils {
             }
         }
 
-        return resultMap;
+        return errorPackages;
     }
 
     private static String getSuffix(String fileName) {

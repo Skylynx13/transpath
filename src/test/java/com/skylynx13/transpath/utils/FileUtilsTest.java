@@ -195,7 +195,7 @@ public class FileUtilsTest {
         testFiles.add(testResource("testEmpty.zip"));
         testFiles.add(testResource("testFiles.cbz"));
         testFiles.add(testResource("testWrongType.txt"));
-        Map<String, String> result = FileUtils.checkPackage(testFiles);
+        Map<String, String> result = FileUtils.checkPackages(testFiles);
         assertEquals(5, result.size());
         assertEquals("No files to extract", result.get(testResource("testZipFakeRar.rar")));
         assertEquals("No files to extract", result.get(testResource("testEmpty.rar")));

@@ -4,7 +4,7 @@
  * 
  * Project Name:transpath
  * Package Name:com.qxu.transpath.worker
- * File Name:NameEditor.java
+ * File Name:TaskChecker.java
  * Date:2015-2-3 上午11:08:20
  * 
  */
@@ -20,7 +20,7 @@ import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
  /**
- * ClassName: NameEditor <br/>
+ * ClassName: TaskChecker <br/>
  * Description: To rename file with a regular name by replace template. <br/>
  * Date: 2015-2-3 上午11:08:20 <br/>
  * <br/>
@@ -32,7 +32,7 @@ import com.skylynx13.transpath.utils.TransProp;
  * 
  */
 
-public class NameEditor {
+public class TaskChecker {
     boolean CHANGE = true;
     private String[][] replaceTemplates = {
             {"\\+", " "},
@@ -77,7 +77,7 @@ public class NameEditor {
         return TransProp.get(TransConst.LOC_TRANS);
     };
 
-    public NameEditor() {
+    public TaskChecker() {
     }
     
     private boolean renameFileByRenameList(String renameListName) {
@@ -385,19 +385,19 @@ public class NameEditor {
     }
 
     public static void renamePushDate() {
-        TransLog.getLogger().info("Result: " + new NameEditor().renamePathFilePushDate() + ".");
+        TransLog.getLogger().info("Result: " + new TaskChecker().renamePathFilePushDate() + ".");
     }
 
     public static void renameUnPushDate() {
-        TransLog.getLogger().info("Result: " + new NameEditor().renamePathFileUnPushDate() + ".");
+        TransLog.getLogger().info("Result: " + new TaskChecker().renamePathFileUnPushDate() + ".");
     }
 
     public static void renameNormalize() {
-        TransLog.getLogger().info("Result: " + new NameEditor().renameFileByTemplate() + ".");
+        TransLog.getLogger().info("Result: " + new TaskChecker().renameFileByTemplate() + ".");
     }
 
     public static void rename() {
-        TransLog.getLogger().info("Result: " + new NameEditor().renameFileByRenameList(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_RENAME) + ".");
+        TransLog.getLogger().info("Result: " + new TaskChecker().renameFileByRenameList(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_RENAME) + ".");
     }
 
     public static void renameComic07() {
@@ -410,7 +410,7 @@ public class NameEditor {
                 " (2016) (NMM).cbr"},
         };
 
-        TransLog.getLogger().info("Result: " + new NameEditor().renameFileOnce(replaceOnce) + ".");
+        TransLog.getLogger().info("Result: " + new TaskChecker().renameFileOnce(replaceOnce) + ".");
     }
     
     public static void renameSpecialReplace() {
@@ -436,11 +436,11 @@ public class NameEditor {
 //                "$1 0$3 ($2) $4" }, 
         };
 
-        TransLog.getLogger().info("Result: " + new NameEditor().renameFileOnce(replaceOnce) + ".");
+        TransLog.getLogger().info("Result: " + new TaskChecker().renameFileOnce(replaceOnce) + ".");
     }
     
     public static void cutHead() {
-        TransLog.getLogger().info("Result: " + new NameEditor().renameCutHead() + ".");
+        TransLog.getLogger().info("Result: " + new TaskChecker().renameCutHead() + ".");
     }
     
     public static void renameTest() {
@@ -466,7 +466,10 @@ public class NameEditor {
         for (String[] aaa:abc) {
             System.out.println(aaa[0] + ":::::" + aaa[1]);
         }
-        NameEditor.rename();
+        TaskChecker.rename();
     }
-}
+
+     public static void checkPackages() {
+     }
+ }
 

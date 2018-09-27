@@ -4,7 +4,7 @@
  * 
  * Project Name:transpath
  * Package Name:com.qxu.transpath.worker
- * File Name:NameEditorTest.java
+ * File Name:TaskCheckerTest.java
  * Date:2017-9-30 下午1:47:47
  * 
  */
@@ -15,10 +15,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.skylynx13.transpath.task.NameEditor;
-
- /**
- * ClassName: NameEditorTest <br/>
+/**
+ * ClassName: TaskCheckerTest <br/>
  * Description: TODO <br/>
  * Date: 2017-9-30 下午1:47:47 <br/>
  * <br/>
@@ -30,8 +28,8 @@ import com.skylynx13.transpath.task.NameEditor;
  * 
  */
 
-public class NameEditorTest {
-    private NameEditor nameEditor = new NameEditor();
+public class TaskCheckerTest {
+    private TaskChecker taskChecker = new TaskChecker();
     private static final String TEST_RENAMELIST = "src/test/resources/rename.list";
     private String[][] replaceTemplates = {
             {"\\+", " "},
@@ -79,19 +77,19 @@ public class NameEditorTest {
     
     @Test
     public void testGetReplacedName() {
-        assertEquals("", nameEditor.getReplacedName(replaceTemplates, ""));
-        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameEditor.getReplacedName(replaceTemplates, "Abcde fg Hijklmn 07 (of 05) (2017) (digital) (opq-rst).CBR"));
-        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameEditor.getReplacedName(replaceTemplates, "Abcde+fg+Hijklmn+07+(of+05)+(2017)_(digital)_%28opq-rst%29.rar"));
-        assertEquals("Abcde and fg from of the vs Hijklmn v06 v02 007 (of 05) (2017) (Digital) (opq-rst).cbz", nameEditor.getReplacedName(replaceTemplates, "Abcde And fg From Of The Vs. Hijklmn v6 Vol.2 #07 (of 05) (2017) (digital) (opq-rst).ZIP"));
+        assertEquals("", taskChecker.getReplacedName(replaceTemplates, ""));
+        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", taskChecker.getReplacedName(replaceTemplates, "Abcde fg Hijklmn 07 (of 05) (2017) (digital) (opq-rst).CBR"));
+        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", taskChecker.getReplacedName(replaceTemplates, "Abcde+fg+Hijklmn+07+(of+05)+(2017)_(digital)_%28opq-rst%29.rar"));
+        assertEquals("Abcde and fg from of the vs Hijklmn v06 v02 007 (of 05) (2017) (Digital) (opq-rst).cbz", taskChecker.getReplacedName(replaceTemplates, "Abcde And fg From Of The Vs. Hijklmn v6 Vol.2 #07 (of 05) (2017) (digital) (opq-rst).ZIP"));
     }
     
     @Test
     public void testGetReplaceNameByReplaceList() {
-        String[][] repList = NameEditor.readRenameList(TEST_RENAMELIST);
-        assertEquals("", nameEditor.getReplacedName(repList, ""));
-        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameEditor.getReplacedName(repList, "Abcde fg Hijklmn 07 (of 05) (2017) (digital) (opq-rst).CBR"));
-        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameEditor.getReplacedName(repList, "Abcde+fg+Hijklmn+07+(of+05)+(2017)_(digital)_%28opq-rst%29.rar"));
-        assertEquals("Abcde and fg from of the vs Hijklmn v06 v02 007 (of 05) (2017) (Digital) (opq-rst).cbz", nameEditor.getReplacedName(repList, "Abcde And fg From Of The Vs. Hijklmn v6 Vol.2 #07 (of 05) (2017) (digital) (opq-rst).ZIP"));
+        String[][] repList = TaskChecker.readRenameList(TEST_RENAMELIST);
+        assertEquals("", taskChecker.getReplacedName(repList, ""));
+        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", taskChecker.getReplacedName(repList, "Abcde fg Hijklmn 07 (of 05) (2017) (digital) (opq-rst).CBR"));
+        assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", taskChecker.getReplacedName(repList, "Abcde+fg+Hijklmn+07+(of+05)+(2017)_(digital)_%28opq-rst%29.rar"));
+        assertEquals("Abcde and fg from of the vs Hijklmn v06 v02 007 (of 05) (2017) (Digital) (opq-rst).cbz", taskChecker.getReplacedName(repList, "Abcde And fg From Of The Vs. Hijklmn v6 Vol.2 #07 (of 05) (2017) (digital) (opq-rst).ZIP"));
     }
 
 }

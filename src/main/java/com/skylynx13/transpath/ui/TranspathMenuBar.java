@@ -9,19 +9,16 @@
  */
 package com.skylynx13.transpath.ui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 import javax.swing.*;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.pub.PubKeeper;
 import com.skylynx13.transpath.store.StoreKeeper;
-import com.skylynx13.transpath.task.NameEditor;
+import com.skylynx13.transpath.task.TaskChecker;
 import com.skylynx13.transpath.task.TaskKeeper;
 import com.skylynx13.transpath.utils.CompressUtils;
 import com.skylynx13.transpath.utils.TransConst;
@@ -48,36 +45,20 @@ public class TranspathMenuBar extends JMenuBar {
 
     private TranspathFrame transpathFrame;
 
-    private ExecutorService transpathMenuAction = Executors.newCachedThreadPool(new ThreadFactory() {
-
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, "TranspathMenuAction");
-        }
-    });
+    private ExecutorService transpathMenuAction = Executors.newCachedThreadPool(r -> new Thread(r, "TranspathMenuAction"));
 
     private JMenu createSysMenu() {
         JMenu sysMenu = new JMenu("Sys");
 
         JMenuItem sysReloadItem = new JMenuItem("Reload");
         sysMenu.add(sysReloadItem);
-        sysReloadItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathFrame.initPanel();
-            }
-        });
+        sysReloadItem.addActionListener(e -> transpathFrame.initPanel());
 
         sysMenu.add(new JSeparator());
 
         JMenuItem sysExitItem = new JMenuItem("Exit");
         sysMenu.add(sysExitItem);
-        sysExitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathFrame.exit();
-            }
-        });
+        sysExitItem.addActionListener(e -> transpathFrame.exit());
         return sysMenu;
     }
 
@@ -86,61 +67,24 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem taskWeekItem = new JMenuItem("Weekly Digging");
         taskMenu.add(taskWeekItem);
-        taskWeekItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        TaskKeeper.weekFresh();
-                        TaskKeeper.digNewFresh();
-                    }
-                });
-            }
-        });
+        taskWeekItem.addActionListener(e -> transpathMenuAction.submit(() -> {
+            TaskKeeper.weekFresh();
+            TaskKeeper.digNewFresh();
+        }));
 
         JMenuItem taskSpecItem = new JMenuItem("Spec Digging");
         taskMenu.add(taskSpecItem);
-        taskSpecItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        TaskKeeper.digSpecFresh();
-                    }
-                });
-            }
-        });
+        taskSpecItem.addActionListener(e -> transpathMenuAction.submit(TaskKeeper::digSpecFresh));
 
         JMenuItem taskNameItem = new JMenuItem("Name Revise");
         taskMenu.add(taskNameItem);
-        taskNameItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        NameEditor.rename();
-                    }
-                });
-            }
-        });
-        taskNameItem.setAccelerator(KeyStroke.getKeyStroke('R', InputEvent.CTRL_MASK));
+        taskNameItem.addActionListener(e -> transpathMenuAction.submit(TaskChecker::rename));
+        taskNameItem.setAccelerator(KeyStroke.getKeyStroke('R', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem taskPackageItem = new JMenuItem("Package Check");
         taskMenu.add(taskPackageItem);
-        taskPackageItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        CompressUtils.unrar("D:/temp/test.rar", "d:/temp/test01/");
-                    }
-                });
-            }
-        });
+        taskPackageItem.addActionListener(e -> transpathMenuAction.submit(TaskChecker::checkPackages));
+        taskNameItem.setAccelerator(KeyStroke.getKeyStroke('K', InputEvent.CTRL_DOWN_MASK));
         return taskMenu;
     }
 
@@ -149,63 +93,25 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem storeCombineItem = new JMenuItem("Combine");
         storeMenu.add(storeCombineItem);
-        storeCombineItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        StoreKeeper.buildCombinedList();
-                    }
-                });
-            }
-        });
+        storeCombineItem.addActionListener(e -> transpathMenuAction.submit(StoreKeeper::buildCombinedList));
 
         JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
         storeMenu.add(storeCombineTestItem);
-        storeCombineTestItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        StoreKeeper.testCombinedList();
-                    }
-                });
-            }
-        });
+        storeCombineTestItem.addActionListener(e -> transpathMenuAction.submit(StoreKeeper::testCombinedList));
 
         storeMenu.add(new JSeparator());
 
         JMenuItem storeSearchItem = new JMenuItem("Search...");
         storeMenu.add(storeSearchItem);
-        storeSearchItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        String searchText = JOptionPane.showInputDialog("Search Text:");
-                        TranspathFrame.searchList(searchText);
-                    }
-                });
-            }
-        });
-        storeSearchItem.setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_MASK));
+        storeSearchItem.addActionListener(e -> transpathMenuAction.submit(() -> {
+            String searchText = JOptionPane.showInputDialog("Search Text:");
+            TranspathFrame.searchList(searchText);
+        }));
+        storeSearchItem.setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem fetchSelectedItem = new JMenuItem("Fetch Selected");
         storeMenu.add(fetchSelectedItem);
-        fetchSelectedItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        TranspathFrame.fetchSelectedStores();
-                    }
-                });
-            }
-        });
+        fetchSelectedItem.addActionListener(e -> transpathMenuAction.submit(TranspathFrame::fetchSelectedStores));
 
         return storeMenu;
     }
@@ -215,17 +121,7 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem pubRefreshItem = new JMenuItem("Refresh");
         pubMenu.add(pubRefreshItem);
-        pubRefreshItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        PubKeeper.refreshPubList();
-                    }
-                });
-            }
-        });
+        pubRefreshItem.addActionListener(e -> transpathMenuAction.submit(PubKeeper::refreshPubList));
         return pubMenu;
     }
 
@@ -234,18 +130,10 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem helpAboutItem = new JMenuItem("About");
         helpMenu.add(helpAboutItem);
-        helpAboutItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transpathMenuAction.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        TransLog.getLogger().error("It's ok anyway.");
-                        TransLog.getLogger().info("Info can be seen.");
-                    }
-                });
-            }
-        });
+        helpAboutItem.addActionListener(e -> transpathMenuAction.submit(() -> {
+            TransLog.getLogger().error("It's ok anyway.");
+            TransLog.getLogger().info("Info can be seen.");
+        }));
         return helpMenu;
     }
 
