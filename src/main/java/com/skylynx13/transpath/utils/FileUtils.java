@@ -38,6 +38,76 @@ import com.skylynx13.transpath.log.TransLog;
 
 public class FileUtils {
     private static final int READ_BUFFER_SIZE = 1024 * 128;
+    public static final HashMap<String, String> mFileTypes = new HashMap<String, String>();
+
+    static {
+        // images
+        mFileTypes.put("FFD8FF", "jpg");
+        mFileTypes.put("89504E47", "png");
+        mFileTypes.put("47494638", "gif");
+        mFileTypes.put("49492A00", "tif");
+        mFileTypes.put("424D", "bmp");
+        // other
+        mFileTypes.put("41433130", "dwg"); //CAD
+        mFileTypes.put("38425053", "psd");
+        mFileTypes.put("7B5C727466", "rtf");
+        mFileTypes.put("3C3F786D6C", "xml");
+        mFileTypes.put("68746D6C3E", "html");
+        mFileTypes.put("44656C69766572792D646174653A", "eml");
+        mFileTypes.put("D0CF11E0", "doc");
+        mFileTypes.put("5374616E64617264204A", "mdb");
+        mFileTypes.put("252150532D41646F6265", "ps");
+        mFileTypes.put("255044462D312E", "pdf");
+        mFileTypes.put("504B0304", "docx");
+        mFileTypes.put("52617221", "rar");
+        mFileTypes.put("57415645", "wav");
+        mFileTypes.put("41564920", "avi");
+        mFileTypes.put("2E524D46", "rm");
+        mFileTypes.put("000001BA", "mpg");
+        mFileTypes.put("000001B3", "mpg");
+        mFileTypes.put("6D6F6F76", "mov");
+        mFileTypes.put("3026B2758E66CF11", "asf");
+        mFileTypes.put("4D546864", "mid");
+        mFileTypes.put("1F8B08", "gz");
+    }
+
+    public static String getFileType(InputStream inputStream) {
+        return mFileTypes.get(getFileHeader(inputStream));
+    }
+
+    public static String getFileHeader(InputStream inputStream) {
+        String value = null;
+        try {
+            byte[] b = new byte[4];
+            inputStream.read(b, 0, b.length);
+            value = bytesToHexString(b);
+        } catch (Exception e) {
+        } finally {
+            if (null != inputStream) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return value;
+    }
+
+    private static String bytesToHexString(byte[] src) {
+        StringBuilder builder = new StringBuilder();
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        String hv;
+        for (int i = 0; i < src.length; i++) {
+            hv = Integer.toHexString(src[i] & 0xFF).toUpperCase();
+            if (hv.length() < 2) {
+                builder.append(0);
+            }
+            builder.append(hv);
+        }
+        return builder.toString();
+    }
 
     public static void clearFile(String pFileName) {
         try {
@@ -477,106 +547,124 @@ public class FileUtils {
     public static void main(String[] args) {
     }
 
-    public static String checkPackage(String fileName) {
-        String suffix = getSuffix(fileName);
-        if (!isValidType(suffix)) {
-            return TransConst.PKG_TYPE;
+    interface Checker {
+        boolean checkType(String fileName);
+        String[] checkCommand(String fileName);
+        boolean checkOk(String result);
+    }
+
+    static class RarChecker implements Checker {
+        @Override
+        public boolean checkType(String fileName) {
+            return isRar(fileName);
         }
 
-        File packFile = new File(fileName);
-        if (packFile.isDirectory()) {
-            return TransConst.PKG_TYPE;
+        @Override
+        public String[] checkCommand(String fileName) {
+            return new String[]{"rar", "t", fileName};
         }
+
+        @Override
+        public boolean checkOk(String result) {
+            return result.equalsIgnoreCase("All OK");
+        }
+    }
+
+    static class ZipChecker implements Checker {
+        @Override
+        public boolean checkType(String fileName) {
+            return isZip(fileName);
+        }
+
+        @Override
+        public String[] checkCommand(String fileName) {
+            return new String[]{"unzip", "-t", fileName};
+        }
+
+        @Override
+        public boolean checkOk(String result) {
+            return result.startsWith("No errors detected in compressed data of");
+        }
+    }
+
+    private static Map<String, String> checkPackage(String fileName) {
+        Map<String, String> errorInfos = new HashMap<>();
+        List<Checker> checkers = new ArrayList<>();
+        checkers.add(new RarChecker());
+        checkers.add(new ZipChecker());
 
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.redirectErrorStream();
-        List<String> rarCmd = new ArrayList<>();
-        rarCmd.add("rar");
-        rarCmd.add("t");
-        rarCmd.add(fileName);
-        processBuilder.command(rarCmd);
         processBuilder.redirectErrorStream(true);
-        TransLog.getLogger().info("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+
+        if (!isValid(fileName) || new File(fileName).isDirectory()) {
+            TransLog.getLogger().info("File Type: " + fileName);
+            errorInfos.put(fileName, TransConst.PKG_TYPE);
+            return errorInfos;
+        }
+
+        String result;
+        for (Checker checker : checkers) {
+            processBuilder.command(checker.checkCommand(fileName));
+            TransLog.getLogger().info("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+            result = processCommand(processBuilder);
+            if (checker.checkOk(result)) {
+                errorInfos.clear();
+                if (!checker.checkType(fileName)) {
+                    errorInfos.put(fileName, "Type mismatch.");
+                }
+                return errorInfos;
+            }
+//            errorInfos.put(fileName, result);
+        }
+        errorInfos.put(fileName, "All checker failed.");
+        return errorInfos;
+    }
+
+    private static String processCommand(ProcessBuilder processBuilder) {
+        String lastLine = "";
+
         try {
             Process process = processBuilder.start();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-            String lastLine = "";
             while ((line = bufferedReader.readLine()) != null) {
                 lastLine = line;
-            }
-            TransLog.getLogger().info("Last line: " + lastLine);
-            if (lastLine.equalsIgnoreCase("ALL OK")) {
-                return TransConst.PKG_OK;
-            }
-            else {
-                return TransConst.PKG_DAMAGED;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return TransConst.PKG_UNKNOWN;
+
+        TransLog.getLogger().info("Last line: " + lastLine);
+        return lastLine;
     }
 
-    public static Map<String, String> checkPackages(List<String> fileNames) {
-        Map<String, String> errorPackages = new HashMap<>();
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.redirectErrorStream(true);
-        String[] checkCmd = new String[3];
+    public static String checkPackages(List<String> fileNames) {
+        Map<String, String> errorInfos = new HashMap<>();
         for (String fileName : fileNames) {
-            if (!isValidType(getSuffix(fileName)) || new File(fileName).isDirectory()) {
-                TransLog.getLogger().info("File Type: " + fileName);
-                errorPackages.put(fileName, TransConst.PKG_TYPE);
-                continue;
-            }
-            if (isRar(getSuffix(fileName))) {
-                checkCmd[0] = "rar";
-                checkCmd[1] = "t";
-            } else if (isZip(getSuffix(fileName))) {
-                checkCmd[0] = "zip";
-                checkCmd[1] = "-T";
-            }
-            checkCmd[2] = fileName;
-
-            processBuilder.command(checkCmd);
-            TransLog.getLogger().info("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
-            try {
-                Process process = processBuilder.start();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line;
-                String lastLine = "";
-                while ((line = bufferedReader.readLine()) != null) {
-                    lastLine = line;
-                }
-                TransLog.getLogger().info("Last line: " + lastLine);
-                if (lastLine.substring(lastLine.length()-3).equalsIgnoreCase(" OK")) {
-//                    resultMap.put(fileName, TransConst.PKG_OK);
-                    continue;
-                }
-                else {
-                    errorPackages.put(fileName, lastLine);
-                    continue;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            errorInfos.putAll(checkPackage(fileName));
         }
-
-        return errorPackages;
+        StringBuffer errInfoStr = new StringBuffer();
+        errInfoStr.append(errorInfos.size() + " error(s) found.\r\n");
+        for (String key : errorInfos.keySet()) {
+            errInfoStr.append(key + " : " + errorInfos.get(key) + "\r\n");
+        }
+        return errInfoStr.toString();
     }
 
     private static String getSuffix(String fileName) {
         return fileName.substring(fileName.lastIndexOf('.') + 1);
     }
 
-    private static boolean isValidType(String suffix) {
-        return isRar(suffix) || isZip(suffix);
+    private static boolean isValid(String fileName) {
+        return isRar(fileName) || isZip(fileName);
     }
-    private static boolean isRar(String suffix) {
+    private static boolean isRar(String fileName) {
+        String suffix = getSuffix(fileName);
         return suffix.equalsIgnoreCase(TransConst.PKG_RAR)
                 || suffix.equalsIgnoreCase(TransConst.PKG_CBR);
     }
-    private static boolean isZip(String suffix) {
+    private static boolean isZip(String fileName) {
+        String suffix = getSuffix(fileName);
         return suffix.equalsIgnoreCase(TransConst.PKG_ZIP)
                 || suffix.equalsIgnoreCase(TransConst.PKG_CBZ);
     }

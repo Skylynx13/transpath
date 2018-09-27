@@ -84,7 +84,7 @@ public class TranspathMenuBar extends JMenuBar {
         JMenuItem taskPackageItem = new JMenuItem("Package Check");
         taskMenu.add(taskPackageItem);
         taskPackageItem.addActionListener(e -> transpathMenuAction.submit(TaskChecker::checkPackages));
-        taskNameItem.setAccelerator(KeyStroke.getKeyStroke('K', InputEvent.CTRL_DOWN_MASK));
+        taskPackageItem.setAccelerator(KeyStroke.getKeyStroke('K', InputEvent.CTRL_DOWN_MASK));
         return taskMenu;
     }
 

@@ -210,7 +210,25 @@ public class FreeTester {
     }
 
     public static void main(String[] args) {
-        runLinuxCommand();
+        pathNameDisplay();
+
+    }
+
+    private static void pathNameDisplay() {
+        File path = new File("/home/qxu/temp/ok.txt");
+        try {
+            System.out.println(path.getName() + " | " + path.getPath() + " | " + path.getAbsolutePath() + " | " + path.getAbsoluteFile()
+                    + " | " + path.getParent() + " | " + path.getCanonicalPath() + " | " + path.getCanonicalFile() + " | " + path.getParentFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void mapDisplay() {
+        Map<String, String> disMap = new HashMap<>();
+        disMap.put("aaa", "bbb");
+        disMap.put("333", "444");
+        System.out.println(disMap.toString());
 
     }
 

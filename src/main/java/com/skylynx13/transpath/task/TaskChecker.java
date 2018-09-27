@@ -1,35 +1,36 @@
 /**
- * Copyright (c) 2015,qxu. 
+ * Copyright (c) 2015,qxu.
  * All Rights Reserved.
- * 
+ * <p>
  * Project Name:transpath
  * Package Name:com.qxu.transpath.worker
  * File Name:TaskChecker.java
  * Date:2015-2-3 上午11:08:20
- * 
  */
 package com.skylynx13.transpath.task;
 
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.skylynx13.transpath.log.TransLog;
+import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
- /**
+/**
  * ClassName: TaskChecker <br/>
  * Description: To rename file with a regular name by replace template. <br/>
  * Date: 2015-2-3 上午11:08:20 <br/>
  * <br/>
- * 
+ *
  * @author qxu@
- * 
+ *
  * Change Log:
  * @version yyyy-mm-dd qxu@<br/>
- * 
+ *
  */
 
 public class TaskChecker {
@@ -43,43 +44,45 @@ public class TaskChecker {
             {"_\\.", ")."},
             {"___", ") ("},
             {"__", " ("},
-            {"_", " "}, 
-            {"\\(digital\\)", "(Digital)"}, 
-            {"\\(", " ("}, 
-            {"  \\(", " ("}, 
-            {" Vol\\. ", " v0"}, 
-            {" Vol\\.", " v0"}, 
+            {"_", " "},
+            {"\\(digital\\)", "(Digital)"},
+            {"\\(", " ("},
+            {"  \\(", " ("},
+            {" Vol\\. ", " v0"},
+            {" Vol\\.", " v0"},
             {" Vol ", " v0"},
             {" v00", " v0"},
-            { "#", "" }, 
-            { " v1 ", " v01 " }, 
-            { " v2 ", " v02 " }, 
-            { " v3 ", " v03 " }, 
-            { " v4 ", " v04 " }, 
-            { " v5 ", " v05 " }, 
-            { " v6 ", " v06 " }, 
-            { " Of ", " of " }, 
-            { " of The", " of the" },
-            { " From ", " from " }, 
-            { " And ", " and " }, 
-            { " VS ", " vs " },
-            { " Vs ", " vs " },
-            { " Vs\\. ", " vs " },
-            { " vs\\. ", " vs " },
-            { "\\.zip", ".cbz" }, 
-            { "\\.rar", ".cbr" }, 
-            { "\\.CBZ", ".cbz" }, 
-            { "\\.CBR", ".cbr" }, 
-            { "([-+'A-Za-z0-9 ]+) (\\d{2}) ([-A-Za-z0-9 \\(\\)\\.]+)", "$1 0$2 $3" }
-        };
-    
+            {"#", ""},
+            {" v1 ", " v01 "},
+            {" v2 ", " v02 "},
+            {" v3 ", " v03 "},
+            {" v4 ", " v04 "},
+            {" v5 ", " v05 "},
+            {" v6 ", " v06 "},
+            {" Of ", " of "},
+            {" of The", " of the"},
+            {" From ", " from "},
+            {" And ", " and "},
+            {" VS ", " vs "},
+            {" Vs ", " vs "},
+            {" Vs\\. ", " vs "},
+            {" vs\\. ", " vs "},
+            {"\\.zip", ".cbz"},
+            {"\\.rar", ".cbr"},
+            {"\\.CBZ", ".cbz"},
+            {"\\.CBR", ".cbr"},
+            {"([-+'A-Za-z0-9 ]+) (\\d{2}) ([-A-Za-z0-9 \\(\\)\\.]+)", "$1 0$2 $3"}
+    };
+
     private String getRootDir() {
         return TransProp.get(TransConst.LOC_TRANS);
-    };
+    }
+
+    ;
 
     public TaskChecker() {
     }
-    
+
     private boolean renameFileByRenameList(String renameListName) {
         return renameRootPathFile(readRenameList(renameListName));
     }
@@ -87,11 +90,11 @@ public class TaskChecker {
     public boolean renameFileByTemplate() {
         return renameRootPathFile(this.replaceTemplates);
     }
-    
+
     public boolean renameFileOnce(String[][] replaceOnce) {
         return renameRootPathFile(replaceOnce);
     }
-    
+
     private boolean renameRootPathFile(String[][] replaceList) {
         int totalFile = 0;
         int procFile = 0;
@@ -101,7 +104,7 @@ public class TaskChecker {
             TransLog.getLogger().info("Path name error.");
             return false;
         }
-        
+
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 String replacedName = getReplacedName(replaceList, aFile.getName());
@@ -120,7 +123,7 @@ public class TaskChecker {
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
     }
-    
+
     private void checkChars(String fileName) {
         if (!fileName.matches(TransConst.NAME_CHARS)) {
             TransLog.getLogger().info("Check Characters: " + fileName);
@@ -129,12 +132,12 @@ public class TaskChecker {
 
     protected String getReplacedName(String[][] replaceList, String originalName) {
         String replacedName = originalName;
-        for (String[] repTempl: replaceList){
+        for (String[] repTempl : replaceList) {
             replacedName = replacedName.replaceAll(repTempl[0], repTempl[1]);
         }
         return replacedName;
     }
-    
+
     @SuppressWarnings("unused")
     private static void renameInitUpper() {
         int totalFile = 0;
@@ -145,14 +148,14 @@ public class TaskChecker {
             TransLog.getLogger().info("Path name error.");
             TransLog.getLogger().info("Result: False.");
         }
-        
+
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 char[] replacedChars = aFile.getName().toLowerCase().toCharArray();
                 for (int iChar = 0; iChar < replacedChars.length; iChar++) {
-                    if (((iChar == 0) || (replacedChars[iChar-1] == 32))
-                            &&((96<replacedChars[iChar]) && (replacedChars[iChar]<123))) {
-                        replacedChars[iChar]-=32;
+                    if (((iChar == 0) || (replacedChars[iChar - 1] == 32))
+                            && ((96 < replacedChars[iChar]) && (replacedChars[iChar] < 123))) {
+                        replacedChars[iChar] -= 32;
                     }
                 }
                 String replacedName = String.valueOf(replacedChars);
@@ -170,9 +173,9 @@ public class TaskChecker {
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         TransLog.getLogger().info("Result: True.");
     }
-    
+
     protected static String[][] readRenameList(String renameListName) {
-        
+
         Scanner in = null;
         ArrayList<String[]> namePairs = new ArrayList<String[]>();
         try {
@@ -198,14 +201,14 @@ public class TaskChecker {
             TransLog.getLogger().info("Path name error.");
             return false;
         }
-        
+
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 String oldName = aFile.getName();
                 String[] oldSubStr = oldName.split(" ");
                 int slen = oldSubStr.length;
                 String newName = oldSubStr[0] + " " + oldSubStr[2] + " " + oldSubStr[1];
-                for (int i=3; i<slen; i++) {
+                for (int i = 3; i < slen; i++) {
                     newName += " " + oldSubStr[i];
                 }
                 totalFile++;
@@ -222,7 +225,7 @@ public class TaskChecker {
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
     }
-    
+
     public boolean renamePathFilePushDate() {
         int totalFile = 0;
         int procFile = 0;
@@ -232,7 +235,7 @@ public class TaskChecker {
             TransLog.getLogger().info("Path name error.");
             return false;
         }
-        
+
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 String oldName = aFile.getName();
@@ -243,7 +246,7 @@ public class TaskChecker {
                 if (idxFirstLeftBracket > 1) {
                     idxInsert = idxFirstLeftBracket - 1;
                 }
-                String newName = oldName.substring(idxFirstBlank+1, idxInsert) + " ("
+                String newName = oldName.substring(idxFirstBlank + 1, idxInsert) + " ("
                         + oldName.substring(0, idxFirstBlank) + ")" + oldName.substring(idxInsert);
                 totalFile++;
                 if (!oldName.equals(newName)) {
@@ -259,7 +262,7 @@ public class TaskChecker {
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
     }
-    
+
     private boolean renameCutHead() {
         int totalFile = 0;
         int procFile = 0;
@@ -269,12 +272,12 @@ public class TaskChecker {
             TransLog.getLogger().info("Path name error.");
             return false;
         }
-        
+
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 String oldName = aFile.getName();
                 int idxFirstBlank = oldName.indexOf(' ');
-                String newName = oldName.substring(idxFirstBlank+1);
+                String newName = oldName.substring(idxFirstBlank + 1);
                 totalFile++;
                 if (!oldName.equals(newName)) {
                     procFile++;
@@ -299,14 +302,14 @@ public class TaskChecker {
             TransLog.getLogger().info("Path name error.");
             return false;
         }
-        
+
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 String oldName = aFile.getName();
                 int idxFirstBlank = oldName.lastIndexOf('(');
                 int idxLastPoint = oldName.lastIndexOf(')');
-                String newName = oldName.substring(idxFirstBlank+1, idxLastPoint) + " "
-                        + oldName.substring(0, idxFirstBlank-1) + oldName.substring(idxLastPoint+1);
+                String newName = oldName.substring(idxFirstBlank + 1, idxLastPoint) + " "
+                        + oldName.substring(0, idxFirstBlank - 1) + oldName.substring(idxLastPoint + 1);
                 totalFile++;
                 if (!oldName.equals(newName)) {
                     procFile++;
@@ -321,7 +324,7 @@ public class TaskChecker {
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
     }
-    
+
     public boolean reformatNumber() {
         int totalFile = 0;
         int procFile = 0;
@@ -329,7 +332,7 @@ public class TaskChecker {
         File dirRoot = new File(rootDir);
         if (!dirRoot.isDirectory())
             return false;
-        
+
         for (File aFile : dirRoot.listFiles()) {
             if (aFile.isFile()) {
                 String replacedName = aFile.getName().replaceAll("#", " ");
@@ -337,8 +340,8 @@ public class TaskChecker {
                     continue;
                 }
                 String rpl1s = ", ";
-                String rpl1t = " " + String.format("%03d", Integer.parseInt(replacedName.substring(replacedName.indexOf('(')+1, replacedName.indexOf(')')).trim())) + " (";
-                String rpl2s = replacedName.substring(replacedName.indexOf('(')-1, replacedName.indexOf(')')+1).replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
+                String rpl1t = " " + String.format("%03d", Integer.parseInt(replacedName.substring(replacedName.indexOf('(') + 1, replacedName.indexOf(')')).trim())) + " (";
+                String rpl2s = replacedName.substring(replacedName.indexOf('(') - 1, replacedName.indexOf(')') + 1).replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
                 String rpl2t = ")";
                 TransLog.getLogger().info(":" + rpl1t + ":" + rpl2s + ":");
                 replacedName = replacedName.replaceAll(rpl1s, rpl1t).replaceAll(rpl2s, rpl2t);
@@ -356,11 +359,11 @@ public class TaskChecker {
         TransLog.getLogger().info(Integer.toString(procFile) + " of " + totalFile + " files renamed.");
         return true;
     }
-    
+
     public boolean moveFileToRoot() {
-        return movePathFileToRoot(getRootDir(), getRootDir());       
+        return movePathFileToRoot(getRootDir(), getRootDir());
     }
-    
+
     private boolean movePathFileToRoot(String pPath, String pRoot) {
         File dir = new File(pPath);
         if (!dir.isDirectory()) {
@@ -374,11 +377,11 @@ public class TaskChecker {
                     TransLog.getLogger().info("Error: " + aFile.getPath());
                     return false;
                 }
-                
+
                 continue;
             }
             if (aFile.isDirectory() && !movePathFileToRoot(aFile.getPath(), pRoot)) {
-                    return false;
+                return false;
             }
         }
         return true;
@@ -402,17 +405,17 @@ public class TaskChecker {
 
     public static void renameComic07() {
         String[][] replaceOnce = {
-                { " \\(2016\\) ",
-                " "},
-                { "\\.cbr",
-                " (2016).cbr"},
-                { " NMM \\(2016\\).cbr",
-                " (2016) (NMM).cbr"},
+                {" \\(2016\\) ",
+                        " "},
+                {"\\.cbr",
+                        " (2016).cbr"},
+                {" NMM \\(2016\\).cbr",
+                        " (2016) (NMM).cbr"},
         };
 
         TransLog.getLogger().info("Result: " + new TaskChecker().renameFileOnce(replaceOnce) + ".");
     }
-    
+
     public static void renameSpecialReplace() {
         String[][] replaceOnce = {
 //              { "Star Trek_ ([A-Za-z0-9'\\. ]+) (\\d{1,3}) - ([A-Za-z&-\\. ]+)\\.(epub|mobi)", 
@@ -438,24 +441,24 @@ public class TaskChecker {
 
         TransLog.getLogger().info("Result: " + new TaskChecker().renameFileOnce(replaceOnce) + ".");
     }
-    
+
     public static void cutHead() {
         TransLog.getLogger().info("Result: " + new TaskChecker().renameCutHead() + ".");
     }
-    
+
     public static void renameTest() {
         System.out.println(
                 new String("Star Trek_ The Original Series - 0 - Mission to Horatius - Mack Reynolds.epub")
-                .replaceAll("Star Trek_ ([A-Za-z0-9' ]+) - (\\d{1,3}) - ([A-Za-z0-9' ]+) - ([A-Za-z&\\. ]+)\\.(epub|mobi)", 
-                        "Star Trek - $1 $2 - $3 ($4).$5"));
+                        .replaceAll("Star Trek_ ([A-Za-z0-9' ]+) - (\\d{1,3}) - ([A-Za-z0-9' ]+) - ([A-Za-z&\\. ]+)\\.(epub|mobi)",
+                                "Star Trek - $1 $2 - $3 ($4).$5"));
     }
 
     public static void main(String[] args) {
         //cutHead();
-        
+
         //renameNormalize();
         //renameSpecialReplace();
-        
+
         //renameInitUpper();
         //renameComic07();
         //renamePushDate();
@@ -463,13 +466,31 @@ public class TaskChecker {
         //renameTest();
         String[][] abc = readRenameList(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_RENAME);
         System.out.println(abc.length);
-        for (String[] aaa:abc) {
+        for (String[] aaa : abc) {
             System.out.println(aaa[0] + ":::::" + aaa[1]);
         }
         TaskChecker.rename();
     }
 
-     public static void checkPackages() {
-     }
- }
+    public static void checkPackages() {
+        TransLog.getLogger().info("Result: " + new TaskChecker().checkPackageTrans() + ".");
+
+    }
+
+    private String checkPackageTrans() {
+        String rootDirStr = getRootDir();
+        File rootDir = new File(rootDirStr);
+        if (!rootDir.isDirectory()) {
+            return "Invalid root: " + rootDirStr;
+        }
+        if (rootDir.listFiles().length == 0) {
+            return "No files in: " + rootDirStr;
+        }
+        List<String> checkFileList = new ArrayList<>();
+        for (File checkFile : rootDir.listFiles()) {
+            checkFileList.add(checkFile.getPath());
+        }
+        return FileUtils.checkPackages(checkFileList);
+    }
+}
 
