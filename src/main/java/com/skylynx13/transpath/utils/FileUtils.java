@@ -597,7 +597,6 @@ public class FileUtils {
         processBuilder.redirectErrorStream(true);
 
         if (!isValid(fileName) || new File(fileName).isDirectory()) {
-            TransLog.getLogger().info("File Type: " + fileName);
             errorInfos.put(fileName, TransConst.PKG_TYPE);
             return errorInfos;
         }
@@ -616,7 +615,7 @@ public class FileUtils {
             }
 //            errorInfos.put(fileName, result);
         }
-        errorInfos.put(fileName, "All checker failed.");
+        errorInfos.put(fileName, "All checkers failed.");
         return errorInfos;
     }
 
@@ -644,9 +643,9 @@ public class FileUtils {
             errorInfos.putAll(checkPackage(fileName));
         }
         StringBuffer errInfoStr = new StringBuffer();
-        errInfoStr.append(errorInfos.size() + " error(s) found.\r\n");
+        errInfoStr.append(errorInfos.size() + " error(s) found." + TransConst.CRLN);
         for (String key : errorInfos.keySet()) {
-            errInfoStr.append(key + " : " + errorInfos.get(key) + "\r\n");
+            errInfoStr.append(key + " : " + errorInfos.get(key) + TransConst.CRLN);
         }
         return errInfoStr.toString();
     }
