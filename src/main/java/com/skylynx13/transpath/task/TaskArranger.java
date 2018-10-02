@@ -276,12 +276,13 @@ public class TaskArranger {
     public boolean checkStartLine (String line) {
         return line.matches("^(Default|Video|Post) Re: .*$") 
                 || line.matches("^Default$")
-                || line.matches("^(Hari ini|Kemarin|Today|Yesterday|\\d{2}-\\d{2}-\\d{4}) \\d{2}:\\d{2}$");
+                //|| line.matches("^(Hari ini|Kemarin|Today|Yesterday|\\d{2}-\\d{2}-\\d{4}) \\d{2}:\\d{2}$")
+                || line.matches("^Kaskus (Donator|Geek|Addict) .*$");
     }
 
     public boolean checkEndLine (String line) {
         return line.matches("^\\w* is offline\\s*Reply With Quote$") 
-                || line.matches("^\\s*Multi Quote\\s*Quote$")
+                || line.matches("^(0){0,1}\\s*Multi Quote\\s*Quote$")
                 //|| line.matches("^Week of \\d{2}/\\d{2}/\\d{4}$") // Open this line if want to ignore weekly list from the dump.
                 || line.matches("^\\s*Last edited by.*$");
     }

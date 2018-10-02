@@ -10,6 +10,7 @@
  */
 package com.skylynx13.transpath.test;
 
+import java.awt.*;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.*;
@@ -210,8 +211,17 @@ public class FreeTester {
     }
 
     public static void main(String[] args) {
-        pathNameDisplay();
+        openFileByDefaultProgram();
 
+    }
+
+    private static void openFileByDefaultProgram() {
+        try {
+            Desktop.getDesktop().open(new File("/home/qxu/Book/TFLib/A2018/B0912/G.I. Joe - A Real American Hero 256 (2018) (Digital) (Thornn-Empire).cbr"));
+            //Desktop.getDesktop().open(new File("/home/qxu/workspace/transpath/star.sh"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void pathNameDisplay() {

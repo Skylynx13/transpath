@@ -9,6 +9,7 @@ target/
 .jupiter
 .pmd
 transpath.jar
+.attach_*
 
 #################
 ## Eclipse

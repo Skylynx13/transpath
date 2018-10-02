@@ -154,8 +154,9 @@ public class TranspathFrame extends JFrame {
     private void setLookAndFeel() {
         UIManager.getSystemLookAndFeelClassName();
         try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            //UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -294,6 +295,7 @@ public class TranspathFrame extends JFrame {
 
     public static void columnSizeFitContents(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.setFont(TransConst.GLOBAL_FONT);
         for (int column = 0; column < table.getColumnCount(); column++) {
             int maxComponentWidth = 0;
             for (int row = 0; row < table.getRowCount(); row++) {
