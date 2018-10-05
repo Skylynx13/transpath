@@ -522,7 +522,10 @@ public class FileUtils {
     }
 
     public static String storeNameOfTag(String aTag, String bTag) {
-        return TransProp.get(TransConst.LOC_LIST) + "B\\TFLib_" + aTag + "_" + bTag + ".txt";
+        if (TransProp.get(TransConst.SYS_TYPE).equalsIgnoreCase(TransConst.SYS_WINDOWS)) {
+            return TransProp.get(TransConst.LOC_LIST) + "B\\TFLib_" + aTag + "_" + bTag + ".txt";
+        }
+        return TransProp.get(TransConst.LOC_LIST) + "B/TFLib_" + aTag + "_" + bTag + ".txt";
     }
     
     public static String hitShelfList() {

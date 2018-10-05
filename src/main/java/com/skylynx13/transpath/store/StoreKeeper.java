@@ -42,17 +42,42 @@ import com.skylynx13.transpath.utils.TransProp;
 
 public class StoreKeeper {
 
-    private static void keepDelBat(StoreList pList, String pFileName) {
-        keepDelBat(pList, new File(pFileName));
+    private static void keepDelList(StoreList delList) {
+        if (isWindow()) {
+            keepDelBatch(delList, new File(TransProp.get(TransConst.LOC_LIST) + "ToDel.bat"));
+        } else {
+            keepDelShell(delList, new File(TransProp.get(TransConst.LOC_LIST) + "todel.sh"));
+        }
     }
 
-    private static void keepDelBat(StoreList pList, File pFile) {
-        if (0 == pList.size()) {
+    private static boolean isWindow() {
+        return TransProp.get(TransConst.SYS_TYPE).equalsIgnoreCase(TransConst.SYS_WINDOWS);
+    }
+
+    private static void keepDelShell(StoreList delList, File delFile) {
+        if (0 == delList.size()) {
             return;
         }
         try {
-            PrintWriter out = new PrintWriter(pFile);
-            for (Node aNode : pList.nodeList) {
+            PrintWriter out = new PrintWriter(delFile);
+            for (Node aNode : delList.nodeList) {
+                out.println("rm \"" + TransProp.get(TransConst.LOC_STORE)
+                        + aNode.path.substring(1)
+                        + aNode.name + "\"");
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void keepDelBatch(StoreList delList, File delFile) {
+        if (0 == delList.size()) {
+            return;
+        }
+        try {
+            PrintWriter out = new PrintWriter(delFile);
+            for (Node aNode : delList.nodeList) {
                 out.println("del \"" + TransProp.get(TransConst.LOC_STORE)
                         + aNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
                         + aNode.name + "\"");
@@ -67,11 +92,16 @@ public class StoreKeeper {
         int stotal = 0;
         int ttotal = 0;
 
+        String separator = "/";
+        if(isWindow()) {
+            separator = "\\";
+        }
+
         for (String bTag : bTags) {
             long t0 = System.currentTimeMillis();
             StoreList aList = new StoreList();
 
-            aList.build(TransProp.get(TransConst.LOC_STORE), "\\" + aTag + "\\" + bTag + "\\");
+            aList.build(TransProp.get(TransConst.LOC_STORE), separator + aTag + separator + bTag + separator);
             aList.keepFile(FileUtils.storeNameOfTag(aTag, bTag));
 
             int s1 = aList.size();
@@ -169,7 +199,7 @@ public class StoreKeeper {
         delList.keepFile(FileUtils.storeNameOfVersion(pVer + "_del"));
 
         delList.orderByPathAndName();
-        keepDelBat(delList, TransProp.get(TransConst.LOC_LIST) + "ToDel.bat");
+        keepDelList(delList);
 
         TransLog.getLogger().info("Current Length: " + pList.size());
         TransLog.getLogger().info("Reserve Length: " + resList.size());
@@ -216,7 +246,7 @@ public class StoreKeeper {
 
         delList.recap();
         delList.orderByPathAndName();
-        keepDelBat(delList, TransProp.get(TransConst.LOC_LIST) + "ToDel.bat");
+        keepDelList(delList);
 
         TransLog.getLogger().info("Current Length: " + pList.size());
         TransLog.getLogger().info("Reserve Length: " + resList.size());
@@ -266,65 +296,6 @@ public class StoreKeeper {
         linkList.keepFile(FileUtils.linkNameOfVersion(currVer));
 
         TransLog.getLogger().info("GenPubLink done in " + (System.currentTimeMillis() - t0) + "ms.");
-    }
-
-    @Deprecated
-    public static void buildListInit() {
-        int stotal = 0;
-        int ttotal = 0;
-
-        int startNum = 619;
-        int endNum = 619;
-
-        for (int bNum = startNum; bNum <= endNum; bNum++) {
-            long t0 = System.currentTimeMillis();
-            StoreList aList = new StoreList();
-
-            String aTag = "2016";
-            String bTag = String.format(TransConst.FORMAT_INT_04, bNum);
-
-            aList.build("F:\\Book\\TFLib\\", "\\A" + aTag + "\\B" + bTag + "\\");
-            aList.keepFile("D:\\Qdata\\update\\TFLib_A" + aTag + "_B" + bTag + ".txt");
-
-            int s1 = aList.size();
-            long t1 = System.currentTimeMillis() - t0;
-            TransLog.getLogger().info("Store Listed: " + s1);
-            TransLog.getLogger().info("Time Used: " + t1);
-            TransLog.getLogger().info("Avg Speed: " + s1 / (t1 * 0.001) + "item/s.");
-            stotal += s1;
-            ttotal += t1;
-        }
-        TransLog.getLogger().info("Total Store Listed: " + stotal + ". From " + startNum + " to " + endNum + ".");
-        TransLog.getLogger().info("Total Time Used: " + ttotal + " ms.");
-        TransLog.getLogger().info("Total Avg Speed: " + (stotal) * 1000000 / ttotal * 0.001 + " items/s.");
-    }
-
-    @Deprecated
-    public static void combineListInit() {
-        TransLog.getLogger().info("combine Start...");
-        String srcName = "D:\\Qdata\\update\\storelist\\A\\";
-
-        File srcPath = new File(srcName);
-        StoreList aList = new StoreList();
-
-        String tarName = "D:\\Qdata\\update\\storelist\\StoreList_" + aList.version + ".txt";
-
-        if (!srcPath.isDirectory()) {
-            return;
-        }
-
-        for (File aBlock : srcPath.listFiles(new FilenameFilter() {
-            public boolean accept(File file, String name) {
-                return name.startsWith("");
-            }
-        })) {
-            StoreList bList = new StoreList();
-            bList.load(aBlock);
-            aList.attachList(bList);
-            TransLog.getLogger().info(aBlock.getName());
-        }
-        aList.reorgId();
-        aList.keepFile(tarName);
     }
 
     public static void buildCombinedList() {

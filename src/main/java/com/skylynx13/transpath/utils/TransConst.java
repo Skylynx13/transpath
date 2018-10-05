@@ -20,6 +20,10 @@ public class TransConst {
     public static final String TAG_A   = "TAG_A";
     public static final String TAG_B   = "TAG_B";
 
+    public static final String SYS_TYPE = "SYS_TYPE";
+    public static final String SYS_LINUX = "Linux";
+    public static final String SYS_WINDOWS = "Windows";
+
     public static final String PREFIX_ARCHIVE = "A";
     public static final String PREFIX_BLOCK   = "B";    
 	
