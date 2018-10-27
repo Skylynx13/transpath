@@ -636,7 +636,7 @@ public class FileUtils {
             e.printStackTrace();
         }
 
-        TransLog.getLogger().info("Last line: " + lastLine);
+        TransLog.getLogger().info("Package Status: " + lastLine);
         return lastLine;
     }
 
