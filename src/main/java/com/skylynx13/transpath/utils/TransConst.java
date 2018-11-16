@@ -1,6 +1,7 @@
 package com.skylynx13.transpath.utils;
 
 import java.awt.Font;
+import java.util.Arrays;
 
 public class TransConst {
     public static final String LOC_CONFIG = "LOC_CONFIG";
@@ -80,11 +81,7 @@ public class TransConst {
 
     public static final String PKG_OK = "OK";
     public static final String PKG_TYPE = "File type not recognized";
+    public static final String PKG_IGNORE = "File type ignored";
     public static final String PKG_DAMAGED = "File damaged";
     public static final String PKG_UNKNOWN = "Unknown error";
-    public static final String PKG_RAR = "rar";
-    public static final String PKG_CBR = "cbr";
-    public static final String PKG_ZIP = "zip";
-    public static final String PKG_CBZ = "cbz";
-
 }

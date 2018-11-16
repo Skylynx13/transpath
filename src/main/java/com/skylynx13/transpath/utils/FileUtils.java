@@ -599,6 +599,9 @@ public class FileUtils {
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.redirectErrorStream(true);
 
+        if (isIgnorable(fileName)) {
+            errorInfos.put(fileName, TransConst.PKG_IGNORE);
+        }
         if (!isValid(fileName) || new File(fileName).isDirectory()) {
             errorInfos.put(fileName, TransConst.PKG_TYPE);
             return errorInfos;
@@ -660,14 +663,22 @@ public class FileUtils {
     private static boolean isValid(String fileName) {
         return isRar(fileName) || isZip(fileName);
     }
+
     private static boolean isRar(String fileName) {
-        String suffix = getSuffix(fileName);
-        return suffix.equalsIgnoreCase(TransConst.PKG_RAR)
-                || suffix.equalsIgnoreCase(TransConst.PKG_CBR);
+        final String[] ARRAY_SUFFIX_RAR = {"rar", "cbr"};
+
+        return Arrays.asList(ARRAY_SUFFIX_RAR).contains(getSuffix(fileName));
     }
+
     private static boolean isZip(String fileName) {
-        String suffix = getSuffix(fileName);
-        return suffix.equalsIgnoreCase(TransConst.PKG_ZIP)
-                || suffix.equalsIgnoreCase(TransConst.PKG_CBZ);
+        final String[] ARRAY_SUFFIX_ZIP = {"zip", "cbz"};
+
+        return Arrays.asList(ARRAY_SUFFIX_ZIP).contains(getSuffix(fileName));
+    }
+
+    protected static boolean isIgnorable(String fileName) {
+        final String[] ARRAY_SUFFIX_IGNORABLE = {"pdf", "txt", "epub", "mobi"};
+
+        return Arrays.asList(ARRAY_SUFFIX_IGNORABLE).contains(getSuffix(fileName));
     }
 }

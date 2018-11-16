@@ -246,4 +246,18 @@ public class FileUtilsTest {
         System.out.println(FileUtils.extractZipComment(fn2));
         assertEquals(true, true);
     }
+
+    @Test
+    public void isIgnorableTest() {
+        String[] filesOk = {"testfile.txt", "testfile.pdf", "test.epub", "test.mobi"};
+        String[] filesErr = {"testfile.pda", "testfile"};
+
+        for (String fn : filesOk){
+            assertTrue(FileUtils.isIgnorable(fn));
+        }
+        for (String fn : filesErr) {
+            assertFalse(FileUtils.isIgnorable(fn));
+        }
+
+    }
 }
