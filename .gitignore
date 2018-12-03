@@ -10,6 +10,7 @@ target/
 .pmd
 transpath.jar
 .attach_*
+*.out
 
 #################
 ## Eclipse
