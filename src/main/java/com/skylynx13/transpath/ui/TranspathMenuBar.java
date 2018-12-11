@@ -37,10 +37,7 @@ import com.skylynx13.transpath.utils.TransConst;
  */
 
 public class TranspathMenuBar extends JMenuBar {
-    /**
-     * serialVersionUID:TODO.
-     *
-     */
+
     private static final long serialVersionUID = 1L;
 
     private TranspathFrame transpathFrame;

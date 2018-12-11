@@ -50,6 +50,16 @@ public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
+    public TranspathFrame() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize((int) screenSize.getWidth() * 2 / 3, (int) screenSize.getHeight() * 2 / 3);
+        setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
+
+        setJMenuBar(new TranspathMenuBar(this));
+
+        initPanel();
+    }
+
     private static JTextArea logTextArea = new JTextArea();
 
     private static JTextArea infoTextArea = new JTextArea("information");
@@ -97,14 +107,6 @@ public class TranspathFrame extends JFrame {
 
     public static JTextArea getInfoTextArea() {
         return infoTextArea;
-    }
-
-    public TranspathFrame() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize((int) screenSize.getWidth() * 2 / 3, (int) screenSize.getHeight() * 2 / 3);
-        this.setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
-        this.setJMenuBar(new TranspathMenuBar(this));
-        initPanel();
     }
 
     public static void searchList(String searchText) {
