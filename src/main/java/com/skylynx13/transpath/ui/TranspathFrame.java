@@ -51,29 +51,29 @@ public class TranspathFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private JPanel mainPanel = (JPanel) this.getContentPane();
+    private JMenuBar menuBar = new TranspathMenuBar(this);
 
     public TranspathFrame() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setSize((int) screenSize.getWidth() * 2 / 3, (int) screenSize.getHeight() * 2 / 3);
         setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
 
-        setJMenuBar(new TranspathMenuBar(this));
+        setJMenuBar(menuBar);
 
         initPanel();
     }
 
     protected void initPanel() {
-        JPanel contentPanel = (JPanel) this.getContentPane();
-        contentPanel.removeAll();
+        mainPanel.removeAll();
 
-        contentPanel.setLayout(new BorderLayout());
+        mainPanel.setLayout(new BorderLayout());
         setLookAndFeel();
 
         refreshLists();
 
-        contentPanel.add(createAllSplitPane(), BorderLayout.CENTER);
+        mainPanel.add(createAllSplitPane(), BorderLayout.CENTER);
 
-        contentPanel.add(createStatusBar(), BorderLayout.SOUTH);
+        mainPanel.add(createStatusBar(), BorderLayout.SOUTH);
 
         this.setTitle("Storage Archivist - " + TransProp.get(TransConst.VER_CURR));
     }
@@ -135,7 +135,6 @@ public class TranspathFrame extends JFrame {
         setInfoTable(sList);
         TransLog.getLogger().info(sList.toString());
     }
-
 
     private JToolBar createStatusBar() {
         JToolBar statusBar = new JToolBar();
