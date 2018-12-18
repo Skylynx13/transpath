@@ -102,13 +102,13 @@ public class TranspathMenuBar extends JMenuBar {
         storeMenu.add(storeSearchItem);
         storeSearchItem.addActionListener(e -> transpathMenuAction.submit(() -> {
             String searchText = JOptionPane.showInputDialog("Search Text:");
-            TranspathFrame.searchList(searchText);
+            transpathFrame.searchList(searchText);
         }));
         storeSearchItem.setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem fetchSelectedItem = new JMenuItem("Fetch Selected");
         storeMenu.add(fetchSelectedItem);
-        fetchSelectedItem.addActionListener(e -> transpathMenuAction.submit(TranspathFrame::fetchSelectedStores));
+        fetchSelectedItem.addActionListener(e -> transpathFrame.fetchSelectedStores());
 
         return storeMenu;
     }

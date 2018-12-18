@@ -10,7 +10,6 @@ public class TransPath {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 TranspathFrame tpFrame = new TranspathFrame();
-                tpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 tpFrame.setVisible(true);
             }
         });

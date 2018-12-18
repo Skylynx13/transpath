@@ -47,6 +47,8 @@ public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
+    private static StoreList storeList;
+
     public TranspathFrame() {
         initSize(66);
         initIcon();
@@ -57,8 +59,10 @@ public class TranspathFrame extends JFrame {
 
     private void initSize(int percentage) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        super.setSize((int) screenSize.getWidth() * percentage / 100,
-                (int) screenSize.getHeight() * percentage / 100);
+        super.setSize(
+                (int) screenSize.getWidth() * percentage / 100,
+                (int) screenSize.getHeight() * percentage / 100
+        );
     }
 
     private void initIcon() {
@@ -93,6 +97,7 @@ public class TranspathFrame extends JFrame {
         mainPanel.removeAll();
 
         mainPanel.setLayout(new BorderLayout());
+
         reloadStoreList();
 
         mainPanel.add(createAllSplitPane(), BorderLayout.CENTER);
@@ -101,84 +106,25 @@ public class TranspathFrame extends JFrame {
         this.setTitle("Storage Archivist - " + storeList.version);
     }
 
-    // Separater for revision...
-
-    private static JTextArea logTextArea = new JTextArea();
-
-    private static JTextArea infoTextArea = new JTextArea("information");
-
-    private static JTable infoTable = new JTable();
-
-    private static StoreList storeList = null;
-
-    public static StoreList getStoreList() {
-        if (null == storeList) {
-            storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
-        }
-        return storeList;
-    }
-
     private void reloadStoreList() {
         storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
     }
 
-    public static JTable getInfoTable() {
-        return infoTable;
-    }
-
-    public static JTextArea getLogTextArea() {
-        return logTextArea;
-    }
-
-    public static JTextArea getInfoTextArea() {
-        return infoTextArea;
-    }
-
-    public static void searchList(String searchText) {
-        TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
-        StoreList sList = getStoreList().searchName(searchText);
-        setInfoTable(sList);
-        TransLog.getLogger().info(sList.toString());
-    }
-
-    private JToolBar createStatusBar() {
-        JToolBar statusBar = new JToolBar();
-        statusBar.setFloatable(false);
-
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setMaximum(100);
-        progressBar.setMinimum(0);
-        progressBar.setValue(88);
-        progressBar.setStringPainted(true);
-        progressBar.setIndeterminate(false);
-        //Color change unavailable when using NimbusLookAndFeel;
-        //progressBar.setBackground(Color.gray);
-        //progressBar.setForeground(Color.green);
-        statusBar.add(progressBar);
-
-        statusBar.add(new JLabel("8,800 of 10,000 bytes processed. Status Normal."));
-
-        return statusBar;
-    }
-
     private JSplitPane createAllSplitPane() {
-        return createSplitPane(JSplitPane.VERTICAL_SPLIT, createUpperSplitPane(), createLowerTabbedPane(), 0.7);
+        return createSplitPane(
+                JSplitPane.VERTICAL_SPLIT,
+                createUpperSplitPane(),
+                createLowerTabbedPane(),
+                0.7
+        );
     }
 
     private JSplitPane createUpperSplitPane() {
-        return createSplitPane(JSplitPane.HORIZONTAL_SPLIT, createTreeTabbedPane(), createInfoTabbedPane(), 0.2);
-    }
-
-    private JSplitPane createSplitPane(int newOrientation, Component newLeftComponent, Component newRightComponent,
-                                       double proportionalLocation) {
-        JSplitPane splitPane = new JSplitPane(newOrientation, newLeftComponent, newRightComponent);
-        splitPane.setContinuousLayout(true);
-        splitPane.setOneTouchExpandable(true);
-        splitPane.setSize(super.getSize());
-        splitPane.setDividerLocation(proportionalLocation);
-        splitPane.setDividerSize(8);
-
-        return splitPane;
+        return createSplitPane(
+                JSplitPane.HORIZONTAL_SPLIT,
+                createTreeTabbedPane(),
+                createInfoTabbedPane(),
+                0.2);
     }
 
     private JTabbedPane createTreeTabbedPane() {
@@ -205,6 +151,22 @@ public class TranspathFrame extends JFrame {
         return lowerTabbedPane;
     }
 
+    private JSplitPane createSplitPane(
+            int newOrientation,
+            Component newLeftComponent,
+            Component newRightComponent,
+            double proportionalLocation
+    ) {
+        JSplitPane splitPane = new JSplitPane(newOrientation, newLeftComponent, newRightComponent);
+        splitPane.setContinuousLayout(true);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setSize(super.getSize());
+        splitPane.setDividerLocation(proportionalLocation);
+        splitPane.setDividerSize(8);
+
+        return splitPane;
+    }
+
     private JTabbedPane createTabbedPane() {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setTabPlacement(JTabbedPane.TOP);
@@ -213,13 +175,69 @@ public class TranspathFrame extends JFrame {
     }
 
     private JScrollPane createScrollPane(Component comp) {
-        JScrollPane scrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPane = new JScrollPane(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
+        );
         scrollPane.setFont(TransConst.GLOBAL_FONT);
         if (comp != null) {
             scrollPane.setViewportView(comp);
         }
         return scrollPane;
+    }
+
+    private JToolBar createStatusBar() {
+        JToolBar statusBar = new JToolBar();
+        statusBar.setFloatable(false);
+
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setMaximum(100);
+        progressBar.setMinimum(0);
+        progressBar.setValue(88);
+        progressBar.setStringPainted(true);
+        progressBar.setIndeterminate(false);
+        // Color change unavailable when using NimbusLookAndFeel;
+        // progressBar.setBackground(Color.gray);
+        // progressBar.setForeground(Color.green);
+        statusBar.add(progressBar);
+
+        statusBar.add(new JLabel("8,800 of 10,000 bytes processed. Status Normal."));
+
+        return statusBar;
+    }
+
+    // Separater for revision...
+
+    private static JTextArea logTextArea = new JTextArea();
+
+    private static JTextArea infoTextArea = new JTextArea("information");
+
+    private static JTable infoTable = new JTable();
+
+    public StoreList getStoreList() {
+        if (null == storeList) {
+            reloadStoreList();
+        }
+        return storeList;
+    }
+
+    public static JTable getInfoTable() {
+        return infoTable;
+    }
+
+    public static JTextArea getLogTextArea() {
+        return logTextArea;
+    }
+
+    public static JTextArea getInfoTextArea() {
+        return infoTextArea;
+    }
+
+    public void searchList(String searchText) {
+        TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
+        StoreList sList = getStoreList().searchName(searchText);
+        setInfoTable(sList);
+        TransLog.getLogger().info(sList.toString());
     }
 
     private JTree createCurrentStoreTree() {
@@ -303,7 +321,7 @@ public class TranspathFrame extends JFrame {
         }
     }
 
-    public static void fetchSelectedStores() {
+    public void fetchSelectedStores() {
         int columnIndex = -1;
         columnIndex = getIdColumnIndex("StoreId");
         TransLog.getLogger().info("Column index = " + columnIndex);
@@ -316,9 +334,9 @@ public class TranspathFrame extends JFrame {
         return;
     }
 
-    private static void fetchStore(ArrayList<Integer> storeIdList) {
+    private void fetchStore(ArrayList<Integer> storeIdList) {
         //get source path-name list
-        NodeList sList = TranspathFrame.getStoreList().getListByIds(storeIdList);
+        NodeList sList = getStoreList().getListByIds(storeIdList);
         //get target
         String sourceBase = TransProp.get(TransConst.LOC_SOURCE);
         String target = TransProp.get(TransConst.LOC_TARGET);
