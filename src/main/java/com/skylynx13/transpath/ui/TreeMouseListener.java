@@ -56,10 +56,6 @@ public class TreeMouseListener implements MouseListener {
         String nodeType = "";
         if (selectNode instanceof StoreNode) {
             TranspathFrame.getInfoTextArea().append("Store Node Selected: " + selectNode.keepNode()+"\n");
-            TranspathFrame.getInfoTextArea().append("Related Pub Node: " + TranspathFrame.getCurrPubList().getListByIds(TranspathFrame.getCurrLinkList().getPubIdList(selectNode.id))+"\n");
-        } else if (selectNode instanceof PubNode) {
-            TranspathFrame.getInfoTextArea().append("Pub Node Selected: " + selectNode.keepNode()+"\n");
-            TranspathFrame.getInfoTextArea().append("Related Store Node: " + TranspathFrame.getCurrStoreList().getListByIds(TranspathFrame.getCurrLinkList().getStoreIdList(selectNode.id))+"\n");
         } else if (selectNode instanceof BranchNode) {
             TranspathFrame.getInfoTextArea().append("Simple Node Selected: " + selectNode.keepNode()+"\n");
         }

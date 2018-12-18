@@ -16,7 +16,6 @@ public class TransConst {
     public static final String FONT_SIZE = "FONT_SIZE";
 
     public static final String VER_CURR   = "VER_CURR";
-    public static final String VER_LAST   = "VER_LAST";
 
     public static final String TAG_A   = "TAG_A";
     public static final String TAG_B   = "TAG_B";

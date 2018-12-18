@@ -23,14 +23,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.pub.LinkList;
 import com.skylynx13.transpath.pub.PubList;
 import com.skylynx13.transpath.store.StoreList;
-import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeList;
 import com.skylynx13.transpath.tree.NodeTree;
-import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
@@ -50,32 +47,58 @@ public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private JPanel mainPanel = (JPanel) this.getContentPane();
-    private JMenuBar menuBar = new TranspathMenuBar(this);
-
     public TranspathFrame() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize((int) screenSize.getWidth() * 2 / 3, (int) screenSize.getHeight() * 2 / 3);
-        setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
-
-        setJMenuBar(menuBar);
-
+        initSize(66);
+        initIcon();
+        initMenuBar();
+        initLookAndFeel();
         initPanel();
     }
 
+    private void initSize(int percentage) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        super.setSize((int) screenSize.getWidth() * percentage / 100,
+                (int) screenSize.getHeight() * percentage / 100);
+    }
+
+    private void initIcon() {
+        setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
+    }
+
+    private void initMenuBar() {
+        setJMenuBar(new TranspathMenuBar(this));
+    }
+
+    private void initLookAndFeel() {
+        UIManager.getSystemLookAndFeelClassName();
+        try {
+            // Look and feel candidates:
+            // "javax.swing.plaf.metal.MetalLookAndFeel"
+            // "javax.swing.plaf.nimbus.NimbusLookAndFeel"
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected void initPanel() {
+        JPanel mainPanel = (JPanel) this.getContentPane();
+
         mainPanel.removeAll();
 
         mainPanel.setLayout(new BorderLayout());
-        setLookAndFeel();
-
-        refreshLists();
+        reloadStoreList();
 
         mainPanel.add(createAllSplitPane(), BorderLayout.CENTER);
-
         mainPanel.add(createStatusBar(), BorderLayout.SOUTH);
 
-        this.setTitle("Storage Archivist - " + TransProp.get(TransConst.VER_CURR));
+        this.setTitle("Storage Archivist - " + storeList.version);
     }
 
     // Separater for revision...
@@ -86,35 +109,17 @@ public class TranspathFrame extends JFrame {
 
     private static JTable infoTable = new JTable();
 
-    private static StoreList currStoreList = null;
-    private static PubList currPubList = null;
-    private static LinkList currLinkList = null;
+    private static StoreList storeList = null;
 
-    public static StoreList getCurrStoreList() {
-        if (null == currStoreList) {
-            currStoreList = new StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+    public static StoreList getStoreList() {
+        if (null == storeList) {
+            storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
         }
-        return currStoreList;
+        return storeList;
     }
 
-    public static PubList getCurrPubList() {
-        if (null == currPubList) {
-            currPubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
-        }
-        return currPubList;
-    }
-
-    public static LinkList getCurrLinkList() {
-        if (null == currLinkList) {
-            currLinkList = new LinkList(FileUtils.linkNameOfVersion(TransProp.get(TransConst.VER_CURR)));
-        }
-        return currLinkList;
-    }
-
-    private void refreshLists() {
-        currStoreList = new StoreList(FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR)));
-        currPubList = new PubList(FileUtils.pubNameOfVersion(TransProp.get(TransConst.VER_CURR)));
-        currLinkList = new LinkList(FileUtils.linkNameOfVersion(TransProp.get(TransConst.VER_CURR)));
+    private void reloadStoreList() {
+        storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
     }
 
     public static JTable getInfoTable() {
@@ -131,7 +136,7 @@ public class TranspathFrame extends JFrame {
 
     public static void searchList(String searchText) {
         TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
-        StoreList sList = getCurrStoreList().searchName(searchText);
+        StoreList sList = getStoreList().searchName(searchText);
         setInfoTable(sList);
         TransLog.getLogger().info(sList.toString());
     }
@@ -154,23 +159,6 @@ public class TranspathFrame extends JFrame {
         statusBar.add(new JLabel("8,800 of 10,000 bytes processed. Status Normal."));
 
         return statusBar;
-    }
-
-    private void setLookAndFeel() {
-        UIManager.getSystemLookAndFeelClassName();
-        try {
-            //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            //UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
     }
 
     private JSplitPane createAllSplitPane() {
@@ -196,10 +184,9 @@ public class TranspathFrame extends JFrame {
     private JTabbedPane createTreeTabbedPane() {
         JTabbedPane treeTabbedPane = createTabbedPane();
         treeTabbedPane.addTab("Store Tree", createScrollPane(createCurrentStoreTree()));
-        treeTabbedPane.addTab("Pub Tree", createScrollPane(createCurrentPubTree()));
 
         TransLog.getLogger()
-                .info("List: " + FileUtils.storeNameOfVersion(TransProp.get(TransConst.VER_CURR)) + " loaded.");
+                .info("List of version " + storeList.version + " loaded.");
 
         return treeTabbedPane;
     }
@@ -236,11 +223,7 @@ public class TranspathFrame extends JFrame {
     }
 
     private JTree createCurrentStoreTree() {
-        return createTree(getCurrStoreList());
-    }
-
-    private JTree createCurrentPubTree() {
-        return createTree(getCurrPubList());
+        return createTree(getStoreList());
     }
 
     private JTree createTree(NodeList nodeList) {
@@ -329,21 +312,13 @@ public class TranspathFrame extends JFrame {
             fetchStore(storeIdList);
             return;
         }
-        columnIndex = getIdColumnIndex("PubId");
-        TransLog.getLogger().info("Column index = " + columnIndex);
-        if (columnIndex != -1) {
-            ArrayList<Integer> pubIdList = getSelectedIdList(columnIndex);
-            ArrayList<Integer> storeIdList = TranspathFrame.getCurrLinkList().getStoreIdList(pubIdList);
-            fetchStore(storeIdList);
-            return;
-        }
         TransLog.getLogger().info("No fetch performed.");
         return;
     }
 
     private static void fetchStore(ArrayList<Integer> storeIdList) {
         //get source path-name list
-        NodeList sList = TranspathFrame.getCurrStoreList().getListByIds(storeIdList);
+        NodeList sList = TranspathFrame.getStoreList().getListByIds(storeIdList);
         //get target
         String sourceBase = TransProp.get(TransConst.LOC_SOURCE);
         String target = TransProp.get(TransConst.LOC_TARGET);
