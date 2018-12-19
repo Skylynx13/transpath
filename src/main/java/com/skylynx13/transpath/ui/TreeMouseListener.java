@@ -13,9 +13,7 @@ package com.skylynx13.transpath.ui;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 
 import com.skylynx13.transpath.pub.PubNode;
@@ -38,11 +36,19 @@ import com.skylynx13.transpath.tree.NodeTree;
  */
 
 public class TreeMouseListener implements MouseListener {
-    
-    JTree jTree = null;
-    
+
+    private static final String[] POPITEMS = {"New Child", "Rename", "Cut", "Copy", "Paste", "Delete"};
+
+    private JTree jTree;
+
+    private JPopupMenu popupMenu;
+
     public TreeMouseListener(JTree pTree) {
         jTree = pTree;
+        popupMenu = new JPopupMenu();
+        for (String item : POPITEMS) {
+            popupMenu.add(new JMenuItem(item));
+        }
     }
 
     @Override
@@ -51,13 +57,15 @@ public class TreeMouseListener implements MouseListener {
             return;
         }
         NodeTree selectTree = (NodeTree)jTree.getSelectionPath().getLastPathComponent();
+
+        JTextArea infoTextArea = TranspathFrame.getInfoTextArea();
+        infoTextArea.setText("Tree Selected: " + selectTree.toString()+"\n");
+
         Node selectNode = selectTree.getNode();
-        TranspathFrame.getInfoTextArea().setText("Tree Selected: " + selectTree.toString()+"\n");
-        String nodeType = "";
         if (selectNode instanceof StoreNode) {
-            TranspathFrame.getInfoTextArea().append("Store Node Selected: " + selectNode.keepNode()+"\n");
+            infoTextArea.append("Store Node Selected: " + selectNode.keepNode()+"\n");
         } else if (selectNode instanceof BranchNode) {
-            TranspathFrame.getInfoTextArea().append("Simple Node Selected: " + selectNode.keepNode()+"\n");
+            infoTextArea.append("Simple Node Selected: " + selectNode.keepNode()+"\n");
         }
         TranspathFrame.setInfoTable(selectTree);
     }
@@ -68,14 +76,8 @@ public class TreeMouseListener implements MouseListener {
         if (selPath == null) {
             return;
         }
-        if (e.getButton() == MouseEvent.BUTTON3) {
-            JPopupMenu popupMenu = new JPopupMenu();
-            popupMenu.add(new JMenuItem("New Child"));
-            popupMenu.add(new JMenuItem("Rename"));
-            popupMenu.add(new JMenuItem("Cut"));
-            popupMenu.add(new JMenuItem("Copy"));
-            popupMenu.add(new JMenuItem("Paste"));
-            popupMenu.add(new JMenuItem("Delete"));
+
+                if (e.getButton() == MouseEvent.BUTTON3) {
             popupMenu.show(jTree, e.getX(), e.getY());
         }
     }

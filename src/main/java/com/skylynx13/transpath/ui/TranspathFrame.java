@@ -48,6 +48,22 @@ public class TranspathFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private static StoreList storeList;
+    private static JTree storeTree;
+    private static JTable infoTable = new JTable();
+    private static JTextArea logTextArea = new JTextArea();
+    private static JTextArea infoTextArea = new JTextArea("information");
+
+    public static JTree getStoreTree() {
+        return storeTree;
+    }
+
+    public static JTextArea getLogTextArea() {
+        return logTextArea;
+    }
+
+    public static JTextArea getInfoTextArea() {
+        return infoTextArea;
+    }
 
     public TranspathFrame() {
         initSize(66);
@@ -98,7 +114,7 @@ public class TranspathFrame extends JFrame {
 
         mainPanel.setLayout(new BorderLayout());
 
-        reloadStoreList();
+        reloadStoreListAndTree();
 
         mainPanel.add(createAllSplitPane(), BorderLayout.CENTER);
         mainPanel.add(createStatusBar(), BorderLayout.SOUTH);
@@ -106,8 +122,9 @@ public class TranspathFrame extends JFrame {
         this.setTitle("Storage Archivist - " + storeList.version);
     }
 
-    private void reloadStoreList() {
+    private void reloadStoreListAndTree() {
         storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
+        storeTree = createTree(storeList);
     }
 
     private JSplitPane createAllSplitPane() {
@@ -129,10 +146,9 @@ public class TranspathFrame extends JFrame {
 
     private JTabbedPane createTreeTabbedPane() {
         JTabbedPane treeTabbedPane = createTabbedPane();
-        treeTabbedPane.addTab("Store Tree", createScrollPane(createCurrentStoreTree()));
+        treeTabbedPane.addTab("Store Tree", createScrollPane(storeTree));
 
-        TransLog.getLogger()
-                .info("List of version " + storeList.version + " loaded.");
+        TransLog.getLogger().info("List of version " + storeList.version + " loaded.");
 
         return treeTabbedPane;
     }
@@ -206,49 +222,11 @@ public class TranspathFrame extends JFrame {
         return statusBar;
     }
 
-    // Separater for revision...
+    private JTree createTree(StoreList storeList) {
+        NodeTree storeTree = NodeTree.buildFromList(storeList);
+        storeTree.recursivelySort();
 
-    private static JTextArea logTextArea = new JTextArea();
-
-    private static JTextArea infoTextArea = new JTextArea("information");
-
-    private static JTable infoTable = new JTable();
-
-    public StoreList getStoreList() {
-        if (null == storeList) {
-            reloadStoreList();
-        }
-        return storeList;
-    }
-
-    public static JTable getInfoTable() {
-        return infoTable;
-    }
-
-    public static JTextArea getLogTextArea() {
-        return logTextArea;
-    }
-
-    public static JTextArea getInfoTextArea() {
-        return infoTextArea;
-    }
-
-    public void searchList(String searchText) {
-        TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
-        StoreList sList = getStoreList().searchName(searchText);
-        setInfoTable(sList);
-        TransLog.getLogger().info(sList.toString());
-    }
-
-    private JTree createCurrentStoreTree() {
-        return createTree(getStoreList());
-    }
-
-    private JTree createTree(NodeList nodeList) {
-        NodeTree nodeTree = NodeTree.buildFromList(nodeList);
-        nodeTree.recursivelySort();
-
-        JTree jTree = new JTree(nodeTree);
+        JTree jTree = new JTree(storeTree);
         jTree.setShowsRootHandles(true);
         jTree.setRootVisible(true);
         jTree.setEditable(true);
@@ -260,19 +238,12 @@ public class TranspathFrame extends JFrame {
         return jTree;
     }
 
-    public static void setInfoTable(NodeList nodeList) {
-        DefaultTableModel tableModel = null;
-        if (nodeList instanceof StoreList) {
-            tableModel = new DefaultTableModel(((StoreList)nodeList).toRows(), TransConst.TABLE_TITLE_STORE);
-        } else if (nodeList instanceof PubList) {
-            tableModel = new DefaultTableModel(((PubList) nodeList).toRows(), TransConst.TABLE_TITLE_PUB);
-        }
-        setInfoTable(tableModel);
+    public static void setInfoTable(StoreList storeList) {
+        setInfoTable(new DefaultTableModel(storeList.toRows(), TransConst.TABLE_TITLE_STORE));
     }
 
     public static void setInfoTable(NodeTree selectTree) {
-        DefaultTableModel tableModel = new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle());
-        setInfoTable(tableModel);
+        setInfoTable(new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle()));
     }
 
     public static void setInfoTable(DefaultTableModel tableModel) {
@@ -285,8 +256,6 @@ public class TranspathFrame extends JFrame {
 
         columnAlignRight("StoreId");
         columnAlignRight("Length");
-        columnAlignRight("PubId");
-        columnAlignRight("Order");
         columnAlignRight("BranchId");
     }
 
@@ -321,6 +290,13 @@ public class TranspathFrame extends JFrame {
         }
     }
 
+    public void searchList(String searchText) {
+        TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
+        StoreList sList = storeList.searchName(searchText);
+        setInfoTable(sList);
+        TransLog.getLogger().info(sList.toString());
+    }
+
     public void fetchSelectedStores() {
         int columnIndex = -1;
         columnIndex = getIdColumnIndex("StoreId");
@@ -336,7 +312,7 @@ public class TranspathFrame extends JFrame {
 
     private void fetchStore(ArrayList<Integer> storeIdList) {
         //get source path-name list
-        NodeList sList = getStoreList().getListByIds(storeIdList);
+        NodeList sList = storeList.getListByIds(storeIdList);
         //get target
         String sourceBase = TransProp.get(TransConst.LOC_SOURCE);
         String target = TransProp.get(TransConst.LOC_TARGET);
@@ -403,9 +379,4 @@ public class TranspathFrame extends JFrame {
         TransLog.getLogger().info("Transpath Exit.");
         System.exit(0);
     }
-
-    public static void main(String[] args) {
-        new TranspathFrame();
-    }
-
 }

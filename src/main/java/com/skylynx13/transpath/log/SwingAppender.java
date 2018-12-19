@@ -38,18 +38,18 @@ import com.skylynx13.transpath.utils.TransConst;
  * @version yyyy-mm-dd qxu@<br/>
  * 
  */
-// See https://github.com/M-Razavi/log4j-swing-appender
+// See:
+// https://github.com/M-Razavi/log4j-swing-appender
 // http://www.howtobuildsoftware.com/index.php/how-do/chab/java-logging-log4j-log4j2-how-to-create-a-custom-appender-in-log4j2
 // http://logging.apache.org/log4j/2.x/manual/configuration.html#Properties
 // http://logging.apache.org/log4j/2.x/manual/extending.html#Appenders
 @Plugin(name="Swing", category="Core", elementType="appender", printObject=true)
 public class SwingAppender extends AbstractAppender {  
-    private final JTextArea logTextArea;
+    private final JTextArea logTextArea = TranspathFrame.getLogTextArea();
 
     private SwingAppender(String name, Filter filter,
             Layout<? extends Serializable> layout, final boolean ignoreExceptions) {
         super(name, filter, layout, ignoreExceptions);
-        logTextArea = TranspathFrame.getLogTextArea();
     }
     
     @Override
