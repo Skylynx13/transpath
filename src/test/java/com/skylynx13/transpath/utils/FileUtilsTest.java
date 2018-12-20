@@ -216,12 +216,6 @@ public class FileUtilsTest {
 //        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_004.cbz")));
     }
 
-    @Ignore
-    @Test
-    public void getLastModifiedStringTest() {
-        assertEquals("2015-03-19 14:11:42.114", FileUtils.getLastModifiedString(testResource("getLastModifiedString_000.txt")));
-    }
-    
     @SuppressWarnings("unused")
     @Test
     public void getRarCommentTest() {

@@ -23,7 +23,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.pub.PubList;
 import com.skylynx13.transpath.store.StoreList;
 import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeList;
@@ -47,15 +46,12 @@ public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private static StoreList storeList;
-    private static JTree storeTree;
     private static JTable infoTable = new JTable();
     private static JTextArea logTextArea = new JTextArea();
     private static JTextArea infoTextArea = new JTextArea("information");
 
-    public static JTree getStoreTree() {
-        return storeTree;
-    }
+    private StoreList storeList;
+    private JTree storeTree;
 
     public static JTextArea getLogTextArea() {
         return logTextArea;
@@ -127,6 +123,22 @@ public class TranspathFrame extends JFrame {
         storeTree = createTree(storeList);
     }
 
+    private JTree createTree(StoreList storeList) {
+        NodeTree storeTree = NodeTree.buildFromList(storeList);
+        storeTree.recursivelySort();
+
+        JTree jTree = new JTree(storeTree);
+        jTree.setShowsRootHandles(true);
+        jTree.setRootVisible(true);
+        jTree.setEditable(true);
+        jTree.setDragEnabled(true);
+        jTree.setDropTarget(new DropTarget());
+        jTree.setFont(TransConst.GLOBAL_FONT);
+        jTree.addMouseListener(new TreeMouseListener(jTree));
+
+        return jTree;
+    }
+
     private JSplitPane createAllSplitPane() {
         return createSplitPane(
                 JSplitPane.VERTICAL_SPLIT,
@@ -196,9 +208,7 @@ public class TranspathFrame extends JFrame {
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
         );
         scrollPane.setFont(TransConst.GLOBAL_FONT);
-        if (comp != null) {
-            scrollPane.setViewportView(comp);
-        }
+        scrollPane.setViewportView(comp);
         return scrollPane;
     }
 
@@ -220,22 +230,6 @@ public class TranspathFrame extends JFrame {
         statusBar.add(new JLabel("8,800 of 10,000 bytes processed. Status Normal."));
 
         return statusBar;
-    }
-
-    private JTree createTree(StoreList storeList) {
-        NodeTree storeTree = NodeTree.buildFromList(storeList);
-        storeTree.recursivelySort();
-
-        JTree jTree = new JTree(storeTree);
-        jTree.setShowsRootHandles(true);
-        jTree.setRootVisible(true);
-        jTree.setEditable(true);
-        jTree.setDragEnabled(true);
-        jTree.setDropTarget(new DropTarget());
-        jTree.setFont(TransConst.GLOBAL_FONT);
-        jTree.addMouseListener(new TreeMouseListener(jTree));
-
-        return jTree;
     }
 
     public static void setInfoTable(StoreList storeList) {
@@ -265,6 +259,7 @@ public class TranspathFrame extends JFrame {
         try {
             infoTable.getColumn(columnTitle).setCellRenderer(alignRight);
         } catch (IllegalArgumentException e) {
+            // Ignore
         }
     }
 
@@ -276,7 +271,14 @@ public class TranspathFrame extends JFrame {
             for (int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer rend = table.getCellRenderer(row, column);
                 Object value = table.getValueAt(row, column);
-                Component component = rend.getTableCellRendererComponent(table, value, false, false, row, column);
+                Component component = rend.getTableCellRendererComponent(
+                        table,
+                        value,
+                        false,
+                        false,
+                        row,
+                        column
+                );
                 maxComponentWidth = Math.max(component.getPreferredSize().width, maxComponentWidth);
             }
             TableCellRenderer headerRenderer = table.getColumnModel().getColumn(column).getHeaderRenderer();
@@ -284,9 +286,18 @@ public class TranspathFrame extends JFrame {
                 headerRenderer = table.getTableHeader().getDefaultRenderer();
             }
             Object headerValue = table.getColumnModel().getColumn(column).getHeaderValue();
-            Component headerComp = headerRenderer.getTableCellRendererComponent(table, headerValue, false, false, 0, column);
+            Component headerComp = headerRenderer.getTableCellRendererComponent(
+                    table,
+                    headerValue,
+                    false,
+                    false,
+                    0,
+                    column
+            );
             maxComponentWidth = Math.max(maxComponentWidth, headerComp.getPreferredSize().width);
-            table.getColumnModel().getColumn(column).setPreferredWidth(maxComponentWidth + table.getIntercellSpacing().width);
+            table.getColumnModel()
+                    .getColumn(column)
+                    .setPreferredWidth(maxComponentWidth + table.getIntercellSpacing().width);
         }
     }
 
@@ -318,7 +329,8 @@ public class TranspathFrame extends JFrame {
         String target = TransProp.get(TransConst.LOC_TARGET);
         //exec and feedback
         for (Node sNode : sList.nodeList) {
-            String pathName = sNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4) + sNode.name;
+            String pathName = sNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
+                    + sNode.name;
             String cmd = TransConst.CMD_COPY_TO_TARGET + "\"" + sourceBase + pathName + "\" " + target;
             TransLog.getLogger().info("Command: " + cmd);
             //execCmd(cmd);
@@ -328,8 +340,10 @@ public class TranspathFrame extends JFrame {
     private static void execCmd(String cmd) {
         try {
             Process proc = Runtime.getRuntime().exec(cmd);
-            BufferedReader iReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getInputStream())));
-            BufferedReader eReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getErrorStream())));
+            BufferedReader iReader =
+                    new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getInputStream())));
+            BufferedReader eReader =
+                    new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getErrorStream())));
             String inLine;
             while ((inLine = iReader.readLine()) != null) {
                 TransLog.getLogger().info("Return: " + inLine);

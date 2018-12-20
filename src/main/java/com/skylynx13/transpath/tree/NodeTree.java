@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import com.skylynx13.transpath.pub.PubNode;
 import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.utils.TransConst;
 
@@ -109,20 +108,12 @@ public class NodeTree implements MutableTreeNode {
 
     public String[] getChildrenTitle() {
         if (0 == getChildCount()) {
-            if (getNode() instanceof StoreNode) {
-                return TransConst.TABLE_TITLE_STORE;
-            } else if (getNode() instanceof PubNode) {
-                return TransConst.TABLE_TITLE_PUB;
-            } else {
-                return null;
-            }
+            return TransConst.TABLE_TITLE_STORE;
         }
         for (NodeTree nodeTree : getChildren()) {
             Node node = nodeTree.getNode();
             if (node instanceof StoreNode) {
                 return TransConst.TABLE_TITLE_STORE;
-            } else if (node instanceof PubNode) {
-                return TransConst.TABLE_TITLE_PUB;
             }
         }
         return TransConst.TABLE_TITLE_BRANCH;
@@ -149,8 +140,6 @@ public class NodeTree implements MutableTreeNode {
         Node aNode = nodeTree.getNode();
         if (aNode instanceof StoreNode) {
             row = ((StoreNode) aNode).toRow();
-        } else if (aNode instanceof PubNode) {
-            row = ((PubNode) aNode).toRow();
         } else if (aNode instanceof BranchNode) {
             long length = nodeTree.sumLength();
             row = ((BranchNode) aNode).toRow(length);
@@ -166,8 +155,6 @@ public class NodeTree implements MutableTreeNode {
             Node aNode = nodeTree.getNode();
             if (aNode instanceof StoreNode) {
                 length += ((StoreNode) aNode).length;
-            } else if (aNode instanceof PubNode) {
-                return 0;
             } else if (aNode instanceof BranchNode) {
                 length += nodeTree.sumLength();
             } else {

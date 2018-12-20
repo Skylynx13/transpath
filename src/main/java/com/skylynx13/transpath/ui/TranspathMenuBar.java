@@ -16,7 +16,6 @@ import java.util.concurrent.Executors;
 import javax.swing.*;
 
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.pub.PubKeeper;
 import com.skylynx13.transpath.store.StoreKeeper;
 import com.skylynx13.transpath.task.TaskChecker;
 import com.skylynx13.transpath.task.TaskKeeper;
@@ -113,15 +112,6 @@ public class TranspathMenuBar extends JMenuBar {
         return storeMenu;
     }
 
-    private JMenu createPubMenu() {
-        JMenu pubMenu = new JMenu("Pub");
-
-        JMenuItem pubRefreshItem = new JMenuItem("Refresh");
-        pubMenu.add(pubRefreshItem);
-        pubRefreshItem.addActionListener(e -> transpathMenuAction.submit(PubKeeper::refreshPubList));
-        return pubMenu;
-    }
-
     private JMenu createHelpMenu() {
         JMenu helpMenu = new JMenu("Help");
 
@@ -147,7 +137,6 @@ public class TranspathMenuBar extends JMenuBar {
         this.add(createSysMenu());
         this.add(createTaskMenu());
         this.add(createStoreMenu());
-        this.add(createPubMenu());
         this.add(createHelpMenu());
 
     }

@@ -16,7 +16,6 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 
-import com.skylynx13.transpath.pub.PubNode;
 import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.tree.BranchNode;
 import com.skylynx13.transpath.tree.Node;
@@ -77,7 +76,7 @@ public class TreeMouseListener implements MouseListener {
             return;
         }
 
-                if (e.getButton() == MouseEvent.BUTTON3) {
+        if (e.getButton() == MouseEvent.BUTTON3) {
             popupMenu.show(jTree, e.getX(), e.getY());
         }
     }

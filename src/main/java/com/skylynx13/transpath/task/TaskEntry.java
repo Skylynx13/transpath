@@ -177,6 +177,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
         this.comments.clear();
         this.links.clear();
     }
+
     public boolean matches(String[] keys) {
         for (String key : keys) {
             key = "(?i).*" + key + ".*";

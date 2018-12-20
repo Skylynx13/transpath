@@ -86,21 +86,20 @@ public class StoreNode extends Node{
     }
 
     public String keepNode() {
-        String seperator = TransConst.COLON;
         return new StringBuffer(String.format(TransConst.FORMAT_INT_08, id))
-                        .append(seperator)
+                        .append(TransConst.COLON)
                         .append(String.format(TransConst.FORMAT_INT_13, length))
-                        .append(seperator)
+                        .append(TransConst.COLON)
                         .append(lastModified)
-                        .append(seperator)
+                        .append(TransConst.COLON)
                         .append(md5)
-                        .append(seperator)
+                        .append(TransConst.COLON)
                         .append(sha1)
-                        .append(seperator)
+                        .append(TransConst.COLON)
                         .append(crc32)
-                        .append(seperator)
+                        .append(TransConst.COLON)
                         .append(path)
-                        .append(seperator)
+                        .append(TransConst.COLON)
                         .append(name)
                         .toString();
     }
@@ -125,7 +124,16 @@ public class StoreNode extends Node{
     }
 
     public Object[] toRow() {
-        Object[] row = {id, path, name, StringUtils.formatLongInt(length), DateUtils.formatDateTimeLong(lastModified), md5, sha1, crc32};
+        Object[] row = {
+                id,
+                path,
+                name,
+                StringUtils.formatLongInt(length),
+                DateUtils.formatDateTimeLong(lastModified),
+                md5,
+                sha1,
+                crc32
+        };
         return row;
     }
     

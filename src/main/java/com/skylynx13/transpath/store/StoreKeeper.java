@@ -17,12 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.pub.LinkList;
-import com.skylynx13.transpath.pub.LinkNode;
-import com.skylynx13.transpath.pub.PubList;
-import com.skylynx13.transpath.pub.PubNode;
 import com.skylynx13.transpath.tree.Node;
-import com.skylynx13.transpath.ui.TranspathFrame;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
@@ -260,40 +255,10 @@ public class StoreKeeper {
         long t0 = System.currentTimeMillis();
         TransLog.getLogger().info("GenPubLink started...");
 
-        PubList pubList = new PubList();
-        pubList.load(FileUtils.pubNameOfVersion(oldVer));
-
-        LinkList linkList = new LinkList();
-        linkList.load(FileUtils.linkNameOfVersion(oldVer));
-
-        ArrayList<Integer> oldStoreIdList = linkList.getStoreIdList();
-
-        for (Node aNode : resList.nodeList) {
-            StoreNode sNode = (StoreNode) aNode;
-            if (!oldStoreIdList.contains(sNode.id)) {
-                PubNode pNode = new PubNode(sNode);
-                int pubId = pubList.addNode(pNode);
-                linkList.addNode(new LinkNode(sNode.id, pubId));
-            }
-        }
-
         resList.orderByPathAndName();
-        linkList.refreshStoreId(resList.reorgId());
-
-        pubList.hitShelf(FileUtils.hitShelfList());
-        pubList.orderByPathAndName();
-        linkList.refreshPubId(pubList.reorgId());
-        pubList.reorder();
-
-        linkList.orderByStoreId();
-        linkList.reorgId();
-
+        resList.reorgId();
         String currVer = resList.version;
-        pubList.version = currVer;
-        linkList.version = currVer;
         resList.keepFile(FileUtils.storeNameOfVersion(currVer));
-        pubList.keepFile(FileUtils.pubNameOfVersion(currVer));
-        linkList.keepFile(FileUtils.linkNameOfVersion(currVer));
 
         TransLog.getLogger().info("GenPubLink done in " + (System.currentTimeMillis() - t0) + "ms.");
     }
