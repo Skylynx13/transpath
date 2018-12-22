@@ -119,7 +119,7 @@ public class TaskArranger {
     public int writeToFile(String fileName) {
         try {
             PrintWriter out = new PrintWriter(fileName);
-            out.println(this.toOutput());
+            out.print(this.toOutput());
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -133,7 +133,7 @@ public class TaskArranger {
         }
         try {
             PrintWriter out = new PrintWriter(new FileWriter(fileName,true));
-            out.println(this.toOutput());
+            out.print(this.toOutput());
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
