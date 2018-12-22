@@ -11,6 +11,7 @@ target/
 transpath.jar
 .attach_*
 *.out
+src/test/resources/Actual_*
 
 #################
 ## Eclipse

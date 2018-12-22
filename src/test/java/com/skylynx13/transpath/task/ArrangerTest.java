@@ -1,22 +1,9 @@
-/**
- * Copyright (c) 2015,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.worker
- * File Name:ArrangerTest.java
- * Date:2015-2-17 上午10:13:07
- * 
- */
 package com.skylynx13.transpath.task;
 
-import static org.junit.Assert.*;
-
+import com.skylynx13.transpath.utils.FileUtils;
 import org.junit.Test;
 
-import com.skylynx13.transpath.task.TaskArranger;
-import com.skylynx13.transpath.task.TaskEntry;
-import com.skylynx13.transpath.utils.FileUtils;
+import static org.junit.Assert.*;
 
  /**
  * ClassName: ArrangerTest <br/>
@@ -42,21 +29,40 @@ public class ArrangerTest {
     @Test
     public void readSortMergeWriteTest_raw_task() {
         TaskArranger argr = new TaskArranger();
-        int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_appendTo_001.txt"));
+        int n = argr
+                .readFromFile(testResource("Raw_ArrangerTest.txt"))
+                .sort()
+                .merge()
+                .writeToFile(testResource("Actual_ArrangerTest_appendTo_001.txt"));
         assertEquals(32, n);
-        assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendTo_001.txt"), testResource("ArrangerTest_appendTo_Expected_001.txt")));
+        assertTrue(FileUtils.compareFileBytes(
+                testResource("Expected_ArrangerTest_appendTo_001.txt"),
+                testResource("Actual_ArrangerTest_appendTo_001.txt")
+        ));
     }
 
      @Test
      public void appendToFileTest() {
          TaskArranger argr = new TaskArranger();
-         int n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).sort().merge().writeToFile(testResource("ArrangerTest_appendTo_002.txt"));
+         int n = argr
+                 .readFromFile(testResource("Raw_ArrangerTest.txt"))
+                 .sort()
+                 .merge()
+                 .writeToFile(testResource("Actual_ArrangerTest_appendTo_002.txt"));
          assertEquals(32, n);
-         assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendTo_002.txt"), testResource("ArrangerTest_appendTo_Expected_001.txt")));
+         assertTrue(FileUtils.compareFileBytes(
+                 testResource("Expected_ArrangerTest_appendTo_001.txt"),
+                 testResource("Actual_ArrangerTest_appendTo_002.txt")
+         ));
          argr.clear();
-         n = argr.readFromFile(testResource("ArrangerTest_raw.txt")).appendToFile(testResource("ArrangerTest_appendTo_002.txt"));
+         n = argr
+                 .readFromFile(testResource("Raw_ArrangerTest.txt"))
+                 .appendToFile(testResource("Actual_ArrangerTest_appendTo_002.txt"));
          assertEquals(35, n);
-         assertEquals(true, FileUtils.compareFileBytes(testResource("ArrangerTest_appendTo_002.txt"), testResource("ArrangerTest_appendTo_Expected_002.txt")));
+         assertTrue(FileUtils.compareFileBytes(
+                 testResource("Expected_ArrangerTest_appendTo_002.txt"),
+                 testResource("Actual_ArrangerTest_appendTo_002.txt")
+         ));
      }
 
      @Test
@@ -106,8 +112,8 @@ public class ArrangerTest {
         arr11.addEntry(ent12);
         arr11.addEntry(ent13);
         arr11.addEntry(ent14);
- 
-        assertEquals(true, arr1.applyFilter(keys).equals(arr11));
+
+         assertTrue(arr1.applyFilter(keys).equals(arr11));
     }
     @Test
     public void applyFilterTest_keywords_filter_upper_lower_cases() {
@@ -133,8 +139,8 @@ public class ArrangerTest {
         arr11.addEntry(ent12);
         arr11.addEntry(ent13);
         arr11.addEntry(ent14);
- 
-        assertEquals(true, arr1.applyFilter(keys).equals(arr11));
+
+        assertTrue(arr1.applyFilter(keys).equals(arr11));
     }
     
     @Test
@@ -143,10 +149,10 @@ public class ArrangerTest {
         TaskArranger secondArranger = new TaskArranger();
         firstArranger.addEntry("abc");
         secondArranger.addEntry("abc");
-        assertEquals(true, firstArranger.equals(secondArranger));
+        assertTrue(firstArranger.equals(secondArranger));
         firstArranger.addEntry("def");
         secondArranger.addEntry("def");
-        assertEquals(true, firstArranger.equals(secondArranger));
+        assertTrue(firstArranger.equals(secondArranger));
     }
     @Test
     public void equalsTest_not_equals_entry() {
@@ -154,7 +160,7 @@ public class ArrangerTest {
         TaskArranger secondArranger = new TaskArranger();
         firstArranger.addEntry("abc");
         secondArranger.addEntry("def");
-        assertEquals(false, firstArranger.equals(secondArranger));
+        assertFalse(firstArranger.equals(secondArranger));
     }
     @Test
     public void equalsTest_not_equals_entries() {
@@ -162,10 +168,10 @@ public class ArrangerTest {
         TaskArranger secondArranger = new TaskArranger();
         firstArranger.addEntry("abc");
         secondArranger.addEntry("abc");
-        assertEquals(true, firstArranger.equals(secondArranger));
+        assertTrue(firstArranger.equals(secondArranger));
         firstArranger.addEntry("def");
         secondArranger.addEntry("deg");
-        assertEquals(false, firstArranger.equals(secondArranger));
+        assertFalse(firstArranger.equals(secondArranger));
     }
     @Test
     public void equalsTest_equals_comments_links() {
@@ -183,7 +189,7 @@ public class ArrangerTest {
         ent1.addLink("link1");
         ent1.addLink("link2");
         secondArranger.addEntry(ent1);
-        assertEquals(true, firstArranger.equals(secondArranger));
+        assertTrue(firstArranger.equals(secondArranger));
     }
 
     @Test
@@ -202,7 +208,7 @@ public class ArrangerTest {
         ent1.addLink("link1");
         TaskArranger secondArranger = new TaskArranger();
         secondArranger.addEntry(ent1);
-        assertEquals(false, firstArranger.equals(secondArranger));
+        assertFalse(firstArranger.equals(secondArranger));
         TaskEntry ent2 = new TaskEntry("abc");
         ent2.addComment("comm2");
         ent2.addComment("comm1");
@@ -210,7 +216,7 @@ public class ArrangerTest {
         ent2.addLink("link2");
         TaskArranger thirdArranger = new TaskArranger();
         thirdArranger.addEntry(ent2);
-        assertEquals(false, firstArranger.equals(thirdArranger));
+        assertFalse(firstArranger.equals(thirdArranger));
     }
 
 }
