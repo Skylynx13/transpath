@@ -58,12 +58,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    @Ignore
     public void getFileSizeTest_file_size() {
-//        assertEquals(10318, FileUtils.getFileSize(new File(testResource("Raw_ArrangerTest.txt"))));
-//        assertEquals(10205, FileUtils.getFileSize(new File(testResource("CompareTest_base.txt"))));
-//        assertEquals(8990, FileUtils.getFileSize(new File(testResource("CompareTest_short.txt"))));
-//        assertEquals( 10205, FileUtils.getFileSize(new File(testResource("CompareTest_change.txt"))));
         assertEquals(9899, FileUtils.getFileSize(new File(testResource("Raw_ArrangerTest.txt"))));
         assertEquals(10205, FileUtils.getFileSize(new File(testResource("CompareTest_base.txt"))));
         assertEquals(8990, FileUtils.getFileSize(new File(testResource("CompareTest_short.txt"))));
@@ -71,10 +66,9 @@ public class FileUtilsTest {
     }
 
     @Test
-    @Ignore
     public void getFileSizeTest_dir_size() {
-        //assertEquals(32907186, FileUtils.getFileSize(new File(testResource(""))));
-        assertEquals(32510106, FileUtils.getFileSize(new File(testResource(""))));
+        assertEquals(32910160, FileUtils.getFileSize(new File(testResource(""))));
+//        assertEquals(32510106, FileUtils.getFileSize(new File(testResource(""))));
     }
 
     @Test
@@ -91,6 +85,7 @@ public class FileUtilsTest {
         FileUtils.clearFile(fn);
         assertEquals(0, f1.length());
     }
+
     @Test
     public void copyFileBytesTest() {
         String fn1 = testResource("CopyTest_001.txt");
@@ -124,7 +119,6 @@ public class FileUtilsTest {
                 System.currentTimeMillis()-tm1) + " ms.");
         
         assertEquals(f1.length() + f2.length(), f3.length());
-//        assertEquals(true, FileUtils.compareFileBytes(fn0, fn3));
     }
     
     @Test
@@ -146,7 +140,6 @@ public class FileUtilsTest {
                 System.currentTimeMillis()-tm1) + " ms.");
 
         assertEquals(f1.length() + f2.length(), f3.length());
-//        assertEquals(true, FileUtils.compareFileBytes(fn0, fn3));
     }
 
     @Test
