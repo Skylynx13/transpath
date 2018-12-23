@@ -1,26 +1,15 @@
-/**
- * Copyright (c) 2017,qxu.
- * All Rights Reserved.
- * <p>
- * Project Name:transpath
- * Package Name:com.libra42.transpath.ui
- * File Name:TransMenuBar.java
- * Date:2017年10月14日 下午4:00:27
- */
 package com.skylynx13.transpath.ui;
-
-import java.awt.event.InputEvent;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.swing.*;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.store.StoreKeeper;
 import com.skylynx13.transpath.task.TaskChecker;
 import com.skylynx13.transpath.task.TaskKeeper;
-import com.skylynx13.transpath.utils.CompressUtils;
 import com.skylynx13.transpath.utils.TransConst;
+
+import javax.swing.*;
+import java.awt.event.InputEvent;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * ClassName: TransMenuBar <br/>
@@ -48,7 +37,7 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem sysReloadItem = new JMenuItem("Reload");
         sysMenu.add(sysReloadItem);
-        sysReloadItem.addActionListener(e -> transpathFrame.initPanel());
+        sysReloadItem.addActionListener(e -> transpathFrame.reloadStore());
 
         sysMenu.add(new JSeparator());
 

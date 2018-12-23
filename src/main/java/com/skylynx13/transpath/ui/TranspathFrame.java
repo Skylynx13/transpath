@@ -1,12 +1,3 @@
-/**
- * Copyright (c) 2015,qxu.
- * All Rights Reserved.
- * <p>
- * Project Name:transpath
- * Package Name:com.qxu.transpath.ui
- * File Name:TranspathFrame.java
- * Date:2015-11-16 上午12:59:46
- */
 package com.skylynx13.transpath.ui;
 
 import java.awt.*;
@@ -29,6 +20,7 @@ import com.skylynx13.transpath.tree.NodeList;
 import com.skylynx13.transpath.tree.NodeTree;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * ClassName: TranspathFrame <br/>
@@ -51,29 +43,37 @@ public class TranspathFrame extends JFrame {
     private static JTextArea infoTextArea = new JTextArea("information");
 
     private StoreList storeList;
-    private JTree storeTree;
+    private JScrollPane treePane;
 
     public static JTextArea getLogTextArea() {
         return logTextArea;
     }
 
-    public static JTextArea getInfoTextArea() {
+    static JTextArea getInfoTextArea() {
         return infoTextArea;
     }
 
+    private JScrollPane getTreePane() {
+        if (treePane == null) {
+            treePane = createScrollPane();
+        }
+        return treePane;
+    }
+
     public TranspathFrame() {
-        initSize(66);
+        initSize();
         initIcon();
         initMenuBar();
         initLookAndFeel();
         initPanel();
     }
 
-    private void initSize(int percentage) {
+    private void initSize() {
+        int zoomPercent = 66;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         super.setSize(
-                (int) screenSize.getWidth() * percentage / 100,
-                (int) screenSize.getHeight() * percentage / 100
+                (int) screenSize.getWidth() * zoomPercent / 100,
+                (int) screenSize.getHeight() * zoomPercent / 100
         );
     }
 
@@ -92,35 +92,29 @@ public class TranspathFrame extends JFrame {
             // "javax.swing.plaf.metal.MetalLookAndFeel"
             // "javax.swing.plaf.nimbus.NimbusLookAndFeel"
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException
+                | InstantiationException
+                | IllegalAccessException
+                | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
     }
 
-    protected void initPanel() {
+    private void initPanel() {
         JPanel mainPanel = (JPanel) this.getContentPane();
-
         mainPanel.removeAll();
-
         mainPanel.setLayout(new BorderLayout());
-
-        reloadStoreListAndTree();
-
+        reloadStore();
         mainPanel.add(createAllSplitPane(), BorderLayout.CENTER);
         mainPanel.add(createStatusBar(), BorderLayout.SOUTH);
-
         this.setTitle("Storage Archivist - " + storeList.version);
+        this.setVisible(true);
     }
 
-    private void reloadStoreListAndTree() {
+    void reloadStore() {
         storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
-        storeTree = createTree(storeList);
+        getTreePane().setViewportView(createTree(storeList));
+        TransLog.getLogger().info("List of version " + storeList.version + " loaded.");
     }
 
     private JTree createTree(StoreList storeList) {
@@ -151,18 +145,9 @@ public class TranspathFrame extends JFrame {
     private JSplitPane createUpperSplitPane() {
         return createSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
-                createTreeTabbedPane(),
+                getTreePane(),
                 createInfoTabbedPane(),
                 0.2);
-    }
-
-    private JTabbedPane createTreeTabbedPane() {
-        JTabbedPane treeTabbedPane = createTabbedPane();
-        treeTabbedPane.addTab("Store Tree", createScrollPane(storeTree));
-
-        TransLog.getLogger().info("List of version " + storeList.version + " loaded.");
-
-        return treeTabbedPane;
     }
 
     private JTabbedPane createInfoTabbedPane() {
@@ -203,12 +188,17 @@ public class TranspathFrame extends JFrame {
     }
 
     private JScrollPane createScrollPane(Component comp) {
+        JScrollPane scrollPane = createScrollPane();
+        scrollPane.setViewportView(comp);
+        return scrollPane;
+    }
+
+    private JScrollPane createScrollPane() {
         JScrollPane scrollPane = new JScrollPane(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
         );
         scrollPane.setFont(TransConst.GLOBAL_FONT);
-        scrollPane.setViewportView(comp);
         return scrollPane;
     }
 
@@ -232,25 +222,24 @@ public class TranspathFrame extends JFrame {
         return statusBar;
     }
 
-    public static void setInfoTable(StoreList storeList) {
+    private static void setInfoTable(@NotNull StoreList storeList) {
         setInfoTable(new DefaultTableModel(storeList.toRows(), TransConst.TABLE_TITLE_STORE));
     }
 
-    public static void setInfoTable(NodeTree selectTree) {
+    static void setInfoTable(NodeTree selectTree) {
         setInfoTable(new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle()));
     }
 
-    public static void setInfoTable(DefaultTableModel tableModel) {
-        if (null == tableModel) {
-            return;
-        }
+    private static void setInfoTable(@NotNull DefaultTableModel tableModel) {
+        String[] rightAlignedTitles = {"StoreId", "Length", "BranchId"};
+
         infoTable.setModel(tableModel);
 
         columnSizeFitContents(infoTable);
 
-        columnAlignRight("StoreId");
-        columnAlignRight("Length");
-        columnAlignRight("BranchId");
+        for (String rightAlignedTitle : rightAlignedTitles) {
+            columnAlignRight(rightAlignedTitle);
+        }
     }
 
     private static void columnAlignRight(String columnTitle) {
@@ -263,7 +252,7 @@ public class TranspathFrame extends JFrame {
         }
     }
 
-    public static void columnSizeFitContents(JTable table) {
+    private static void columnSizeFitContents(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.setFont(TransConst.GLOBAL_FONT);
         for (int column = 0; column < table.getColumnCount(); column++) {
@@ -301,16 +290,15 @@ public class TranspathFrame extends JFrame {
         }
     }
 
-    public void searchList(String searchText) {
+    void searchList(String searchText) {
         TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
         StoreList sList = storeList.searchName(searchText);
         setInfoTable(sList);
         TransLog.getLogger().info(sList.toString());
     }
 
-    public void fetchSelectedStores() {
-        int columnIndex = -1;
-        columnIndex = getIdColumnIndex("StoreId");
+    void fetchSelectedStores() {
+        int columnIndex = getIdColumnIndex();
         TransLog.getLogger().info("Column index = " + columnIndex);
         if (columnIndex != -1) {
             ArrayList<Integer> storeIdList = getSelectedIdList(columnIndex);
@@ -318,7 +306,6 @@ public class TranspathFrame extends JFrame {
             return;
         }
         TransLog.getLogger().info("No fetch performed.");
-        return;
     }
 
     private void fetchStore(ArrayList<Integer> storeIdList) {
@@ -339,11 +326,11 @@ public class TranspathFrame extends JFrame {
 
     private static void execCmd(String cmd) {
         try {
-            Process proc = Runtime.getRuntime().exec(cmd);
+            Process cmdProcessor = Runtime.getRuntime().exec(cmd);
             BufferedReader iReader =
-                    new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getInputStream())));
+                    new BufferedReader(new InputStreamReader(new BufferedInputStream(cmdProcessor.getInputStream())));
             BufferedReader eReader =
-                    new BufferedReader(new InputStreamReader(new BufferedInputStream(proc.getErrorStream())));
+                    new BufferedReader(new InputStreamReader(new BufferedInputStream(cmdProcessor.getErrorStream())));
             String inLine;
             while ((inLine = iReader.readLine()) != null) {
                 TransLog.getLogger().info("Return: " + inLine);
@@ -351,14 +338,12 @@ public class TranspathFrame extends JFrame {
             while ((inLine = eReader.readLine()) != null) {
                 TransLog.getLogger().info("Error: " + inLine);
             }
-            if (proc.waitFor() != 0) {
-                if (proc.exitValue() == 1) {
+            if (cmdProcessor.waitFor() != 0) {
+                if (cmdProcessor.exitValue() == 1) {
                     TransLog.getLogger().info("Error executing.");
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -373,11 +358,11 @@ public class TranspathFrame extends JFrame {
         return selectedIds;
     }
 
-    private static int getIdColumnIndex(String columnTitle) {
+    private static int getIdColumnIndex() {
         try {
-            return infoTable.getColumnModel().getColumnIndex(columnTitle);
+            return infoTable.getColumnModel().getColumnIndex("StoreId");
         } catch (IllegalArgumentException e) {
-            TransLog.getLogger().info(columnTitle + " not found.");
+            TransLog.getLogger().info("StoreId" + " not found.");
             return -1;
         }
     }
