@@ -40,7 +40,7 @@ public class TranspathFrame extends JFrame {
 
     private static JTable infoTable = new JTable();
     private static JTextArea logTextArea = new JTextArea();
-    private static JTextArea infoTextArea = new JTextArea("information");
+    private static JTextArea infoTextArea = new JTextArea();
 
     private StoreList storeList;
     private JScrollPane treePane;
@@ -66,6 +66,28 @@ public class TranspathFrame extends JFrame {
         initMenuBar();
         initLookAndFeel();
         initPanel();
+    }
+
+    void reloadStore() {
+        storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
+        getTreePane().setViewportView(createTree(storeList));
+        TransLog.getLogger().info("List of version " + storeList.version + " loaded.");
+    }
+
+    private JTree createTree(StoreList storeList) {
+        NodeTree storeTree = NodeTree.buildFromList(storeList);
+        storeTree.recursivelySort();
+
+        JTree jTree = new JTree(storeTree);
+        jTree.setShowsRootHandles(true);
+        jTree.setRootVisible(true);
+        jTree.setEditable(true);
+        jTree.setDragEnabled(true);
+        jTree.setDropTarget(new DropTarget());
+        jTree.setFont(TransConst.GLOBAL_FONT);
+        jTree.addMouseListener(new TreeMouseListener(jTree));
+
+        return jTree;
     }
 
     private void initSize() {
@@ -109,28 +131,6 @@ public class TranspathFrame extends JFrame {
         mainPanel.add(createStatusBar(), BorderLayout.SOUTH);
         this.setTitle("Storage Archivist - " + storeList.version);
         this.setVisible(true);
-    }
-
-    void reloadStore() {
-        storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
-        getTreePane().setViewportView(createTree(storeList));
-        TransLog.getLogger().info("List of version " + storeList.version + " loaded.");
-    }
-
-    private JTree createTree(StoreList storeList) {
-        NodeTree storeTree = NodeTree.buildFromList(storeList);
-        storeTree.recursivelySort();
-
-        JTree jTree = new JTree(storeTree);
-        jTree.setShowsRootHandles(true);
-        jTree.setRootVisible(true);
-        jTree.setEditable(true);
-        jTree.setDragEnabled(true);
-        jTree.setDropTarget(new DropTarget());
-        jTree.setFont(TransConst.GLOBAL_FONT);
-        jTree.addMouseListener(new TreeMouseListener(jTree));
-
-        return jTree;
     }
 
     private JSplitPane createAllSplitPane() {
@@ -232,9 +232,7 @@ public class TranspathFrame extends JFrame {
 
     private static void setInfoTable(@NotNull DefaultTableModel tableModel) {
         String[] rightAlignedTitles = {"StoreId", "Length", "BranchId"};
-
         infoTable.setModel(tableModel);
-
         columnSizeFitContents(infoTable);
 
         for (String rightAlignedTitle : rightAlignedTitles) {
@@ -248,7 +246,7 @@ public class TranspathFrame extends JFrame {
         try {
             infoTable.getColumn(columnTitle).setCellRenderer(alignRight);
         } catch (IllegalArgumentException e) {
-            // Ignore
+            e.printStackTrace();
         }
     }
 
