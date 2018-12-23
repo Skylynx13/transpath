@@ -7,11 +7,9 @@ import java.awt.*;
 
 public class TransPath {
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                TranspathFrame tpFrame = new TranspathFrame();
-                tpFrame.setVisible(true);
-            }
+        EventQueue.invokeLater(() -> {
+            TranspathFrame tpFrame = new TranspathFrame();
+            tpFrame.setVisible(true);
         });
     }
 }
