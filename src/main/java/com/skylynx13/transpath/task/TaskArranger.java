@@ -231,6 +231,9 @@ public class TaskArranger {
         while (in.hasNext()) {
             iInLine++;
             String inLine = in.nextLine();
+            if (isInWindow && checkIgnorableLine(inLine)) {
+                continue;
+            }
             if (!isInWindow && checkEndLine(inLine)) {
                 TransLog.getLogger().info("Error: End line out of window!");
                 TransLog.getLogger().info("Last End Line " + iLastClose + ": " + sLastClose);
@@ -251,7 +254,7 @@ public class TaskArranger {
                 iLastOpen = iInLine;
                 sLastOpen = inLine;
                 //TransLog.getLogger().info("Line " + iInLine + " window opened.");
-           } 
+            }
             if (isInWindow && checkEndLine(inLine)) {
                 isInWindow = false;
                 iLastClose = iInLine;
@@ -277,7 +280,8 @@ public class TaskArranger {
         return line.matches("^(Default|Video|Post) Re: .*$") 
                 || line.matches("^Default$")
                 //|| line.matches("^(Hari ini|Kemarin|Today|Yesterday|\\d{2}-\\d{2}-\\d{4}) \\d{2}:\\d{2}$")
-                || line.matches("^Kaskus (Donator|Geek|Addict) .*$");
+                || line.matches("^Kaskus (Donator|Geek|Addict) .*$")
+                || line.matches("^Posts: .*$");
     }
 
     public boolean checkEndLine (String line) {
@@ -285,7 +289,8 @@ public class TaskArranger {
                 || line.matches("^(0){0,1}\\s*Multi Quote\\s*Quote$")
                 //|| line.matches("^Week of \\d{2}/\\d{2}/\\d{4}$")
                 // Open this line if want to ignore weekly list from the dump.
-                || line.matches("^\\s*Last edited by.*$");
+                || line.matches("^\\s*Last edited by.*$")
+                || line.matches("^\\s*Kutip\\s*Balas$");
     }
 
     public boolean checkIgnorableLine (String line) {
@@ -297,7 +302,9 @@ public class TaskArranger {
                 || line.matches("^\\s*Quote:\\s*$")
                 || line.matches("^\\s*Download:\\s*$")
                 || line.matches("^\\s*Week of \\d{2}/\\d{2}/\\d{4}\\s*$")
-                || line.matches("^\\s*This image has been resized.*$");
+                || line.matches("^\\s*This image has been resized.*$")
+                || line.matches("^#\\d+$")
+                || line.matches("^\\s*https\\://kask\\.us/izmSo\\s*$");
     }
     
     public TaskArranger applyFilter(String[] keys) {
