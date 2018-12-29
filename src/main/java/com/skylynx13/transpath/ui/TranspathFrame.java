@@ -37,6 +37,10 @@ import org.jetbrains.annotations.NotNull;
 public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
+    public static final int DIVIDER_SIZE = 8;
+    public static final int ZOOM_PERCENT = 66;
+    public static final double SPLIT_PROPORTION_VERTICAL = 0.7;
+    public static final double SPLIT_PROPORTION_HORIZONTAL = 0.2;
 
     private static JTable infoTable = new JTable();
     private static JTextArea logTextArea = new JTextArea();
@@ -91,11 +95,10 @@ public class TranspathFrame extends JFrame {
     }
 
     private void initSize() {
-        int zoomPercent = 66;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         super.setSize(
-                (int) screenSize.getWidth() * zoomPercent / 100,
-                (int) screenSize.getHeight() * zoomPercent / 100
+                (int) screenSize.getWidth() * ZOOM_PERCENT / 100,
+                (int) screenSize.getHeight() * ZOOM_PERCENT / 100
         );
     }
 
@@ -138,7 +141,7 @@ public class TranspathFrame extends JFrame {
                 JSplitPane.VERTICAL_SPLIT,
                 createUpperSplitPane(),
                 createLowerTabbedPane(),
-                0.7
+                SPLIT_PROPORTION_VERTICAL
         );
     }
 
@@ -147,7 +150,8 @@ public class TranspathFrame extends JFrame {
                 JSplitPane.HORIZONTAL_SPLIT,
                 getTreePane(),
                 createInfoTabbedPane(),
-                0.2);
+                SPLIT_PROPORTION_HORIZONTAL
+        );
     }
 
     private JTabbedPane createInfoTabbedPane() {
@@ -175,7 +179,7 @@ public class TranspathFrame extends JFrame {
         splitPane.setOneTouchExpandable(true);
         splitPane.setSize(super.getSize());
         splitPane.setDividerLocation(proportionalLocation);
-        splitPane.setDividerSize(8);
+        splitPane.setDividerSize(DIVIDER_SIZE);
 
         return splitPane;
     }
@@ -246,7 +250,7 @@ public class TranspathFrame extends JFrame {
         try {
             infoTable.getColumn(columnTitle).setCellRenderer(alignRight);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            TransLog.getLogger().warn("Title \"" + columnTitle + "\" not exist.");
         }
     }
 
@@ -318,31 +322,6 @@ public class TranspathFrame extends JFrame {
                     + sNode.name;
             String cmd = TransConst.CMD_COPY_TO_TARGET + "\"" + sourceBase + pathName + "\" " + target;
             TransLog.getLogger().info("Command: " + cmd);
-            //execCmd(cmd);
-        }
-    }
-
-    private static void execCmd(String cmd) {
-        try {
-            Process cmdProcessor = Runtime.getRuntime().exec(cmd);
-            BufferedReader iReader =
-                    new BufferedReader(new InputStreamReader(new BufferedInputStream(cmdProcessor.getInputStream())));
-            BufferedReader eReader =
-                    new BufferedReader(new InputStreamReader(new BufferedInputStream(cmdProcessor.getErrorStream())));
-            String inLine;
-            while ((inLine = iReader.readLine()) != null) {
-                TransLog.getLogger().info("Return: " + inLine);
-            }
-            while ((inLine = eReader.readLine()) != null) {
-                TransLog.getLogger().info("Error: " + inLine);
-            }
-            if (cmdProcessor.waitFor() != 0) {
-                if (cmdProcessor.exitValue() == 1) {
-                    TransLog.getLogger().info("Error executing.");
-                }
-            }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
@@ -350,7 +329,7 @@ public class TranspathFrame extends JFrame {
         ArrayList<Integer> selectedIds = new ArrayList<>();
         for (int iSelectedRow : infoTable.getSelectedRows()) {
             int id = (Integer)infoTable.getValueAt(iSelectedRow, columnIndex);
-            TransLog.getLogger().info("id is: " + id);
+            TransLog.getLogger().info("StoreId selected: " + id);
             selectedIds.add(id);
         }
         return selectedIds;
@@ -360,7 +339,7 @@ public class TranspathFrame extends JFrame {
         try {
             return infoTable.getColumnModel().getColumnIndex("StoreId");
         } catch (IllegalArgumentException e) {
-            TransLog.getLogger().info("StoreId" + " not found.");
+            TransLog.getLogger().info("Column \"StoreId\" not found.");
             return -1;
         }
     }
