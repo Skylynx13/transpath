@@ -184,8 +184,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
+			<version>16.0.3</version>
+		</dependency>
     </dependencies>
 </project>
