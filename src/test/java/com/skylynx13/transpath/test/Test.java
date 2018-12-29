@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2017,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.libra42.transpath.test
- * File Name:Test.java
- * Date:2017年10月23日 下午5:52:31
- * 
- */
 package com.skylynx13.transpath.test;
 
 import java.awt.BorderLayout;

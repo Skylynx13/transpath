@@ -1,7 +1,6 @@
 package com.skylynx13.transpath.utils;
 
-import java.awt.Font;
-import java.util.Arrays;
+import java.awt.*;
 
 public class TransConst {
     public static final String LOC_CONFIG = "LOC_CONFIG";

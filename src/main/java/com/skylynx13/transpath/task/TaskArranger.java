@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2014,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.worker
- * File Name:Arranger.java
- * Date:Apr 23, 2014 11:32:59 PM
- * 
- */
 package com.skylynx13.transpath.task;
 
 import java.io.FileNotFoundException;
@@ -23,46 +13,38 @@ import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.utils.TransConst;
 
  /**
- * ClassName: Arranger <br/>
- * Description: To arrange raw file and build a task list. <br/>
- * Date: Apr 23, 2014 11:32:59 PM <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: Arranger
+ * Description: To arrange raw file and build a task list.
+ * Date: 2014-04-23 23:32:59
  */
-
 public class TaskArranger {
     private ArrayList<TaskEntry> entries;
     private TaskEntry entry;
     private int status;
     
     public TaskArranger() {
-        this.entries = new ArrayList<TaskEntry>();
+        this.entries = new ArrayList<>();
     }
     
     public TaskArranger(ArrayList<TaskEntry> entries) {
         this.entries = entries;
     }
     
-    public void clear() {
+    void clear() {
         this.entries = null;
     }
     
-    public void addEntry(String name) {
+    void addEntry(String name) {
         if (this.entries == null) {
-            this.entries = new ArrayList<TaskEntry>();
+            this.entries = new ArrayList<>();
         }
         entry = new TaskEntry(name);
         this.entries.add(entry);
     }
     
-    public void addEntry(TaskEntry cde) {
+    void addEntry(TaskEntry cde) {
         if (this.entries == null) {
-            this.entries = new ArrayList<TaskEntry>();
+            this.entries = new ArrayList<>();
         }
         this.entries.add(cde);
     }
@@ -76,8 +58,8 @@ public class TaskArranger {
     }
     
     public TaskArranger readFromFile(String fileName) {
-        Scanner in = null;
-        String line = "";
+        Scanner in;
+        String line;
         try {
             in = new Scanner(new FileReader(fileName));
         } catch (FileNotFoundException e) {
@@ -99,7 +81,7 @@ public class TaskArranger {
                 }
                 entry.addUniqueLink(line);
             } else if (this.checkCommentLine(line)) {
-                if (this.entry == null && !this.entry.hasName()) {
+                if (this.entry == null || !this.entry.hasName()) {
                     status = 200000 + cnt; // Error: Entry no name at line cnt.
                     in.close();
                     return null;
@@ -108,10 +90,8 @@ public class TaskArranger {
             } else {
                 this.addEntry(line);
             }
-            //TransLog.getLogger().info(line);
             cnt++;
         }
-        //TransLog.getLogger().info(cnt);
         in.close();
         return this;
     }
@@ -135,8 +115,6 @@ public class TaskArranger {
             PrintWriter out = new PrintWriter(new FileWriter(fileName,true));
             out.print(this.toOutput());
             out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -187,19 +165,19 @@ public class TaskArranger {
     }
     
     public String toOutput() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         if (this.entries == null) 
-            return str;
+            return str.toString();
         for (TaskEntry cde:this.entries) {
-            str += cde.getName() + TransConst.LN;
+            str.append(cde.getName()).append(TransConst.LN);
             for (String cmt: cde.getComments()) {
-                str += cmt + TransConst.LN;
+                str.append(cmt).append(TransConst.LN);
             }
             for (String lnk: cde.getLinks()) {
-                str += lnk + TransConst.LN;
+                str.append(lnk).append(TransConst.LN);
             }
         }
-        return str;
+        return str.toString();
     }
 
     public int getStatus() {
@@ -210,7 +188,7 @@ public class TaskArranger {
         this.status = status;
     }
     
-    public int trimFile(String inFile, String outFile) {
+    int trimFile(String inFile, String outFile) {
         int iInLine = 0;
         int iOutLine = 0;
         int iLastOpen = 0;
@@ -266,17 +244,15 @@ public class TaskArranger {
                 iOutLine++;
             }
         }
-        
-        if (in != null) {
-            in.close();
-        }
+
+        in.close();
         if (out != null) {
             out.close();
         }
         return iOutLine;
     }
     
-    public boolean checkStartLine (String line) {
+    private boolean checkStartLine(String line) {
         return line.matches("^(Default|Video|Post) Re: .*$") 
                 || line.matches("^Default$")
                 //|| line.matches("^(Hari ini|Kemarin|Today|Yesterday|\\d{2}-\\d{2}-\\d{4}) \\d{2}:\\d{2}$")
@@ -284,9 +260,9 @@ public class TaskArranger {
                 || line.matches("^Posts: .*$");
     }
 
-    public boolean checkEndLine (String line) {
+    private boolean checkEndLine(String line) {
         return line.matches("^\\w* is offline\\s*Reply With Quote$") 
-                || line.matches("^(0){0,1}\\s*Multi Quote\\s*Quote$")
+                || line.matches("^(0)?\\s*Multi Quote\\s*Quote$")
                 //|| line.matches("^Week of \\d{2}/\\d{2}/\\d{4}$")
                 // Open this line if want to ignore weekly list from the dump.
                 || line.matches("^\\s*Last edited by.*$")
@@ -304,10 +280,10 @@ public class TaskArranger {
                 || line.matches("^\\s*Week of \\d{2}/\\d{2}/\\d{4}\\s*$")
                 || line.matches("^\\s*This image has been resized.*$")
                 || line.matches("^#\\d+$")
-                || line.matches("^\\s*https\\://kask\\.us/izmSo\\s*$");
+                || line.matches("^\\s*https://kask\\.us/izmSo\\s*$");
     }
     
-    public TaskArranger applyFilter(String[] keys) {
+    TaskArranger applyFilter(String[] keys) {
         TaskArranger newArranger = new TaskArranger();
         for (TaskEntry currEntry : this.entries) {
             if (currEntry.matches(keys))
@@ -316,7 +292,7 @@ public class TaskArranger {
         return newArranger;
     }
     
-    public TaskArranger applyFilterReversely(String[] keys) {
+    TaskArranger applyFilterReversely(String[] keys) {
         TaskArranger newArranger = new TaskArranger();
         for (TaskEntry currEntry : this.entries) {
             if (!currEntry.matches(keys))

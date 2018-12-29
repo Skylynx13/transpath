@@ -6,18 +6,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
  /**
- * ClassName: ArrangerTest <br/>
- * Description: TODO <br/>
- * Date: 2015-2-17 上午10:13:07 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: ArrangerTest
+ * Description: Arranger test
+ * Date: 2015-02-17 10:13:07
  */
-
 public class ArrangerTest {
     
     private static final String TEST_RESOURCES_LOC = "src/test/resources/";

@@ -1,21 +1,12 @@
-/**
- * Copyright (c) 2015,qxu.
- * All Rights Reserved.
- * <p>
- * Project Name:transpath
- * Package Name:com.qxu.transpath.utils
- * File Name:StringUtils.java
- * Date:Aug 6, 2015 5:08:23 PM
- */
 package com.skylynx13.transpath.utils;
 
 import java.text.DecimalFormat;
 
 /**
- * ClassName: StringUtils <br/>
- * Description: TODO <br/>
- * Date: Aug 6, 2015 5:08:23 PM <br/>
- * <br/>
+ * ClassName: StringUtils
+ * Description: TODO
+ * Date: Aug 6, 2015 5:08:23 PM
+ *
  *
  * @author qxu@
  *

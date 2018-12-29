@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2017,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.utils
- * File Name:CompressUtils.java
- * Date:2017年10月4日 下午6:28:15
- * 
- */
 package com.skylynx13.transpath.utils;
 
 import java.io.BufferedInputStream;
@@ -29,18 +19,10 @@ import com.github.junrar.rarfile.FileHeader;
 import com.skylynx13.transpath.log.TransLog;
 
 /**
- * ClassName: CompressUtils <br/>
- * Description: <br/>
- * Date: 2017年10月4日 下午6:28:15 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: CompressUtils
+ * Description: Compress utils
+ * Date: 2017-10-04 18:28:15
  */
-
 public class CompressUtils {
     private static final int BUFFEREDSIZE = 1024;
 

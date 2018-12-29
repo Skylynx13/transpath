@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2017,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.utils
- * File Name:ImageUtils.java
- * Date:2017年10月5日 下午10:30:31
- * 
- */
 package com.skylynx13.transpath.utils;
 
 import java.awt.Image;
@@ -17,20 +7,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-
 /**
- * ClassName: ImageUtils <br/>
- * Description: TODO <br/>
- * Date: 2017年10月5日 下午10:30:31 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: ImageUtils
+ * Description: Image utils
+ * Date: 2017-10-05 22:30:31
  */
-
 public class ImageUtils {
     
     public static void main(String[] args) {

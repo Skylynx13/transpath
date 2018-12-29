@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2016,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.utest
- * File Name:StoreListTest.java
- * Date:2016-6-17 上午12:29:56
- * 
- */
 package com.skylynx13.transpath.store;
 
 import static org.junit.Assert.*;
@@ -21,18 +11,10 @@ import com.skylynx13.transpath.store.StoreList;
 import com.skylynx13.transpath.store.StoreNode;
 
 /**
- * ClassName: StoreListTest <br/>
- * Description: TODO <br/>
- * Date: 2016-6-17 上午12:29:56 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: StoreListTest
+ * Description: Store list test
+ * Date: 2016-06-17 12:29:56
  */
-
 public class StoreListTest {
     public static final int LOC_AFTER_TIME = TransConst.FMT_DATE_TIME_LONG.length()+1;
 

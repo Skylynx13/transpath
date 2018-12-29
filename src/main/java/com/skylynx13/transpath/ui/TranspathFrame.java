@@ -23,17 +23,10 @@ import com.skylynx13.transpath.utils.TransProp;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ClassName: TranspathFrame <br/>
- * Description: Transpath Main Frame <br/>
- * Date: 2015-11-16 上午12:59:46 <br/>
- * <br/>
- *
- * @author qxu@
- * <p>
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
+ * ClassName: TranspathFrame
+ * Description: Transpath Main Frame
+ * Date: 2015-11-16 12:59:46
  */
-
 public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;

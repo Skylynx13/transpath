@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2015,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.utils
- * File Name:DateUtils.java
- * Date:2015-11-4 下午11:49:42
- * 
- */
 package com.skylynx13.transpath.utils;
 
 import java.text.SimpleDateFormat;
@@ -16,18 +6,10 @@ import java.util.Date;
 import com.skylynx13.transpath.log.TransLog;
 
  /**
- * ClassName: DateUtils <br/>
- * Description: TODO <br/>
- * Date: 2015-11-4 下午11:49:42 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: DateUtils
+ * Description: Date utils
+ * Date: 2015-11-04 23:49:42
  */
-
 public class DateUtils {
     
     public static String formatDateToday() {

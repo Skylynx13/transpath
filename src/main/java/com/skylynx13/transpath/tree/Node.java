@@ -1,27 +1,10 @@
-/**
- * Copyright (c) 2014,qxu.
- * All Rights Reserved.
- * <p>
- * Project Name:transpath
- * Package Name:com.qxu.transpath.tree
- * File Name:Node.java
- * Date:2014-4-2 下午10:34:48
- */
 package com.skylynx13.transpath.tree;
 
 /**
- * ClassName: Node <br/>
- * Description: Basic Unit of NodeTree. <br/>
- * Date: 2014-4-2 下午10:34:48 <br/>
- * <br/>
- *
- * @author qxu@
- *
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- *
+ * ClassName: Node
+ * Description: Basic Unit of NodeTree.
+ * Date: 2014-04-02 22:34:48
  */
-
 public abstract class Node{
     public int id;
     public String path;
@@ -59,7 +42,6 @@ public abstract class Node{
 
     private boolean search(String member, String searchText) {
         if (member.matches("(?i).*" + searchText + ".*")) {
-//        if (member.contains(searchText)) {
             return true;
         }
         return false;

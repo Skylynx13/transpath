@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2014,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.tree
- * File Name:NodeTree.java
- * Date:2014-4-5 下午10:47:08
- * 
- */
 package com.skylynx13.transpath.tree;
 
 import java.util.ArrayList;
@@ -25,20 +15,12 @@ import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.utils.TransConst;
 
 /**
- * ClassName: NodeTree <br/>
- * Description: A Tree with a Node. <br/>
- * If this is not enough for use, <br/>
- * reference to Class DefaultMutableTreeNode.<br/>
- * Date: 2014-4-5 下午10:47:08 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: NodeTree
+ * Description: A Tree with a Node.
+ * If this is not enough for use,
+ * reference to Class DefaultMutableTreeNode.
+ * Date: 2014-04-05 22:47:08
  */
-
 public class NodeTree implements MutableTreeNode {
     private static class NodeNameAscComparator implements Comparator<NodeTree> {
 

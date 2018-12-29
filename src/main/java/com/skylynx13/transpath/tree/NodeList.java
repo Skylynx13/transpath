@@ -1,12 +1,3 @@
-/**
- * Copyright (c) 2016,qxu.
- * All Rights Reserved.
- * <p>
- * Project Name:transpath
- * Package Name:com.qxu.transpath.tree
- * File Name:NodeList.java
- * Date:2016-7-12 下午3:10:19
- */
 package com.skylynx13.transpath.tree;
 
 import java.io.File;
@@ -25,18 +16,10 @@ import com.skylynx13.transpath.utils.StringUtils;
 import com.skylynx13.transpath.utils.TransConst;
 
 /**
- * ClassName: NodeList <br/>
- * Description: TODO <br/>
- * Date: 2016-7-12 下午3:10:19 <br/>
- * <br/>
- *
- * @author qxu@
- *
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- *
+ * ClassName: NodeList
+ * Description: Node list
+ * Date: 2016-07-12 15:10:19
  */
-
 public abstract class NodeList {
     public String version;
     public int minId;

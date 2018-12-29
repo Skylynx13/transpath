@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2017,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.libra42.transpath.ui
- * File Name:TreeMouseListener.java
- * Date:2017年10月23日 上午11:14:43
- * 
- */
 package com.skylynx13.transpath.ui;
 
 import java.awt.event.MouseEvent;
@@ -22,18 +12,10 @@ import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.tree.NodeTree;
 
 /**
- * ClassName: TreeMouseListener <br/>
- * Description: TODO <br/>
- * Date: 2017年10月23日 上午11:14:43 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: TreeMouseListener
+ * Description: Tree mouse listener
+ * Date: 2017-10-23 11:14:43
  */
-
 public class TreeMouseListener implements MouseListener {
 
     private static final String[] POPITEMS = {"New Child", "Rename", "Cut", "Copy", "Paste", "Delete"};

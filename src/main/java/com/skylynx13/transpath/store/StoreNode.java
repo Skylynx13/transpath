@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2016,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.tree
- * File Name:StoreNode.java
- * Date:2016-5-16 下午2:04:15
- * 
- */
 package com.skylynx13.transpath.store;
 
 import java.io.File;
@@ -19,25 +9,18 @@ import com.skylynx13.transpath.utils.StringUtils;
 import com.skylynx13.transpath.utils.TransConst;
 
 /**
- * ClassName: StoreNode <br/>
- * Description: TODO <br/>
- * Date: 2016-5-16 下午2:04:15 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
- *          <sid>:<size>:<time>:<md5>:<sha1>:<crc32>:<spath>:<sname>
+ * ClassName: StoreNode
+ * Description: Store node
+ * <sid>:<size>:<time>:<md5>:<sha1>:<crc32>:<spath>:<sname>
+ * Date: 2016-05-16 14:04:15
  */
 
 public class StoreNode extends Node{
     public long length;
-    public long lastModified;
-    public String md5;
-    public String sha1;
-    public String crc32;
+    private long lastModified;
+    String md5;
+    private String sha1;
+    private String crc32;
 
     public StoreNode() {
         length = 0;
@@ -61,7 +44,7 @@ public class StoreNode extends Node{
         return node;
     }
 
-    public StoreNode(String pRoot, File pFile) {
+    StoreNode(String pRoot, File pFile) {
         id = 0;
         name = pFile.getName();
         path = pFile.getParent().replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
@@ -73,7 +56,7 @@ public class StoreNode extends Node{
         crc32 = FileUtils.digestCrc32(pFile);
     }
 
-    public StoreNode(String sEntry) {
+    StoreNode(String sEntry) {
         String[] sItems = sEntry.split(TransConst.COLON);
         id = Integer.parseInt(sItems[0]);
         length = Long.parseLong(sItems[1]);
@@ -86,22 +69,21 @@ public class StoreNode extends Node{
     }
 
     public String keepNode() {
-        return new StringBuffer(String.format(TransConst.FORMAT_INT_08, id))
-                        .append(TransConst.COLON)
-                        .append(String.format(TransConst.FORMAT_INT_13, length))
-                        .append(TransConst.COLON)
-                        .append(lastModified)
-                        .append(TransConst.COLON)
-                        .append(md5)
-                        .append(TransConst.COLON)
-                        .append(sha1)
-                        .append(TransConst.COLON)
-                        .append(crc32)
-                        .append(TransConst.COLON)
-                        .append(path)
-                        .append(TransConst.COLON)
-                        .append(name)
-                        .toString();
+        return String.format(TransConst.FORMAT_INT_08, id) +
+                TransConst.COLON +
+                String.format(TransConst.FORMAT_INT_13, length) +
+                TransConst.COLON +
+                lastModified +
+                TransConst.COLON +
+                md5 +
+                TransConst.COLON +
+                sha1 +
+                TransConst.COLON +
+                crc32 +
+                TransConst.COLON +
+                path +
+                TransConst.COLON +
+                name;
     }
 
     public boolean equals(StoreNode pStoreNode) {
@@ -115,16 +97,16 @@ public class StoreNode extends Node{
                 && (this.name.equals(pStoreNode.name));
     }
 
-    public boolean checkDupNode(StoreNode pStoreNode) {
-        return (null != pStoreNode) 
-                && (pStoreNode.length == this.length) 
+    boolean checkDupNode(StoreNode pStoreNode) {
+        return (null != pStoreNode)
+                && (pStoreNode.length == this.length)
                 && (pStoreNode.crc32.equals(this.crc32))
-                && (pStoreNode.md5.equals(this.md5)) 
+                && (pStoreNode.md5.equals(this.md5))
                 && (pStoreNode.sha1.equals(this.sha1));
     }
 
     public Object[] toRow() {
-        Object[] row = {
+        return new Object[]{
                 id,
                 path,
                 name,
@@ -134,7 +116,6 @@ public class StoreNode extends Node{
                 sha1,
                 crc32
         };
-        return row;
     }
     
 }

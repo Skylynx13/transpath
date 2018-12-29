@@ -1,17 +1,9 @@
-/**
- * Copyright (c) 2016,qxu.
- * All Rights Reserved.
- * <p>
- * Project Name:transpath
- * Package Name:com.qxu.transpath.tree
- * File Name:StoreList.java
- * Date:2016-6-17 上午12:05:40
- */
 package com.skylynx13.transpath.store;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.tree.Node;
@@ -20,22 +12,22 @@ import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 
 /**
- * ClassName: StoreList <br/>
- * Description: TODO <br/>
- * Date: 2016-6-17 上午12:05:40 <br/>
- * <br/>
- *
- * @author qxu@
- *
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- *
+ * ClassName: StoreList
+ * Description: Store list
+ * Date: 2016-06-17 12:05:40
  */
-
 public class StoreList extends NodeList {
-    public long fileSize; // recap, clear
+    private long fileSize; // recap, clear
 
-    public StoreList() {
+    long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    StoreList() {
         fileSize = 0;
     }
 
@@ -61,14 +53,14 @@ public class StoreList extends NodeList {
         calcFileSize();
     }
 
-    public void calcFileSize() {
+    private void calcFileSize() {
         fileSize = 0;
         for (Node aNode : nodeList) {
             fileSize += ((StoreNode) aNode).length;
         }
     }
 
-    public void build(String pRoot, String pPathName) {
+    void build(String pRoot, String pPathName) {
         String aRoot = FileUtils.regulateSlash(pRoot);
         String aPathName = aRoot + FileUtils.regulateSlash(pPathName);
 
@@ -92,7 +84,7 @@ public class StoreList extends NodeList {
         }
         TransLog.getLogger().info(pPath);
         long processedBytes = 0;
-        for (File aFile : pPath.listFiles()) {
+        for (File aFile : Objects.requireNonNull(pPath.listFiles())) {
             if (aFile.isFile()) {
                 StoreNode aNode = new StoreNode(pRoot, aFile);
                 addNode(aNode);
@@ -108,22 +100,17 @@ public class StoreList extends NodeList {
         }
     }
 
-    protected void orderByMd5() {
-        Collections.sort(nodeList, new Comparator<Node>() {
-            @Override
-            public int compare(Node sn1, Node sn2) {
-                return ((StoreNode) sn1).md5.compareTo(((StoreNode) sn2).md5);
-            }
-        });
+    void orderByMd5() {
+        nodeList.sort(Comparator.comparing(sn -> ((StoreNode) sn).md5));
     }
 
     @Override
     public String keepHeader() {
-        return new StringBuffer(version).append(TransConst.COLON)
-                .append(String.format(TransConst.FORMAT_INT_08, minId)).append(TransConst.COLON)
-                .append(String.format(TransConst.FORMAT_INT_08, maxId)).append(TransConst.COLON)
-                .append(String.format(TransConst.FORMAT_INT_20, fileSize)).append(TransConst.COLON)
-                .append(String.format(TransConst.FORMAT_INT_08, size())).toString();
+        return version + TransConst.COLON +
+                String.format(TransConst.FORMAT_INT_08, minId) + TransConst.COLON +
+                String.format(TransConst.FORMAT_INT_08, maxId) + TransConst.COLON +
+                String.format(TransConst.FORMAT_INT_20, fileSize) + TransConst.COLON +
+                String.format(TransConst.FORMAT_INT_08, size());
 
     }
 
@@ -134,7 +121,7 @@ public class StoreList extends NodeList {
 
     @Override
     public String keepLine(Node pNode) {
-        return ((StoreNode) pNode).keepNode();
+        return pNode.keepNode();
     }
 
     @Override

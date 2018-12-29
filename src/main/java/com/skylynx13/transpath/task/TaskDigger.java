@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2016,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.worker
- * File Name:CodeDigger.java
- * Date:2016-4-7 下午7:20:44
- * 
- */
 package com.skylynx13.transpath.task;
 
 import java.io.File;
@@ -23,16 +13,12 @@ import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
 /**
- * ClassName: CodeDigger <br/>
- * Description: To dig a given code from a source file, get all of the entries
- * containing the code, then write them to a track file.<br/>
- * Date: 2016-4-7 下午7:20:44 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
+ * ClassName: CodeDigger
+ * Description: To dig a given code from a source file,
+ * get all of the entries containing the code,
+ * then write them to a track file.
+ * Date: 2016-04-07 19:20:44
  */
-
 public class TaskDigger {
 
     private static final String[] KEYS_BIG_ENTRY = { "(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB)" };

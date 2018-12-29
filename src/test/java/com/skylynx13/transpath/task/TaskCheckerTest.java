@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2017,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.worker
- * File Name:TaskCheckerTest.java
- * Date:2017-9-30 下午1:47:47
- * 
- */
 package com.skylynx13.transpath.task;
 
 import static org.junit.Assert.*;
@@ -16,18 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * ClassName: TaskCheckerTest <br/>
- * Description: TODO <br/>
- * Date: 2017-9-30 下午1:47:47 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: TaskCheckerTest
+ * Description: Task checker test
+ * Date: 2017-09-30 13:47:47
  */
-
 public class TaskCheckerTest {
     private TaskChecker taskChecker = new TaskChecker();
     private static final String TEST_RENAMELIST = "src/test/resources/rename.list";

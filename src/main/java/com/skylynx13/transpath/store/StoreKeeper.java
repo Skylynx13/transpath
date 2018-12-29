@@ -1,20 +1,4 @@
-/**
- * Copyright (c) 2015,qxu.
- * All Rights Reserved.
- * <p>
- * Project Name:transpath
- * Package Name:com.qxu.transpath.worker
- * File Name:StoreKeeper.java
- * Date:2015-11-4 下午4:26:14
- */
 package com.skylynx13.transpath.store;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.tree.Node;
@@ -22,19 +6,16 @@ import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
-/**
- * ClassName: StoreKeeper <br/>
- * Description: TODO <br/>
- * Date: 2015-11-4 下午4:26:14 <br/>
- * <br/>
- *
- * @author qxu@
- *
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- *
- */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Arrays;
 
+/**
+ * ClassName: StoreKeeper
+ * Description: Store keeper
+ * Date: 2015-11-04 16:26:14
+ */
 public class StoreKeeper {
 
     private static void keepDelList(StoreList delList) {
@@ -102,7 +83,7 @@ public class StoreKeeper {
             int s1 = aList.size();
             long t1 = System.currentTimeMillis() - t0;
             TransLog.getLogger().info("Store Listed: " + s1);
-            TransLog.getLogger().info("Store file size: " + aList.fileSize);
+            TransLog.getLogger().info("Store file size: " + aList.getFileSize());
             TransLog.getLogger().info("Time Used: " + t1);
             TransLog.getLogger().info("Avg Speed: " + s1 / (t1 * 0.001) + "item/s.");
             stotal += s1;
@@ -119,7 +100,7 @@ public class StoreKeeper {
 
         StoreList aList = attachTags(oldVer, aTag, bTags);
         StoreList resList = checkDup(oldVer, aList);
-        genPubLink(oldVer, resList);
+        saveResList(resList);
 
         TransLog.getLogger().info("Combine done in " + (System.currentTimeMillis() - t0) + "ms.");
         return resList.version;
@@ -166,18 +147,17 @@ public class StoreKeeper {
         StoreList delList = new StoreList();
 
         for (Node aNode : pList.nodeList) {
-            if (null == aNode) {
-                continue;
-            } else if (!((StoreNode) aNode).checkDupNode(dNode)) {
-                dNode = ((StoreNode) aNode);
-                resList.nodeList.add(aNode);
-                continue;
-            } else {
-                if (!dupList.hasNode(dNode)) {
-                    dupList.nodeList.add(dNode);
+            if (null != aNode) {
+                if (!((StoreNode) aNode).checkDupNode(dNode)) {
+                    dNode = ((StoreNode) aNode);
+                    resList.nodeList.add(aNode);
+                } else {
+                    if (!dupList.hasNode(dNode)) {
+                        dupList.nodeList.add(dNode);
+                    }
+                    dupList.nodeList.add(aNode);
+                    delList.nodeList.add(aNode);
                 }
-                dupList.nodeList.add(aNode);
-                delList.nodeList.add(aNode);
             }
         }
         TransLog.getLogger().info("Duplicated Number: " + (dupList.size() - delList.size()));
@@ -199,13 +179,13 @@ public class StoreKeeper {
         TransLog.getLogger().info("Current Length: " + pList.size());
         TransLog.getLogger().info("Reserve Length: " + resList.size());
         TransLog.getLogger().info("Removal Length: " + delList.size());
-        TransLog.getLogger().info("Removal file size: " + delList.fileSize);
+        TransLog.getLogger().info("Removal file size: " + delList.getFileSize());
 
         TransLog.getLogger().info("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
         return resList;
     }
 
-    public static void checkDupTest(StoreList pList) {
+    private static void checkDupTest(StoreList pList) {
         long t0 = System.currentTimeMillis();
         TransLog.getLogger().info("CheckDupInPath started...");
 
@@ -217,18 +197,17 @@ public class StoreKeeper {
         StoreList delList = new StoreList();
 
         for (Node aNode : pList.nodeList) {
-            if (null == aNode) {
-                continue;
-            } else if (!((StoreNode) aNode).checkDupNode(dNode)) {
-                dNode = ((StoreNode) aNode);
-                resList.nodeList.add(aNode);
-                continue;
-            } else {
-                if (!dupList.hasNode(dNode)) {
-                    dupList.nodeList.add(dNode);
+            if (null != aNode) {
+                if (!((StoreNode) aNode).checkDupNode(dNode)) {
+                    dNode = ((StoreNode) aNode);
+                    resList.nodeList.add(aNode);
+                } else {
+                    if (!dupList.hasNode(dNode)) {
+                        dupList.nodeList.add(dNode);
+                    }
+                    dupList.nodeList.add(aNode);
+                    delList.nodeList.add(aNode);
                 }
-                dupList.nodeList.add(aNode);
-                delList.nodeList.add(aNode);
             }
         }
         TransLog.getLogger().info("Duplicated Number: " + (dupList.size() - delList.size()));
@@ -246,12 +225,12 @@ public class StoreKeeper {
         TransLog.getLogger().info("Current Length: " + pList.size());
         TransLog.getLogger().info("Reserve Length: " + resList.size());
         TransLog.getLogger().info("Removal Length: " + delList.size());
-        TransLog.getLogger().info("Removal file size: " + delList.fileSize);
+        TransLog.getLogger().info("Removal file size: " + delList.getFileSize());
 
         TransLog.getLogger().info("CheckDupInPath done in " + (System.currentTimeMillis() - t0) + "ms.");
     }
 
-    private static void genPubLink(String oldVer, StoreList resList) {
+    private static void saveResList(StoreList resList) {
         long t0 = System.currentTimeMillis();
         TransLog.getLogger().info("GenPubLink started...");
 
@@ -306,18 +285,4 @@ public class StoreKeeper {
 
         TransLog.getLogger().info("StoreKeeper done.");
     }
-
-    /**
-     * main:<br/>
-     * bin>java com.qxu.transpath.worker.StoreKeeper storehis<br/>
-     * bin>java com.qxu.transpath.worker.StoreKeeper b1112 istore<br/>
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        StoreList aList = new StoreList();
-        aList.build("D:\\Book\\TFLib\\New\\full", "\\");
-        checkDupTest(aList);
-    }
-
 }

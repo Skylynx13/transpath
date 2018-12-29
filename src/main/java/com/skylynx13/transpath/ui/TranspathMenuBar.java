@@ -12,18 +12,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * ClassName: TransMenuBar <br/>
- * Description: TODO <br/>
- * Date: 2017年10月14日 下午4:00:27 <br/>
- * <br/>
- *
- * @author qxu@
- *
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- *
+ * ClassName: TransMenuBar
+ * Description: Transpath menu bar
+ * Date: 2017-10-14 16:00:27
  */
-
 public class TranspathMenuBar extends JMenuBar {
 
     private static final long serialVersionUID = 1L;

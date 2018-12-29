@@ -1,30 +1,12 @@
-/**
- * Copyright (c) 2016,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.tree
- * File Name:BranchNode.java
- * Date:2016-7-12 下午4:47:49
- * 
- */
 package com.skylynx13.transpath.tree;
 
 import com.skylynx13.transpath.utils.StringUtils;
 
 /**
- * ClassName: BranchNode <br/>
- * Description: TODO <br/>
- * Date: 2016-7-12 下午4:47:49 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: BranchNode
+ * Description: Branch node
+ * Date: 2016-07-12 16:47:49
  */
-
 public class BranchNode extends Node {
 
     public BranchNode(String pName) {

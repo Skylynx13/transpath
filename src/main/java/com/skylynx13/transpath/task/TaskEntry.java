@@ -1,49 +1,31 @@
-/**
- * Copyright (c) 2014,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.utils
- * File Name:CdEntry.java
- * Date:Apr 23, 2014 11:38:09 PM
- * 
- */
 package com.skylynx13.transpath.task;
 
 import java.util.ArrayList;
 
  /**
- * ClassName: CdEntry <br/>
- * Description: Content destination entry <br/>
- * Date: Apr 23, 2014 11:38:09 PM <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: CdEntry
+ * Description: Content destination entry
+ * Date: 2014-04-23 23:38:09
  */
-
 public class TaskEntry implements Comparable<TaskEntry>{
     private String name;
     private ArrayList<String> comments;
     private ArrayList<String> links;
     public TaskEntry() {
         this.name = "";
-        this.comments = new ArrayList<String>();
-        this.links = new ArrayList<String>();
+        this.comments = new ArrayList<>();
+        this.links = new ArrayList<>();
     }
     public TaskEntry(String name) {
         this.name = name;
-        this.comments = new ArrayList<String>();
-        this.links = new ArrayList<String>();
+        this.comments = new ArrayList<>();
+        this.links = new ArrayList<>();
     }
     public TaskEntry(String name, String comment, String link) {
         this.name = name;
-        this.comments = new ArrayList<String>();
+        this.comments = new ArrayList<>();
         this.comments.add(comment);
-        this.links = new ArrayList<String>();
+        this.links = new ArrayList<>();
         this.links.add(link);
     }
     public TaskEntry copy() {
@@ -66,7 +48,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
     }
     private void addComments(ArrayList<String> pComments) {
         if (this.comments == null) {
-            this.comments = new ArrayList<String>();
+            this.comments = new ArrayList<>();
         }
         for (String aComment: pComments) {
             this.comments.add(aComment);
@@ -95,19 +77,19 @@ public class TaskEntry implements Comparable<TaskEntry>{
     }
     public void addComment(String comment) {
         if (this.comments == null) {
-            this.comments = new ArrayList<String>();
+            this.comments = new ArrayList<>();
         }
         this.comments.add(comment);
     }
     public void addLink(String link) {
         if (this.links == null) {
-            this.links = new ArrayList<String>();
+            this.links = new ArrayList<>();
         }
         this.links.add(link);
     }
     public void addUniqueLink(String link) {
         if (this.links == null) {
-            this.links = new ArrayList<String>();
+            this.links = new ArrayList<>();
         }
         boolean linkFound = false;
         for (String exLink: this.links){

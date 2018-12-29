@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2015,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.utils
- * File Name:FileUtils.java
- * Date:2015-2-17 上午10:18:37
- * 
- */
 package com.skylynx13.transpath.utils;
 
 import java.io.*;
@@ -24,18 +14,10 @@ import org.apache.commons.codec.binary.Hex;
 import com.skylynx13.transpath.log.TransLog;
 
 /**
- * ClassName: FileUtils <br/>
- * Description: Utilities for file processing. <br/>
- * Date: 2015-2-17 上午10:18:37 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: FileUtils
+ * Description: Utilities for file processing.
+ * Date: 2015-02-17 10:18:37
  */
-
 public class FileUtils {
     private static final int READ_BUFFER_SIZE = 1024 * 128;
     public static final HashMap<String, String> mFileTypes = new HashMap<String, String>();

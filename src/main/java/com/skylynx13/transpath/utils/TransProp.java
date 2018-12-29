@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2016,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.utils
- * File Name:TransProp.java
- * Date:2016-2-14 下午3:45:49
- * 
- */
 package com.skylynx13.transpath.utils;
 
 import java.io.FileInputStream;
@@ -16,18 +6,10 @@ import java.io.IOException;
 import java.util.Properties;
 
  /**
- * ClassName: TransProp <br/>
- * Description: Transpath properties interface.<br/>
- * Date: 2016-2-14 下午3:45:49 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: TransProp
+ * Description: Transpath properties interface.
+ * Date: 2016-02-14 15:45:49
  */
-
 public class TransProp {
     // Retrieve file on every get so that props can change dynamically.
     public static String get(String propName) {

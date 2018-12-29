@@ -10,16 +10,9 @@ import java.io.PrintWriter;
 import static org.junit.Assert.*;
 
  /**
- * ClassName: FileUtilsTest <br/>
- * Description: TODO <br/>
- * Date: 2015-2-17 下午6:11:37 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: FileUtilsTest
+ * Description: File utils test
+ * Date: 2015-02-17 18:11:37
  */
 public class FileUtilsTest {
 
@@ -167,7 +160,7 @@ public class FileUtilsTest {
     }
     
     /**
-     * To pass this test, add following entries to ${JRE_HOME}\lib\content-types.properties <br/>
+     * To pass this test, add following entries to ${JRE_HOME}\lib\content-types.properties
      * text/qxu: \
      *     description=QXU text;\
      *     file_extensions=.qxu

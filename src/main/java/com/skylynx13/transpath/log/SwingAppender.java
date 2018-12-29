@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2017,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.log
- * File Name:LogAppender.java
- * Date:2017-9-26 下午6:30:43
- * 
- */
 package com.skylynx13.transpath.log;
 
 import java.io.Serializable;
@@ -27,22 +17,15 @@ import com.skylynx13.transpath.ui.TranspathFrame;
 import com.skylynx13.transpath.utils.TransConst;
 
 /**
- * ClassName: LogAppender <br/>
- * Description: TODO <br/>
- * Date: 2017-9-26 下午6:30:43 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: LogAppender
+ * Description: Log appender
+ * Date: 2017-9-26 18:30:43
+ * See:
+ * https://github.com/M-Razavi/log4j-swing-appender
+ * http://www.howtobuildsoftware.com/index.php/how-do/chab/java-logging-log4j-log4j2-how-to-create-a-custom-appender-in-log4j2
+ * http://logging.apache.org/log4j/2.x/manual/configuration.html#Properties
+ * http://logging.apache.org/log4j/2.x/manual/extending.html#Appenders
  */
-// See:
-// https://github.com/M-Razavi/log4j-swing-appender
-// http://www.howtobuildsoftware.com/index.php/how-do/chab/java-logging-log4j-log4j2-how-to-create-a-custom-appender-in-log4j2
-// http://logging.apache.org/log4j/2.x/manual/configuration.html#Properties
-// http://logging.apache.org/log4j/2.x/manual/extending.html#Appenders
 @Plugin(name="Swing", category="Core", elementType="appender", printObject=true)
 public class SwingAppender extends AbstractAppender {  
     private final JTextArea logTextArea = TranspathFrame.getLogTextArea();

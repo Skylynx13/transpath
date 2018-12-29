@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2015,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.worker
- * File Name:FreshKeeper.java
- * Date:2015-11-4 下午11:23:27
- * 
- */
 package com.skylynx13.transpath.task;
 
 import com.skylynx13.transpath.log.TransLog;
@@ -17,18 +7,10 @@ import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
  /**
- * ClassName: TaskKeeper <br/>
- * Description: TODO <br/>
- * Date: 2015-11-4 下午11:23:27 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- * Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: TaskKeeper
+ * Description: Task keeper
+ * Date: 2015-11-04 23:23:27
  */
-
 public class TaskKeeper {
     private String archDate;
     

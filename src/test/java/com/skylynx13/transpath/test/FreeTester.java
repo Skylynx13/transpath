@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2014,qxu. 
- * All Rights Reserved.
- * 
- * Project Name:transpath
- * Package Name:com.qxu.transpath.test
- * File Name:FreeTester.java
- * Date:2014-4-14 下午10:35:28
- * 
- */
 package com.skylynx13.transpath.test;
 
 import java.awt.*;
@@ -30,16 +20,9 @@ import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
 /**
- * ClassName: FreeTester <br/>
- * Description: TODO <br/>
- * Date: 2014-4-14 下午10:35:28 <br/>
- * <br/>
- * 
- * @author qxu@
- * 
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- * 
+ * ClassName: FreeTester
+ * Description: Free tester
+ * Date: 2014-04-14 22:35:28
  */
 public class FreeTester {
     public class SortByName implements Comparator<String> {
