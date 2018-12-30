@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -44,13 +45,12 @@ public class CompressUtils {
             strPath = tempFile.getAbsolutePath();
             Enumeration<ZipEntry> e = (Enumeration<ZipEntry>) zipFile.entries();
             while (e.hasMoreElements()) {
-                ZipEntry zipEnt = (ZipEntry) e.nextElement();
+                ZipEntry zipEnt = e.nextElement();
                 gbkPath = zipEnt.getName();
                 if (zipEnt.isDirectory()) {
                     strtemp = strPath + File.separator + gbkPath;
                     File dir = new File(strtemp);
                     dir.mkdirs();
-                    continue;
                 } else {
                     InputStream is = zipFile.getInputStream(zipEnt);
                     BufferedInputStream bis = new BufferedInputStream(is);
@@ -91,13 +91,8 @@ public class CompressUtils {
     }
 
     public synchronized void zip(File inputFile, String zipFilename) throws IOException {
-        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFilename));
-        try {
+        try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFilename))) {
             zip(inputFile, out, "");
-        } catch (IOException e) {
-            throw e;
-        } finally {
-            out.close();
         }
     }
 
@@ -106,7 +101,7 @@ public class CompressUtils {
             File[] inputFiles = inputFile.listFiles();
             out.putNextEntry(new ZipEntry(base + "/"));
             base = base.length() == 0 ? "" : base + "/";
-            for (int i = 0; i < inputFiles.length; i++) {
+            for (int i = 0; i < Objects.requireNonNull(inputFiles).length; i++) {
                 zip(inputFiles[i], out, base + inputFiles[i].getName());
             }
         } else {
@@ -115,22 +110,17 @@ public class CompressUtils {
             } else {
                 out.putNextEntry(new ZipEntry(inputFile.getName()));
             }
-            FileInputStream in = new FileInputStream(inputFile);
-            try {
+            try (FileInputStream in = new FileInputStream(inputFile)) {
                 int c;
                 byte[] by = new byte[BUFFEREDSIZE];
                 while ((c = in.read(by)) != -1) {
                     out.write(by, 0, c);
                 }
-            } catch (IOException e) {
-                throw e;
-            } finally {
-                in.close();
             }
         }
     }
 
-    public static synchronized void unrar(String rarFileName, String extPlace) {
+    private static synchronized void unrar(String rarFileName, String extPlace) {
         (new File(extPlace)).mkdirs();
 
         Archive arch = null;
@@ -140,7 +130,7 @@ public class CompressUtils {
         } catch (RarException | IOException e) {
             TransLog.getLogger().error("[" + rarFileName + "] package error: " + e.getMessage());
         }
-        FileHeader fh = arch.nextFileHeader();
+        FileHeader fh = Objects.requireNonNull(arch).nextFileHeader();
         while (fh != null) {
             FileOutputStream output = null;
             try {

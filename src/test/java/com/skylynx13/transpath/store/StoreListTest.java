@@ -1,14 +1,11 @@
 package com.skylynx13.transpath.store;
 
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
-
 import com.skylynx13.transpath.utils.TransConst;
 import org.junit.Test;
 
-import com.skylynx13.transpath.store.StoreList;
-import com.skylynx13.transpath.store.StoreNode;
+import java.util.HashMap;
+
+import static org.junit.Assert.*;
 
 /**
  * ClassName: StoreListTest
@@ -16,7 +13,7 @@ import com.skylynx13.transpath.store.StoreNode;
  * Date: 2016-06-17 12:29:56
  */
 public class StoreListTest {
-    public static final int LOC_AFTER_TIME = TransConst.FMT_DATE_TIME_LONG.length()+1;
+    private static final int LOC_AFTER_TIME = TransConst.FMT_DATE_TIME_LONG.length()+1;
 
     @Test
     public void testAddNode_add() {
@@ -39,8 +36,8 @@ public class StoreListTest {
         StoreNode sn2 = new StoreNode();
         assertEquals(0, sl.size());
         sl.addNode(sn1);
-        assertEquals(true, sl.hasNode(sn1));
-        assertEquals(false, sl.hasNode(sn2));        
+        assertTrue(sl.hasNode(sn1));
+        assertFalse(sl.hasNode(sn2));
     }
     
     @Test

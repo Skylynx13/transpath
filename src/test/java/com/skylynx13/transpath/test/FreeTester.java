@@ -54,14 +54,14 @@ public class FreeTester {
         System.out.println("===");
     }
     public void testList() {
-        ArrayList<String> aStrList = new ArrayList<String>();
+        ArrayList<String> aStrList = new ArrayList<>();
         aStrList.add("abcde");
         aStrList.add("1234");
         aStrList.add("12345");
         System.out.println(aStrList.toString());
         Collections.sort(aStrList);
         System.out.println(aStrList.toString());
-        Collections.sort(aStrList, new SortByName());
+        aStrList.sort(new SortByName());
         System.out.println(aStrList.toString());
     }
     public void testArrangerBasic() {
@@ -74,7 +74,7 @@ public class FreeTester {
         TaskEntry cde3 = new TaskEntry("name3", "comment3", "link3");
         cde3.addComment("comment31");
         cde3.addLink("link32");
-        ArrayList<TaskEntry> cdEntries = new ArrayList<TaskEntry>();
+        ArrayList<TaskEntry> cdEntries = new ArrayList<>();
         cdEntries.add(cde3);
         cdEntries.add(cde1);
         cdEntries.add(cde2);
@@ -91,7 +91,7 @@ public class FreeTester {
         System.out.println(argr.checkIgnorableLine("    aCode: "));
         System.out.println("Link: " + argr.checkLinkLine("http://  "));
         System.out.println("Comment: " + argr.checkCommentLine("//  "));
-        System.out.println("[" + new String("       abcd    ").trim() + "]");
+        System.out.println("[" + "       abcd    ".trim() + "]");
     }
     
     public void testArranger() {
@@ -105,13 +105,13 @@ public class FreeTester {
     }
     
     public void testReplaceStr() {
-        String str0 = new String("abcd__efg___hi___test)(2014___digital___jkl___mn_empire_.ccc");
+        String str0 = "abcd__efg___hi___test)(2014___digital___jkl___mn_empire_.ccc";
         String str1 = str0.replaceAll("___", ") (");
         String str2 = str1.replaceAll("__", " (");
         String str3 = str2.replaceAll("_\\.", ").");
         String str4 = str3.replaceAll("_", " ");
         String str5 = str4.replaceAll("\\(", " (");
-        String str6 = str5.replaceAll("  \\(", " (");
+        String str6 = str5.replaceAll(" {2}\\(", " (");
         String str7 = str6.replaceAll("\\(digital\\)", "(Digital)");
         String str8 = str7.replaceAll(" Empire\\)", "-Empire)");
         System.out.println(str0 + "\r -> " + str1  + "\r -> " + str2
@@ -119,17 +119,12 @@ public class FreeTester {
                 + "\r -> " + str6 + "\r -> " + str7 + "\r -> " + str8);
     }
     
-    public void testHashMap() {
-        HashMap<String, String> thm = new HashMap<String, String>();
-        thm.put("abc", "def");
-    }
-    
     public void testArrayListAddAll() {
         ArrayList<Node> nl1 = null;
-        ArrayList<Node> nl2 = new ArrayList<Node>();
+        ArrayList<Node> nl2 = new ArrayList<>();
         nl2.add(new BranchNode("a"));
-        ArrayList<Node> nl3 = new ArrayList<Node>();
-        nl3.addAll(nl1);
+        ArrayList<Node> nl3 = new ArrayList<>();
+        nl3.addAll(Objects.requireNonNull(nl1));
         nl3.addAll(nl2);
         System.out.println("ok" + nl3);
     }
@@ -139,7 +134,7 @@ public class FreeTester {
         System.out.println(this.reformat(str0));
     }
     
-    public String reformat(String str) {
+    private String reformat(String str) {
         String ret = str.replaceAll("_", " ");
         ret.indexOf(',');
         ret.indexOf('(');
@@ -157,12 +152,10 @@ public class FreeTester {
     }
     
     private void testProps() {
-        String aProp = "abc";
+        String aProp;
         Properties aProps = new Properties();
         try {
             aProps.load(new FileInputStream(TransConst.TP_PROPS));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -171,10 +164,6 @@ public class FreeTester {
         
     }
     
-    private static int addOne(final int i) {
-        return i + 1;
-    }
-
     private void workoutAbc() {
         System.out.println("abc ready");
         for (int a = 1; a<1000; a++) {
@@ -238,7 +227,7 @@ public class FreeTester {
         String[] rarCmd = new String[3];
         rarCmd[0] = "rar";
         rarCmd[1] = "t";
-        for (File packFile : packPath.listFiles()) {
+        for (File packFile : Objects.requireNonNull(packPath.listFiles())) {
 //            System.out.println("Checking " + packFile.getName());
             if (packFile.isDirectory()) {
                 System.out.println(packFile.getName() + " is a directory.");
@@ -252,7 +241,7 @@ public class FreeTester {
                 //rarCmd[2] = "\'" + packPath + "/" + fileName + "\'";
                 rarCmd[2] = packPath + "/" + fileName;
                 processBuilder.command(rarCmd);
-                System.out.println("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+                System.out.println("Command line: " + String.join(" ", processBuilder.command()));
                 try {
                     Process process = processBuilder.start();
                     //process.waitFor();
@@ -281,13 +270,11 @@ public class FreeTester {
 }
 
     public static void simpleExec() {
-
-        String fileName = "/home/qxu/sandbox/Amazing\\ Spider-Man\\ 005\\ \\(2018\\)\\ \\(digital\\)\\ \\(Oroboros-DCP\\).cbr";
-        fileName = "/home/qxu/sandbox/testEmpty.rar";
-        fileName = "/home/qxu/sandbox/Amazing Spider-Man 005 (2018) (digital) (Oroboros-DCP).cbr";
+        String fileName = "/home/qxu/sandbox/Amazing Spider-Man 005 (2018) (digital) (Oroboros-DCP).cbr";
+        //"/home/qxu/sandbox/Amazing\\ Spider-Man\\ 005\\ \\(2018\\)\\ \\(digital\\)\\ \\(Oroboros-DCP\\).cbr";
         ProcessBuilder processBuilder = new ProcessBuilder().command("rar", "t", fileName);//.inheritIO();
         processBuilder.redirectErrorStream(true);
-        System.out.println("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+        System.out.println("Command line: " + String.join(" ", processBuilder.command()));
         try {
             Process process = processBuilder.start();
             process.waitFor();
@@ -297,10 +284,7 @@ public class FreeTester {
             while ((line = bufferedReader.readLine()) != null) {
                 System.out.println("Output: " + line);
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -318,15 +302,13 @@ public class FreeTester {
         //System.out.println(StringUtils.getSimpleName("G.I. Joe Action Force Mini Comic.cbr"));
         
         ft.testProps();
-        System.out.println(new String(" Week of 02/04/2016  ").matches("^\\s*Week of \\d{2}/\\d{2}/\\d{4}\\s*$"));
-        String rex = "(?i).*(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB).*";
-        System.out.println(new String("gkk233.2 MB").matches(rex));
-        System.out.println(new String("/a2016/b1234/").replaceAll("/", "\\\\"));
+        System.out.println(" Week of 02/04/2016  ".matches("^\\s*Week of \\d{2}/\\d{2}/\\d{4}\\s*$"));
+        String rex = "(?i).*(\\d{3}(\\.\\d{1,2})? MB|\\d{1,2}(\\.\\d{1,2})? GB).*";
+        System.out.println("gkk233.2 MB".matches(rex));
+        System.out.println("/a2016/b1234/".replaceAll("/", "\\\\"));
         int aaa = 3;
         int bbb = 3;
-        System.out.println(((Integer)aaa).compareTo(bbb));
-        
-        System.out.println(FreeTester.addOne(5));
+        System.out.println(Integer.compare(aaa, bbb));
         
         System.out.println(TransProp.get(TransConst.LOC_CONFIG));
 
@@ -344,7 +326,7 @@ public class FreeTester {
 
         System.out.println("Time elapsed: " + (System.currentTimeMillis()-timeTag) + " ms.");
         String inputString = "A8123PEKAA";
-        String regex = "(\\w{2})(\\d{3,4})([A-Z]{0,1})(\\w{3})";
+        String regex = "(\\w{2})(\\d{3,4})([A-Z]?)(\\w{3})";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(inputString);
         boolean matched = matcher.find();
@@ -358,13 +340,11 @@ public class FreeTester {
         }
 
         int a = 1;
-        int b = a;
-        b = 2;
+        int b = 2;
         System.out.println("a="+a+"; b=" + b);
 
         String sa = "1";
-        String sb = new String(sa);
-        sb="2";
+        String sb = "2";
         System.out.println("a="+sa+"; b=" + sb);
 
         StoreNode na = new StoreNode();
@@ -392,9 +372,7 @@ public class FreeTester {
                     System.err.println("Error executing.");
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 

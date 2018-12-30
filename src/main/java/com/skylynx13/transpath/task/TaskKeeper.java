@@ -18,7 +18,7 @@ public class TaskKeeper {
         archDate = DateUtils.formatDateToday();
     }
     
-    public void keepRaw() {
+    private void keepRaw() {
         TransLog.getLogger().info("Keeping raw...");
         FileUtils.copyFileBytes(TransProp.get(TransConst.LOC_TASK) + "dump.txt", TransProp.get(TransConst.LOC_TASK) + "dump_" + archDate + ".txt");
         int n = new TaskArranger().trimFile(TransProp.get(TransConst.LOC_TASK) + "dump.txt", TransProp.get(TransConst.LOC_TASK) + "raw.txt");
@@ -27,7 +27,7 @@ public class TaskKeeper {
         TransLog.getLogger().info("Done.");
     }
     
-    public void keepFresh() {
+    private void keepFresh() {
         TransLog.getLogger().info("Keeping fresh...");
         int n = new TaskArranger().readFromFile(TransProp.get(TransConst.LOC_TASK) + "raw.txt").sort().merge().writeToFile(TransProp.get(TransConst.LOC_TASK) + "fresh.txt");
         FileUtils.copyFileBytes(TransProp.get(TransConst.LOC_TASK) + "fresh.txt", TransProp.get(TransConst.LOC_TASK) + "fresh_" + archDate + ".txt");

@@ -3,10 +3,6 @@ package com.skylynx13.transpath.ui;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -30,10 +26,10 @@ import org.jetbrains.annotations.NotNull;
 public class TranspathFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    public static final int DIVIDER_SIZE = 8;
-    public static final int ZOOM_PERCENT = 66;
-    public static final double SPLIT_PROPORTION_VERTICAL = 0.7;
-    public static final double SPLIT_PROPORTION_HORIZONTAL = 0.2;
+    private static final int DIVIDER_SIZE = 8;
+    private static final int ZOOM_PERCENT = 66;
+    private static final double SPLIT_V_DEFAULT = 0.7;
+    private static final double SPLIT_H_DEFAULT = 0.2;
 
     private static JTable infoTable = new JTable();
     private static JTextArea logTextArea = new JTextArea();
@@ -133,8 +129,8 @@ public class TranspathFrame extends JFrame {
         return createSplitPane(
                 JSplitPane.VERTICAL_SPLIT,
                 createUpperSplitPane(),
-                createLowerTabbedPane(),
-                SPLIT_PROPORTION_VERTICAL
+                createScrollPane(logTextArea),
+                SPLIT_V_DEFAULT
         );
     }
 
@@ -143,22 +139,15 @@ public class TranspathFrame extends JFrame {
                 JSplitPane.HORIZONTAL_SPLIT,
                 getTreePane(),
                 createInfoTabbedPane(),
-                SPLIT_PROPORTION_HORIZONTAL
+                SPLIT_H_DEFAULT
         );
     }
 
     private JTabbedPane createInfoTabbedPane() {
         JTabbedPane infoTabbedPane = createTabbedPane();
-        infoTabbedPane.addTab("Info Table", createScrollPane(infoTable));
-        infoTabbedPane.addTab("Info Page", createScrollPane(infoTextArea));
+        infoTabbedPane.addTab("Content List", createScrollPane(infoTable));
+        infoTabbedPane.addTab("Selected Details", createScrollPane(infoTextArea));
         return infoTabbedPane;
-    }
-
-    private JTabbedPane createLowerTabbedPane() {
-        JTabbedPane lowerTabbedPane = createTabbedPane();
-        lowerTabbedPane.addTab("Console", createScrollPane(logTextArea));
-
-        return lowerTabbedPane;
     }
 
     private JSplitPane createSplitPane(
@@ -242,8 +231,7 @@ public class TranspathFrame extends JFrame {
         alignRight.setHorizontalAlignment(JLabel.RIGHT);
         try {
             infoTable.getColumn(columnTitle).setCellRenderer(alignRight);
-        } catch (IllegalArgumentException e) {
-            TransLog.getLogger().warn("Title \"" + columnTitle + "\" not exist.");
+        } catch (IllegalArgumentException ignore) {
         }
     }
 

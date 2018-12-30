@@ -4,17 +4,9 @@ import java.text.DecimalFormat;
 
 /**
  * ClassName: StringUtils
- * Description: TODO
- * Date: Aug 6, 2015 5:08:23 PM
- *
- *
- * @author qxu@
- *
- *         Change Log:
- * @version yyyy-mm-dd qxu@<br/>
- *
+ * Description: String utils
+ * Date: 2015-08-06 17:08:23
  */
-
 public class StringUtils {
     public static final String EMPTY_STRING = "";
 
@@ -48,7 +40,7 @@ public class StringUtils {
             return null;
         }
 
-        String result = null;
+        String result;
 
         int startIdx = pString.indexOf(startAfter, startIndex);
         int endIdx = pString.indexOf(endBefore, startIdx);

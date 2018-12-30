@@ -13,7 +13,7 @@ public class BranchNode extends Node {
         name = pName;
     }
 
-    public BranchNode(String pName, String pPath) {
+    BranchNode(String pName, String pPath) {
         name = pName;
         path = pPath;
     }
@@ -30,8 +30,7 @@ public class BranchNode extends Node {
         return name;
     }
 
-    public Object[] toRow(long length) {
-        Object[] row = {id, path, name, StringUtils.formatLongInt(length)};
-        return row;
+    Object[] toRow(long length) {
+        return new Object[]{id, path, name, StringUtils.formatLongInt(length)};
     }
  }

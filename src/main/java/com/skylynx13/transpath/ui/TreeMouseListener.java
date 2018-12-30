@@ -24,7 +24,7 @@ public class TreeMouseListener implements MouseListener {
 
     private JPopupMenu popupMenu;
 
-    public TreeMouseListener(JTree pTree) {
+    TreeMouseListener(JTree pTree) {
         jTree = pTree;
         popupMenu = new JPopupMenu();
         for (String item : POPITEMS) {

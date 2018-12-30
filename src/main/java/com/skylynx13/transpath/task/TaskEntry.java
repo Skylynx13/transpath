@@ -1,5 +1,7 @@
 package com.skylynx13.transpath.task;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
  /**
@@ -11,7 +13,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
     private String name;
     private ArrayList<String> comments;
     private ArrayList<String> links;
-    public TaskEntry() {
+    private TaskEntry() {
         this.name = "";
         this.comments = new ArrayList<>();
         this.links = new ArrayList<>();
@@ -28,7 +30,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
         this.links = new ArrayList<>();
         this.links.add(link);
     }
-    public TaskEntry copy() {
+    TaskEntry copy() {
         TaskEntry newCde = new TaskEntry();
         newCde.setName(this.name);
         newCde.addComments(this.comments);
@@ -50,9 +52,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
         if (this.comments == null) {
             this.comments = new ArrayList<>();
         }
-        for (String aComment: pComments) {
-            this.comments.add(aComment);
-        }
+        this.comments.addAll(pComments);
     }
     public String getName() {
         return name;
@@ -60,16 +60,16 @@ public class TaskEntry implements Comparable<TaskEntry>{
     public void setName(String name) {
         this.name = name;
     }
-    public boolean hasName() {
-        return ((this.name != null) && (this.name != ""));
+    boolean hasName() {
+        return ((this.name != null) && (!this.name.equals("")));
     }
-    public ArrayList<String> getComments() {
+    ArrayList<String> getComments() {
         return comments;
     }
     public void setComments(ArrayList<String> comments) {
         this.comments = comments;
     }
-    public ArrayList<String> getLinks() {
+    ArrayList<String> getLinks() {
         return links;
     }
     public void setLinks(ArrayList<String> links) {
@@ -87,7 +87,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
         }
         this.links.add(link);
     }
-    public void addUniqueLink(String link) {
+    void addUniqueLink(String link) {
         if (this.links == null) {
             this.links = new ArrayList<>();
         }
@@ -117,7 +117,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
     }
     
     @Override
-    public int compareTo(TaskEntry cde) {
+    public int compareTo(@NotNull TaskEntry cde) {
         return this.name.compareTo(cde.name);
     }
     
@@ -125,7 +125,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
         return name + this.comments.toString() + this.links.toString();
     }
     
-    public TaskEntry mergeEntry(TaskEntry otherEntry) {
+    TaskEntry mergeEntry(TaskEntry otherEntry) {
         TaskEntry newCde = this.copy();
         newCde.addComments(otherEntry.getComments());
         newCde.addUniqueLinks(otherEntry.getLinks());
@@ -160,7 +160,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
         this.links.clear();
     }
 
-    public boolean matches(String[] keys) {
+    boolean matches(String[] keys) {
         for (String key : keys) {
             key = "(?i).*" + key + ".*";
             if (this.name.matches(key)) 

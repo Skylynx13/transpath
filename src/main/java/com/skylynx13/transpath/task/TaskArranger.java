@@ -107,7 +107,7 @@ public class TaskArranger {
         return entries.size();
     }
     
-    public int appendToFile(String fileName) {
+    int appendToFile(String fileName) {
         if (entries.size() == 0) {
             return 0;
         }

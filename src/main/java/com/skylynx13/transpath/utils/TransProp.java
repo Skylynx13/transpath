@@ -16,15 +16,13 @@ public class TransProp {
         Properties tProps = new Properties();
         try {
             tProps.load(new FileInputStream(TransConst.TP_PROPS));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return tProps.getProperty(propName);
     }
     
-    public static int getInt(String propName) {
+    static int getInt(String propName) {
         return Integer.parseInt(get(propName));
     }
 }

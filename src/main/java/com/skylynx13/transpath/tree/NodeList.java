@@ -1,19 +1,17 @@
 package com.skylynx13.transpath.tree;
 
+import com.skylynx13.transpath.utils.DateUtils;
+import com.skylynx13.transpath.utils.StringUtils;
+import com.skylynx13.transpath.utils.TransConst;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Scanner;
-
-import com.skylynx13.transpath.store.StoreList;
-import com.skylynx13.transpath.utils.DateUtils;
-import com.skylynx13.transpath.utils.StringUtils;
-import com.skylynx13.transpath.utils.TransConst;
 
 /**
  * ClassName: NodeList
@@ -22,31 +20,31 @@ import com.skylynx13.transpath.utils.TransConst;
  */
 public abstract class NodeList {
     public String version;
-    public int minId;
+    protected int minId;
     public int maxId;
     public ArrayList<Node> nodeList;
 
-    public NodeList() {
+    protected NodeList() {
         refreshVersion();
         minId = 0;
         maxId = 0;
-        nodeList = new ArrayList<Node>();
+        nodeList = new ArrayList<>();
     }
 
     public NodeList(NodeList pNodeList) {
         refreshVersion();
-        nodeList = new ArrayList<Node>(pNodeList.nodeList);
+        nodeList = new ArrayList<>(pNodeList.nodeList);
         recap();
     }
 
     public NodeList(String fileName) {
-        nodeList = new ArrayList<Node>();
+        nodeList = new ArrayList<>();
         load(fileName);
     }
 
     public NodeList(ArrayList<Node> pList) {
         refreshVersion();
-        nodeList = new ArrayList<Node>(pList);
+        nodeList = new ArrayList<>(pList);
         recap();
     }
 
@@ -71,7 +69,7 @@ public abstract class NodeList {
         version = DateUtils.formatDateTimeLongToday();
         minId = 0;
         maxId = 0;
-        nodeList = new ArrayList<Node>();
+        nodeList = new ArrayList<>();
     }
 
     public Node get(int index) {
@@ -88,7 +86,7 @@ public abstract class NodeList {
     }
 
     public ArrayList<Integer> getIdList() {
-        ArrayList<Integer> idList = new ArrayList<Integer>();
+        ArrayList<Integer> idList = new ArrayList<>();
         for (Node aNode : nodeList) {
             idList.add(aNode.id);
         }
@@ -109,16 +107,15 @@ public abstract class NodeList {
         return nodeList.contains(pNode);
     }
 
-    public int addNode(Node pNode) {
+    public void addNode(Node pNode) {
         if (0 == size()) {
             minId = 1;
         }
         pNode.id = ++maxId;
         nodeList.add(pNode);
-        return pNode.id;
     }
 
-    public void enlist(Node pNode) {
+    private void enlist(Node pNode) {
         if (0 == size()) {
             minId = pNode.id;
             maxId = pNode.id;
@@ -129,7 +126,7 @@ public abstract class NodeList {
     }
 
     public HashMap<Integer, Integer> attachList(NodeList pList) {
-        HashMap<Integer, Integer> aMap = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> aMap = new HashMap<>();
         for (Node aNode : pList.nodeList) {
             int oldId = aNode.id;
             addNode(aNode);
@@ -143,7 +140,7 @@ public abstract class NodeList {
     }
 
     public void removeById(int pId) {
-        ArrayList<Node> removeList = new ArrayList<Node>();
+        ArrayList<Node> removeList = new ArrayList<>();
         for (Node aNode : nodeList) {
             if (aNode.id == pId) {
                 removeList.add(aNode);
@@ -154,7 +151,7 @@ public abstract class NodeList {
     }
 
     public void removeByIdMap(HashMap<Integer, Integer> idMap) {
-        ArrayList<Node> removeList = new ArrayList<Node>();
+        ArrayList<Node> removeList = new ArrayList<>();
         for (Node aNode : nodeList) {
             if (idMap.containsKey(aNode.id)) {
                 removeList.add(aNode);
@@ -165,7 +162,7 @@ public abstract class NodeList {
     }
 
     public void removeByPath(String pPath) {
-        ArrayList<Node> removeList = new ArrayList<Node>();
+        ArrayList<Node> removeList = new ArrayList<>();
         for (Node aNode : nodeList) {
             if (aNode.path.equals(pPath)) {
                 removeList.add(aNode);
@@ -175,12 +172,12 @@ public abstract class NodeList {
         recap();
     }
 
-    public void refreshVersion() {
+    private void refreshVersion() {
         version = DateUtils.formatDateTimeLongToday();
     }
 
     public HashMap<Integer, Integer> reorgId() {
-        HashMap<Integer, Integer> aMap = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> aMap = new HashMap<>();
         int newId = 0;
         for (Node aNode : nodeList) {
             newId++;
@@ -197,9 +194,9 @@ public abstract class NodeList {
         load(new File(pFileName));
     }
 
-    public void load(File pFile) {
+    private void load(File pFile) {
         clear();
-        Scanner aScan = null;
+        Scanner aScan;
         try {
             aScan = new Scanner(new FileReader(pFile));
         } catch (FileNotFoundException e) {
@@ -218,37 +215,29 @@ public abstract class NodeList {
 
     public abstract Node loadNode(String pLine);
 
-    public void loadVersion(String pLine) {
+    private void loadVersion(String pLine) {
         version = pLine.split(TransConst.COLON)[0];
     }
 
     public void orderById() {
-        Collections.sort(nodeList, new Comparator<Node>() {
-            @Override
-            public int compare(Node sn1, Node sn2) {
-                return ((Integer) sn1.id).compareTo(sn2.id);
-            }
-        });
+        nodeList.sort(Comparator.comparingInt(sn -> sn.id));
     }
 
     public void orderByPathAndName() {
-        Collections.sort(nodeList, new Comparator<Node>() {
-            @Override
-            public int compare(Node sn1, Node sn2) {
-                int cmp = sn1.path.compareTo(sn2.path);
-                if (cmp != 0) {
-                    return cmp;
-                }
-                return sn1.name.compareTo(sn2.name);
+        nodeList.sort((sn1, sn2) -> {
+            int cmp = sn1.path.compareTo(sn2.path);
+            if (cmp != 0) {
+                return cmp;
             }
+            return sn1.name.compareTo(sn2.name);
         });
     }
 
     public String keepHeader() {
-        return new StringBuffer(version).append(TransConst.COLON)
-                .append(String.format(TransConst.FORMAT_INT_08, minId)).append(TransConst.COLON)
-                .append(String.format(TransConst.FORMAT_INT_08, maxId)).append(TransConst.COLON)
-                .append(String.format(TransConst.FORMAT_INT_08, size())).toString();
+        return version + TransConst.COLON +
+                String.format(TransConst.FORMAT_INT_08, minId) + TransConst.COLON +
+                String.format(TransConst.FORMAT_INT_08, maxId) + TransConst.COLON +
+                String.format(TransConst.FORMAT_INT_08, size());
 
     }
 
@@ -257,7 +246,7 @@ public abstract class NodeList {
         keepFile(aFile);
     }
 
-    public void keepFile(File pFile) {
+    private void keepFile(File pFile) {
         if (0 == size()) {
             return;
         }
@@ -276,7 +265,7 @@ public abstract class NodeList {
     protected abstract String keepLine(Node pNode);
 
     public String toString() {
-        StringBuffer strBuff = new StringBuffer(keepHeader());
+        StringBuilder strBuff = new StringBuilder(keepHeader());
         strBuff.append(TransConst.CRLN);
         for (Node aNode : nodeList) {
             strBuff.append(keepLine(aNode)).append(TransConst.CRLN);
@@ -285,7 +274,7 @@ public abstract class NodeList {
     }
 
     public static ArrayList<Integer> FindIdOnlyInAList(ArrayList<Integer> aList, ArrayList<Integer> bList) {
-        ArrayList<Integer> idList = new ArrayList<Integer>();
+        ArrayList<Integer> idList = new ArrayList<>();
         for (int element : aList) {
             if (!bList.contains(element)) {
                 idList.add(element);

@@ -1,18 +1,11 @@
 package com.skylynx13.transpath.tree;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import com.skylynx13.transpath.store.StoreNode;
+import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
-
-import com.skylynx13.transpath.store.StoreNode;
-import com.skylynx13.transpath.utils.TransConst;
+import java.util.*;
 
 /**
  * ClassName: NodeTree
@@ -52,10 +45,7 @@ public class NodeTree implements MutableTreeNode {
     private List<NodeTree> children;
     private boolean allowsChildren;
 
-    public NodeTree() {
-        this.setNode(null);
-        this.setParent(null);
-        this.setChildren(null);
+    private NodeTree() {
     }
 
     public boolean isNull() {
@@ -64,8 +54,6 @@ public class NodeTree implements MutableTreeNode {
 
     public NodeTree(Node node) {
         this.setNode(node);
-        this.setParent(null);
-        this.setChildren(null);
     }
 
     public Node getNode() {
@@ -80,11 +68,11 @@ public class NodeTree implements MutableTreeNode {
         return parent;
     }
 
-    public void setParent(NodeTree parent) {
+    private void setParent(NodeTree parent) {
         this.parent = parent;
     }
 
-    public List<NodeTree> getChildren() {
+    private List<NodeTree> getChildren() {
         return children;
     }
 
@@ -117,7 +105,7 @@ public class NodeTree implements MutableTreeNode {
         return rows;
     }
 
-    public Object[] toRow(NodeTree nodeTree) {
+    private Object[] toRow(NodeTree nodeTree) {
         Object[] row;
         Node aNode = nodeTree.getNode();
         if (aNode instanceof StoreNode) {
@@ -131,7 +119,7 @@ public class NodeTree implements MutableTreeNode {
         return row;
     }
 
-    public long sumLength() {
+    private long sumLength() {
         long length = 0;
         for (NodeTree nodeTree : this.getChildren()) {
             Node aNode = nodeTree.getNode();
@@ -152,13 +140,13 @@ public class NodeTree implements MutableTreeNode {
 
     public void addChild(NodeTree nodeTree) {
         if (null == children) {
-            children = new ArrayList<NodeTree>();
+            children = new ArrayList<>();
         }
         children.add(nodeTree);
         nodeTree.parent = this;
     }
 
-    public void addChildNode(Node node) {
+    private void addChildNode(Node node) {
         this.addChild(new NodeTree(node));
     }
 
@@ -186,7 +174,7 @@ public class NodeTree implements MutableTreeNode {
         node.id = pId;
     }
 
-    public String getNodeName() {
+    private String getNodeName() {
         return node.name;
     }
 
@@ -198,7 +186,7 @@ public class NodeTree implements MutableTreeNode {
         if (null == this.children) {
             return;
         }
-        Collections.sort(this.children, new NodeNameAscComparator());
+        this.children.sort(new NodeNameAscComparator());
         for (NodeTree child : this.children) {
             child.recursivelySort();
         }
@@ -219,7 +207,7 @@ public class NodeTree implements MutableTreeNode {
         return pathName;
     }
 
-    public NodeTree getChildByName(String aName) {
+    private NodeTree getChildByName(String aName) {
         if (null == this.children)
             return null;
         for (NodeTree aChild : this.children) {
@@ -229,7 +217,7 @@ public class NodeTree implements MutableTreeNode {
         return null;
     }
 
-    public NodeTree getChildByNameOrAddIt(String aName) {
+    private NodeTree getChildByNameOrAddIt(String aName) {
         NodeTree aNodeTree = getChildByName(aName);
         if (null == aNodeTree) {
             aNodeTree = new NodeTree(new BranchNode(aName, this.getNodePathName()));
@@ -289,15 +277,15 @@ public class NodeTree implements MutableTreeNode {
         return (null == this.children);
     }
 
-    public boolean isRoot() {
+    private boolean isRoot() {
         return (null == this.parent);
     }
 
-    public boolean isBranch() {
+    private boolean isBranch() {
         return !this.isLeaf() && !this.isRoot();
     }
 
-    public NodeTree addBranch(String pPath) {
+    private NodeTree addBranch(String pPath) {
         if (this.isNull()) {
             this.setNode(new BranchNode(TransConst.ROOT, "/"));
         }
@@ -318,7 +306,7 @@ public class NodeTree implements MutableTreeNode {
         return aTree;
     }
     
-    public void appendFromList(NodeList pList) {
+    private void appendFromList(NodeList pList) {
         for (Node aNode : pList.nodeList) {
             this.addBranch(aNode.path).addChildNode(aNode);
         }

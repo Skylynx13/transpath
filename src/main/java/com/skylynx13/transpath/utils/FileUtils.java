@@ -20,7 +20,7 @@ import com.skylynx13.transpath.log.TransLog;
  */
 public class FileUtils {
     private static final int READ_BUFFER_SIZE = 1024 * 128;
-    public static final HashMap<String, String> mFileTypes = new HashMap<String, String>();
+    private static final HashMap<String, String> mFileTypes = new HashMap<String, String>();
 
     static {
         // images
@@ -57,18 +57,18 @@ public class FileUtils {
         return mFileTypes.get(getFileHeader(inputStream));
     }
 
-    public static String getFileHeader(InputStream inputStream) {
+    private static String getFileHeader(InputStream inputStream) {
         String value = null;
         try {
             byte[] b = new byte[4];
             inputStream.read(b, 0, b.length);
             value = bytesToHexString(b);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
             if (null != inputStream) {
                 try {
                     inputStream.close();
-                } catch (IOException e) {
+                } catch (IOException ignored) {
                 }
             }
         }
@@ -81,8 +81,8 @@ public class FileUtils {
             return null;
         }
         String hv;
-        for (int i = 0; i < src.length; i++) {
-            hv = Integer.toHexString(src[i] & 0xFF).toUpperCase();
+        for (byte b : src) {
+            hv = Integer.toHexString(b & 0xFF).toUpperCase();
             if (hv.length() < 2) {
                 builder.append(0);
             }
@@ -95,8 +95,6 @@ public class FileUtils {
         try {
             FileOutputStream file = new FileOutputStream(pFileName);
             file.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,6 +103,7 @@ public class FileUtils {
     public static boolean copyFileBytes(String srcFileName, String tarFileName) {
         BufferedInputStream inBuff = null;
         BufferedOutputStream outBuff = null;
+        boolean result;
         try {
             inBuff = new BufferedInputStream(new FileInputStream(srcFileName));
             outBuff = new BufferedOutputStream(new FileOutputStream(tarFileName));
@@ -115,9 +114,10 @@ public class FileUtils {
                 outBuff.write(b, 0, len);
             }
             outBuff.flush();
+            result = true;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            result = false;
         } finally {
             try {
                 if (inBuff != null) {
@@ -128,15 +128,16 @@ public class FileUtils {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                return false;
+                result = false;
             }
         }
-        return true;
+        return result;
     }
 
-    public static boolean appendFileBytes(String srcFileName, String tarFileName) {
+    static boolean appendFileBytes(String srcFileName, String tarFileName) {
         BufferedInputStream inBuff = null;
         BufferedOutputStream outBuff = null;
+        boolean result;
         try {
             inBuff = new BufferedInputStream(new FileInputStream(srcFileName));
             outBuff = new BufferedOutputStream(new FileOutputStream(tarFileName, true));
@@ -147,9 +148,10 @@ public class FileUtils {
                 outBuff.write(b, 0, len);
             }
             outBuff.flush();
+            result = true;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            result = false;
         } finally {
             try {
                 if (inBuff != null) {
@@ -160,16 +162,17 @@ public class FileUtils {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                return false;
+                result = false;
             }
         }
-        return true;
+        return result;
     }
 
-    public static boolean catFileBytes(String srcFileName1, String srcFileName2, String tarFileName) {
+    static boolean catFileBytes(String srcFileName1, String srcFileName2, String tarFileName) {
         BufferedInputStream inBuff1 = null;
         BufferedInputStream inBuff2 = null;
         BufferedOutputStream outBuff = null;
+        boolean result;
         try {
             inBuff1 = new BufferedInputStream(new FileInputStream(srcFileName1));
             inBuff2 = new BufferedInputStream(new FileInputStream(srcFileName2));
@@ -184,9 +187,10 @@ public class FileUtils {
                 outBuff.write(b, 0, len);
             }
             outBuff.flush();
+            result = true;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            result = false;
         } finally {
             try {
                 if (inBuff1 != null) {
@@ -200,18 +204,18 @@ public class FileUtils {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                return false;
+                result = false;
             }
         }
-        return true;
+        return result;
     }
 
     public static boolean compareFileBytes(String pFileName1, String pFileName2) {
         if (pFileName1.equals(pFileName2)) {
             return true;
         }
-        FileInputStream inStream1 = null;
-        FileInputStream inStream2 = null;
+        FileInputStream inStream1;
+        FileInputStream inStream2;
         try {
             inStream1 = new FileInputStream(pFileName1);
             inStream2 = new FileInputStream(pFileName2);
@@ -225,8 +229,8 @@ public class FileUtils {
                 inStream2.close();
                 return false;
             }
-            int inByte1 = 0;
-            int inByte2 = 0;
+            int inByte1;
+            int inByte2;
             do {
                 inByte1 = inStream1.read();
                 inByte2 = inStream2.read();
@@ -248,7 +252,7 @@ public class FileUtils {
         return getFileSize(new File(pFileName));
     }
 
-    public static long getFileSize(File pFile) {
+    static long getFileSize(File pFile) {
         if (pFile == null) {
             return 0;
         }
@@ -256,13 +260,13 @@ public class FileUtils {
             return pFile.length();
         }
         long size = 0;
-        for (File sub : pFile.listFiles()) {
+        for (File sub : Objects.requireNonNull(pFile.listFiles())) {
             size += getFileSize(sub);
         }
         return size;
     }
 
-    public static String getFileMimeType(String pFileName) {
+    static String getFileMimeType(String pFileName) {
         if (pFileName == null || pFileName.isEmpty()) {
             return TransConst.EMPTY;
         }
@@ -283,7 +287,7 @@ public class FileUtils {
         return getLastModifiedString(new File(pFileName));
     }
 
-    public static String getLastModifiedString(File pFile) {
+    private static String getLastModifiedString(File pFile) {
         if (pFile == null) {
             return TransConst.EMPTY;
         }
@@ -291,9 +295,8 @@ public class FileUtils {
 
         // An alternative way for a string in default format.
         // String fmtStr = new Timestamp(time).toString();
-        String fmtStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(time));
 
-        return fmtStr;
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(time));
     }
 
     public static int countMatch(String inFile, String inRegex) {
@@ -304,20 +307,18 @@ public class FileUtils {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        while (in.hasNext()) {
+        while (Objects.requireNonNull(in).hasNext()) {
             String inLine = in.nextLine();
             if (inLine.matches(inRegex)) {
                 TransLog.getLogger().info(inLine);
                 matchedLine++;
             }
         }
-        if (in != null) {
-            in.close();
-        }
+        in.close();
         return matchedLine;
     }
 
-    public static String extractZipComment(String fileName) {
+    static String extractZipComment(String fileName) {
         String retStr = null;
         try {
             File file = new File(fileName);
@@ -364,22 +365,21 @@ public class FileUtils {
                     TransLog.getLogger().info("WARNING! ZIP comment size mismatch: directory says len is " + commentLen
                             + ", but file ends after " + realLen + " bytes!");
                 }
-                String comment = new String(buffer, i + 22, Math.min(commentLen, realLen));
-                return comment;
+                return new String(buffer, i + 22, Math.min(commentLen, realLen));
             }
         }
         TransLog.getLogger().info("ERROR! ZIP comment NOT found!");
         return null;
     }
 
-    public static String digest(String fileName, String algorithm) {
+    private static String digest(String fileName, String algorithm) {
         byte[] rBytes = new byte[READ_BUFFER_SIZE];
 
         if (TransConst.CRC32.equals(algorithm)) {
             CRC32 crc32 = new CRC32();
             try {
                 BufferedInputStream inBuff = new BufferedInputStream(new FileInputStream(fileName));
-                int nLen = 0;
+                int nLen;
                 while ((nLen = inBuff.read(rBytes)) != -1) {
                     crc32.update(rBytes, 0, nLen);
                 }
@@ -392,7 +392,7 @@ public class FileUtils {
             return String.format(TransConst.FORMAT_HEX_08, crc32.getValue()).toUpperCase();
         }
         
-        MessageDigest md = null;
+        MessageDigest md;
         try {
             md = MessageDigest.getInstance(algorithm);
 
@@ -410,14 +410,14 @@ public class FileUtils {
         return new String(Hex.encodeHex(md.digest())).toUpperCase();
     }
 
-    public static String digest(File pFile, String algorithm) {
+    private static String digest(File pFile, String algorithm) {
         byte[] rBytes = new byte[READ_BUFFER_SIZE];
 
         if (TransConst.CRC32.equals(algorithm)) {
             CRC32 crc32 = new CRC32();
             try {
                 BufferedInputStream inBuff = new BufferedInputStream(new FileInputStream(pFile));
-                int nLen = 0;
+                int nLen;
                 while ((nLen = inBuff.read(rBytes)) != -1) {
                     crc32.update(rBytes, 0, nLen);
                 }
@@ -429,7 +429,7 @@ public class FileUtils {
             return String.format(TransConst.FORMAT_HEX_08, crc32.getValue()).toUpperCase();
         }
         
-        MessageDigest md = null;
+        MessageDigest md;
         try {
             md = MessageDigest.getInstance(algorithm);
 
@@ -522,8 +522,8 @@ public class FileUtils {
         if (path.isFile()) {
             return path.getName();
         }
-        StringBuffer strbuf = new StringBuffer();
-        for (File file : path.listFiles()) {
+        StringBuilder strbuf = new StringBuilder();
+        for (File file : Objects.requireNonNull(path.listFiles())) {
             strbuf.append(file.getName()).append(TransConst.CRLN);
         }
         return strbuf.toString();
@@ -592,7 +592,8 @@ public class FileUtils {
         String result;
         for (Checker checker : checkers) {
             processBuilder.command(checker.checkCommand(fileName));
-            TransLog.getLogger().info("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+//            TransLog.getLogger().info("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
+            TransLog.getLogger().info("Command line: " + String.join(" ", processBuilder.command()));
             result = processCommand(processBuilder);
             if (checker.checkOk(result)) {
                 errorInfos.clear();
@@ -630,10 +631,10 @@ public class FileUtils {
         for (String fileName : fileNames) {
             errorInfos.putAll(checkPackage(fileName));
         }
-        StringBuffer errInfoStr = new StringBuffer();
-        errInfoStr.append(errorInfos.size() + " error(s) found." + TransConst.CRLN);
+        StringBuilder errInfoStr = new StringBuilder();
+        errInfoStr.append(errorInfos.size()).append(" error(s) found.").append(TransConst.CRLN);
         for (String key : errorInfos.keySet()) {
-            errInfoStr.append(key + " : " + errorInfos.get(key) + TransConst.CRLN);
+            errInfoStr.append(key).append(" : ").append(errorInfos.get(key)).append(TransConst.CRLN);
         }
         return errInfoStr.toString();
     }
@@ -658,7 +659,7 @@ public class FileUtils {
         return Arrays.asList(ARRAY_SUFFIX_ZIP).contains(getSuffix(fileName));
     }
 
-    protected static boolean isIgnorable(String fileName) {
+    static boolean isIgnorable(String fileName) {
         final String[] ARRAY_SUFFIX_IGNORABLE = {"pdf", "txt", "epub", "mobi"};
 
         return Arrays.asList(ARRAY_SUFFIX_IGNORABLE).contains(getSuffix(fileName));

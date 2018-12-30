@@ -32,19 +32,16 @@ public abstract class Node{
                 && (pNode.path.equals(this.path));
     }
 
-    public boolean searchName(String searchText) {
+    boolean searchName(String searchText) {
         return search(this.name, searchText);
     }
 
-    public boolean searchPath(String searchText) {
+    boolean searchPath(String searchText) {
         return search(this.path, searchText);
     }
 
     private boolean search(String member, String searchText) {
-        if (member.matches("(?i).*" + searchText + ".*")) {
-            return true;
-        }
-        return false;
+        return member.matches("(?i).*" + searchText + ".*");
     }
 
 

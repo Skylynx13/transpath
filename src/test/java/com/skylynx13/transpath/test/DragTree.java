@@ -13,8 +13,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
@@ -26,18 +24,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 class DragTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener {
     private static final long serialVersionUID = -7123350256666099899L;
-    BufferedImage ghostImage;
+    private BufferedImage ghostImage;
     private Rectangle2D ghostRect = new Rectangle2D.Float();
     private Point ptOffset = new Point();
     private Point lastPoint = new Point();
     private TreePath lastPath;
     private Timer hoverTimer;
-    FileNode sourceNode;
+    private FileNode sourceNode;
 
-    public DragTree() {
+    DragTree() {
         System.out.println("DragTree");
         DragSource dragSource = DragSource.getDefaultDragSource();
         dragSource.createDefaultDragGestureRecognizer(this,
@@ -92,26 +91,24 @@ class DragTree extends JTree implements DragGestureListener, DragSourceListener,
         // Set up a hover timer, so that a node will be automatically expanded
         // or collapsed
         // if the user lingers on it for more than a short time
-        hoverTimer = new Timer(1000, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (lastPath == null) {
-                    return;
-                }
-                if (getRowForPath(lastPath) == 0)
-                    return;
-                // Do nothing if we are hovering over the root node
-                if (isExpanded(lastPath))
-                    collapsePath(lastPath);
-                else
-                    expandPath(lastPath);
+        hoverTimer = new Timer(1000, e -> {
+            if (lastPath == null) {
+                return;
             }
+            if (getRowForPath(lastPath) == 0)
+                return;
+            // Do nothing if we are hovering over the root node
+            if (isExpanded(lastPath))
+                collapsePath(lastPath);
+            else
+                expandPath(lastPath);
         });
         hoverTimer.setRepeats(false);
         // Set timer to one-shot mode
         this.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 int code = e.getKeyCode();
-                int modifiers = e.getModifiers();
+                int modifiers = e.getModifiersEx();
                 if (code == 'v' || code == 'V') {
                     System.out.println("find v");
                     System.out.println("modifiers:" + modifiers + "/t" + ((modifiers & KeyEvent.CTRL_MASK) != 0));
@@ -150,13 +147,12 @@ class DragTree extends JTree implements DragGestureListener, DragSourceListener,
         TreePath path = getLeadSelectionPath();
         if (path == null)
             return;
-        FileNode node = (FileNode) path.getLastPathComponent();
-        sourceNode = node;
+        sourceNode = (FileNode) path.getLastPathComponent();
         // Work out the offset of the drag point from the TreePath bounding
         // rectangle origin
         Rectangle raPath = getPathBounds(path);
         Point ptDragOrigin = e.getDragOrigin();
-        ptOffset.setLocation(ptDragOrigin.x - raPath.x, ptDragOrigin.y - raPath.y);
+        ptOffset.setLocation(ptDragOrigin.x - Objects.requireNonNull(raPath).x, ptDragOrigin.y - raPath.y);
         // Get the cell renderer (which is a JLabel) for the path being dragged
         int row = this.getRowForLocation(ptDragOrigin.x, ptDragOrigin.y);
         JLabel lbl = (JLabel) getCellRenderer().getTreeCellRendererComponent(this,
@@ -311,10 +307,8 @@ class DragTree extends JTree implements DragGestureListener, DragSourceListener,
             } else {
                 e.rejectDrop();
             }
-        } catch (IOException ioe) {
+        } catch (IOException | UnsupportedFlavorException ioe) {
             ioe.printStackTrace();
-        } catch (UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
         } finally {
             ghostImage = null;
             this.repaint();
@@ -325,26 +319,21 @@ class DragTree extends JTree implements DragGestureListener, DragSourceListener,
         if (src.isDirectory()) {
             if (!dest.exists()) {
                 boolean ret = dest.mkdir();
-                if (ret == false)
+                if (!ret)
                     return;
             }
             File[] fs = src.listFiles();
-            for (int i = 0; i < fs.length; i++) {
-                cp(fs[i], new File(dest, fs[i].getName()));
+            for (File f : Objects.requireNonNull(fs)) {
+                cp(f, new File(dest, f.getName()));
             }
             return;
         }
         byte[] buf = new byte[1024];
-        FileInputStream in = new FileInputStream(src);
-        FileOutputStream out = new FileOutputStream(dest);
         int len;
-        try {
+        try (FileInputStream in = new FileInputStream(src); FileOutputStream out = new FileOutputStream(dest)) {
             while ((len = in.read(buf)) > 0) {
                 out.write(buf, 0, len);
             }
-        } finally {
-            in.close();
-            out.close();
         }
     }
 
@@ -356,7 +345,7 @@ class FileNode extends DefaultMutableTreeNode {
     private static final long serialVersionUID = -6713369593920467035L;
     private boolean explored = false;
 
-    public FileNode(File file) {
+    FileNode(File file) {
         setUserObject(file);
     }
 
@@ -368,15 +357,15 @@ class FileNode extends DefaultMutableTreeNode {
         return !isDirectory();
     }
 
-    public File getFile() {
+    File getFile() {
         return (File) getUserObject();
     }
 
-    public boolean isExplored() {
+    boolean isExplored() {
         return explored;
     }
 
-    public boolean isDirectory() {
+    boolean isDirectory() {
         File file = getFile();
         return file.isDirectory();
     }
@@ -388,25 +377,25 @@ class FileNode extends DefaultMutableTreeNode {
         return (index != -1 && index != filename.length() - 1) ? filename.substring(index + 1) : filename;
     }
 
-    public void explore() {
+    void explore() {
         if (!isDirectory())
             return;
         if (!isExplored()) {
             File file = getFile();
             File[] children = file.listFiles();
-            for (int i = 0; i < children.length; ++i) {
-                if (children[i].isDirectory())
-                    add(new FileNode(children[i]));
+            for (File child : Objects.requireNonNull(children)) {
+                if (child.isDirectory())
+                    add(new FileNode(child));
             }
-            for (int i = 0; i < children.length; ++i) {
-                if (!children[i].isDirectory())
-                    add(new FileNode(children[i]));
+            for (File child : children) {
+                if (!child.isDirectory())
+                    add(new FileNode(child));
             }
             explored = true;
         }
     }
 
-    public void reexplore() {
+    void reexplore() {
         this.removeAllChildren();
         explored = false;
         explore();

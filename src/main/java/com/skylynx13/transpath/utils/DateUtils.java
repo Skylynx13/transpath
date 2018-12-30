@@ -24,7 +24,7 @@ public class DateUtils {
         return formatDateTimeLong(new Date(pDateValue));
     }
     
-    public static String formatDateTimeLong(Date pDate) {
+    private static String formatDateTimeLong(Date pDate) {
         return formatDate(TransConst.FMT_DATE_TIME_LONG, pDate);
     }
     
@@ -32,7 +32,7 @@ public class DateUtils {
         return formatDate(pFormat, new Date(pDateValue));
     }
 
-    public static String formatDate(String pFormat, Date pDate) {
+    private static String formatDate(String pFormat, Date pDate) {
         return new SimpleDateFormat(pFormat).format(pDate);
     }
     

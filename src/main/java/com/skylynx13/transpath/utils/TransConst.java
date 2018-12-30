@@ -11,8 +11,8 @@ public class TransConst {
     public static final String LOC_SOURCE  = "LOC_SOURCE";
     public static final String LOC_TARGET  = "LOC_TARGET";
 
-    public static final String FONT_TYPE = "FONT_TYPE";
-    public static final String FONT_SIZE = "FONT_SIZE";
+    private static final String FONT_TYPE = "FONT_TYPE";
+    private static final String FONT_SIZE = "FONT_SIZE";
 
     public static final String VER_CURR   = "VER_CURR";
 
@@ -42,28 +42,28 @@ public class TransConst {
     public static final String TP_PROPS = System.getProperty("transpath.properties");
     
     public static final String LIST_KEYWORDS = "keywords.list";
-    public static final String LIST_HITSHELF = "hitshelf.list";
+    static final String LIST_HITSHELF = "hitshelf.list";
     public static final String LIST_RENAME   = "rename.list";
 
-    public static final String MD5    = "MD5";
-    public static final String SHA    = "SHA";
+    static final String MD5    = "MD5";
+    static final String SHA    = "SHA";
     public static final String SHA1   = "SHA-1";
     public static final String SHA256 = "SHA-256";
     public static final String SHA384 = "SHA-384";
     public static final String SHA512 = "SHA-512";
-    public static final String CRC32  = "CRC32";
+    static final String CRC32  = "CRC32";
     
     public static final String FORMAT_INT_04 = "%04d";
     public static final String FORMAT_INT_08 = "%08d";
     public static final String FORMAT_INT_13 = "%013d";
     public static final String FORMAT_INT_20 = "%020d";
-    public static final String FORMAT_HEX_08 = "%08x";
+    static final String FORMAT_HEX_08 = "%08x";
     
     public static final String FMT_DATE_TIME_SHORT = "yyyyMMddHHmm";
     public static final String FMT_DATE_TIME       = "yyyyMMddHHmmss";
     public static final String FMT_DATE_TIME_LONG  = "yyyyMMddHHmmssSSS";
     public static final String FMT_DATE_TIME_READ  = "yyyy-MM-dd HH:mm:ss.SSS";
-    public static final String FMT_DATE            = "yyyyMMdd";
+    static final String FMT_DATE            = "yyyyMMdd";
     
     public static final String NAME_CHARS = "[\\-\\+!@#$%^&½,.'A-Za-z0-9 \\(\\)]+";
 
@@ -78,8 +78,8 @@ public class TransConst {
     public static final String CMD_COPY_TO_TARGET = "cmd /c chcp 437|copy ";
 
     public static final String PKG_OK = "OK";
-    public static final String PKG_TYPE = "File type not recognized";
-    public static final String PKG_IGNORE = "File type ignored";
+    static final String PKG_TYPE = "File type not recognized";
+    static final String PKG_IGNORE = "File type ignored";
     public static final String PKG_DAMAGED = "File damaged";
     public static final String PKG_UNKNOWN = "Unknown error";
 }

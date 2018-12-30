@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
 import com.skylynx13.transpath.log.TransLog;
@@ -23,24 +24,24 @@ public class TaskDigger {
 
     private static final String[] KEYS_BIG_ENTRY = { "(\\d{3}(\\.\\d{1,2}){0,1} MB|\\d{1,2}(\\.\\d{1,2}){0,1} GB)" };
 
-    public static void digKeywordFileDefault(String src, String target) {
+    static void digKeywordFileDefault(String src, String target) {
         TaskDigger.digKeywordFile(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_KEYWORDS, 
                                   src, target);
     }
 
-    public static void digKeywordFile(String key, String src, String target) {
+    private static void digKeywordFile(String key, String src, String target) {
         String[] keywords = TaskDigger.readKeywordList(key);
         TransLog.getLogger().info("Digging keywords " + Arrays.toString(keywords));
         TaskDigger.digKeyword(keywords, src, target);
     }
 
-    public static int digKeyword(String[] keywords, String src, String target) {
+    private static int digKeyword(String[] keywords, String src, String target) {
         int n = new TaskArranger().readFromFile(src).applyFilter(keywords).appendToFile(target);
         TransLog.getLogger().info("" + n + " entries digged from " + src + " are saved to " + target);
         return n;
     }
 
-    public static void pickoutKeyword(String[] keys, String src, String target) {
+    private static void pickoutKeyword(String[] keys, String src, String target) {
         TransLog.getLogger().info("Digging keyword...");
         int n = new TaskArranger().readFromFile(src).applyFilterReversely(keys).appendToFile(target);
         TransLog.getLogger().info("Totally " + n + " entries extracted.");
@@ -56,9 +57,9 @@ public class TaskDigger {
         TaskDigger.pickoutKeyword(KEYS_BIG_ENTRY, src, target);
     }
 
-    public static String[] readKeywordList(String key) {
-        Scanner in = null;
-        ArrayList<String> keywords = new ArrayList<String>();
+    private static String[] readKeywordList(String key) {
+        Scanner in;
+        ArrayList<String> keywords = new ArrayList<>();
         try {
             in = new Scanner(new FileReader(key));
         } catch (Exception e) {
@@ -69,20 +70,16 @@ public class TaskDigger {
             keywords.add(in.nextLine());
         }
         in.close();
-        return (String[]) keywords.toArray(new String[keywords.size()]);
+        return keywords.toArray(new String[0]);
     }
     
-    public static void digAllFreshSpecific(String[] keys, String target) {
+    static void digAllFreshSpecific(String[] keys, String target) {
         long t0 = System.currentTimeMillis();
         FileUtils.clearFile(target);
         File path = new File(TransProp.get(TransConst.LOC_TASK));
         int total = 0;
         TransLog.getLogger().info("Digging keywords " + Arrays.toString(keys));
-        for (File file : path.listFiles(new FilenameFilter() {
-            public boolean accept(File file, String name) {
-                return name.matches("fresh_.*.txt");
-            }
-        })) {
+        for (File file : Objects.requireNonNull(path.listFiles((file, name) -> name.matches("fresh_.*.txt")))) {
             total += TaskDigger.digKeyword(keys, file.getAbsolutePath(), target);
             //TransLog.getLogger().info(file.getAbsolutePath());
         }

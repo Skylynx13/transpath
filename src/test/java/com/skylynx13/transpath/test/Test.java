@@ -1,61 +1,42 @@
 package com.skylynx13.transpath.test;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import javax.swing.*;
+import javax.swing.text.Document;
+import javax.swing.text.EditorKit;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetAdapter;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
+import java.awt.dnd.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import javax.swing.BorderFactory;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
-import javax.swing.text.Document;
-import javax.swing.text.EditorKit;
 
 public class Test extends JFrame implements DropTargetListener {
     private static final long serialVersionUID = -5037743965292608371L;
     private JEditorPane textPane = new JEditorPane();
-    DragTree tree = new DragTree();
+    private DragTree tree = new DragTree();
     private JScrollPane jsPane = new JScrollPane(tree);
 
-    public Test() {
+    private Test() {
         super("Drag and Drop With Swing");
         System.out.println("test");
 //        DropTarget dt = new DropTarget(textPane, DnDConstants.ACTION_COPY_OR_MOVE, this);
         DropTarget dt = new DropTarget(tree, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter() {
-
             @Override
             public void drop(DropTargetDropEvent dtde) {
                 Transferable tr = dtde.getTransferable();
                 System.out.println("JFL: " + dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor));
                 try {
                     System.out.println("JFL: " + tr.getTransferData(DataFlavor.javaFileListFlavor).toString());
-                } catch (UnsupportedFlavorException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (UnsupportedFlavorException | IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
-            
+
         });
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, createTreePanel(), createTextPanel());
@@ -64,7 +45,7 @@ public class Test extends JFrame implements DropTargetListener {
         getContentPane().add(splitPane, BorderLayout.CENTER);
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         System.out.println("main");
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -152,10 +133,8 @@ public class Test extends JFrame implements DropTargetListener {
             } else {
                 e.rejectDrop();
             }
-        } catch (IOException ioe) {
+        } catch (IOException | UnsupportedFlavorException ioe) {
             ioe.printStackTrace();
-        } catch (UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
         }
     }
 
