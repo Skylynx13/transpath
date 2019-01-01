@@ -59,6 +59,9 @@ public class TranspathFrame extends JFrame {
         initMenuBar();
         initLookAndFeel();
         initPanel();
+
+        setTitle("Storage Archivist - " + storeList.version);
+        setVisible(true);
     }
 
     void reloadStore() {
@@ -115,14 +118,12 @@ public class TranspathFrame extends JFrame {
     }
 
     private void initPanel() {
-        JPanel mainPanel = (JPanel) this.getContentPane();
+        JPanel mainPanel = (JPanel) getContentPane();
         mainPanel.removeAll();
         mainPanel.setLayout(new BorderLayout());
         reloadStore();
         mainPanel.add(createAllSplitPane(), BorderLayout.CENTER);
         mainPanel.add(createStatusBar(), BorderLayout.SOUTH);
-        this.setTitle("Storage Archivist - " + storeList.version);
-        this.setVisible(true);
     }
 
     private JSplitPane createAllSplitPane() {
