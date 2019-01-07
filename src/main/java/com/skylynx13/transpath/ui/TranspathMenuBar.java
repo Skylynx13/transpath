@@ -1,12 +1,12 @@
 package com.skylynx13.transpath.ui;
 
-import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.store.StoreKeeper;
 import com.skylynx13.transpath.task.TaskChecker;
 import com.skylynx13.transpath.task.TaskKeeper;
 import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,6 +21,7 @@ public class TranspathMenuBar extends JMenuBar {
     private static final long serialVersionUID = 1L;
 
     private TranspathFrame transpathFrame;
+    private JDialog aboutDialog;
 
     private ExecutorService transpathMenuAction = Executors.newCachedThreadPool(r -> new Thread(r, "TranspathMenuAction"));
 
@@ -53,15 +54,16 @@ public class TranspathMenuBar extends JMenuBar {
         taskMenu.add(taskSpecItem);
         taskSpecItem.addActionListener(e -> transpathMenuAction.submit(TaskKeeper::digSpecFresh));
 
+        JMenuItem taskPackageItem = new JMenuItem("Package Check");
+        taskMenu.add(taskPackageItem);
+        taskPackageItem.addActionListener(e -> transpathMenuAction.submit(TaskChecker::checkPackages));
+        taskPackageItem.setAccelerator(KeyStroke.getKeyStroke('K', InputEvent.CTRL_DOWN_MASK));
+
         JMenuItem taskNameItem = new JMenuItem("Name Revise");
         taskMenu.add(taskNameItem);
         taskNameItem.addActionListener(e -> transpathMenuAction.submit(TaskChecker::rename));
         taskNameItem.setAccelerator(KeyStroke.getKeyStroke('R', InputEvent.CTRL_DOWN_MASK));
 
-        JMenuItem taskPackageItem = new JMenuItem("Package Check");
-        taskMenu.add(taskPackageItem);
-        taskPackageItem.addActionListener(e -> transpathMenuAction.submit(TaskChecker::checkPackages));
-        taskPackageItem.setAccelerator(KeyStroke.getKeyStroke('K', InputEvent.CTRL_DOWN_MASK));
         return taskMenu;
     }
 
@@ -98,11 +100,25 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem helpAboutItem = new JMenuItem("About");
         helpMenu.add(helpAboutItem);
-        helpAboutItem.addActionListener(e -> transpathMenuAction.submit(() -> {
-            TransLog.getLogger().error("It's ok anyway.");
-            TransLog.getLogger().info("Info can be seen.");
-        }));
+        helpAboutItem.addActionListener(e -> showAboutDialog());
         return helpMenu;
+    }
+
+    private void showAboutDialog() {
+        if (aboutDialog == null) {
+            aboutDialog = new JDialog(this.transpathFrame, "About TransPath", true);
+            aboutDialog.add(
+                    new JLabel("<html><h2>TransPath is here anyway.</h2><hr>By Skylynx13</html>"),
+                    BorderLayout.CENTER
+            );
+            JButton okButton = new JButton("OK");
+            okButton.addActionListener(e -> aboutDialog.setVisible(false));
+            JPanel okPanel = new JPanel();
+            okPanel.add(okButton);
+            aboutDialog.add(okPanel, BorderLayout.SOUTH);
+            aboutDialog.setSize(250, 150);
+        }
+        aboutDialog.setVisible(true);
     }
 
     private void setFont() {
