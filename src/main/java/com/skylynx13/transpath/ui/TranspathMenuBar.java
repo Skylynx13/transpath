@@ -7,6 +7,8 @@ import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,7 +25,25 @@ public class TranspathMenuBar extends JMenuBar {
     private TranspathFrame transpathFrame;
     private JDialog aboutDialog;
 
-    private ExecutorService transpathMenuAction = Executors.newCachedThreadPool(r -> new Thread(r, "TranspathMenuAction"));
+    private ExecutorService transpathMenuAction =
+            Executors.newCachedThreadPool(r -> new Thread(r, "TranspathMenuAction"));
+
+    public TranspathMenuBar(TranspathFrame transpathFrame) {
+        this.transpathFrame = transpathFrame;
+
+        setFont();
+
+        this.add(createSysMenu());
+        this.add(createTaskMenu());
+        this.add(createStoreMenu());
+        this.add(createHelpMenu());
+
+    }
+
+    private void setFont() {
+        UIManager.put("Menu.font", TransConst.GLOBAL_FONT);
+        UIManager.put("MenuItem.font", TransConst.GLOBAL_FONT);
+    }
 
     private JMenu createSysMenu() {
         JMenu sysMenu = new JMenu("Sys");
@@ -82,10 +102,12 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem storeSearchItem = new JMenuItem("Search...");
         storeMenu.add(storeSearchItem);
-        storeSearchItem.addActionListener(e -> transpathMenuAction.submit(() -> {
+        storeSearchItem.addActionListener(e -> {
             String searchText = JOptionPane.showInputDialog("Search Text:");
-            transpathFrame.searchList(searchText);
-        }));
+            if (searchText != null) {
+                transpathFrame.searchList(searchText);
+            }
+        });
         storeSearchItem.setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem fetchSelectedItem = new JMenuItem("Fetch Selected");
@@ -120,22 +142,4 @@ public class TranspathMenuBar extends JMenuBar {
         }
         aboutDialog.setVisible(true);
     }
-
-    private void setFont() {
-        UIManager.put("Menu.font", TransConst.GLOBAL_FONT);
-        UIManager.put("MenuItem.font", TransConst.GLOBAL_FONT);
-    }
-
-    public TranspathMenuBar(TranspathFrame transpathFrame) {
-        this.transpathFrame = transpathFrame;
-
-        setFont();
-
-        this.add(createSysMenu());
-        this.add(createTaskMenu());
-        this.add(createStoreMenu());
-        this.add(createHelpMenu());
-
-    }
-
 }
