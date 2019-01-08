@@ -148,7 +148,7 @@ public class FileUtilsTest {
 //        testFiles.add(testResource("testEmpty.zip"));
 //        testFiles.add(testResource("testFiles.cbz"));
 //        testFiles.add(testResource("testWrongType.txt"));
-//        String result = FileUtils.checkPackages(testFiles);
+//        String result = FileUtils.check(testFiles);
 //        assertEquals(5, result.size());
 //        assertEquals("No files to extract", result.get(testResource("testZipFakeRar.rar")));
 //        assertEquals("No files to extract", result.get(testResource("testEmpty.rar")));
@@ -209,19 +209,5 @@ public class FileUtilsTest {
 //        }
         System.out.println(FileUtils.extractZipComment(fn2));
         assertTrue(true);
-    }
-
-    @Test
-    public void isIgnorableTest() {
-        String[] filesOk = {"testfile.txt", "testfile.pdf", "test.epub", "test.mobi"};
-        String[] filesErr = {"testfile.pda", "testfile"};
-
-        for (String fn : filesOk){
-            assertTrue(FileUtils.isIgnorable(fn));
-        }
-        for (String fn : filesErr) {
-            assertFalse(FileUtils.isIgnorable(fn));
-        }
-
     }
 }

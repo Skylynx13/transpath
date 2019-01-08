@@ -1,14 +1,13 @@
 package com.skylynx13.transpath.ui;
 
 import com.skylynx13.transpath.store.StoreKeeper;
-import com.skylynx13.transpath.task.TaskChecker;
+import com.skylynx13.transpath.task.NameReviser;
+import com.skylynx13.transpath.task.PackageChecker;
 import com.skylynx13.transpath.task.TaskKeeper;
 import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -76,12 +75,12 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem taskPackageItem = new JMenuItem("Package Check");
         taskMenu.add(taskPackageItem);
-        taskPackageItem.addActionListener(e -> transpathMenuAction.submit(TaskChecker::checkPackages));
+        taskPackageItem.addActionListener(e -> transpathMenuAction.submit(PackageChecker::check));
         taskPackageItem.setAccelerator(KeyStroke.getKeyStroke('K', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem taskNameItem = new JMenuItem("Name Revise");
         taskMenu.add(taskNameItem);
-        taskNameItem.addActionListener(e -> transpathMenuAction.submit(TaskChecker::rename));
+        taskNameItem.addActionListener(e -> transpathMenuAction.submit(NameReviser::rename));
         taskNameItem.setAccelerator(KeyStroke.getKeyStroke('R', InputEvent.CTRL_DOWN_MASK));
 
         return taskMenu;
