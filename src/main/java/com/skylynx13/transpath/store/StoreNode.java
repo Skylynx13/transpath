@@ -30,7 +30,7 @@ public class StoreNode extends Node{
     }
 
     @Override
-    public Node clone() {
+    public StoreNode clone() {
         StoreNode node = new StoreNode();
         node.id = this.id;
         node.name = this.name;

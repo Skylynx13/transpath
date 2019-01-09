@@ -10,10 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.store.StoreList;
-import com.skylynx13.transpath.store.Node;
-import com.skylynx13.transpath.store.NodeList;
-import com.skylynx13.transpath.store.NodeTree;
+import com.skylynx13.transpath.store.*;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 import org.jetbrains.annotations.NotNull;
@@ -60,14 +57,14 @@ public class TranspathFrame extends JFrame {
         initLookAndFeel();
         initPanel();
 
-        setTitle("Storage Archivist - " + storeList.version);
+        setTitle("Storage Archivist - " + storeList.getVersion());
         setVisible(true);
     }
 
     void reloadStore() {
         storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
         getTreePane().setViewportView(createTree(storeList));
-        TransLog.getLogger().info("List of version " + storeList.version + " loaded.");
+        TransLog.getLogger().info("List of version " + storeList.getVersion() + " loaded.");
     }
 
     private JTree createTree(StoreList storeList) {
@@ -294,12 +291,12 @@ public class TranspathFrame extends JFrame {
 
     private void fetchStore(ArrayList<Integer> storeIdList) {
         //get source path-name list
-        NodeList sList = storeList.getListByIds(storeIdList);
+        StoreList sList = storeList.getListByIds(storeIdList);
         //get target
         String sourceBase = TransProp.get(TransConst.LOC_SOURCE);
         String target = TransProp.get(TransConst.LOC_TARGET);
         //exec and feedback
-        for (Node sNode : sList.nodeList) {
+        for (StoreNode sNode : sList.getStoreList()) {
             String pathName = sNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
                     + sNode.name;
             String cmd = TransConst.CMD_COPY_TO_TARGET + "\"" + sourceBase + pathName + "\" " + target;

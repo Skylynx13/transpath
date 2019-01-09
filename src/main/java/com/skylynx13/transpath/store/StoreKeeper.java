@@ -35,7 +35,7 @@ public class StoreKeeper {
         }
         try {
             PrintWriter out = new PrintWriter(delFile);
-            for (Node aNode : delList.nodeList) {
+            for (Node aNode : delList.storeList) {
                 out.println("rm \"" + TransProp.get(TransConst.LOC_STORE)
                         + aNode.path.substring(1)
                         + aNode.name + "\"");
@@ -52,7 +52,7 @@ public class StoreKeeper {
         }
         try {
             PrintWriter out = new PrintWriter(delFile);
-            for (Node aNode : delList.nodeList) {
+            for (Node aNode : delList.storeList) {
                 out.println("del \"" + TransProp.get(TransConst.LOC_STORE)
                         + aNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
                         + aNode.name + "\"");
@@ -82,7 +82,7 @@ public class StoreKeeper {
             int s1 = aList.size();
             long t1 = System.currentTimeMillis() - t0;
             TransLog.getLogger().info("Store Listed: " + s1);
-            TransLog.getLogger().info("Store file size: " + aList.getFileSize());
+            TransLog.getLogger().info("Store file size: " + aList.getStoreSize());
             TransLog.getLogger().info("Time Used: " + t1);
             TransLog.getLogger().info("Avg Speed: " + s1 / (t1 * 0.001) + "item/s.");
             stotal += s1;
@@ -102,7 +102,7 @@ public class StoreKeeper {
         saveResList(resList);
 
         TransLog.getLogger().info("Combine done in " + (System.currentTimeMillis() - t0) + "ms.");
-        return resList.version;
+        return resList.getVersion();
     }
 
     private static void combineTest(String oldVer, String aTag, String[] bTags) {
@@ -145,17 +145,17 @@ public class StoreKeeper {
         StoreList dupList = new StoreList();
         StoreList delList = new StoreList();
 
-        for (Node aNode : pList.nodeList) {
+        for (StoreNode aNode : pList.storeList) {
             if (null != aNode) {
                 if (!((StoreNode) aNode).checkDupNode(dNode)) {
                     dNode = ((StoreNode) aNode);
-                    resList.nodeList.add(aNode);
+                    resList.storeList.add(aNode);
                 } else {
                     if (!dupList.hasNode(dNode)) {
-                        dupList.nodeList.add(dNode);
+                        dupList.storeList.add(dNode);
                     }
-                    dupList.nodeList.add(aNode);
-                    delList.nodeList.add(aNode);
+                    dupList.storeList.add(aNode);
+                    delList.storeList.add(aNode);
                 }
             }
         }
@@ -178,7 +178,7 @@ public class StoreKeeper {
         TransLog.getLogger().info("Current Length: " + pList.size());
         TransLog.getLogger().info("Reserve Length: " + resList.size());
         TransLog.getLogger().info("Removal Length: " + delList.size());
-        TransLog.getLogger().info("Removal file size: " + delList.getFileSize());
+        TransLog.getLogger().info("Removal file size: " + delList.getStoreSize());
 
         TransLog.getLogger().info("CheckDup done in " + (System.currentTimeMillis() - t0) + "ms.");
         return resList;
@@ -195,17 +195,17 @@ public class StoreKeeper {
         StoreList dupList = new StoreList();
         StoreList delList = new StoreList();
 
-        for (Node aNode : pList.nodeList) {
+        for (StoreNode aNode : pList.storeList) {
             if (null != aNode) {
                 if (!((StoreNode) aNode).checkDupNode(dNode)) {
                     dNode = ((StoreNode) aNode);
-                    resList.nodeList.add(aNode);
+                    resList.storeList.add(aNode);
                 } else {
                     if (!dupList.hasNode(dNode)) {
-                        dupList.nodeList.add(dNode);
+                        dupList.storeList.add(dNode);
                     }
-                    dupList.nodeList.add(aNode);
-                    delList.nodeList.add(aNode);
+                    dupList.storeList.add(aNode);
+                    delList.storeList.add(aNode);
                 }
             }
         }
@@ -224,7 +224,7 @@ public class StoreKeeper {
         TransLog.getLogger().info("Current Length: " + pList.size());
         TransLog.getLogger().info("Reserve Length: " + resList.size());
         TransLog.getLogger().info("Removal Length: " + delList.size());
-        TransLog.getLogger().info("Removal file size: " + delList.getFileSize());
+        TransLog.getLogger().info("Removal file size: " + delList.getStoreSize());
 
         TransLog.getLogger().info("CheckDupInPath done in " + (System.currentTimeMillis() - t0) + "ms.");
     }
@@ -235,7 +235,7 @@ public class StoreKeeper {
 
         resList.orderByPathAndName();
         resList.reorgId();
-        String currVer = resList.version;
+        String currVer = resList.getVersion();
         resList.keepFile(FileUtils.storeNameOfVersion(currVer));
 
         TransLog.getLogger().info("GenPubLink done in " + (System.currentTimeMillis() - t0) + "ms.");
