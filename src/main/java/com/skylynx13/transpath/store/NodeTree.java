@@ -1,6 +1,5 @@
-package com.skylynx13.transpath.tree;
+package com.skylynx13.transpath.store;
 
-import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.tree.MutableTreeNode;

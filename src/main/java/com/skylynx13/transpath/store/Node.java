@@ -1,4 +1,4 @@
-package com.skylynx13.transpath.tree;
+package com.skylynx13.transpath.store;
 
 /**
  * ClassName: Node

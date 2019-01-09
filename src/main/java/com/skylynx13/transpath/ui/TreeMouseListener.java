@@ -7,9 +7,9 @@ import javax.swing.*;
 import javax.swing.tree.TreePath;
 
 import com.skylynx13.transpath.store.StoreNode;
-import com.skylynx13.transpath.tree.BranchNode;
-import com.skylynx13.transpath.tree.Node;
-import com.skylynx13.transpath.tree.NodeTree;
+import com.skylynx13.transpath.store.BranchNode;
+import com.skylynx13.transpath.store.Node;
+import com.skylynx13.transpath.store.NodeTree;
 
 /**
  * ClassName: TreeMouseListener

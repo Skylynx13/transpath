@@ -1,7 +1,6 @@
 package com.skylynx13.transpath.store;
 
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.tree.Node;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
