@@ -147,15 +147,15 @@ public class StoreKeeper {
 
         for (StoreNode aNode : pList.storeList) {
             if (null != aNode) {
-                if (!aNode.checkDupStoreNode(dNode)) {
-                    dNode = aNode;
-                    resList.storeList.add(aNode);
-                } else {
+                if (aNode.checkDupStoreNode(dNode)) {
                     if (!dupList.hasNode(dNode)) {
                         dupList.storeList.add(dNode);
                     }
                     dupList.storeList.add(aNode);
                     delList.storeList.add(aNode);
+                } else {
+                    dNode = aNode;
+                    resList.storeList.add(aNode);
                 }
             }
         }
@@ -197,15 +197,15 @@ public class StoreKeeper {
 
         for (StoreNode aNode : pList.storeList) {
             if (null != aNode) {
-                if (!aNode.checkDupStoreNode(dNode)) {
-                    dNode = aNode;
-                    resList.storeList.add(aNode);
-                } else {
+                if (aNode.checkDupStoreNode(dNode)) {
                     if (!dupList.hasNode(dNode)) {
                         dupList.storeList.add(dNode);
                     }
                     dupList.storeList.add(aNode);
                     delList.storeList.add(aNode);
+                } else {
+                    dNode = aNode;
+                    resList.storeList.add(aNode);
                 }
             }
         }

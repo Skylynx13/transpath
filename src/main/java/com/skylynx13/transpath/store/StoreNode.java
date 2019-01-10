@@ -112,21 +112,6 @@ public class StoreNode implements Cloneable {
         crc32 = "";
     }
 
-//    public StoreNode(String pName) {
-//        name = pName;
-//    }
-
-    public StoreNode(String pName, String pPath) {
-        name = pName;
-        path = pPath;
-    }
-
-    public StoreNode(int pId, String pPath, String pName) {
-        this.id = pId;
-        this.path = pPath;
-        this.name = pName;
-    }
-
     StoreNode(String sEntry) {
         String[] sItems = sEntry.split(TransConst.COLON);
         id = Integer.parseInt(sItems[0]);
@@ -147,7 +132,7 @@ public class StoreNode implements Cloneable {
         return branchNode;
     }
 
-    public StoreNode getClone() {
+    StoreNode getClone() {
         StoreNode storeNode = null;
         try {
             storeNode = (StoreNode) this.clone();
@@ -156,12 +141,6 @@ public class StoreNode implements Cloneable {
             e.printStackTrace();
         }
         return storeNode;
-    }
-
-    public boolean checkDupPathName(StoreNode pStoreNode) {
-        return (null != pStoreNode)
-                && (pStoreNode.name.equals(this.name))
-                && (pStoreNode.path.equals(this.path));
     }
 
     boolean checkDupStoreNode(StoreNode pStoreNode) {
@@ -182,10 +161,6 @@ public class StoreNode implements Cloneable {
 
     private boolean search(String member, String searchText) {
         return member.matches("(?i).*" + searchText + ".*");
-    }
-
-    public String keepBranchNode() {
-        return name;
     }
 
     StoreNode(String pRoot, File pFile) {
@@ -218,18 +193,7 @@ public class StoreNode implements Cloneable {
                 name;
     }
 
-    public boolean equals(StoreNode pStoreNode) {
-        return (this.id == pStoreNode.id) 
-                && (this.length == pStoreNode.length)
-                && (this.lastModified == pStoreNode.lastModified) 
-                && (this.md5.equals(pStoreNode.md5))
-                && (this.sha1.equals(pStoreNode.sha1))
-                && (this.crc32.equals(pStoreNode.crc32))
-                && (this.path.equals(pStoreNode.path)) 
-                && (this.name.equals(pStoreNode.name));
-    }
-
-    public Object[] toStoreRow() {
+    Object[] toStoreRow() {
         return new Object[]{
                 id,
                 path,

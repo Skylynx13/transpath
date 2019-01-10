@@ -51,7 +51,7 @@ public class StoreTree implements MutableTreeNode {
         return ((null == this.getNode()) && (null == this.getParent()) && (null == this.getChildren()));
     }
 
-    public StoreTree(StoreNode node) {
+    private StoreTree(StoreNode node) {
         this.setNode(node);
     }
 
@@ -59,7 +59,7 @@ public class StoreTree implements MutableTreeNode {
         return node;
     }
 
-    public void setNode(StoreNode node) {
+    private void setNode(StoreNode node) {
         this.node = node;
     }
 
@@ -133,7 +133,7 @@ public class StoreTree implements MutableTreeNode {
         this.children = children;
     }
 
-    public void addChild(StoreTree storeTree) {
+    private void addChild(StoreTree storeTree) {
         if (null == children) {
             children = new ArrayList<>();
         }
@@ -193,7 +193,7 @@ public class StoreTree implements MutableTreeNode {
         return this.getNodeName();
     }
 
-    public String getNodePathName() {
+    private String getNodePathName() {
         String pathName = TransConst.EMPTY;
         if (!isRoot()) {
             pathName += this.parent.getNodePathName();
@@ -336,5 +336,4 @@ public class StoreTree implements MutableTreeNode {
     public void setParent(MutableTreeNode newParent) {
         // TODO Auto-generated method stub
     }
-
 }

@@ -95,7 +95,7 @@ public class StoreList {
         return (null == storeList) ? 0 : storeList.size();
     }
 
-    public void recap() {
+    void recap() {
         minId = Integer.MAX_VALUE;
         maxId = 0;
         for (StoreNode aNode : storeList) {
@@ -109,7 +109,7 @@ public class StoreList {
         calcSize();
     }
 
-    public void clear() {
+    private void clear() {
         version = DateUtils.formatDateTimeLongToday();
         minId = 0;
         maxId = 0;
@@ -263,7 +263,7 @@ public class StoreList {
     }
 
     public void orderById() {
-        storeList.sort(Comparator.comparingInt(sn -> sn.getId()));
+        storeList.sort(Comparator.comparingInt(StoreNode::getId));
     }
 
     void orderByPathAndName() {
@@ -276,7 +276,7 @@ public class StoreList {
         });
     }
 
-    public String keepHeader() {
+    private String keepHeader() {
         return version + TransConst.COLON +
                 String.format(TransConst.FORMAT_INT_08, minId) + TransConst.COLON +
                 String.format(TransConst.FORMAT_INT_08, maxId) + TransConst.COLON +
@@ -368,7 +368,7 @@ public class StoreList {
     private void calcSize() {
         storeSize = 0;
         for (StoreNode aNode : storeList) {
-            storeSize += ((StoreNode) aNode).getLength();
+            storeSize += aNode.getLength();
         }
     }
 
@@ -413,7 +413,7 @@ public class StoreList {
     }
 
     void orderByMd5() {
-        storeList.sort(Comparator.comparing(sn -> sn.getMd5()));
+        storeList.sort(Comparator.comparing(StoreNode::getMd5));
     }
 
     private StoreNode loadNode(String pLine) {
