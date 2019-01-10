@@ -99,11 +99,11 @@ public class StoreList {
         minId = Integer.MAX_VALUE;
         maxId = 0;
         for (StoreNode aNode : storeList) {
-            if (aNode.id < minId) {
-                minId = aNode.id;
+            if (aNode.getId() < minId) {
+                minId = aNode.getId();
             }
-            if (aNode.id > maxId) {
-                maxId = aNode.id;
+            if (aNode.getId() > maxId) {
+                maxId = aNode.getId();
             }
         }
         calcSize();
@@ -123,7 +123,7 @@ public class StoreList {
 
     public StoreNode getById(int pId) {
         for (StoreNode aNode : storeList) {
-            if (aNode.id == pId) {
+            if (aNode.getId() == pId) {
                 return aNode;
             }
         }
@@ -133,7 +133,7 @@ public class StoreList {
     public ArrayList<Integer> getIdList() {
         ArrayList<Integer> idList = new ArrayList<>();
         for (StoreNode aNode : storeList) {
-            idList.add(aNode.id);
+            idList.add(aNode.getId());
         }
         return idList;
     }
@@ -141,8 +141,8 @@ public class StoreList {
     public StoreList getListByIds(ArrayList<Integer> ids) {
         StoreList rNodeList = getNewList();
         for (StoreNode node : storeList) {
-            if (ids.contains(node.id)) {
-                rNodeList.addNode(node.clone());
+            if (ids.contains(node.getId())) {
+                rNodeList.addNode(node.getClone());
             }
         }
         return rNodeList;
@@ -156,27 +156,27 @@ public class StoreList {
         if (0 == size()) {
             minId = 1;
         }
-        pNode.id = ++maxId;
+        pNode.setId(++maxId);
         storeList.add(pNode);
     }
 
     private void enlist(StoreNode pNode) {
         if (0 == size()) {
-            minId = pNode.id;
-            maxId = pNode.id;
+            minId = pNode.getId();
+            maxId = pNode.getId();
         }
-        minId = Math.min(minId, pNode.id);
-        maxId = Math.max(maxId, pNode.id);
+        minId = Math.min(minId, pNode.getId());
+        maxId = Math.max(maxId, pNode.getId());
         storeList.add(pNode);
     }
 
     HashMap<Integer, Integer> attachList(StoreList pList) {
         HashMap<Integer, Integer> aMap = new HashMap<>();
         for (StoreNode aNode : pList.storeList) {
-            int oldId = aNode.id;
+            int oldId = aNode.getId();
             addNode(aNode);
-            if (oldId != aNode.id) {
-                aMap.put(oldId, aNode.id);
+            if (oldId != aNode.getId()) {
+                aMap.put(oldId, aNode.getId());
             }
         }
 
@@ -185,9 +185,9 @@ public class StoreList {
     }
 
     public void removeById(int pId) {
-        ArrayList<Node> removeList = new ArrayList<>();
-        for (Node aNode : storeList) {
-            if (aNode.id == pId) {
+        ArrayList<StoreNode> removeList = new ArrayList<>();
+        for (StoreNode aNode : storeList) {
+            if (aNode.getId() == pId) {
                 removeList.add(aNode);
             }
         }
@@ -196,9 +196,9 @@ public class StoreList {
     }
 
     public void removeByIdMap(HashMap<Integer, Integer> idMap) {
-        ArrayList<Node> removeList = new ArrayList<>();
-        for (Node aNode : storeList) {
-            if (idMap.containsKey(aNode.id)) {
+        ArrayList<StoreNode> removeList = new ArrayList<>();
+        for (StoreNode aNode : storeList) {
+            if (idMap.containsKey(aNode.getId())) {
                 removeList.add(aNode);
             }
         }
@@ -207,9 +207,9 @@ public class StoreList {
     }
 
     void removeByPath(String pPath) {
-        ArrayList<Node> removeList = new ArrayList<>();
-        for (Node aNode : storeList) {
-            if (aNode.path.equals(pPath)) {
+        ArrayList<StoreNode> removeList = new ArrayList<>();
+        for (StoreNode aNode : storeList) {
+            if (aNode.getPath().equals(pPath)) {
                 removeList.add(aNode);
             }
         }
@@ -224,11 +224,11 @@ public class StoreList {
     HashMap<Integer, Integer> reorgId() {
         HashMap<Integer, Integer> aMap = new HashMap<>();
         int newId = 0;
-        for (Node aNode : storeList) {
+        for (StoreNode aNode : storeList) {
             newId++;
-            if (aNode.id != newId) {
-                aMap.put(aNode.id, newId);
-                aNode.id = newId;
+            if (aNode.getId() != newId) {
+                aMap.put(aNode.getId(), newId);
+                aNode.setId(newId);
             }
         }
         recap();
@@ -263,16 +263,16 @@ public class StoreList {
     }
 
     public void orderById() {
-        storeList.sort(Comparator.comparingInt(sn -> sn.id));
+        storeList.sort(Comparator.comparingInt(sn -> sn.getId()));
     }
 
     void orderByPathAndName() {
         storeList.sort((sn1, sn2) -> {
-            int cmp = sn1.path.compareTo(sn2.path);
+            int cmp = sn1.getPath().compareTo(sn2.getPath());
             if (cmp != 0) {
                 return cmp;
             }
-            return sn1.name.compareTo(sn2.name);
+            return sn1.getName().compareTo(sn2.getName());
         });
     }
 
@@ -297,7 +297,7 @@ public class StoreList {
         try {
             PrintWriter out = new PrintWriter(pFile);
             out.println(keepHeader());
-            for (Node aNode : storeList) {
+            for (StoreNode aNode : storeList) {
                 out.println(keepLine(aNode));
             }
             out.close();
@@ -309,7 +309,7 @@ public class StoreList {
     public String toString() {
         StringBuilder strBuff = new StringBuilder(keepHeader());
         strBuff.append(TransConst.CRLN);
-        for (Node aNode : storeList) {
+        for (StoreNode aNode : storeList) {
             strBuff.append(keepLine(aNode)).append(TransConst.CRLN);
         }
         return strBuff.toString();
@@ -331,7 +331,7 @@ public class StoreList {
         }
         Object[][] rows = new Object[size()][];
         int iNode = 0;
-        for (Node aNode : storeList) {
+        for (StoreNode aNode : storeList) {
             rows[iNode] = toRow(aNode);
             iNode++;
         }
@@ -367,8 +367,8 @@ public class StoreList {
 
     private void calcSize() {
         storeSize = 0;
-        for (Node aNode : storeList) {
-            storeSize += ((StoreNode) aNode).length;
+        for (StoreNode aNode : storeList) {
+            storeSize += ((StoreNode) aNode).getLength();
         }
     }
 
@@ -401,7 +401,7 @@ public class StoreList {
                 StoreNode aNode = new StoreNode(pRoot, aFile);
                 addNode(aNode);
                 TransLog.getLogger().info(aNode.keepNode());
-                processedBytes += aNode.length;
+                processedBytes += aNode.getLength();
                 TransLog.getLogger().info("Processed Bytes: " + processedBytes);
             }
             if (aFile.isDirectory()) {
@@ -413,19 +413,19 @@ public class StoreList {
     }
 
     void orderByMd5() {
-        storeList.sort(Comparator.comparing(sn -> ((StoreNode) sn).md5));
+        storeList.sort(Comparator.comparing(sn -> sn.getMd5()));
     }
 
     private StoreNode loadNode(String pLine) {
         return new StoreNode(pLine);
     }
 
-    private String keepLine(Node pNode) {
+    private String keepLine(StoreNode pNode) {
         return pNode.keepNode();
     }
 
-    private Object[] toRow(Node pNode) {
-        return ((StoreNode) pNode).toRow();
+    private Object[] toRow(StoreNode pNode) {
+        return pNode.toStoreRow();
     }
 
     private StoreList getNewList() {

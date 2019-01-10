@@ -10,9 +10,6 @@ import java.util.regex.Pattern;
 import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.task.TaskArranger;
 import com.skylynx13.transpath.task.TaskEntry;
-import com.skylynx13.transpath.store.BranchNode;
-import com.skylynx13.transpath.store.Node;
-import com.skylynx13.transpath.store.NodeTree;
 import com.skylynx13.transpath.utils.DateUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
@@ -34,23 +31,6 @@ public class FreeTester {
         }
     }
 
-    public void testNodeTree() {
-        NodeTree tree1 = new NodeTree(new BranchNode("tree1"));
-        NodeTree node1 = new NodeTree(new BranchNode("node1"));
-        tree1.addChild(node1);
-        NodeTree node2 = new NodeTree(new BranchNode("node2"));
-        tree1.addChild(node2);
-        NodeTree node3 = new NodeTree(new BranchNode("node3"));
-        NodeTree tree2 = new NodeTree(new BranchNode("tree2"));
-        tree2.addChild(node3);
-        tree1.addChild(tree2);
-        System.out.println(tree1.getNodePathName());
-        System.out.println(tree2.getNodePathName());
-        System.out.println(node1.getNodePathName());
-        System.out.println(node2.getNodePathName());
-        System.out.println(node3.getNodePathName());
-        System.out.println("===");
-    }
     public void testList() {
         ArrayList<String> aStrList = new ArrayList<>();
         aStrList.add("abcde");
@@ -117,15 +97,6 @@ public class FreeTester {
                 + "\r -> " + str6 + "\r -> " + str7 + "\r -> " + str8);
     }
     
-    public void testArrayListAddAll() {
-        ArrayList<Node> nl1 = null;
-        ArrayList<Node> nl2 = new ArrayList<>();
-        nl2.add(new BranchNode("a"));
-        ArrayList<Node> nl3 = new ArrayList<>();
-        nl3.addAll(Objects.requireNonNull(nl1));
-        nl3.addAll(nl2);
-        System.out.println("ok" + nl3);
-    }
     public void testReformat() {
         String str0 = "Uncle Sam and the Freedom Fighters, 2006-08-00 (_02) (digital) (OkC.O.M.P.U.T.O.-Novus-HD).cbz";
         System.out.println(str0);
@@ -346,13 +317,13 @@ public class FreeTester {
         System.out.println("a="+sa+"; b=" + sb);
 
         StoreNode na = new StoreNode();
-        na.id=1;
-        na.name = "namea";
-        na.path = "patha";
+        na.setId(1);
+        na.setName("namea");
+        na.setPath("patha");
 
         StoreNode nb = na;
-        nb.id=2;
-        System.out.println("na=" + na.id + "; nb=" + nb.id);
+        nb.setId(2);
+        System.out.println("na=" + na.getId() + "; nb=" + nb.getId());
 
         try {
             Process proc = Runtime.getRuntime().exec("cmd /c chcp 437|copy D:\\tesp\\head110.jpg D:\\temp\\head120.jpg" );

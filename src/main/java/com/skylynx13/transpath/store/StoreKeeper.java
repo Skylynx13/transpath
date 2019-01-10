@@ -35,10 +35,10 @@ public class StoreKeeper {
         }
         try {
             PrintWriter out = new PrintWriter(delFile);
-            for (Node aNode : delList.storeList) {
+            for (StoreNode aNode : delList.storeList) {
                 out.println("rm \"" + TransProp.get(TransConst.LOC_STORE)
-                        + aNode.path.substring(1)
-                        + aNode.name + "\"");
+                        + aNode.getPath().substring(1)
+                        + aNode.getName() + "\"");
             }
             out.close();
         } catch (FileNotFoundException e) {
@@ -52,10 +52,10 @@ public class StoreKeeper {
         }
         try {
             PrintWriter out = new PrintWriter(delFile);
-            for (Node aNode : delList.storeList) {
+            for (StoreNode aNode : delList.storeList) {
                 out.println("del \"" + TransProp.get(TransConst.LOC_STORE)
-                        + aNode.path.substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
-                        + aNode.name + "\"");
+                        + aNode.getPath().substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
+                        + aNode.getName() + "\"");
             }
             out.close();
         } catch (FileNotFoundException e) {
@@ -147,8 +147,8 @@ public class StoreKeeper {
 
         for (StoreNode aNode : pList.storeList) {
             if (null != aNode) {
-                if (!((StoreNode) aNode).checkDupNode(dNode)) {
-                    dNode = ((StoreNode) aNode);
+                if (!aNode.checkDupStoreNode(dNode)) {
+                    dNode = aNode;
                     resList.storeList.add(aNode);
                 } else {
                     if (!dupList.hasNode(dNode)) {
@@ -197,8 +197,8 @@ public class StoreKeeper {
 
         for (StoreNode aNode : pList.storeList) {
             if (null != aNode) {
-                if (!((StoreNode) aNode).checkDupNode(dNode)) {
-                    dNode = ((StoreNode) aNode);
+                if (!aNode.checkDupStoreNode(dNode)) {
+                    dNode = aNode;
                     resList.storeList.add(aNode);
                 } else {
                     if (!dupList.hasNode(dNode)) {

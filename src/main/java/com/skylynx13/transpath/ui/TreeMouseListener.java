@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.tree.TreePath;
 
 import com.skylynx13.transpath.store.StoreNode;
-import com.skylynx13.transpath.store.BranchNode;
-import com.skylynx13.transpath.store.Node;
 import com.skylynx13.transpath.store.NodeTree;
 
 /**
@@ -42,11 +40,11 @@ public class TreeMouseListener implements MouseListener {
         JTextArea infoTextArea = TranspathFrame.getInfoTextArea();
         infoTextArea.setText("Tree Selected: " + selectTree.toString()+"\n");
 
-        Node selectNode = selectTree.getNode();
-        if (selectNode instanceof StoreNode) {
+        StoreNode selectNode = selectTree.getNode();
+        if (selectNode.isBranch()) {
+            infoTextArea.append("Branch Node Selected: " + selectNode.keepNode()+"\n");
+        } else {
             infoTextArea.append("Store Node Selected: " + selectNode.keepNode()+"\n");
-        } else if (selectNode instanceof BranchNode) {
-            infoTextArea.append("Simple Node Selected: " + selectNode.keepNode()+"\n");
         }
         TranspathFrame.setInfoTable(selectTree);
     }

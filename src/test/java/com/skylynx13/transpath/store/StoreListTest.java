@@ -19,12 +19,12 @@ public class StoreListTest {
     public void testAddNode_add() {
         StoreList sl = new StoreList();
         StoreNode sn = new StoreNode();
-        assertEquals(0, sn.id);
+        assertEquals(0, sn.getId());
         assertEquals(0, sl.maxId);
         assertEquals(0, sl.size());
         sl.addNode(sn);
-        assertEquals(1, sn.id);
-        assertEquals(1, sl.get(0).id);
+        assertEquals(1, sn.getId());
+        assertEquals(1, sl.get(0).getId());
         assertEquals(1, sl.maxId);
         assertEquals(1, sl.size());
     }

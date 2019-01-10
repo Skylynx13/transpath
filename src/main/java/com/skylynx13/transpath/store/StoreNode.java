@@ -2,6 +2,7 @@ package com.skylynx13.transpath.store;
 
 import java.io.File;
 
+import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.utils.DateUtils;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.StringUtils;
@@ -14,14 +15,96 @@ import com.skylynx13.transpath.utils.TransConst;
  * Date: 2016-05-16 14:04:15
  */
 
-public class StoreNode extends Node{
-    public long length;
+public class StoreNode implements Cloneable {
+    private int id;
+    private String path;
+    private String name;
+
+    private long length;
+
     private long lastModified;
-    String md5;
+    private String md5;
     private String sha1;
     private String crc32;
 
+    private boolean branch;
+
+    public boolean isBranch() {
+        return branch;
+    }
+
+    public void setBranch(boolean branch) {
+        this.branch = branch;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getLength() {
+        return length;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public long getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
+    public String getSha1() {
+        return sha1;
+    }
+
+    public void setSha1(String sha1) {
+        this.sha1 = sha1;
+    }
+
+    public String getCrc32() {
+        return crc32;
+    }
+
+    public void setCrc32(String crc32) {
+        this.crc32 = crc32;
+    }
+
     public StoreNode() {
+        id = 0;
+        path = "";
+        name = "";
         length = 0;
         lastModified = 0;
         md5 = "";
@@ -29,30 +112,19 @@ public class StoreNode extends Node{
         crc32 = "";
     }
 
-    @Override
-    public StoreNode clone() {
-        StoreNode node = new StoreNode();
-        node.id = this.id;
-        node.name = this.name;
-        node.path = this.path;
-        node.length = this.length;
-        node.lastModified = this.lastModified;
-        node.md5 = this.md5;
-        node.sha1 = this.sha1;
-        node.crc32 = this.crc32;
-        return node;
+//    public StoreNode(String pName) {
+//        name = pName;
+//    }
+
+    public StoreNode(String pName, String pPath) {
+        name = pName;
+        path = pPath;
     }
 
-    StoreNode(String pRoot, File pFile) {
-        id = 0;
-        name = pFile.getName();
-        path = pFile.getParent().replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
-                .replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
-        length = pFile.length();
-        lastModified = pFile.lastModified();
-        md5 = FileUtils.digestMd5(pFile);
-        sha1 = FileUtils.digestSha(pFile);
-        crc32 = FileUtils.digestCrc32(pFile);
+    public StoreNode(int pId, String pPath, String pName) {
+        this.id = pId;
+        this.path = pPath;
+        this.name = pName;
     }
 
     StoreNode(String sEntry) {
@@ -65,6 +137,67 @@ public class StoreNode extends Node{
         crc32 = sItems[5];
         path = sItems[6];
         name = sItems[7];
+    }
+
+    static StoreNode newBranchNode(String name, String path) {
+        StoreNode branchNode = new StoreNode();
+        branchNode.setName(name);
+        branchNode.setPath(path);
+        branchNode.setBranch(true);
+        return branchNode;
+    }
+
+    public StoreNode getClone() {
+        StoreNode storeNode = null;
+        try {
+            storeNode = (StoreNode) this.clone();
+        } catch (CloneNotSupportedException e) {
+            TransLog.getLogger().error("StoreNode clone error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return storeNode;
+    }
+
+    public boolean checkDupPathName(StoreNode pStoreNode) {
+        return (null != pStoreNode)
+                && (pStoreNode.name.equals(this.name))
+                && (pStoreNode.path.equals(this.path));
+    }
+
+    boolean checkDupStoreNode(StoreNode pStoreNode) {
+        return (null != pStoreNode)
+                && (pStoreNode.length == this.length)
+                && (pStoreNode.crc32.equals(this.crc32))
+                && (pStoreNode.md5.equals(this.md5))
+                && (pStoreNode.sha1.equals(this.sha1));
+    }
+
+    boolean searchName(String searchText) {
+        return search(this.name, searchText);
+    }
+
+    boolean searchPath(String searchText) {
+        return search(this.path, searchText);
+    }
+
+    private boolean search(String member, String searchText) {
+        return member.matches("(?i).*" + searchText + ".*");
+    }
+
+    public String keepBranchNode() {
+        return name;
+    }
+
+    StoreNode(String pRoot, File pFile) {
+        id = 0;
+        name = pFile.getName();
+        path = pFile.getParent().replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
+                .replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
+        length = pFile.length();
+        lastModified = pFile.lastModified();
+        md5 = FileUtils.digestMd5(pFile);
+        sha1 = FileUtils.digestSha(pFile);
+        crc32 = FileUtils.digestCrc32(pFile);
     }
 
     public String keepNode() {
@@ -96,15 +229,7 @@ public class StoreNode extends Node{
                 && (this.name.equals(pStoreNode.name));
     }
 
-    boolean checkDupNode(StoreNode pStoreNode) {
-        return (null != pStoreNode)
-                && (pStoreNode.length == this.length)
-                && (pStoreNode.crc32.equals(this.crc32))
-                && (pStoreNode.md5.equals(this.md5))
-                && (pStoreNode.sha1.equals(this.sha1));
-    }
-
-    public Object[] toRow() {
+    public Object[] toStoreRow() {
         return new Object[]{
                 id,
                 path,
@@ -116,5 +241,9 @@ public class StoreNode extends Node{
                 crc32
         };
     }
-    
+
+    Object[] toBranchRow(long length) {
+        return new Object[]{id, path, name, StringUtils.formatLongInt(length)};
+    }
+
 }
