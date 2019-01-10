@@ -68,7 +68,7 @@ public class TranspathFrame extends JFrame {
     }
 
     private JTree createTree(StoreList storeList) {
-        NodeTree storeTree = NodeTree.buildFromList(storeList);
+        StoreTree storeTree = StoreTree.buildFromList(storeList);
         storeTree.recursivelySort();
 
         JTree jTree = new JTree(storeTree);
@@ -210,7 +210,7 @@ public class TranspathFrame extends JFrame {
         setInfoTable(new DefaultTableModel(storeList.toRows(), TransConst.TABLE_TITLE_STORE));
     }
 
-    static void setInfoTable(NodeTree selectTree) {
+    static void setInfoTable(StoreTree selectTree) {
         setInfoTable(new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle()));
     }
 

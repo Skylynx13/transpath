@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.tree.TreePath;
 
 import com.skylynx13.transpath.store.StoreNode;
-import com.skylynx13.transpath.store.NodeTree;
+import com.skylynx13.transpath.store.StoreTree;
 
 /**
  * ClassName: TreeMouseListener
@@ -35,7 +35,7 @@ public class TreeMouseListener implements MouseListener {
         if (jTree.getSelectionPath() == null) {
             return;
         }
-        NodeTree selectTree = (NodeTree)jTree.getSelectionPath().getLastPathComponent();
+        StoreTree selectTree = (StoreTree)jTree.getSelectionPath().getLastPathComponent();
 
         JTextArea infoTextArea = TranspathFrame.getInfoTextArea();
         infoTextArea.setText("Tree Selected: " + selectTree.toString()+"\n");

@@ -7,17 +7,17 @@ import javax.swing.tree.TreeNode;
 import java.util.*;
 
 /**
- * ClassName: NodeTree
+ * ClassName: StoreTree
  * Description: A Tree with a Node.
  * If this is not enough for use,
  * reference to Class DefaultMutableTreeNode.
  * Date: 2014-04-05 22:47:08
  */
-public class NodeTree implements MutableTreeNode {
-    private static class NodeNameAscComparator implements Comparator<NodeTree> {
+public class StoreTree implements MutableTreeNode {
+    private static class NodeNameAscComparator implements Comparator<StoreTree> {
 
         @Override
-        public int compare(NodeTree o1, NodeTree o2) {
+        public int compare(StoreTree o1, StoreTree o2) {
             if (o1.isBranch() == o2.isBranch()) {
                 return o1.getNodeName().compareTo(o2.getNodeName());
             }
@@ -30,28 +30,28 @@ public class NodeTree implements MutableTreeNode {
     }
 
     @SuppressWarnings("unused")
-    private static class NodeNameDescComparator implements Comparator<NodeTree> {
+    private static class NodeNameDescComparator implements Comparator<StoreTree> {
 
         @Override
-        public int compare(NodeTree o1, NodeTree o2) {
+        public int compare(StoreTree o1, StoreTree o2) {
             return o2.getNodeName().compareTo(o1.getNodeName());
         }
 
     }
 
     private StoreNode node;
-    private NodeTree parent;
-    private List<NodeTree> children;
+    private StoreTree parent;
+    private List<StoreTree> children;
     private boolean allowsChildren;
 
-    private NodeTree() {
+    private StoreTree() {
     }
 
     public boolean isNull() {
         return ((null == this.getNode()) && (null == this.getParent()) && (null == this.getChildren()));
     }
 
-    public NodeTree(StoreNode node) {
+    public StoreTree(StoreNode node) {
         this.setNode(node);
     }
 
@@ -63,15 +63,15 @@ public class NodeTree implements MutableTreeNode {
         this.node = node;
     }
 
-    public NodeTree getParent() {
+    public StoreTree getParent() {
         return parent;
     }
 
-    private void setParent(NodeTree parent) {
+    private void setParent(StoreTree parent) {
         this.parent = parent;
     }
 
-    private List<NodeTree> getChildren() {
+    private List<StoreTree> getChildren() {
         return children;
     }
 
@@ -79,8 +79,8 @@ public class NodeTree implements MutableTreeNode {
         if (0 == getChildCount()) {
             return TransConst.TABLE_TITLE_STORE;
         }
-        for (NodeTree nodeTree : getChildren()) {
-            StoreNode node = nodeTree.getNode();
+        for (StoreTree storeTree : getChildren()) {
+            StoreNode node = storeTree.getNode();
             if (!node.isBranch()) {
                 return TransConst.TABLE_TITLE_STORE;
             }
@@ -97,18 +97,18 @@ public class NodeTree implements MutableTreeNode {
         }
         rows = new Object[getChildCount()][];
         int iNode = 0;
-        for (NodeTree aNodeTree : getChildren()) {
-            rows[iNode] = toRow(aNodeTree);
+        for (StoreTree aStoreTree : getChildren()) {
+            rows[iNode] = toRow(aStoreTree);
             iNode++;
         }
         return rows;
     }
 
-    private Object[] toRow(NodeTree nodeTree) {
+    private Object[] toRow(StoreTree storeTree) {
         Object[] row;
-        StoreNode aNode = nodeTree.getNode();
+        StoreNode aNode = storeTree.getNode();
         if (aNode.isBranch()) {
-            long length = nodeTree.sumLength();
+            long length = storeTree.sumLength();
             row = aNode.toBranchRow(length);
         } else {
             row = aNode.toStoreRow();
@@ -118,10 +118,10 @@ public class NodeTree implements MutableTreeNode {
 
     private long sumLength() {
         long length = 0;
-        for (NodeTree nodeTree : this.getChildren()) {
-            StoreNode aNode = nodeTree.getNode();
+        for (StoreTree storeTree : this.getChildren()) {
+            StoreNode aNode = storeTree.getNode();
             if (aNode.isBranch()){
-                length += nodeTree.sumLength();
+                length += storeTree.sumLength();
             } else {
                 length += aNode.getLength();
             }
@@ -129,24 +129,24 @@ public class NodeTree implements MutableTreeNode {
         return length;
     }
 
-    public void setChildren(List<NodeTree> children) {
+    public void setChildren(List<StoreTree> children) {
         this.children = children;
     }
 
-    public void addChild(NodeTree nodeTree) {
+    public void addChild(StoreTree storeTree) {
         if (null == children) {
             children = new ArrayList<>();
         }
-        children.add(nodeTree);
-        nodeTree.parent = this;
+        children.add(storeTree);
+        storeTree.parent = this;
     }
 
     private void addChildNode(StoreNode node) {
-        this.addChild(new NodeTree(node));
+        this.addChild(new StoreTree(node));
     }
 
     @Override
-    public NodeTree getChildAt(int index) {
+    public StoreTree getChildAt(int index) {
         if (null == children) {
             return null;
         }
@@ -182,7 +182,7 @@ public class NodeTree implements MutableTreeNode {
             return;
         }
         this.children.sort(new NodeNameAscComparator());
-        for (NodeTree child : this.children) {
+        for (StoreTree child : this.children) {
             child.recursivelySort();
         }
     }
@@ -202,23 +202,23 @@ public class NodeTree implements MutableTreeNode {
         return pathName;
     }
 
-    private NodeTree getChildByName(String aName) {
+    private StoreTree getChildByName(String aName) {
         if (null == this.children)
             return null;
-        for (NodeTree aChild : this.children) {
+        for (StoreTree aChild : this.children) {
             if (aChild.node.getName().equals(aName))
                 return aChild;
         }
         return null;
     }
 
-    private NodeTree getChildByNameOrAddIt(String aName) {
-        NodeTree aNodeTree = getChildByName(aName);
-        if (null == aNodeTree) {
-            aNodeTree = new NodeTree(StoreNode.newBranchNode(aName, this.getNodePathName()));
-            this.addChild(aNodeTree);
+    private StoreTree getChildByNameOrAddIt(String aName) {
+        StoreTree aStoreTree = getChildByName(aName);
+        if (null == aStoreTree) {
+            aStoreTree = new StoreTree(StoreNode.newBranchNode(aName, this.getNodePathName()));
+            this.addChild(aStoreTree);
         }
-        return aNodeTree;
+        return aStoreTree;
     }
 
     @Override
@@ -242,26 +242,26 @@ public class NodeTree implements MutableTreeNode {
     }
 
     @Override
-    public Enumeration<NodeTree> children() {
+    public Enumeration<StoreTree> children() {
         if (this.isLeaf()) {
-            return new Enumeration<NodeTree>() {
+            return new Enumeration<StoreTree>() {
                 public boolean hasMoreElements() {
                     return false;
                 }
 
-                public NodeTree nextElement() {
+                public StoreTree nextElement() {
                     throw new NoSuchElementException("No elements here.");
                 }
             };
         } else {
-            return new Enumeration<NodeTree>() {
-                Iterator<NodeTree> iter = children.iterator();
+            return new Enumeration<StoreTree>() {
+                Iterator<StoreTree> iter = children.iterator();
 
                 public boolean hasMoreElements() {
                     return iter.hasNext();
                 }
 
-                public NodeTree nextElement() throws NoSuchElementException {
+                public StoreTree nextElement() throws NoSuchElementException {
                     return iter.next();
                 }
             };
@@ -280,12 +280,12 @@ public class NodeTree implements MutableTreeNode {
         return !this.isLeaf() && !this.isRoot();
     }
 
-    private NodeTree addBranch(String pPath) {
+    private StoreTree addBranch(String pPath) {
         if (this.isNull()) {
             this.setNode(StoreNode.newBranchNode(TransConst.ROOT, "/"));
         }
         String[] nodeNames = pPath.split(TransConst.SLASH);
-        NodeTree bTree = this;
+        StoreTree bTree = this;
         for (String nodeName : nodeNames) {
             if (null != nodeName && !nodeName.isEmpty()) {
                 // TransLog.getLogger().info(nodeName);
@@ -295,8 +295,8 @@ public class NodeTree implements MutableTreeNode {
         return bTree;
     }
 
-    public static NodeTree buildFromList(StoreList pList) {
-        NodeTree aTree = new NodeTree();
+    public static StoreTree buildFromList(StoreList pList) {
+        StoreTree aTree = new StoreTree();
         aTree.appendFromList(pList);
         return aTree;
     }
