@@ -1,9 +1,11 @@
 package com.skylynx13.transpath.task;
 
 import com.skylynx13.transpath.log.TransLog;
+import com.skylynx13.transpath.ui.TranspathFrame;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -15,20 +17,18 @@ import java.util.*;
  * Description: To rename file with a regular name by replace template.
  * Date: 2015-02-03 11:08:20
  */
-public class PackageChecker {
+public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
+    private TranspathFrame transpathFrame;
 
-    public static void check() {
-        TransLog.getLogger().info("Result: " + new PackageChecker().checkPackageTrans() + ".");
-    }
-
-    private String checkPackageTrans() {
+    @Override
+    protected StringBuilder doInBackground() {
         String rootDirStr = TransProp.get(TransConst.LOC_TRANS);
         File rootDir = new File(rootDirStr);
         if (!rootDir.isDirectory()) {
-            return "Invalid root: " + rootDirStr;
+            return new StringBuilder("Invalid root: ").append(rootDirStr);
         }
         if (Objects.requireNonNull(rootDir.listFiles()).length == 0) {
-            return "No files in: " + rootDirStr;
+            return new StringBuilder("No files in: ").append(rootDirStr);
         }
         List<String> checkFileList = new ArrayList<>();
         for (File checkFile : Objects.requireNonNull(rootDir.listFiles())) {
@@ -37,7 +37,37 @@ public class PackageChecker {
         return check(checkFileList);
     }
 
-    private String check(List<String> fileNames) {
+    @Override
+    protected void process(List<ProgressData> progressData) {
+
+    }
+
+    @Override
+    protected void done() {
+
+    }
+
+    public static void check() {
+//        TransLog.getLogger().info("Result: " + new PackageChecker().checkPackageTrans() + ".");
+    }
+
+//    private StringB checkPackageTrans() {
+//        String rootDirStr = TransProp.get(TransConst.LOC_TRANS);
+//        File rootDir = new File(rootDirStr);
+//        if (!rootDir.isDirectory()) {
+//            return "Invalid root: " + rootDirStr;
+//        }
+//        if (Objects.requireNonNull(rootDir.listFiles()).length == 0) {
+//            return "No files in: " + rootDirStr;
+//        }
+//        List<String> checkFileList = new ArrayList<>();
+//        for (File checkFile : Objects.requireNonNull(rootDir.listFiles())) {
+//            checkFileList.add(checkFile.getPath());
+//        }
+//        return check(checkFileList);
+//    }
+
+    private StringBuilder check(List<String> fileNames) {
         Map<String, String> errorInfos = new HashMap<>();
         for (String fileName : fileNames) {
             errorInfos.putAll(checkPackage(fileName));
@@ -47,7 +77,7 @@ public class PackageChecker {
         for (String key : errorInfos.keySet()) {
             errInfoStr.append(key).append(" : ").append(errorInfos.get(key)).append(TransConst.CRLN);
         }
-        return errInfoStr.toString();
+        return errInfoStr;
     }
 
     private Map<String, String> checkPackage(String fileName) {
@@ -169,8 +199,9 @@ public class PackageChecker {
     private static String getSuffix(String fileName) {
         return fileName.substring(fileName.lastIndexOf('.') + 1);
     }
-
-
-
 }
 
+class ProgressData {
+    int progress;
+    String line;
+}

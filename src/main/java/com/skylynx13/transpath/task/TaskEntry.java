@@ -30,6 +30,7 @@ public class TaskEntry implements Comparable<TaskEntry>{
         this.links = new ArrayList<>();
         this.links.add(link);
     }
+
     TaskEntry copy() {
         TaskEntry newCde = new TaskEntry();
         newCde.setName(this.name);

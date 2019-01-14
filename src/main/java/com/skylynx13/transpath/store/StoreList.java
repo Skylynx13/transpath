@@ -142,7 +142,7 @@ public class StoreList {
         StoreList rNodeList = getNewList();
         for (StoreNode node : storeList) {
             if (ids.contains(node.getId())) {
-                rNodeList.addNode(node.getClone());
+                rNodeList.addNode(node.clone());
             }
         }
         return rNodeList;

@@ -31,6 +31,8 @@ public class TranspathFrame extends JFrame {
     private static JTable infoTable = new JTable();
     private static JTextArea logTextArea = new JTextArea();
     private static JTextArea infoTextArea = new JTextArea();
+    private static JProgressBar progressBar = new JProgressBar();
+    private static JToolBar statusBar = new JToolBar();
 
     private StoreList storeList;
     private JScrollPane treePane;
@@ -48,6 +50,22 @@ public class TranspathFrame extends JFrame {
             treePane = createScrollPane();
         }
         return treePane;
+    }
+
+    public static JProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public static void setProgressBar(JProgressBar progressBar) {
+        TranspathFrame.progressBar = progressBar;
+    }
+
+    public static JToolBar getStatusBar() {
+        return statusBar;
+    }
+
+    public static void setStatusBar(JToolBar statusBar) {
+        TranspathFrame.statusBar = statusBar;
     }
 
     public TranspathFrame() {
@@ -120,7 +138,7 @@ public class TranspathFrame extends JFrame {
         mainPanel.setLayout(new BorderLayout());
         reloadStore();
         mainPanel.add(createAllSplitPane(), BorderLayout.CENTER);
-        mainPanel.add(createStatusBar(), BorderLayout.SOUTH);
+        mainPanel.add(setupStatusBar(), BorderLayout.SOUTH);
     }
 
     private JSplitPane createAllSplitPane() {
@@ -186,14 +204,12 @@ public class TranspathFrame extends JFrame {
         return scrollPane;
     }
 
-    private JToolBar createStatusBar() {
-        JToolBar statusBar = new JToolBar();
+    private JToolBar setupStatusBar() {
         statusBar.setFloatable(false);
 
-        JProgressBar progressBar = new JProgressBar();
         progressBar.setMaximum(100);
         progressBar.setMinimum(0);
-        progressBar.setValue(88);
+        progressBar.setValue(0);
         progressBar.setStringPainted(true);
         progressBar.setIndeterminate(false);
         // Color change unavailable when using NimbusLookAndFeel;
@@ -201,20 +217,20 @@ public class TranspathFrame extends JFrame {
         // progressBar.setForeground(Color.green);
         statusBar.add(progressBar);
 
-        statusBar.add(new JLabel("8,800 of 10,000 bytes processed. Status Normal."));
+        statusBar.add(new JLabel("Status Normal."));
 
         return statusBar;
     }
 
-    private static void setInfoTable(@NotNull StoreList storeList) {
-        setInfoTable(new DefaultTableModel(storeList.toRows(), TransConst.TABLE_TITLE_STORE));
+    private static void updateInfoTable(@NotNull StoreList storeList) {
+        updateInfoTable(new DefaultTableModel(storeList.toRows(), TransConst.TABLE_TITLE_STORE));
     }
 
-    static void setInfoTable(StoreTree selectTree) {
-        setInfoTable(new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle()));
+    static void updateInfoTable(StoreTree selectTree) {
+        updateInfoTable(new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle()));
     }
 
-    private static void setInfoTable(@NotNull DefaultTableModel tableModel) {
+    private static void updateInfoTable(@NotNull DefaultTableModel tableModel) {
         String[] rightAlignedTitles = {"StoreId", "Length", "BranchId"};
         infoTable.setModel(tableModel);
         columnSizeFitContents(infoTable);
@@ -274,7 +290,7 @@ public class TranspathFrame extends JFrame {
     void searchList(String searchText) {
         TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
         StoreList sList = storeList.searchName(searchText);
-        setInfoTable(sList);
+        updateInfoTable(sList);
         TransLog.getLogger().info(sList.toString());
     }
 

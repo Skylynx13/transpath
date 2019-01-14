@@ -8,6 +8,8 @@ import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -75,7 +77,10 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem taskPackageItem = new JMenuItem("Package Check");
         taskMenu.add(taskPackageItem);
-        taskPackageItem.addActionListener(e -> transpathMenuAction.submit(PackageChecker::check));
+        taskPackageItem.addActionListener(e -> {
+            PackageChecker packageChecker = new PackageChecker();
+            packageChecker.execute();
+        });
         taskPackageItem.setAccelerator(KeyStroke.getKeyStroke('K', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem taskNameItem = new JMenuItem("Name Revise");

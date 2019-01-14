@@ -46,7 +46,7 @@ public class TreeMouseListener implements MouseListener {
         } else {
             infoTextArea.append("Store Node Selected: " + selectNode.keepNode()+"\n");
         }
-        TranspathFrame.setInfoTable(selectTree);
+        TranspathFrame.updateInfoTable(selectTree);
     }
 
     @Override

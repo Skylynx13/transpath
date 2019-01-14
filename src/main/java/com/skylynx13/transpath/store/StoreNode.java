@@ -27,7 +27,7 @@ public class StoreNode implements Cloneable {
     private String sha1;
     private String crc32;
 
-    private boolean branch;
+    private boolean branch = false;
 
     public boolean isBranch() {
         return branch;
@@ -110,6 +110,7 @@ public class StoreNode implements Cloneable {
         md5 = "";
         sha1 = "";
         crc32 = "";
+        branch = false;
     }
 
     StoreNode(String sEntry) {
@@ -122,6 +123,19 @@ public class StoreNode implements Cloneable {
         crc32 = sItems[5];
         path = sItems[6];
         name = sItems[7];
+        branch = false;
+    }
+
+    StoreNode(String pRoot, File pFile) {
+        id = 0;
+        name = pFile.getName();
+        path = pFile.getParent().replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
+                .replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
+        length = pFile.length();
+        lastModified = pFile.lastModified();
+        md5 = FileUtils.digestMd5(pFile);
+        sha1 = FileUtils.digestSha(pFile);
+        crc32 = FileUtils.digestCrc32(pFile);
     }
 
     static StoreNode newBranchNode(String name, String path) {
@@ -132,10 +146,11 @@ public class StoreNode implements Cloneable {
         return branchNode;
     }
 
-    StoreNode getClone() {
+    @Override
+    public StoreNode clone() {
         StoreNode storeNode = null;
         try {
-            storeNode = (StoreNode) this.clone();
+            storeNode = (StoreNode) super.clone();
         } catch (CloneNotSupportedException e) {
             TransLog.getLogger().error("StoreNode clone error: " + e.getMessage());
             e.printStackTrace();
@@ -161,18 +176,6 @@ public class StoreNode implements Cloneable {
 
     private boolean search(String member, String searchText) {
         return member.matches("(?i).*" + searchText + ".*");
-    }
-
-    StoreNode(String pRoot, File pFile) {
-        id = 0;
-        name = pFile.getName();
-        path = pFile.getParent().replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
-                .replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
-        length = pFile.length();
-        lastModified = pFile.lastModified();
-        md5 = FileUtils.digestMd5(pFile);
-        sha1 = FileUtils.digestSha(pFile);
-        crc32 = FileUtils.digestCrc32(pFile);
     }
 
     public String keepNode() {
@@ -207,7 +210,12 @@ public class StoreNode implements Cloneable {
     }
 
     Object[] toBranchRow(long length) {
-        return new Object[]{id, path, name, StringUtils.formatLongInt(length)};
+        return new Object[]{
+                id,
+                path,
+                name,
+                StringUtils.formatLongInt(length)
+        };
     }
 
 }
