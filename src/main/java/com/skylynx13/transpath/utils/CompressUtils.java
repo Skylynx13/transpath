@@ -147,6 +147,39 @@ public class CompressUtils {
         }
     }
 
+    public static synchronized void testRar(File rarFile) {
+        String extPlace = "D:\\temp\\rartemp\\";
+        File extPlaceFIle = new File(extPlace);
+        boolean ret = extPlaceFIle.mkdirs();
+        System.out.println("mkdir: " + ret);
+        System.out.println(rarFile.length() + ":" + rarFile.lastModified());
+
+        Archive archive = null;
+        try {
+            archive = new Archive(rarFile);
+        } catch (RarException | IOException e) {
+            TransLog.getLogger().error("[" + rarFile + "] package error: " + e.getMessage());
+            return;
+        }
+        FileHeader fileHeader = Objects.requireNonNull(archive).nextFileHeader();
+        while (fileHeader != null) {
+            FileOutputStream output = null;
+            try {
+                output = new FileOutputStream(new File(extPlace + fileHeader.getFileNameString()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                archive.extractFile(fileHeader, output);
+            } catch (RarException e) {
+                e.printStackTrace();
+            }
+            fileHeader = archive.nextFileHeader();
+        }
+        //ret = extPlaceFIle.delete();
+        System.out.println("delete: " + ret);
+    }
+
     public static void main(String[] args) {
         System.out.println(File.separator);
         CompressUtils.unrar("D:/temp/test-rar.rar", "d:/temp/test01/");
