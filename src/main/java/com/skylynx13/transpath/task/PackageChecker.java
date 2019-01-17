@@ -67,7 +67,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
 //        return check(checkFileList);
 //    }
 
-    public StringBuilder check(List<String> fileNames) {
+    StringBuilder check(List<String> fileNames) {
         Map<String, String> errorInfos = new HashMap<>();
         for (String fileName : fileNames) {
             errorInfos.putAll(checkPackage(fileName));
@@ -80,7 +80,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         return errInfoStr;
     }
 
-    private Map<String, String> checkPackage(String fileName) {
+    Map<String, String> checkPackage(String fileName) {
         Map<String, String> errorInfos = new HashMap<>();
         List<Checker> checkers = new ArrayList<>();
         checkers.add(new RarChecker());
@@ -91,9 +91,11 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
 
         if (isIgnorable(fileName)) {
             errorInfos.put(fileName, TransConst.PKG_IGNORE);
+            return errorInfos;
         }
+
         if (!isValid(fileName) || new File(fileName).isDirectory()) {
-            errorInfos.put(fileName, TransConst.PKG_TYPE);
+            errorInfos.put(fileName, TransConst.PKG_TYPE_NOT_RECOGNIZED);
             return errorInfos;
         }
 
@@ -106,13 +108,13 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
             if (checker.checkOk(result)) {
                 errorInfos.clear();
                 if (!checker.checkType(fileName)) {
-                    errorInfos.put(fileName, "Type mismatch.");
+                    errorInfos.put(fileName, TransConst.PKG_TYPE_MISMATCH);
                 }
                 return errorInfos;
             }
 //            errorInfos.put(fileName, result);
         }
-        errorInfos.put(fileName, "All checkers failed.");
+        errorInfos.put(fileName, TransConst.PKG_ALL_FAILED);
         return errorInfos;
     }
 

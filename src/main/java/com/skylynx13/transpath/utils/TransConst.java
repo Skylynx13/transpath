@@ -78,8 +78,10 @@ public class TransConst {
     public static final String CMD_COPY_TO_TARGET = "cmd /c chcp 437|copy ";
 
     public static final String PKG_OK = "OK";
-    public static final String PKG_TYPE = "File type not recognized";
-    public static final String PKG_IGNORE = "File type ignored";
-    public static final String PKG_DAMAGED = "File damaged";
-    public static final String PKG_UNKNOWN = "Unknown error";
+    public static final String PKG_ALL_FAILED = "All checkers failed.";
+    public static final String PKG_TYPE_MISMATCH = "Type mismatch.";
+    public static final String PKG_TYPE_NOT_RECOGNIZED = "File type not recognized.";
+    public static final String PKG_IGNORE = "File type ignorable.";
+    public static final String PKG_DAMAGED = "File damaged.";
+    public static final String PKG_UNKNOWN = "Unknown error.";
 }
