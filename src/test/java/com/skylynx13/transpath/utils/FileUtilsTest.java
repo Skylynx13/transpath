@@ -15,9 +15,7 @@ import static org.junit.Assert.*;
  * Date: 2015-02-17 18:11:37
  */
 public class FileUtilsTest {
-
     private static final String TEST_RESOURCES_LOC = "src/test/resources/";
-    
     private String testResource(String fileName) {
         return (TEST_RESOURCES_LOC + fileName);
     }
@@ -134,31 +132,6 @@ public class FileUtilsTest {
         assertEquals(f1.length() + f2.length(), f3.length());
     }
 
-    @Test
-    @Ignore
-    public void checkPackageTest() {
-        long t0 = System.currentTimeMillis();
-//        List<String> testFiles = new ArrayList<>();
-//        testFiles.add(testResource("testFiles.rar"));
-//        testFiles.add(testResource("testZipFakeRar.rar"));
-//        testFiles.add(testResource("testEmpty.rar"));
-//        testFiles.add(testResource("testFiles.cbr"));
-//        testFiles.add(testResource("testFiles.zip"));
-//        testFiles.add(testResource("testRarFakeZip.zip"));
-//        testFiles.add(testResource("testEmpty.zip"));
-//        testFiles.add(testResource("testFiles.cbz"));
-//        testFiles.add(testResource("testWrongType.txt"));
-//        String result = FileUtils.check(testFiles);
-//        assertEquals(5, result.size());
-//        assertEquals("No files to extract", result.get(testResource("testZipFakeRar.rar")));
-//        assertEquals("No files to extract", result.get(testResource("testEmpty.rar")));
-//        assertTrue(result.get(testResource("testRarFakeZip.zip")).startsWith("zip error: "));
-//        assertTrue(result.get(testResource("testEmpty.zip")).startsWith("zip error: "));
-//        assertEquals(TransConst.PKG_TYPE, result.get(testResource("testWrongType.txt")));
-//        TransLog.getLogger().info("Multiple Time = " + (System.currentTimeMillis() - t0));
-        assertTrue(true);
-    }
-    
     /**
      * To pass this test, add following entries to ${JRE_HOME}\lib\content-types.properties
      * text/qxu: \

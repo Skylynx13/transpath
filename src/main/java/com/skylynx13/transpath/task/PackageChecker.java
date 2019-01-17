@@ -51,7 +51,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
 //        TransLog.getLogger().info("Result: " + new PackageChecker().checkPackageTrans() + ".");
     }
 
-//    private StringB checkPackageTrans() {
+//    private StringBuilder checkPackageTrans() {
 //        String rootDirStr = TransProp.get(TransConst.LOC_TRANS);
 //        File rootDir = new File(rootDirStr);
 //        if (!rootDir.isDirectory()) {
@@ -67,7 +67,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
 //        return check(checkFileList);
 //    }
 
-    private StringBuilder check(List<String> fileNames) {
+    public StringBuilder check(List<String> fileNames) {
         Map<String, String> errorInfos = new HashMap<>();
         for (String fileName : fileNames) {
             errorInfos.putAll(checkPackage(fileName));
