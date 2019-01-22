@@ -80,64 +80,64 @@ public class Test extends JFrame implements DropTargetListener {
         return textPanel;
     }
 
-    private void readFile(final String filename) {
-        try {
-            textPane.setPage(new File(filename).toURL());
-        } catch (IOException e) {
-            EditorKit kit = textPane.getEditorKit();
-            Document document = textPane.getDocument();
-            try {
-                document.remove(0, document.getLength());
-                kit.read(new FileReader(filename), document, 0);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    private void readFile(final File f) {
-        try {
-            textPane.setPage(f.toURL());
-        } catch (IOException e) {
-            EditorKit kit = textPane.getEditorKit();
-            Document document = textPane.getDocument();
-            try {
-                document.remove(0, document.getLength());
-                kit.read(new FileReader(f), document, 0);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
+//    private void readFile(final String filename) {
+//        try {
+//            textPane.setPage(new File(filename).toURL());
+//        } catch (IOException e) {
+//            EditorKit kit = textPane.getEditorKit();
+//            Document document = textPane.getDocument();
+//            try {
+//                document.remove(0, document.getLength());
+//                kit.read(new FileReader(filename), document, 0);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+//    }
+//
+//    private void readFile(final File f) {
+//        try {
+//            textPane.setPage(f.toURL());
+//        } catch (IOException e) {
+//            EditorKit kit = textPane.getEditorKit();
+//            Document document = textPane.getDocument();
+//            try {
+//                document.remove(0, document.getLength());
+//                kit.read(new FileReader(f), document, 0);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+//    }
+//
     public void drop(DropTargetDropEvent e) {
-        System.out.println("Drop");
-        try {
-            DataFlavor stringFlavor = DataFlavor.stringFlavor;
-            Transferable tr = e.getTransferable();
-            System.out.println("JFL: " + e.isDataFlavorSupported(DataFlavor.javaFileListFlavor));
-            System.out.println("JFL: " + tr.getTransferData(DataFlavor.javaFileListFlavor).toString());
-            if (e.isDataFlavorSupported(stringFlavor)) {
-                String filename = (String) tr.getTransferData(stringFlavor);
-                System.out.println(filename + "|");
-                if (filename.endsWith(".txt") || filename.endsWith(".java") || filename.endsWith(".jsp")
-                        || filename.endsWith(".html") || filename.endsWith(".htm") || filename.endsWith(".log")) {
-                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    //readFile("D:\\temp\\" + filename);
-                    readFile((File)((java.util.List)tr.getTransferData(DataFlavor.javaFileListFlavor)).get(0));
-                    textPane.setCaretPosition(0);
-                    e.dropComplete(true);
-                } else {
-                    e.rejectDrop();
-                }
-            } else {
-                e.rejectDrop();
-            }
-        } catch (IOException | UnsupportedFlavorException ioe) {
-            ioe.printStackTrace();
-        }
+//        System.out.println("Drop");
+//        try {
+//            DataFlavor stringFlavor = DataFlavor.stringFlavor;
+//            Transferable tr = e.getTransferable();
+//            System.out.println("JFL: " + e.isDataFlavorSupported(DataFlavor.javaFileListFlavor));
+//            System.out.println("JFL: " + tr.getTransferData(DataFlavor.javaFileListFlavor).toString());
+//            if (e.isDataFlavorSupported(stringFlavor)) {
+//                String filename = (String) tr.getTransferData(stringFlavor);
+//                System.out.println(filename + "|");
+//                if (filename.endsWith(".txt") || filename.endsWith(".java") || filename.endsWith(".jsp")
+//                        || filename.endsWith(".html") || filename.endsWith(".htm") || filename.endsWith(".log")) {
+//                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+//                    //readFile("D:\\temp\\" + filename);
+//                    readFile((File)((java.util.List)tr.getTransferData(DataFlavor.javaFileListFlavor)).get(0));
+//                    textPane.setCaretPosition(0);
+//                    e.dropComplete(true);
+//                } else {
+//                    e.rejectDrop();
+//                }
+//            } else {
+//                e.rejectDrop();
+//            }
+//        } catch (IOException | UnsupportedFlavorException ioe) {
+//            ioe.printStackTrace();
+//        }
     }
-
+//
     public void dragEnter(DropTargetDragEvent e) {
         System.out.println("testenter1");
     }

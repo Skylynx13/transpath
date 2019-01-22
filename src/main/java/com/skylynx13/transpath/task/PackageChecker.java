@@ -2,6 +2,7 @@ package com.skylynx13.transpath.task;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.ui.TranspathFrame;
+import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * ClassName: PackageChecker
@@ -18,7 +20,6 @@ import java.util.*;
  * Date: 2015-02-03 11:08:20
  */
 public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
-    private TranspathFrame transpathFrame;
 
     @Override
     protected StringBuilder doInBackground() {
@@ -30,52 +31,51 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         if (Objects.requireNonNull(rootDir.listFiles()).length == 0) {
             return new StringBuilder("No files in: ").append(rootDirStr);
         }
-        List<String> checkFileList = new ArrayList<>();
-        for (File checkFile : Objects.requireNonNull(rootDir.listFiles())) {
-            checkFileList.add(checkFile.getPath());
-        }
+
+        List<File> checkFileList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(rootDir.listFiles())));
         return check(checkFileList);
     }
 
     @Override
     protected void process(List<ProgressData> progressData) {
-
+        ProgressData lastProgressData = progressData.get(progressData.size()-1);
+        TranspathFrame.getProgressBar().setValue(lastProgressData.progress);
+        TranspathFrame.getStatusLabel().setText(lastProgressData.line);
     }
 
     @Override
     protected void done() {
-
-    }
-
-    public static void check() {
-//        TransLog.getLogger().info("Result: " + new PackageChecker().checkPackageTrans() + ".");
-    }
-
-//    private StringBuilder checkPackageTrans() {
-//        String rootDirStr = TransProp.get(TransConst.LOC_TRANS);
-//        File rootDir = new File(rootDirStr);
-//        if (!rootDir.isDirectory()) {
-//            return "Invalid root: " + rootDirStr;
-//        }
-//        if (Objects.requireNonNull(rootDir.listFiles()).length == 0) {
-//            return "No files in: " + rootDirStr;
-//        }
-//        List<String> checkFileList = new ArrayList<>();
-//        for (File checkFile : Objects.requireNonNull(rootDir.listFiles())) {
-//            checkFileList.add(checkFile.getPath());
-//        }
-//        return check(checkFileList);
-//    }
-
-    StringBuilder check(List<String> fileNames) {
-        Map<String, String> errorInfos = new HashMap<>();
-        for (String fileName : fileNames) {
-            errorInfos.putAll(checkPackage(fileName));
+        try {
+            StringBuilder result = get();
+            TransLog.getLogger().info(result.toString());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
-        StringBuilder errInfoStr = new StringBuilder();
+
+    }
+
+    StringBuilder check(List<File> checkFiles) {
+        Map<String, String> errorInfos = new HashMap<>();
+        long totalSize = 0;
+        for (File checkFile : checkFiles) {
+            totalSize += checkFile.length();
+        }
+        long procSize = 0;
+        int totalCount = checkFiles.size();
+        int procCount = 0;
+        ProgressData progressData = new ProgressData(0, "0 of " + totalCount + " files processed");
+        for (File checkFile : checkFiles) {
+            errorInfos.putAll(checkPackage(checkFile.getPath()));
+            procSize += checkFile.length();
+            procCount ++;
+            progressData.progress = (int)(100 * procSize / totalSize);
+            progressData.line = String.valueOf(procCount) + " of " + totalCount + " files processed.";
+            publish(progressData);
+        }
+        StringBuilder errInfoStr = new StringBuilder("Result: ");
         errInfoStr.append(errorInfos.size()).append(" error(s) found.").append(TransConst.CRLN);
         for (String key : errorInfos.keySet()) {
-            errInfoStr.append(key).append(" : ").append(errorInfos.get(key)).append(TransConst.CRLN);
+            errInfoStr.append(FileUtils.regulateSlash(key)).append(" : ").append(errorInfos.get(key)).append(TransConst.CRLN);
         }
         return errInfoStr;
     }
@@ -90,7 +90,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         processBuilder.redirectErrorStream(true);
 
         if (isIgnorable(fileName)) {
-            errorInfos.put(fileName, TransConst.PKG_IGNORE);
+            TransLog.getLogger().info(TransConst.PKG_IGNORE + ": " + fileName);
             return errorInfos;
         }
 
@@ -102,7 +102,6 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         String result;
         for (Checker checker : checkers) {
             processBuilder.command(checker.checkCommand(fileName));
-//            TransLog.getLogger().info("Command line: " + processBuilder.command().stream().collect(Collectors.joining(" ")));
             TransLog.getLogger().info("Command line: " + String.join(" ", processBuilder.command()));
             result = processCommand(processBuilder);
             if (checker.checkOk(result)) {
@@ -112,7 +111,6 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
                 }
                 return errorInfos;
             }
-//            errorInfos.put(fileName, result);
         }
         errorInfos.put(fileName, TransConst.PKG_ALL_FAILED);
         return errorInfos;
@@ -206,4 +204,9 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
 class ProgressData {
     int progress;
     String line;
+
+    ProgressData(int pProgress, String pLine) {
+        progress = pProgress;
+        line = pLine;
+    }
 }

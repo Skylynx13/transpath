@@ -32,7 +32,7 @@ public class TranspathFrame extends JFrame {
     private static JTextArea logTextArea = new JTextArea();
     private static JTextArea infoTextArea = new JTextArea();
     private static JProgressBar progressBar = new JProgressBar();
-    private static JToolBar statusBar = new JToolBar();
+    private static JLabel statusLabel = new JLabel();
 
     private StoreList storeList;
     private JScrollPane treePane;
@@ -60,12 +60,12 @@ public class TranspathFrame extends JFrame {
         TranspathFrame.progressBar = progressBar;
     }
 
-    public static JToolBar getStatusBar() {
-        return statusBar;
+    public static JLabel getStatusLabel() {
+        return statusLabel;
     }
 
-    public static void setStatusBar(JToolBar statusBar) {
-        TranspathFrame.statusBar = statusBar;
+    public static void setStatusLabel(JLabel statusLabel) {
+        TranspathFrame.statusLabel = statusLabel;
     }
 
     public TranspathFrame() {
@@ -205,6 +205,7 @@ public class TranspathFrame extends JFrame {
     }
 
     private JToolBar setupStatusBar() {
+        JToolBar statusBar = new JToolBar();
         statusBar.setFloatable(false);
 
         progressBar.setMaximum(100);
@@ -217,7 +218,8 @@ public class TranspathFrame extends JFrame {
         // progressBar.setForeground(Color.green);
         statusBar.add(progressBar);
 
-        statusBar.add(new JLabel("Status Normal."));
+        statusLabel.setText("Status Normal.");
+        statusBar.add(statusLabel);
 
         return statusBar;
     }

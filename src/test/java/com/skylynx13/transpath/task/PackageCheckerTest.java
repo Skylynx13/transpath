@@ -1,8 +1,10 @@
 package com.skylynx13.transpath.task;
 
+import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +82,7 @@ public class PackageCheckerTest {
 
         statusInfo = packageChecker.checkPackage(testResource("testIgnorable.pdf"));
         System.out.println(statusInfo.toString());
-        assertEquals(TransConst.PKG_IGNORE, statusInfo.get(testResource("testIgnorable.pdf")));
+        assertNull(statusInfo.get(testResource("testIgnorable.pdf")));
 
         System.out.println("Multiple Time = " + (System.currentTimeMillis() - t0));
     }
@@ -88,26 +90,27 @@ public class PackageCheckerTest {
     @Test
     public void checkPackageListTest() {
         long t0 = System.currentTimeMillis();
-        List<String> testFiles = new ArrayList<>();
-        testFiles.add(testResource("testFiles.rar"));
-        testFiles.add(testResource("testZipFakeRar.rar"));
-        testFiles.add(testResource("testEmpty.rar"));
-        testFiles.add(testResource("testFiles.cbr"));
-        testFiles.add(testResource("testFiles.zip"));
-        testFiles.add(testResource("testRarFakeZip.zip"));
-        testFiles.add(testResource("testEmpty.zip"));
-        testFiles.add(testResource("testFiles.cbz"));
-        testFiles.add(testResource("testWrongType.tmp"));
-        testFiles.add(testResource("testIgnorable.pdf"));
+        List<File> testFiles = new ArrayList<>();
+        testFiles.add(new File(testResource("testFiles.rar")));
+        testFiles.add(new File(testResource("testZipFakeRar.rar")));
+        testFiles.add(new File(testResource("testEmpty.rar")));
+        testFiles.add(new File(testResource("testFiles.cbr")));
+        testFiles.add(new File(testResource("testFiles.zip")));
+        testFiles.add(new File(testResource("testRarFakeZip.zip")));
+        testFiles.add(new File(testResource("testEmpty.zip")));
+        testFiles.add(new File(testResource("testFiles.cbz")));
+        testFiles.add(new File(testResource("testWrongType.tmp")));
+        testFiles.add(new File(testResource("testIgnorable.pdf")));
         String result = packageChecker.check(testFiles).toString();
         System.out.println(result);
-        assertEquals("6 error(s) found.\r\n" +
+        assertEquals("Result: 5 error(s) found.\r\n" +
                 "src/test/resources/testRarFakeZip.zip : Type mismatch.\r\n" +
-                "src/test/resources/testEmpty.zip : All checkers failed.\r\n" +
-                "src/test/resources/testIgnorable.pdf : File type ignorable.\r\n" +
+                "src/test/resources/testWrongType.tmp : File type not recognized.\r\n" +
                 "src/test/resources/testZipFakeRar.rar : Type mismatch.\r\n" +
+                "src/test/resources/testEmpty.zip : All checkers failed.\r\n" +
                 "src/test/resources/testEmpty.rar : All checkers failed.\r\n" +
-                "src/test/resources/testWrongType.tmp : File type not recognized.\r\n", result);
+//                "src/test/resources/testIgnorable.pdf : File type ignorable.\r\n" +
+                "", result);
 //        assertEquals(5, result.size());
 //        assertEquals("No files to extract", result.get(testResource("testZipFakeRar.rar")));
 //        assertEquals("No files to extract", result.get(testResource("testEmpty.rar")));
