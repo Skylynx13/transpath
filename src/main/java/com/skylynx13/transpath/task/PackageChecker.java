@@ -32,8 +32,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
             return new StringBuilder("No files in: ").append(rootDirStr);
         }
 
-        List<File> checkFileList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(rootDir.listFiles())));
-        return check(checkFileList);
+        return check(Objects.requireNonNull(rootDir.listFiles()));
     }
 
     @Override
@@ -51,19 +50,19 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
     }
 
-    StringBuilder check(List<File> checkFiles) {
+    StringBuilder check(File[] checkFiles) {
         Map<String, String> errorInfos = new HashMap<>();
         long totalSize = 0;
         for (File checkFile : checkFiles) {
             totalSize += checkFile.length();
         }
         long procSize = 0;
-        int totalCount = checkFiles.size();
+        int totalCount = checkFiles.length;
         int procCount = 0;
-        ProgressData progressData = new ProgressData(0, "0 of " + totalCount + " files processed");
+        ProgressData progressData =
+                new ProgressData(0, "0 of " + totalCount + " files processed");
         for (File checkFile : checkFiles) {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
             procSize += checkFile.length();
@@ -75,7 +74,8 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         StringBuilder errInfoStr = new StringBuilder("Result: ");
         errInfoStr.append(errorInfos.size()).append(" error(s) found.").append(TransConst.CRLN);
         for (String key : errorInfos.keySet()) {
-            errInfoStr.append(FileUtils.regulateSlash(key)).append(" : ").append(errorInfos.get(key)).append(TransConst.CRLN);
+            errInfoStr.append(FileUtils.regulateSlash(key)).append(" : ")
+                    .append(errorInfos.get(key)).append(TransConst.CRLN);
         }
         return errInfoStr;
     }
@@ -102,7 +102,8 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         String result;
         for (Checker checker : checkers) {
             processBuilder.command(checker.checkCommand(fileName));
-            TransLog.getLogger().info("Command line: " + String.join(" ", processBuilder.command()));
+            TransLog.getLogger().info("Command line: "
+                    + String.join(" ", processBuilder.command()));
             result = processCommand(processBuilder);
             if (checker.checkOk(result)) {
                 errorInfos.clear();

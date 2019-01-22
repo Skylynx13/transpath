@@ -1,6 +1,5 @@
 package com.skylynx13.transpath.task;
 
-import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import org.junit.Test;
 
@@ -10,9 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * ClassName: PackageCheckerTest
@@ -101,7 +98,7 @@ public class PackageCheckerTest {
         testFiles.add(new File(testResource("testFiles.cbz")));
         testFiles.add(new File(testResource("testWrongType.tmp")));
         testFiles.add(new File(testResource("testIgnorable.pdf")));
-        String result = packageChecker.check(testFiles).toString();
+        String result = packageChecker.check(testFiles.toArray(new File[0])).toString();
         System.out.println(result);
         assertEquals("Result: 5 error(s) found.\r\n" +
                 "src/test/resources/testRarFakeZip.zip : Type mismatch.\r\n" +
