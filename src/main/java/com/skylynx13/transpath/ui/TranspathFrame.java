@@ -206,8 +206,8 @@ public class TranspathFrame extends JFrame {
 
     private JToolBar setupStatusBar() {
         JToolBar statusBar = new JToolBar();
-        statusBar.setFloatable(false);
         statusBar.setLayout(new GridLayout());
+        statusBar.setFloatable(false);
 
         progressBar.setMaximum(100);
         progressBar.setMinimum(0);
