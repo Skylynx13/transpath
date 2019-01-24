@@ -62,13 +62,14 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         int totalCount = checkFiles.length;
         int procCount = 0;
         ProgressData progressData =
-                new ProgressData(0, "0 of " + totalCount + " files processed");
+                new ProgressData(0,
+                        "Checking packages: 0 of " + totalCount + " files processed");
         for (File checkFile : checkFiles) {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
             procSize += checkFile.length();
             procCount ++;
             progressData.progress = (int)(100 * procSize / totalSize);
-            progressData.line = String.valueOf(procCount) + " of " + totalCount + " files processed.";
+            progressData.line = "Checking packages: " + procCount + " of " + totalCount + " files processed.";
             publish(progressData);
         }
         StringBuilder errInfoStr = new StringBuilder("Result: ");
