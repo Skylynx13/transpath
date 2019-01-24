@@ -3,6 +3,7 @@ package com.skylynx13.transpath.task;
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.ui.TranspathFrame;
 import com.skylynx13.transpath.utils.FileUtils;
+import com.skylynx13.transpath.utils.ProgressData;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 
@@ -38,8 +39,8 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
     @Override
     protected void process(List<ProgressData> progressData) {
         ProgressData lastProgressData = progressData.get(progressData.size()-1);
-        TranspathFrame.getProgressBar().setValue(lastProgressData.progress);
-        TranspathFrame.getStatusLabel().setText(lastProgressData.line);
+        TranspathFrame.getProgressBar().setValue(lastProgressData.getProgress());
+        TranspathFrame.getStatusLabel().setText(lastProgressData.getLine());
     }
 
     @Override
@@ -68,8 +69,8 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
             procSize += checkFile.length();
             procCount ++;
-            progressData.progress = (int)(100 * procSize / totalSize);
-            progressData.line = "Checking packages: " + procCount + " of " + totalCount + " files processed.";
+            progressData.setProgress((int)(100 * procSize / totalSize));
+            progressData.setLine("Checking packages: " + procCount + " of " + totalCount + " files processed.");
             publish(progressData);
         }
         StringBuilder errInfoStr = new StringBuilder("Result: ");
@@ -203,12 +204,3 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
     }
 }
 
-class ProgressData {
-    int progress;
-    String line;
-
-    ProgressData(int pProgress, String pLine) {
-        progress = pProgress;
-        line = pLine;
-    }
-}
