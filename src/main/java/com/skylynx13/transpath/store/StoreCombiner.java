@@ -3,12 +3,13 @@ package com.skylynx13.transpath.store;
 import com.skylynx13.transpath.utils.ProgressData;
 
 import javax.swing.*;
+import java.util.List;
 
 public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
-    private boolean update;
+    private boolean updateList;
 
-    public StoreCombiner(boolean update) {
-        this.update = update;
+    public StoreCombiner(boolean updateList) {
+        this.updateList = updateList;
     }
 
     @Override
@@ -16,11 +17,21 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         return null;
     }
 
-    public boolean isUpdate() {
-        return update;
+    @Override
+    protected void process(List<ProgressData> progressData) {
+
     }
 
-    public void setUpdate(boolean update) {
-        this.update = update;
+    @Override
+    protected void done() {
+
+    }
+
+    public boolean isUpdateList() {
+        return updateList;
+    }
+
+    public void setUpdateList(boolean updateList) {
+        this.updateList = updateList;
     }
 }

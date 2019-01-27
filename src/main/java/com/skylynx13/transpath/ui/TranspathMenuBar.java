@@ -1,5 +1,6 @@
 package com.skylynx13.transpath.ui;
 
+import com.skylynx13.transpath.store.StoreCombiner;
 import com.skylynx13.transpath.store.StoreKeeper;
 import com.skylynx13.transpath.task.NameReviser;
 import com.skylynx13.transpath.task.PackageChecker;
@@ -77,10 +78,7 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem taskPackageItem = new JMenuItem("Package Check");
         taskMenu.add(taskPackageItem);
-        taskPackageItem.addActionListener(e -> {
-            PackageChecker packageChecker = new PackageChecker();
-            packageChecker.execute();
-        });
+        taskPackageItem.addActionListener(e -> new PackageChecker().execute());
         taskPackageItem.setAccelerator(KeyStroke.getKeyStroke('K', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem taskNameItem = new JMenuItem("Name Revise");
@@ -96,11 +94,11 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem storeCombineItem = new JMenuItem("Combine");
         storeMenu.add(storeCombineItem);
-        storeCombineItem.addActionListener(e -> transpathMenuAction.submit(StoreKeeper::buildCombinedList));
+        storeCombineItem.addActionListener(e -> new StoreCombiner(true));
 
         JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
         storeMenu.add(storeCombineTestItem);
-        storeCombineTestItem.addActionListener(e -> transpathMenuAction.submit(StoreKeeper::testCombinedList));
+        storeCombineTestItem.addActionListener(e -> new StoreCombiner(false));
 
         storeMenu.add(new JSeparator());
 
