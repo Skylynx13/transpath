@@ -101,11 +101,11 @@ public class PackageCheckerTest {
         String result = packageChecker.check(testFiles.toArray(new File[0])).toString();
         System.out.println(result);
         assertEquals("Result: 5 error(s) found.\r\n" +
+                "src/test/resources/testEmpty.rar : All checkers failed.\r\n" +
+                "src/test/resources/testEmpty.zip : All checkers failed.\r\n" +
                 "src/test/resources/testRarFakeZip.zip : Type mismatch.\r\n" +
                 "src/test/resources/testWrongType.tmp : File type not recognized.\r\n" +
                 "src/test/resources/testZipFakeRar.rar : Type mismatch.\r\n" +
-                "src/test/resources/testEmpty.zip : All checkers failed.\r\n" +
-                "src/test/resources/testEmpty.rar : All checkers failed.\r\n" +
 //                "src/test/resources/testIgnorable.pdf : File type ignorable.\r\n" +
                 "", result);
 //        assertEquals(5, result.size());
