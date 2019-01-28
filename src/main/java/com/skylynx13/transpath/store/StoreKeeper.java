@@ -76,7 +76,8 @@ public class StoreKeeper {
             long t0 = System.currentTimeMillis();
             StoreList aList = new StoreList();
 
-            aList.build(TransProp.get(TransConst.LOC_STORE), separator + aTag + separator + bTag + separator);
+            aList.build(TransProp.get(TransConst.LOC_STORE),
+                    separator + aTag + separator + bTag + separator);
             aList.keepFile(FileUtils.storeNameOfTag(aTag, bTag));
 
             int s1 = aList.size();
