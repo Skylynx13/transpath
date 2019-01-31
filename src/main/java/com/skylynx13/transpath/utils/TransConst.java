@@ -18,6 +18,8 @@ public class TransConst {
 
     public static final String TAG_A   = "TAG_A";
     public static final String TAG_B   = "TAG_B";
+    public static final String PATH_BRANCH = "PATH_BRANCH";
+    public static final String PATH_DRILL = "PATH_DRILL";
 
     public static final String SYS_TYPE = "SYS_TYPE";
     public static final String SYS_LINUX = "Linux";
