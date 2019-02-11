@@ -3,6 +3,7 @@ package com.skylynx13.transpath.ui;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -11,6 +12,7 @@ import javax.swing.table.TableCellRenderer;
 
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.store.*;
+import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 import org.jetbrains.annotations.NotNull;
@@ -316,8 +318,7 @@ public class TranspathFrame extends JFrame {
         String target = TransProp.get(TransConst.LOC_TARGET);
         //exec and feedback
         for (StoreNode sNode : sList.getStoreList()) {
-            String pathName = sNode.getPath().substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
-                    + sNode.getName();
+            String pathName = FileUtils.regulatePath(sNode.getPath().substring(1)) + sNode.getName();
             String cmd = TransConst.CMD_COPY_TO_TARGET + "\"" + sourceBase + pathName + "\" " + target;
             TransLog.getLogger().info("Command: " + cmd);
         }

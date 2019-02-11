@@ -7,10 +7,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.utils.DateUtils;
-import com.skylynx13.transpath.utils.FileUtils;
-import com.skylynx13.transpath.utils.StringUtils;
-import com.skylynx13.transpath.utils.TransConst;
+import com.skylynx13.transpath.utils.*;
 
 /**
  * ClassName: StoreList
@@ -89,6 +86,10 @@ public class StoreList {
         refreshVersion();
         storeList = new ArrayList<>(pList);
         recap();
+        calcSize();
+    }
+
+    public StoreList(List<String> storePathList) {
     }
 
     public int size() {
@@ -283,6 +284,19 @@ public class StoreList {
                 String.format(TransConst.FORMAT_INT_20, storeSize) + TransConst.COLON +
                 String.format(TransConst.FORMAT_INT_08, size());
 
+    }
+
+    void backup() {
+        int rev = 0;
+        while (getBackupFileByRev(rev).exists()) {
+            rev = rev == 999 ? 0 : rev + 1;
+        }
+        keepFile(getBackupFileByRev(rev));
+    }
+
+    private File getBackupFileByRev(int rev) {
+        String backupFileName = TransProp.get(TransConst.LOC_LIST) + String.format("backup/StoreList_%s_%03d.txt", version, rev);
+        return new File(backupFileName);
     }
 
     void keepFile(String pFileName) {

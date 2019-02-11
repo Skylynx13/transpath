@@ -54,7 +54,7 @@ public class StoreKeeper {
             PrintWriter out = new PrintWriter(delFile);
             for (StoreNode aNode : delList.storeList) {
                 out.println("del \"" + TransProp.get(TransConst.LOC_STORE)
-                        + aNode.getPath().substring(1).replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4)
+                        + FileUtils.regulatePath(aNode.getPath().substring(1))
                         + aNode.getName() + "\"");
             }
             out.close();
@@ -67,9 +67,9 @@ public class StoreKeeper {
         int stotal = 0;
         int ttotal = 0;
 
-        String separator = "/";
+        String SEPARATOR = "/";
         if(isWindow()) {
-            separator = "\\";
+            SEPARATOR = "\\";
         }
 
         for (String bTag : bTags) {
@@ -77,7 +77,7 @@ public class StoreKeeper {
             StoreList aList = new StoreList();
 
             aList.build(TransProp.get(TransConst.LOC_STORE),
-                    separator + aTag + separator + bTag + separator);
+                    SEPARATOR + aTag + SEPARATOR + bTag + SEPARATOR);
             aList.keepFile(FileUtils.storeNameOfTag(aTag, bTag));
 
             int s1 = aList.size();

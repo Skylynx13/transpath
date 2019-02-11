@@ -26,9 +26,20 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
 
     @Override
     protected StringBuilder doInBackground() {
-        String branchPath = TransProp.get(TransConst.PATH_BRANCH);
+        List<String> storePathList = parseStorePathList(TransProp.get(TransConst.PATH_BRANCH));
 
+        StoreList newStoreList = new StoreList(storePathList);
+        StoreList oldStoreList = new StoreList(getStoreListName());
+        oldStoreList.backup();
+//        StoreList combinedList = oldStoreList.combine(newStoreList);
+//        if (updateList) {
+//            combinedList.keepFile("");
+//        }
         return null;
+    }
+
+    private String getStoreListName() {
+        return TransProp.get(TransConst.LOC_LIST) + String.format("StoreList.txt");
     }
 
     List<String> parseStorePathList(String branchPath) {
@@ -59,6 +70,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
                 storePathList.add(String.format("A%04d/B%04d", numberA, numberI));
             }
         }
+        TransLog.getLogger().info(storePathList.toString());
         return storePathList;
     }
 

@@ -152,7 +152,24 @@ public class FreeTester {
     }
 
     public static void main(String[] args) {
-        openFileByDefaultProgram();
+        fileTester();
+    }
+
+    private static void fileTester() {
+        int rev = 0;
+        String version = "Teestt";
+        File file = new File(String.format("D:\\\\temp\\\\StoreList_%s_%03d.txt", version, rev));
+        while (file.exists()) {
+            rev ++;
+            file = new File(String.format("D:\\\\temp\\\\StoreList_%s_%03d.txt", version, rev));
+        }
+        try {
+            PrintWriter out = new PrintWriter(file);
+            out.println("ok");
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 

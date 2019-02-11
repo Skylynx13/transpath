@@ -20,7 +20,7 @@ import com.skylynx13.transpath.log.TransLog;
  */
 public class FileUtils {
     private static final int READ_BUFFER_SIZE = 1024 * 128;
-    private static final HashMap<String, String> mFileTypes = new HashMap<String, String>();
+    private static final HashMap<String, String> mFileTypes = new HashMap<>();
 
     static {
         // images
@@ -527,5 +527,20 @@ public class FileUtils {
             strbuf.append(file.getName()).append(TransConst.CRLN);
         }
         return strbuf.toString();
+    }
+
+    public static String regulatePath(String path) {
+        if (TransProp.get(TransConst.SYS_TYPE).equals(TransConst.SYS_WINDOWS)) {
+            return toWindowsPath(path);
+        }
+        return toStandardPath(path);
+    }
+
+    private static String toWindowsPath(String path) {
+        return path.replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4);
+    }
+
+    private static String toStandardPath(String path) {
+        return path.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
     }
 }

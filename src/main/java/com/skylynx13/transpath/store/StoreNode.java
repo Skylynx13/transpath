@@ -129,8 +129,7 @@ public class StoreNode implements Cloneable {
     StoreNode(String pRoot, File pFile) {
         id = 0;
         name = pFile.getName();
-        path = pFile.getParent().replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH)
-                .replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
+        path = FileUtils.regulatePath(pFile.getParent()).replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
         length = pFile.length();
         lastModified = pFile.lastModified();
         md5 = FileUtils.digestMd5(pFile);
