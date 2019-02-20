@@ -7,7 +7,6 @@ import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.ProgressData;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
-import sun.rmi.runtime.Log;
 
 import javax.swing.*;
 import java.io.File;
@@ -32,8 +31,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private long processedSize;
     private long processedCount;
     private ProgressData progressData = new ProgressData();
-    private long storeSize;
-    private long storeCount;
+    private long totalSize;
+    private long totalCount;
 
     public StoreCombiner(boolean updateList) {
         this.updateList = updateList;
@@ -72,8 +71,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         publishProgressNewList(0, 0);
         long t0 = System.currentTimeMillis();
         List<String> storePathList = buildStorePathList();
-        storeSize = calcStoreFileSize(storePathList);
-        storeCount = calcStoreFileCount(storePathList);
+        totalSize = calcStoreFileSize(storePathList);
+        totalCount = calcStoreFileCount(storePathList);
 
         StoreList newList = new StoreList();
 
@@ -85,6 +84,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
             }
 
             processedSize = 0;
+            processedCount = 0;
             newList.attachList(buildStoreListByPath(storePath));
         }
         TransLog.getLogger().info("New store list built.");
@@ -93,8 +93,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     }
 
     private void publishProgressNewList(long processedSize, long processedCount) {
-        progressData.setProgress((int)(100 * processedSize / storeSize));
-        progressData.setLine("Building new list: " + processedCount + " of " + storeCount + "files processed.");
+        progressData.setProgress((int)(100 * processedSize / totalSize));
+        progressData.setLine("Building new list: " + processedCount + " of " + totalCount + "files processed.");
         publish(progressData);
     }
 
@@ -206,21 +206,27 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         StoreList duplicatedList = new StoreList();
         StoreList removedList = new StoreList();
 
+        totalSize = overallList.getStoreSize();
+        totalCount = overallList.size();
         processedSize = 0;
         processedCount = 0;
         for (StoreNode aNode : overallList.storeList) {
-            if (null != aNode) {
-                if (aNode.checkDupStoreNode(dNode)) {
-                    if (!duplicatedList.hasNode(dNode)) {
-                        duplicatedList.storeList.add(dNode);
-                    }
-                    duplicatedList.storeList.add(aNode);
-                    removedList.storeList.add(aNode);
-                } else {
-                    dNode = aNode;
-                    reservedList.storeList.add(aNode);
-                }
+            if (aNode == null) {
+                continue;
             }
+            if (aNode.checkDupStoreNode(dNode)) {
+                if (!duplicatedList.hasNode(dNode)) {
+                    duplicatedList.storeList.add(dNode);
+                }
+                duplicatedList.storeList.add(aNode);
+                removedList.storeList.add(aNode);
+            } else {
+                dNode = aNode;
+                reservedList.storeList.add(aNode);
+            }
+            processedSize += aNode.getLength();
+            processedCount++;
+            publishCombinedList(processedSize, processedCount);
         }
         TransLog.getLogger().info("Duplicated list.");
         TransLog.getLogger().info(duplicatedList.toString());
@@ -292,8 +298,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     }
 
     private void publishCombinedList(long processedSize, long processedCount) {
-        progressData.setProgress((int)(100 * processedSize / storeSize));
-        progressData.setLine("Combining list: " + processedCount + " of " + storeCount + "files processed.");
+        progressData.setProgress((int)(100 * processedSize / totalSize));
+        progressData.setLine("Combining list: " + processedCount + " of " + totalCount + "files processed.");
         publish(progressData);
     }
 
