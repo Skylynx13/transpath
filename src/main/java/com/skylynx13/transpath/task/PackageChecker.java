@@ -65,6 +65,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         ProgressData progressData =
                 new ProgressData(0,
                         "Checking packages: 0 of " + totalCount + " files processed");
+        publish(progressData);
         for (File checkFile : checkFiles) {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
             procSize += checkFile.length();

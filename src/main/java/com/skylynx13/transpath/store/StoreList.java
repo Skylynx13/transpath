@@ -15,6 +15,7 @@ import com.skylynx13.transpath.utils.*;
  * Date: 2016-06-17 12:05:40
  */
 public class StoreList {
+    private static final String STORELIST_DEFAULT = TransProp.get(TransConst.LOC_LIST) + "StoreList.txt";
     private String version;
     private int minId;
     int maxId;
@@ -79,7 +80,6 @@ public class StoreList {
     public StoreList(String fileName) {
         storeList = new ArrayList<>();
         load(fileName);
-        calcSize();
     }
 
     public StoreList(ArrayList<StoreNode> pList) {
@@ -232,8 +232,12 @@ public class StoreList {
                 aNode.setId(newId);
             }
         }
-        recap();
         return aMap;
+    }
+
+    StoreList loadCurrent() {
+        load(STORELIST_DEFAULT);
+        return this;
     }
 
     void load(String pFileName) {
@@ -257,6 +261,7 @@ public class StoreList {
         }
         aScan.close();
         recap();
+        calcSize();
     }
 
     private void loadVersion(String pLine) {
@@ -283,25 +288,27 @@ public class StoreList {
                 String.format(TransConst.FORMAT_INT_08, maxId) + TransConst.COLON +
                 String.format(TransConst.FORMAT_INT_20, storeSize) + TransConst.COLON +
                 String.format(TransConst.FORMAT_INT_08, size());
-
     }
 
     void backup() {
         int rev = 0;
-        while (getBackupFileByRev(rev).exists()) {
+        while (getBackupRev(rev).exists()) {
             rev = rev == 999 ? 0 : rev + 1;
         }
-        keepFile(getBackupFileByRev(rev));
+        keepFile(getBackupRev(rev));
     }
 
-    private File getBackupFileByRev(int rev) {
-        String backupFileName = TransProp.get(TransConst.LOC_LIST) + String.format("backup/StoreList_%s_%03d.txt", version, rev);
-        return new File(backupFileName);
+    private File getBackupRev(int rev) {
+        return new File(TransProp.get(TransConst.LOC_LIST)
+                + String.format("backup/StoreList_%s_%03d.txt", version, rev));
     }
 
     void keepFile(String pFileName) {
-        File aFile = new File(pFileName);
-        keepFile(aFile);
+        keepFile(new File(pFileName));
+    }
+
+    void keepFile() {
+        keepFile(new File(STORELIST_DEFAULT));
     }
 
     private void keepFile(File pFile) {
@@ -445,5 +452,4 @@ public class StoreList {
     private StoreList getNewList() {
         return new StoreList();
     }
-
 }

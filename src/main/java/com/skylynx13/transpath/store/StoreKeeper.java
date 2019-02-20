@@ -18,15 +18,11 @@ import java.util.Arrays;
 public class StoreKeeper {
 
     private static void keepDelList(StoreList delList) {
-        if (isWindow()) {
+        if (FileUtils.isWindows()) {
             keepDelBatch(delList, new File(TransProp.get(TransConst.LOC_LIST) + "ToDel.bat"));
         } else {
             keepDelShell(delList, new File(TransProp.get(TransConst.LOC_LIST) + "todel.sh"));
         }
-    }
-
-    private static boolean isWindow() {
-        return TransProp.get(TransConst.SYS_TYPE).equalsIgnoreCase(TransConst.SYS_WINDOWS);
     }
 
     private static void keepDelShell(StoreList delList, File delFile) {
@@ -68,7 +64,7 @@ public class StoreKeeper {
         int ttotal = 0;
 
         String SEPARATOR = "/";
-        if(isWindow()) {
+        if(FileUtils.isWindows()) {
             SEPARATOR = "\\";
         }
 
@@ -236,6 +232,7 @@ public class StoreKeeper {
 
         resList.orderByPathAndName();
         resList.reorgId();
+        resList.recap();
         String currVer = resList.getVersion();
         resList.keepFile(FileUtils.storeNameOfVersion(currVer));
 

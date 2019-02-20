@@ -4,6 +4,9 @@ public class ProgressData {
     private int progress;
     private String line;
 
+    public ProgressData() {
+    }
+
     public int getProgress() {
         return progress;
     }

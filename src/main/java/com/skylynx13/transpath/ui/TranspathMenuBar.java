@@ -94,11 +94,11 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem storeCombineItem = new JMenuItem("Combine");
         storeMenu.add(storeCombineItem);
-        storeCombineItem.addActionListener(e -> new StoreCombiner(true));
+        storeCombineItem.addActionListener(e -> new StoreCombiner(true).execute());
 
         JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
         storeMenu.add(storeCombineTestItem);
-        storeCombineTestItem.addActionListener(e -> new StoreCombiner(false));
+        storeCombineTestItem.addActionListener(e -> new StoreCombiner(false).execute());
 
         storeMenu.add(new JSeparator());
 

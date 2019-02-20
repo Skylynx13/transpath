@@ -157,30 +157,4 @@ public class FileUtilsTest {
 //        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_003.cbr")));
 //        assertEquals("archive/comic", FileUtils.getFileMimeType(testResource("getFileMimeType_004.cbz")));
     }
-
-    @SuppressWarnings("unused")
-    @Test
-    @Ignore
-    public void getRarCommentTest() {
-        String fn1 = testResource("getSetRarCommentTest.rar");
-        String fn2 = testResource("getSetZipCommentTest.zip");
-        File f1 = new File(fn1);
-//        try {
-//            ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(fn2));
-//            zout.write(new String("ask why").getBytes());
-//            zout.flush();
-//            zout.setComment("abc");
-//            zout.close();
-//            ZipInputStream zin = new ZipInputStream(new FileInputStream(fn2));
-//            byte[] b = new byte[10];
-//            zin.read(b);
-//            zin.close();
-//            System.out.println(b);
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-        System.out.println(FileUtils.extractZipComment(fn2));
-        assertTrue(true);
-    }
 }

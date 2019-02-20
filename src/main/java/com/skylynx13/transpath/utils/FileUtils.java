@@ -266,6 +266,27 @@ public class FileUtils {
         return size;
     }
 
+    public static long getFileCount(String pFileName) {
+        if (pFileName == null || pFileName.isEmpty()) {
+            return 0;
+        }
+        return getFileCount(new File(pFileName));
+    }
+
+    private static long getFileCount(File pFile) {
+        if (pFile == null) {
+            return 0;
+        }
+        if (pFile.isFile()) {
+            return 1;
+        }
+        long count = 0;
+        for (File sub : Objects.requireNonNull(pFile.listFiles())) {
+            count += getFileSize(sub);
+        }
+        return count;
+    }
+
     static String getFileMimeType(String pFileName) {
         if (pFileName == null || pFileName.isEmpty()) {
             return TransConst.EMPTY;
@@ -504,7 +525,7 @@ public class FileUtils {
     }
 
     public static String storeNameOfTag(String aTag, String bTag) {
-        if (TransProp.get(TransConst.SYS_TYPE).equalsIgnoreCase(TransConst.SYS_WINDOWS)) {
+        if (isWindows()) {
             return TransProp.get(TransConst.LOC_LIST) + "B\\TFLib_" + aTag + "_" + bTag + ".txt";
         }
         return TransProp.get(TransConst.LOC_LIST) + "B/TFLib_" + aTag + "_" + bTag + ".txt";
@@ -530,10 +551,14 @@ public class FileUtils {
     }
 
     public static String regulatePath(String path) {
-        if (TransProp.get(TransConst.SYS_TYPE).equals(TransConst.SYS_WINDOWS)) {
+        if (isWindows()) {
             return toWindowsPath(path);
         }
         return toStandardPath(path);
+    }
+
+    public static boolean isWindows() {
+        return TransProp.get(TransConst.SYS_TYPE).equalsIgnoreCase(TransConst.SYS_WINDOWS);
     }
 
     private static String toWindowsPath(String path) {
