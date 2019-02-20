@@ -180,7 +180,7 @@ public class StoreList {
                 aMap.put(oldId, aNode.getId());
             }
         }
-
+        recap();
         //Return value only used by test.
         return aMap;
     }

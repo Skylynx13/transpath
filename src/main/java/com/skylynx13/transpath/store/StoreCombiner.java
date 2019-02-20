@@ -21,13 +21,13 @@ import java.util.regex.Pattern;
 
 public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private boolean updateList;
+    private final static String STORE_ROOT = TransProp.get(TransConst.LOC_STORE);
     private final static String REGEX_PATH_FULL = "^(A\\d{4})/B(\\d{4})(-(\\d{4}))?(,((A\\d{4})/)?B(\\d{4})(-(\\d{4}))?)*?$";
     private final static String REGEX_PATH_UNIT = ",?(A(\\d{4})/)?B(\\d{4})(-(\\d{4}))?";
     private final static Pattern PATTERN_PATH_UNIT = Pattern.compile(REGEX_PATH_UNIT);
     private final static int GROUP_A = 2;
     private final static int GROUP_B = 3;
     private final static int GROUP_S = 5;
-
     private long processedSize;
     private long processedCount;
     private ProgressData progressData = new ProgressData();
@@ -50,9 +50,10 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
                 combinedList.keepFile();
             }
             return new StringBuilder("Store combiner done.")
-                    .append(" Old:").append(oldStoreList.size())
-                    .append(" New:").append(newStoreList.size())
-                    .append(" Combined:").append(combinedList.getStoreSize());
+                    .append(" Old: ").append(oldStoreList.size())
+                    .append(" New: ").append(newStoreList.size())
+                    .append(" Combined: ").append(combinedList.size())
+                    .append(" Combined file size: ").append(combinedList.getStoreSize());
         } catch (StoreListException e) {
             return new StringBuilder(e.getMessage());
         }
@@ -68,16 +69,16 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
 
     private StoreList buildNewStoreList() throws StoreListException {
         TransLog.getLogger().info("Building new store list...");
-        publishProgressNewList(0, 0);
         long t0 = System.currentTimeMillis();
         List<String> storePathList = buildStorePathList();
         totalSize = calcStoreFileSize(storePathList);
         totalCount = calcStoreFileCount(storePathList);
+        publishProgressNewList(0, 0);
 
         StoreList newList = new StoreList();
 
         for (String storePathName : storePathList) {
-            File storePath = new File(storePathName);
+            File storePath = new File(STORE_ROOT + storePathName);
             if (!storePath.isDirectory() || storePath.listFiles() == null) {
                 TransLog.getLogger().warn("Store path ignored: " + storePathName);
                 continue;
@@ -99,7 +100,6 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     }
 
     private StoreList buildStoreListByPath(File storePath) {
-        final String STORE_ROOT = TransProp.get(TransConst.LOC_STORE);
         StoreList storeList = new StoreList();
         for (File aPath : Objects.requireNonNull(storePath.listFiles())) {
             if (aPath.isFile()) {
@@ -120,7 +120,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private long calcStoreFileSize(List<String> storePathList) {
         long totalSize = 0;
         for (String storePathName : storePathList) {
-            totalSize += FileUtils.getFileSize(storePathName);
+            totalSize += FileUtils.getFileSize(STORE_ROOT+storePathName);
         }
         return totalSize;
     }
@@ -128,7 +128,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private long calcStoreFileCount(List<String> storePathList) {
         long totalCount = 0;
         for (String storePathName : storePathList) {
-            totalCount += FileUtils.getFileCount(storePathName);
+            totalCount += FileUtils.getFileCount(STORE_ROOT+storePathName);
         }
         return totalCount;
     }
@@ -186,7 +186,6 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
 
     private StoreList combine(StoreList oldStoreList, StoreList newStoreList) {
         TransLog.getLogger().info("Combining...");
-        publishCombinedList(0, 0);
         long t0 = System.currentTimeMillis();
 
         StoreList overallList = new StoreList();
@@ -210,6 +209,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         totalCount = overallList.size();
         processedSize = 0;
         processedCount = 0;
+        publishCombinedList(0, 0);
         for (StoreNode aNode : overallList.storeList) {
             if (aNode == null) {
                 continue;
@@ -238,7 +238,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         removedList.orderByPathAndName();
         removedList.recap();
         keepDelList(removedList);
-        TransLog.getLogger().info("Combined count: " + overallList.size());
+        TransLog.getLogger().info("Overall count: " + overallList.size());
         TransLog.getLogger().info("Reserved count: " + reservedList.size());
         TransLog.getLogger().info("Removed count: " + removedList.size());
         TransLog.getLogger().info("Removed size: " + removedList.getStoreSize());

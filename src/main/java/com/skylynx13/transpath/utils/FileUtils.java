@@ -282,7 +282,7 @@ public class FileUtils {
         }
         long count = 0;
         for (File sub : Objects.requireNonNull(pFile.listFiles())) {
-            count += getFileSize(sub);
+            count += getFileCount(sub);
         }
         return count;
     }
