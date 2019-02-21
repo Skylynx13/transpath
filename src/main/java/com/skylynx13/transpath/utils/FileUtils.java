@@ -565,7 +565,7 @@ public class FileUtils {
         return path.replaceAll(TransConst.SLASH, TransConst.BACK_SLASH_4);
     }
 
-    private static String toStandardPath(String path) {
+    public static String toStandardPath(String path) {
         return path.replaceAll(TransConst.BACK_SLASH_4, TransConst.SLASH);
     }
 }

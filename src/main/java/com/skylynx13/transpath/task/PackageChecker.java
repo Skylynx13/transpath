@@ -79,8 +79,8 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         List<String> keyList = new ArrayList<String>(Arrays.asList(errorInfos.keySet().toArray(new String[0])));
         Collections.sort(keyList);
         for (String key : keyList) {
-            errInfoStr.append(FileUtils.regulateSlash(key)).append(" : ")
-                    .append(errorInfos.get(key)).append(TransConst.CRLN);
+              errInfoStr.append(FileUtils.toStandardPath(key)).append(" : ")
+                  .append(errorInfos.get(key)).append(TransConst.CRLN);
         }
         return errInfoStr;
     }

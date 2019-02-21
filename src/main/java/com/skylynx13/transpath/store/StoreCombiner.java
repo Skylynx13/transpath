@@ -78,7 +78,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         StoreList newList = new StoreList();
 
         for (String storePathName : storePathList) {
-            File storePath = new File(STORE_ROOT + storePathName);
+            File storePath = new File(buildRootPath(storePathName));
             if (!storePath.isDirectory() || storePath.listFiles() == null) {
                 TransLog.getLogger().warn("Store path ignored: " + storePathName);
                 continue;
@@ -120,7 +120,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private long calcStoreFileSize(List<String> storePathList) {
         long totalSize = 0;
         for (String storePathName : storePathList) {
-            totalSize += FileUtils.getFileSize(STORE_ROOT+storePathName);
+            totalSize += FileUtils.getFileSize(buildRootPath(storePathName));
         }
         return totalSize;
     }
@@ -128,7 +128,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private long calcStoreFileCount(List<String> storePathList) {
         long totalCount = 0;
         for (String storePathName : storePathList) {
-            totalCount += FileUtils.getFileCount(STORE_ROOT+storePathName);
+            totalCount += FileUtils.getFileCount(buildRootPath(storePathName));
         }
         return totalCount;
     }
@@ -139,6 +139,10 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         } else {
             return parseStorePathList(TransProp.get(TransConst.PATH_DRILL));
         }
+    }
+
+    private String buildRootPath(String pathName) {
+        return FileUtils.regulatePath(STORE_ROOT + pathName);
     }
 
     List<String> parseStorePathList(String branchPath) throws StoreListException {
