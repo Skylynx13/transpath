@@ -76,7 +76,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         }
         StringBuilder errInfoStr = new StringBuilder("Result: ");
         errInfoStr.append(errorInfos.size()).append(" error(s) found.").append(TransConst.CRLN);
-        List<String> keyList = new ArrayList<String>(Arrays.asList(errorInfos.keySet().toArray(new String[0])));
+        List<String> keyList = new ArrayList<>(Arrays.asList(errorInfos.keySet().toArray(new String[0])));
         Collections.sort(keyList);
         for (String key : keyList) {
               errInfoStr.append(FileUtils.toStandardPath(key)).append(" : ")

@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.utils.*;
 
 /**
@@ -30,28 +29,8 @@ public class StoreList {
         this.version = version;
     }
 
-    public int getMinId() {
-        return minId;
-    }
-
-    public void setMinId(int minId) {
-        this.minId = minId;
-    }
-
-    public int getMaxId() {
-        return maxId;
-    }
-
-    public void setMaxId(int maxId) {
-        this.maxId = maxId;
-    }
-
     public ArrayList<StoreNode> getStoreList() {
         return storeList;
-    }
-
-    public void setStoreList(ArrayList<StoreNode> storeList) {
-        this.storeList = storeList;
     }
 
     long getStoreSize() {
@@ -79,7 +58,7 @@ public class StoreList {
 
     public StoreList(String fileName) {
         storeList = new ArrayList<>();
-        load(fileName);
+        load(new File(fileName));
     }
 
     public StoreList(ArrayList<StoreNode> pList) {
@@ -87,9 +66,6 @@ public class StoreList {
         storeList = new ArrayList<>(pList);
         recap();
         calcSize();
-    }
-
-    public StoreList(List<String> storePathList) {
     }
 
     public int size() {
@@ -236,12 +212,8 @@ public class StoreList {
     }
 
     StoreList loadCurrent() {
-        load(STORELIST_DEFAULT);
+        load(new File(STORELIST_DEFAULT));
         return this;
-    }
-
-    void load(String pFileName) {
-        load(new File(pFileName));
     }
 
     private void load(File pFile) {
@@ -303,10 +275,6 @@ public class StoreList {
                 + String.format("backup/StoreList_%s_%03d.txt", version, rev));
     }
 
-    void keepFile(String pFileName) {
-        keepFile(new File(pFileName));
-    }
-
     void keepFile() {
         keepFile(new File(STORELIST_DEFAULT));
     }
@@ -334,16 +302,6 @@ public class StoreList {
             strBuff.append(keepLine(aNode)).append(TransConst.CRLN);
         }
         return strBuff.toString();
-    }
-
-    public static ArrayList<Integer> FindIdOnlyInAList(ArrayList<Integer> aList, ArrayList<Integer> bList) {
-        ArrayList<Integer> idList = new ArrayList<>();
-        for (int element : aList) {
-            if (!bList.contains(element)) {
-                idList.add(element);
-            }
-        }
-        return idList;
     }
 
     public Object[][] toRows() {
@@ -390,46 +348,6 @@ public class StoreList {
         storeSize = 0;
         for (StoreNode aNode : storeList) {
             storeSize += aNode.getLength();
-        }
-    }
-
-    void build(String pRoot, String pPathName) {
-        String aRoot = FileUtils.regulateSlash(pRoot);
-        String aPathName = aRoot + FileUtils.regulateSlash(pPathName);
-
-        if (new File(aRoot).isFile() || new File(aPathName).isFile()) {
-            return;
-        }
-
-        buildByPath(aRoot, aPathName);
-        recap();
-    }
-
-    private void buildByPath(String pRoot, String pPathName) {
-        buildByPath(pRoot, new File(pPathName));
-    }
-
-    private void buildByPath(String pRoot, File pPath) {
-        clear();
-
-        if (!pPath.isDirectory() || pPath.listFiles() == null) {
-            return;
-        }
-        TransLog.getLogger().info(pPath);
-        long processedBytes = 0;
-        for (File aFile : Objects.requireNonNull(pPath.listFiles())) {
-            if (aFile.isFile()) {
-                StoreNode aNode = new StoreNode(pRoot, aFile);
-                addNode(aNode);
-                TransLog.getLogger().info(aNode.keepNode());
-                processedBytes += aNode.getLength();
-                TransLog.getLogger().info("Processed Bytes: " + processedBytes);
-            }
-            if (aFile.isDirectory()) {
-                StoreList aList = new StoreList();
-                aList.buildByPath(pRoot, aFile);
-                attachList(aList);
-            }
         }
     }
 
