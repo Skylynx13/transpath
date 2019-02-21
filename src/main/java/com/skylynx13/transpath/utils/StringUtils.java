@@ -23,12 +23,8 @@ public class StringUtils {
         return true;
     }
 
-    public static boolean isBlank(String pString) {
-        return pString == null || pString.trim().length() == 0;
-    }
-
     public static boolean isEmpty(String pString) {
-        return pString == null || pString.length() == 0;
+        return pString == null || pString.length() == 0 || pString.equals("");
     }
 
     public static boolean isNumeric(String pString) {

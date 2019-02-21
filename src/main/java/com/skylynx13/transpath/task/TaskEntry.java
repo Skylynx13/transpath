@@ -1,6 +1,6 @@
 package com.skylynx13.transpath.task;
 
-import org.jetbrains.annotations.NotNull;
+import com.skylynx13.transpath.utils.StringUtils;
 
 import java.util.ArrayList;
 
@@ -61,20 +61,14 @@ public class TaskEntry implements Comparable<TaskEntry>{
     public void setName(String name) {
         this.name = name;
     }
-    boolean hasName() {
-        return ((this.name != null) && (!this.name.equals("")));
+    boolean hasNoName() {
+        return (StringUtils.isEmpty(this.name));
     }
     ArrayList<String> getComments() {
         return comments;
     }
-    public void setComments(ArrayList<String> comments) {
-        this.comments = comments;
-    }
     ArrayList<String> getLinks() {
         return links;
-    }
-    public void setLinks(ArrayList<String> links) {
-        this.links = links;
     }
     public void addComment(String comment) {
         if (this.comments == null) {
@@ -103,22 +97,9 @@ public class TaskEntry implements Comparable<TaskEntry>{
             this.links.add(link);            
         }
     }
-    public int getLinksSize() {
-        if (this.links == null) {
-            return 0;
-        }
-        return this.links.size();
-    }
-    
-    public int getCommentsSize() {
-        if (this.comments == null) {
-            return 0;
-        }
-        return this.comments.size();
-    }
-    
+
     @Override
-    public int compareTo(@NotNull TaskEntry cde) {
+    public int compareTo(TaskEntry cde) {
         return this.name.compareTo(cde.name);
     }
     
@@ -155,12 +136,6 @@ public class TaskEntry implements Comparable<TaskEntry>{
         return true;
     }
     
-    public void clear() {
-        this.name = "";
-        this.comments.clear();
-        this.links.clear();
-    }
-
     boolean matches(String[] keys) {
         for (String key : keys) {
             key = "(?i).*" + key + ".*";

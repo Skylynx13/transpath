@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Scanner;
 
 import com.skylynx13.transpath.log.TransLog;
@@ -74,14 +75,14 @@ public class TaskArranger {
                 continue;
             }
             if (this.checkLinkLine(line)) {
-                if (this.entry == null || !this.entry.hasName()) {
+                if (this.entry == null || this.entry.hasNoName()) {
                     status = 200000 + cnt; // Error: Entry no name at line cnt.
                     in.close();
                     return null;
                 }
                 entry.addUniqueLink(line);
             } else if (this.checkCommentLine(line)) {
-                if (this.entry == null || !this.entry.hasName()) {
+                if (this.entry == null || this.entry.hasNoName()) {
                     status = 200000 + cnt; // Error: Entry no name at line cnt.
                     in.close();
                     return null;
@@ -206,7 +207,7 @@ public class TaskArranger {
             e.printStackTrace();
         }
         
-        while (in.hasNext()) {
+        while (Objects.requireNonNull(in).hasNext()) {
             iInLine++;
             String inLine = in.nextLine();
             if (isInWindow && checkIgnorableLine(inLine)) {
@@ -240,7 +241,7 @@ public class TaskArranger {
                 //TransLog.getLogger().info("Line " + iInLine + " window closed.");
             }
             if (isInWindow && !checkIgnorableLine(inLine)) {
-                out.println(inLine);
+                Objects.requireNonNull(out).println(inLine);
                 iOutLine++;
             }
         }

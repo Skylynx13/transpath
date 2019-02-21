@@ -3,7 +3,6 @@ package com.skylynx13.transpath.ui;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -15,7 +14,6 @@ import com.skylynx13.transpath.store.*;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * ClassName: TranspathFrame
@@ -42,7 +40,12 @@ public class TranspathFrame extends JFrame {
     public static JTextArea getLogTextArea() {
         return logTextArea;
     }
-
+    public static JProgressBar getProgressBar() {
+        return progressBar;
+    }
+    public static JLabel getStatusLabel() {
+        return statusLabel;
+    }
     static JTextArea getInfoTextArea() {
         return infoTextArea;
     }
@@ -52,22 +55,6 @@ public class TranspathFrame extends JFrame {
             treePane = createScrollPane();
         }
         return treePane;
-    }
-
-    public static JProgressBar getProgressBar() {
-        return progressBar;
-    }
-
-    public static void setProgressBar(JProgressBar progressBar) {
-        TranspathFrame.progressBar = progressBar;
-    }
-
-    public static JLabel getStatusLabel() {
-        return statusLabel;
-    }
-
-    public static void setStatusLabel(JLabel statusLabel) {
-        TranspathFrame.statusLabel = statusLabel;
     }
 
     public TranspathFrame() {
@@ -227,7 +214,7 @@ public class TranspathFrame extends JFrame {
         return statusBar;
     }
 
-    private static void updateInfoTable(@NotNull StoreList storeList) {
+    private static void updateInfoTable(StoreList storeList) {
         updateInfoTable(new DefaultTableModel(storeList.toRows(), TransConst.TABLE_TITLE_STORE));
     }
 
@@ -235,7 +222,7 @@ public class TranspathFrame extends JFrame {
         updateInfoTable(new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle()));
     }
 
-    private static void updateInfoTable(@NotNull DefaultTableModel tableModel) {
+    private static void updateInfoTable(DefaultTableModel tableModel) {
         String[] rightAlignedTitles = {"StoreId", "Length", "BranchId"};
         infoTable.setModel(tableModel);
         columnSizeFitContents(infoTable);
