@@ -49,11 +49,14 @@ public class TransConst {
     
     public static final String NAME_CHARS = "[\\-\\+!@#$%^&½,.'A-Za-z0-9 \\(\\)]+";
 
-    public static final Font GLOBAL_FONT = new Font(TransProp.get(FONT_TYPE), Font.PLAIN, TransProp.getInt(FONT_SIZE));
+    public static final Font GLOBAL_FONT =
+            new Font(TransProp.get(FONT_TYPE), Font.PLAIN, TransProp.getInt(FONT_SIZE));
 
-    public static String[] TABLE_TITLE_BRANCH = {"BranchId", "BranchPath", "BranchName", "Length"};
+    public static String[] TABLE_TITLE_BRANCH =
+            {"BranchId", "BranchPath", "BranchName", "Length"};
 
-    public static String[] TABLE_TITLE_STORE = {"StoreId", "StorePath", "StoreName", "Length", "Update Time", "MD5", "SHA", "CRC32"};
+    public static String[] TABLE_TITLE_STORE =
+            {"StoreId", "StorePath", "StoreName", "Length", "Update Time", "MD5", "SHA", "CRC32"};
 
     public static final String CMD_COPY_TO_TARGET = "cmd /c chcp 437|copy ";
 

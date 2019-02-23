@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 
+import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.store.StoreTree;
 
@@ -37,7 +38,7 @@ public class TreeMouseListener implements MouseListener {
         }
         StoreTree selectTree = (StoreTree)jTree.getSelectionPath().getLastPathComponent();
 
-        JTextArea infoTextArea = TranspathFrame.getInfoTextArea();
+        JTextArea infoTextArea = Transpath.getTranspathFrame().getInfoTextArea();
         infoTextArea.setText("Tree Selected: " + selectTree.toString()+"\n");
 
         StoreNode selectNode = selectTree.getNode();
@@ -46,7 +47,7 @@ public class TreeMouseListener implements MouseListener {
         } else {
             infoTextArea.append("Store Node Selected: " + selectNode.keepNode()+"\n");
         }
-        TranspathFrame.updateInfoTable(selectTree);
+        Transpath.getTranspathFrame().updateInfoTable(selectTree);
     }
 
     @Override

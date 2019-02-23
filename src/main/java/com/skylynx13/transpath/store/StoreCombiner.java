@@ -1,8 +1,8 @@
 package com.skylynx13.transpath.store;
 
+import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.error.StoreListException;
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.ui.TranspathFrame;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.ProgressData;
 import com.skylynx13.transpath.utils.TransConst;
@@ -22,7 +22,8 @@ import java.util.regex.Pattern;
 public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private boolean updateList;
     private final static String STORE_ROOT = TransProp.get(TransConst.LOC_STORE);
-    private final static String REGEX_PATH_FULL = "^(A\\d{4})/B(\\d{4})(-(\\d{4}))?(,((A\\d{4})/)?B(\\d{4})(-(\\d{4}))?)*?$";
+    private final static String REGEX_PATH_FULL =
+            "^(A\\d{4})/B(\\d{4})(-(\\d{4}))?(,((A\\d{4})/)?B(\\d{4})(-(\\d{4}))?)*?$";
     private final static String REGEX_PATH_UNIT = ",?(A(\\d{4})/)?B(\\d{4})(-(\\d{4}))?";
     private final static Pattern PATTERN_PATH_UNIT = Pattern.compile(REGEX_PATH_UNIT);
     private final static int GROUP_A = 2;
@@ -48,6 +49,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
             if (updateList) {
                 oldStoreList.backup();
                 combinedList.keepFile();
+                Transpath.getTranspathFrame().reloadStore();
             }
             return new StringBuilder("Store combiner done.")
                     .append(" Old: ").append(oldStoreList.size())
@@ -73,6 +75,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         List<String> storePathList = buildStorePathList();
         totalSize = calcStoreFileSize(storePathList);
         totalCount = calcStoreFileCount(storePathList);
+        processedSize = 0;
+        processedCount = 0;
         publishProgressNewList(0, 0);
 
         StoreList newList = new StoreList();
@@ -83,9 +87,6 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
                 TransLog.getLogger().warn("Store path ignored: " + storePathName);
                 continue;
             }
-
-            processedSize = 0;
-            processedCount = 0;
             newList.attachList(buildStoreListByPath(storePath));
         }
         TransLog.getLogger().info("New store list built.");
@@ -95,7 +96,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
 
     private void publishProgressNewList(long processedSize, long processedCount) {
         progressData.setProgress((int)(100 * processedSize / totalSize));
-        progressData.setLine("Building new list: " + processedCount + " of " + totalCount + "files processed.");
+        progressData.setLine("Building new list: " + processedCount + " of " + totalCount + " files processed.");
         publish(progressData);
     }
 
@@ -303,15 +304,15 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
 
     private void publishCombinedList(long processedSize, long processedCount) {
         progressData.setProgress((int)(100 * processedSize / totalSize));
-        progressData.setLine("Combining list: " + processedCount + " of " + totalCount + "files processed.");
+        progressData.setLine("Combining list: " + processedCount + " of " + totalCount + " files processed.");
         publish(progressData);
     }
 
     @Override
     protected void process(List<ProgressData> progressData) {
         ProgressData lastProgressData = progressData.get(progressData.size()-1);
-        TranspathFrame.getProgressBar().setValue(lastProgressData.getProgress());
-        TranspathFrame.getStatusLabel().setText(lastProgressData.getLine());
+        Transpath.getTranspathFrame().getProgressBar().setValue(lastProgressData.getProgress());
+        Transpath.getTranspathFrame().getStatusLabel().setText(lastProgressData.getLine());
     }
 
     @Override
@@ -319,7 +320,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         try {
             StringBuilder result = get();
             TransLog.getLogger().info(result.toString());
-            TranspathFrame.getStatusLabel().setText(result.toString());
+            Transpath.getTranspathFrame().getStatusLabel().setText(result.toString());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.store.*;
 import com.skylynx13.transpath.utils.FileUtils;
@@ -28,25 +29,21 @@ public class TranspathFrame extends JFrame {
     private static final double SPLIT_V_DEFAULT = 0.7;
     private static final double SPLIT_H_DEFAULT = 0.2;
 
-    private static JTable infoTable = new JTable();
-    private static JTextArea logTextArea = new JTextArea();
-    private static JTextArea infoTextArea = new JTextArea();
-    private static JProgressBar progressBar = new JProgressBar();
-    private static JLabel statusLabel = new JLabel();
+    private JTable infoTable = new JTable();
+    private JTextArea infoTextArea = new JTextArea();
+    private JProgressBar progressBar = new JProgressBar();
+    private JLabel statusLabel = new JLabel();
 
     private StoreList storeList;
     private JScrollPane treePane;
 
-    public static JTextArea getLogTextArea() {
-        return logTextArea;
-    }
-    public static JProgressBar getProgressBar() {
+    public JProgressBar getProgressBar() {
         return progressBar;
     }
-    public static JLabel getStatusLabel() {
+    public JLabel getStatusLabel() {
         return statusLabel;
     }
-    static JTextArea getInfoTextArea() {
+    JTextArea getInfoTextArea() {
         return infoTextArea;
     }
 
@@ -68,7 +65,7 @@ public class TranspathFrame extends JFrame {
         setVisible(true);
     }
 
-    void reloadStore() {
+    public void reloadStore() {
         storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
         getTreePane().setViewportView(createTree(storeList));
         setTitle("Storage Archivist - " + storeList.getVersion());
@@ -104,7 +101,7 @@ public class TranspathFrame extends JFrame {
     }
 
     private void initMenuBar() {
-        setJMenuBar(new TranspathMenuBar(this));
+        setJMenuBar(new TranspathMenuBar());
     }
 
     private void initLookAndFeel() {
@@ -135,7 +132,7 @@ public class TranspathFrame extends JFrame {
         return createSplitPane(
                 JSplitPane.VERTICAL_SPLIT,
                 createUpperSplitPane(),
-                createScrollPane(logTextArea),
+                createScrollPane(Transpath.getLogTextArea()),
                 SPLIT_V_DEFAULT
         );
     }
@@ -215,15 +212,15 @@ public class TranspathFrame extends JFrame {
         return statusBar;
     }
 
-    private static void updateInfoTable(StoreList storeList) {
+    private void updateInfoTable(StoreList storeList) {
         updateInfoTable(new DefaultTableModel(storeList.toRows(), TransConst.TABLE_TITLE_STORE));
     }
 
-    static void updateInfoTable(StoreTree selectTree) {
+    void updateInfoTable(StoreTree selectTree) {
         updateInfoTable(new DefaultTableModel(selectTree.getChildrenAsRows(), selectTree.getChildrenTitle()));
     }
 
-    private static void updateInfoTable(DefaultTableModel tableModel) {
+    private void updateInfoTable(DefaultTableModel tableModel) {
         String[] rightAlignedTitles = {"StoreId", "Length", "BranchId"};
         infoTable.setModel(tableModel);
         columnSizeFitContents(infoTable);
@@ -233,7 +230,7 @@ public class TranspathFrame extends JFrame {
         }
     }
 
-    private static void columnAlignRight(String columnTitle) {
+    private void columnAlignRight(String columnTitle) {
         DefaultTableCellRenderer alignRight = new DefaultTableCellRenderer();
         alignRight.setHorizontalAlignment(JLabel.RIGHT);
         try {
@@ -312,7 +309,7 @@ public class TranspathFrame extends JFrame {
         }
     }
 
-    private static ArrayList<Integer> getSelectedIdList(int columnIndex) {
+    private ArrayList<Integer> getSelectedIdList(int columnIndex) {
         ArrayList<Integer> selectedIds = new ArrayList<>();
         for (int iSelectedRow : infoTable.getSelectedRows()) {
             int id = (Integer)infoTable.getValueAt(iSelectedRow, columnIndex);
@@ -322,7 +319,7 @@ public class TranspathFrame extends JFrame {
         return selectedIds;
     }
 
-    private static int getIdColumnIndex() {
+    private int getIdColumnIndex() {
         try {
             return infoTable.getColumnModel().getColumnIndex("StoreId");
         } catch (IllegalArgumentException e) {

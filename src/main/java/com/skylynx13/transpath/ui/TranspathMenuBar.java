@@ -1,5 +1,6 @@
 package com.skylynx13.transpath.ui;
 
+import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.store.StoreCombiner;
 import com.skylynx13.transpath.task.NameReviser;
 import com.skylynx13.transpath.task.PackageChecker;
@@ -21,15 +22,12 @@ public class TranspathMenuBar extends JMenuBar {
 
     private static final long serialVersionUID = 1L;
 
-    private TranspathFrame transpathFrame;
     private JDialog aboutDialog;
 
     private ExecutorService transpathMenuAction =
             Executors.newCachedThreadPool(r -> new Thread(r, "TranspathMenuAction"));
 
-    public TranspathMenuBar(TranspathFrame transpathFrame) {
-        this.transpathFrame = transpathFrame;
-
+    public TranspathMenuBar() {
         setFont();
 
         this.add(createSysMenu());
@@ -49,13 +47,13 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem sysReloadItem = new JMenuItem("Reload");
         sysMenu.add(sysReloadItem);
-        sysReloadItem.addActionListener(e -> transpathFrame.reloadStore());
+        sysReloadItem.addActionListener(e -> Transpath.getTranspathFrame().reloadStore());
 
         sysMenu.add(new JSeparator());
 
         JMenuItem sysExitItem = new JMenuItem("Exit");
         sysMenu.add(sysExitItem);
-        sysExitItem.addActionListener(e -> transpathFrame.exit());
+        sysExitItem.addActionListener(e -> Transpath.getTranspathFrame().exit());
         return sysMenu;
     }
 
@@ -104,14 +102,14 @@ public class TranspathMenuBar extends JMenuBar {
         storeSearchItem.addActionListener(e -> {
             String searchText = JOptionPane.showInputDialog("Search Text:");
             if (searchText != null) {
-                transpathFrame.searchList(searchText);
+                Transpath.getTranspathFrame().searchList(searchText);
             }
         });
         storeSearchItem.setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem fetchSelectedItem = new JMenuItem("Fetch Selected");
         storeMenu.add(fetchSelectedItem);
-        fetchSelectedItem.addActionListener(e -> transpathFrame.fetchSelectedStores());
+        fetchSelectedItem.addActionListener(e -> Transpath.getTranspathFrame().fetchSelectedStores());
 
         return storeMenu;
     }
@@ -127,9 +125,9 @@ public class TranspathMenuBar extends JMenuBar {
 
     private void showAboutDialog() {
         if (aboutDialog == null) {
-            aboutDialog = new JDialog(this.transpathFrame, "About TransPath", true);
+            aboutDialog = new JDialog(Transpath.getTranspathFrame(), "About Transpath", true);
             aboutDialog.add(
-                    new JLabel("<html><h2>TransPath is here anyway.</h2><hr>By Skylynx13</html>"),
+                    new JLabel("<html><h2>Transpath is here anyway.</h2><hr>By Skylynx13</html>"),
                     BorderLayout.CENTER
             );
             JButton okButton = new JButton("OK");

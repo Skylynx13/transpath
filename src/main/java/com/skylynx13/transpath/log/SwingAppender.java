@@ -1,8 +1,7 @@
 package com.skylynx13.transpath.log;
 
-import java.io.Serializable;
-import javax.swing.JTextArea;
-
+import com.skylynx13.transpath.Transpath;
+import com.skylynx13.transpath.utils.TransConst;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
@@ -13,8 +12,8 @@ import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
-import com.skylynx13.transpath.ui.TranspathFrame;
-import com.skylynx13.transpath.utils.TransConst;
+import javax.swing.*;
+import java.io.Serializable;
 
 /**
  * ClassName: LogAppender
@@ -28,7 +27,7 @@ import com.skylynx13.transpath.utils.TransConst;
  */
 @Plugin(name="Swing", category="Core", elementType="appender", printObject=true)
 public class SwingAppender extends AbstractAppender {  
-    private final JTextArea logTextArea = TranspathFrame.getLogTextArea();
+    private final JTextArea logTextArea = Transpath.getLogTextArea();
 
     private SwingAppender(String name, Filter filter,
             Layout<? extends Serializable> layout, final boolean ignoreExceptions) {
