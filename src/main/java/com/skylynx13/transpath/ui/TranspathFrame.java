@@ -71,6 +71,7 @@ public class TranspathFrame extends JFrame {
     void reloadStore() {
         storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
         getTreePane().setViewportView(createTree(storeList));
+        setTitle("Storage Archivist - " + storeList.getVersion());
         TransLog.getLogger().info("List of version " + storeList.getVersion() + " loaded.");
     }
 

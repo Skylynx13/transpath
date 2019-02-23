@@ -178,10 +178,6 @@ public class TaskArranger {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-    
     int trimFile(String inFile, String outFile) {
         int iInLine = 0;
         int iOutLine = 0;

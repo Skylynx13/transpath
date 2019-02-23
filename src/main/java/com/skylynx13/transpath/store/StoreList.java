@@ -37,10 +37,6 @@ public class StoreList {
         return storeSize;
     }
 
-    public void setStoreSize(long storeSize) {
-        this.storeSize = storeSize;
-    }
-
     public StoreList() {
         refreshVersion();
         minId = 0;
@@ -202,13 +198,7 @@ public class StoreList {
     }
 
     void orderByPathAndName() {
-        storeList.sort((sn1, sn2) -> {
-            int cmp = sn1.getPath().compareTo(sn2.getPath());
-            if (cmp != 0) {
-                return cmp;
-            }
-            return sn1.getName().compareTo(sn2.getName());
-        });
+        storeList.sort(Comparator.comparing(StoreNode::getPath).thenComparing(StoreNode::getName));
     }
 
     private String keepHeader() {
@@ -228,8 +218,8 @@ public class StoreList {
     }
 
     private File getBackupRev(int rev) {
-        return new File(TransProp.get(TransConst.LOC_LIST)
-                + String.format("backup/StoreList_%s_%03d.txt", version, rev));
+        return new File(FileUtils.regulatePath(TransProp.get(TransConst.LOC_LIST)
+                + String.format("Backup/StoreList_%s_%03d.txt", version, rev)));
     }
 
     void keepFile() {

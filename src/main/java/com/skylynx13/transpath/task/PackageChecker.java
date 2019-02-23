@@ -111,7 +111,6 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
                     + String.join(" ", processBuilder.command()));
             result = processCommand(processBuilder);
             if (checker.checkOk(result)) {
-                errorInfos.clear();
                 if (!checker.checkType(fileName)) {
                     errorInfos.put(fileName, TransConst.PKG_TYPE_MISMATCH);
                 }

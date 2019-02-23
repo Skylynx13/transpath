@@ -324,12 +324,4 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
             e.printStackTrace();
         }
     }
-
-    public boolean isUpdateList() {
-        return updateList;
-    }
-
-    public void setUpdateList(boolean updateList) {
-        this.updateList = updateList;
-    }
 }

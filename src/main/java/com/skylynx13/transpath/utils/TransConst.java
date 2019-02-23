@@ -55,7 +55,7 @@ public class TransConst {
 
     public static String[] TABLE_TITLE_STORE = {"StoreId", "StorePath", "StoreName", "Length", "Update Time", "MD5", "SHA", "CRC32"};
 
-        public static final String CMD_COPY_TO_TARGET = "cmd /c chcp 437|copy ";
+    public static final String CMD_COPY_TO_TARGET = "cmd /c chcp 437|copy ";
 
     public static final String PKG_ALL_FAILED = "All checkers failed.";
     public static final String PKG_TYPE_MISMATCH = "Type mismatch.";

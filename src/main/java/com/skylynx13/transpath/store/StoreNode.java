@@ -69,20 +69,8 @@ public class StoreNode implements Cloneable {
         this.length = length;
     }
 
-    public String getMd5() {
+    String getMd5() {
         return md5;
-    }
-
-    public void setMd5(String md5) {
-        this.md5 = md5;
-    }
-
-    public String getCrc32() {
-        return crc32;
-    }
-
-    public void setCrc32(String crc32) {
-        this.crc32 = crc32;
     }
 
     public StoreNode() {
@@ -113,7 +101,7 @@ public class StoreNode implements Cloneable {
     StoreNode(String pRoot, File pFile) {
         id = 0;
         name = pFile.getName();
-        path = FileUtils.regulatePath(pFile.getParent()).replaceAll(pRoot, TransConst.EMPTY) + TransConst.SLASH;
+        path = FileUtils.regulatePath(pFile.getParent().replaceAll(pRoot, TransConst.SLASH) + TransConst.SLASH);
         length = pFile.length();
         lastModified = pFile.lastModified();
         md5 = FileUtils.digestMd5(pFile);
