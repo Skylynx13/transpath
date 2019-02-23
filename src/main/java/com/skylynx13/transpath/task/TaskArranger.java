@@ -154,13 +154,6 @@ public class TaskArranger {
         return newArranger;
     }
     
-    public TaskArranger merge(TaskArranger otherArranger) {
-        TaskArranger newArranger = new TaskArranger();
-        newArranger.entries.addAll(this.entries);
-        newArranger.entries.addAll(otherArranger.entries);
-        return newArranger.sort().merge();
-    }
-    
     public String toString() {
         return entries.toString();
     }
@@ -288,15 +281,6 @@ public class TaskArranger {
         TaskArranger newArranger = new TaskArranger();
         for (TaskEntry currEntry : this.entries) {
             if (currEntry.matches(keys))
-                newArranger.addEntry(currEntry);
-        }
-        return newArranger;
-    }
-    
-    TaskArranger applyFilterReversely(String[] keys) {
-        TaskArranger newArranger = new TaskArranger();
-        for (TaskEntry currEntry : this.entries) {
-            if (!currEntry.matches(keys))
                 newArranger.addEntry(currEntry);
         }
         return newArranger;

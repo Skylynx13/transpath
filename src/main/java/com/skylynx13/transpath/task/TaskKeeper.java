@@ -14,7 +14,7 @@ import com.skylynx13.transpath.utils.TransProp;
 public class TaskKeeper {
     private String archDate;
     
-    public TaskKeeper() {
+    private TaskKeeper() {
         archDate = DateUtils.formatDateToday();
     }
     

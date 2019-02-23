@@ -30,10 +30,10 @@ public class ImageUtils {
 //        //图片拼接
 //        merge(imgs,"jpg","D:/imgs/big.jpg");
         
-        String folderPath = "D:/imgs";
-        changeFolderImages(folderPath,600,400);
+        String folderPath = "D:/temp/img";
+        changeFolderImages(folderPath,5000,5000);
         
-        mergeFolderImgs(folderPath,"jpg","D:/imgs/merge.jpg");
+        mergeFolderImgs(folderPath,"jpg","D:/temp/img/merge.jpg");
     
     }
     /**
@@ -41,7 +41,6 @@ public class ImageUtils {
      * @param folderPath 图片所在文件夹的绝对路径
      * @param imgType 合并后的图片类型（jpg、png...）
      * @param outAbsolutePath （输出合并后文件的绝对路径）
-     * @return imgName
      */
     private static void mergeFolderImgs(String folderPath, String imgType, String outAbsolutePath){
         File folder = new File(folderPath);
@@ -69,7 +68,8 @@ public class ImageUtils {
      * @param newWidth 新图片宽度
      * @param newHeight 新图片高度
      */
-    public static void changeImage(String path, String oldimg, String newimg, int newWidth,int newHeight) {
+    @SuppressWarnings("unused")
+    public static void changeImage(String path, String oldimg, String newimg, int newWidth, int newHeight) {
            try {
                File file = new File(path + oldimg);
                Image img = ImageIO.read(file);
@@ -137,8 +137,7 @@ public class ImageUtils {
      *                        String[] pics = new String[]{img1,img2,img3};
      * @param type ：图片输出类型（jpg，png，jpeg...）
      * @param dst_pic ：图片输出绝对路径，如 String dst_pic="D:/imgs/big2.jpg";
-     * @return void
-     */  
+     */
     private static void merge(String[] pics, String type, String dst_pic) {
   
         int len = pics.length;  //图片文件个数

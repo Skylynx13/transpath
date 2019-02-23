@@ -29,20 +29,9 @@ public class StoreTree implements MutableTreeNode {
 
     }
 
-    @SuppressWarnings("unused")
-    private static class NodeNameDescComparator implements Comparator<StoreTree> {
-
-        @Override
-        public int compare(StoreTree o1, StoreTree o2) {
-            return o2.getNodeName().compareTo(o1.getNodeName());
-        }
-
-    }
-
     private StoreNode node;
     private StoreTree parent;
     private List<StoreTree> children;
-    private boolean allowsChildren;
 
     private StoreTree() {
     }
@@ -65,10 +54,6 @@ public class StoreTree implements MutableTreeNode {
 
     public StoreTree getParent() {
         return parent;
-    }
-
-    private void setParent(StoreTree parent) {
-        this.parent = parent;
     }
 
     private List<StoreTree> getChildren() {
@@ -129,10 +114,6 @@ public class StoreTree implements MutableTreeNode {
         return length;
     }
 
-    public void setChildren(List<StoreTree> children) {
-        this.children = children;
-    }
-
     private void addChild(StoreTree storeTree) {
         if (null == children) {
             children = new ArrayList<>();
@@ -161,20 +142,8 @@ public class StoreTree implements MutableTreeNode {
         return children.size();
     }
 
-    public int getNodeId() {
-        return node.getId();
-    }
-
-    public void setNodeId(int pId) {
-        node.setId(pId);
-    }
-
     private String getNodeName() {
         return node.getName();
-    }
-
-    public void setNodeName(String pName) {
-        node.setName(pName);
     }
 
     public void recursivelySort() {
@@ -195,7 +164,7 @@ public class StoreTree implements MutableTreeNode {
 
     private String getNodePathName() {
         String pathName = TransConst.EMPTY;
-        if (!isRoot()) {
+        if (isNotRoot()) {
             pathName += this.parent.getNodePathName();
         }
         pathName += TransConst.SLASH + this.getNodeName();
@@ -223,22 +192,12 @@ public class StoreTree implements MutableTreeNode {
 
     @Override
     public int getIndex(TreeNode node) {
-        if (null == node) {
-            throw new IllegalArgumentException("Argument is null.");
-        }
-        if ((this.isLeaf()) || (node.getParent() != this)) {
-            return -1;
-        }
-        return children.indexOf(node);
+        return 0;
     }
 
     @Override
     public boolean getAllowsChildren() {
-        return this.allowsChildren;
-    }
-
-    public void setAllowsChildren(boolean allowsChildren) {
-        this.allowsChildren = allowsChildren;
+        return false;
     }
 
     @Override
@@ -272,12 +231,12 @@ public class StoreTree implements MutableTreeNode {
         return (null == this.children);
     }
 
-    private boolean isRoot() {
-        return (null == this.parent);
+    private boolean isNotRoot() {
+        return (null != this.parent);
     }
 
     private boolean isBranch() {
-        return !this.isLeaf() && !this.isRoot();
+        return !this.isLeaf() && this.isNotRoot();
     }
 
     private StoreTree addBranch(String pPath) {
@@ -309,31 +268,25 @@ public class StoreTree implements MutableTreeNode {
 
     @Override
     public void insert(MutableTreeNode child, int index) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void remove(int index) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void remove(MutableTreeNode node) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void setUserObject(Object object) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void removeFromParent() {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void setParent(MutableTreeNode newParent) {
-        // TODO Auto-generated method stub
     }
 }

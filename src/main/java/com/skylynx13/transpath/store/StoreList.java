@@ -98,23 +98,6 @@ public class StoreList {
         return storeList.get(index);
     }
 
-    public StoreNode getById(int pId) {
-        for (StoreNode aNode : storeList) {
-            if (aNode.getId() == pId) {
-                return aNode;
-            }
-        }
-        return null;
-    }
-
-    public ArrayList<Integer> getIdList() {
-        ArrayList<Integer> idList = new ArrayList<>();
-        for (StoreNode aNode : storeList) {
-            idList.add(aNode.getId());
-        }
-        return idList;
-    }
-
     public StoreList getListByIds(ArrayList<Integer> ids) {
         StoreList rNodeList = getNewList();
         for (StoreNode node : storeList) {
@@ -159,28 +142,6 @@ public class StoreList {
         recap();
         //Return value only used by test.
         return aMap;
-    }
-
-    public void removeById(int pId) {
-        ArrayList<StoreNode> removeList = new ArrayList<>();
-        for (StoreNode aNode : storeList) {
-            if (aNode.getId() == pId) {
-                removeList.add(aNode);
-            }
-        }
-        storeList.removeAll(removeList);
-        recap();
-    }
-
-    public void removeByIdMap(HashMap<Integer, Integer> idMap) {
-        ArrayList<StoreNode> removeList = new ArrayList<>();
-        for (StoreNode aNode : storeList) {
-            if (idMap.containsKey(aNode.getId())) {
-                removeList.add(aNode);
-            }
-        }
-        storeList.removeAll(removeList);
-        recap();
     }
 
     void removeByPath(String pPath) {
@@ -238,10 +199,6 @@ public class StoreList {
 
     private void loadVersion(String pLine) {
         version = pLine.split(TransConst.COLON)[0];
-    }
-
-    public void orderById() {
-        storeList.sort(Comparator.comparingInt(StoreNode::getId));
     }
 
     void orderByPathAndName() {
@@ -328,19 +285,6 @@ public class StoreList {
             }
         }
         foundList.calcSize();
-        return foundList;
-    }
-
-    public StoreList searchPath(String searchText) {
-        StoreList foundList = getNewList();
-        if (0 == size() || StringUtils.isEmpty(searchText)) {
-            return foundList;
-        }
-        for (StoreNode aNode : storeList) {
-            if (aNode.searchPath(searchText)) {
-                foundList.enlist(aNode);
-            }
-        }
         return foundList;
     }
 
