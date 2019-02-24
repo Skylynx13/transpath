@@ -2,7 +2,6 @@ package com.skylynx13.transpath.task;
 
 import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.ui.TranspathFrame;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.ProgressData;
 import com.skylynx13.transpath.utils.TransConst;
@@ -40,8 +39,8 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
     @Override
     protected void process(List<ProgressData> progressData) {
         ProgressData lastProgressData = progressData.get(progressData.size()-1);
-        Transpath.getTranspathFrame().getProgressBar().setValue(lastProgressData.getProgress());
-        Transpath.getTranspathFrame().getStatusLabel().setText(lastProgressData.getLine());
+        Transpath.getProgressBar().setValue(lastProgressData.getProgress());
+        Transpath.getStatusLabel().setText(lastProgressData.getLine());
     }
 
     @Override

@@ -31,18 +31,10 @@ public class TranspathFrame extends JFrame {
 
     private JTable infoTable = new JTable();
     private JTextArea infoTextArea = new JTextArea();
-    private JProgressBar progressBar = new JProgressBar();
-    private JLabel statusLabel = new JLabel();
 
     private StoreList storeList;
     private JScrollPane treePane;
 
-    public JProgressBar getProgressBar() {
-        return progressBar;
-    }
-    public JLabel getStatusLabel() {
-        return statusLabel;
-    }
     JTextArea getInfoTextArea() {
         return infoTextArea;
     }
@@ -196,18 +188,18 @@ public class TranspathFrame extends JFrame {
         statusBar.setLayout(new GridLayout());
         statusBar.setFloatable(false);
 
-        progressBar.setMaximum(100);
-        progressBar.setMinimum(0);
-        progressBar.setValue(0);
-        progressBar.setStringPainted(true);
-        progressBar.setIndeterminate(false);
+        Transpath.getProgressBar().setMaximum(100);
+        Transpath.getProgressBar().setMinimum(0);
+        Transpath.getProgressBar().setValue(0);
+        Transpath.getProgressBar().setStringPainted(true);
+        Transpath.getProgressBar().setIndeterminate(false);
         // Color change unavailable when using NimbusLookAndFeel;
         // progressBar.setBackground(Color.gray);
         // progressBar.setForeground(Color.green);
-        statusBar.add(progressBar);
+        statusBar.add(Transpath.getProgressBar());
 
-        statusLabel.setText("Status Normal.");
-        statusBar.add(statusLabel);
+        Transpath.getStatusLabel().setText("Status Normal.");
+        statusBar.add(Transpath.getStatusLabel());
 
         return statusBar;
     }

@@ -8,13 +8,20 @@ import java.awt.*;
 public class Transpath {
     private static TranspathFrame tpFrame;
     private static JTextArea logTextArea = new JTextArea();
+    private static JProgressBar progressBar = new JProgressBar();
+    private static JLabel statusLabel = new JLabel();
 
     public static TranspathFrame getTranspathFrame() {
         return tpFrame;
     }
-
     public static JTextArea getLogTextArea() {
         return logTextArea;
+    }
+    public static JProgressBar getProgressBar() {
+        return progressBar;
+    }
+    public static JLabel getStatusLabel() {
+        return statusLabel;
     }
 
     public static void main(String[] args) {

@@ -86,6 +86,7 @@ public class PackageCheckerTest {
 
     @Test
     public void checkPackageListTest() {
+
         long t0 = System.currentTimeMillis();
         List<File> testFiles = new ArrayList<>();
         testFiles.add(new File(testResource("testFiles.rar")));

@@ -311,8 +311,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     @Override
     protected void process(List<ProgressData> progressData) {
         ProgressData lastProgressData = progressData.get(progressData.size()-1);
-        Transpath.getTranspathFrame().getProgressBar().setValue(lastProgressData.getProgress());
-        Transpath.getTranspathFrame().getStatusLabel().setText(lastProgressData.getLine());
+        Transpath.getProgressBar().setValue(lastProgressData.getProgress());
+        Transpath.getStatusLabel().setText(lastProgressData.getLine());
     }
 
     @Override
@@ -320,7 +320,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         try {
             StringBuilder result = get();
             TransLog.getLogger().info(result.toString());
-            Transpath.getTranspathFrame().getStatusLabel().setText(result.toString());
+            Transpath.getStatusLabel().setText(result.toString());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
