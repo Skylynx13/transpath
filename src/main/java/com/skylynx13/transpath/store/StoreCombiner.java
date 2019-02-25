@@ -72,7 +72,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private StoreList buildNewStoreList() throws StoreListException {
         TransLog.getLogger().info("Building new store list...");
         long t0 = System.currentTimeMillis();
-        List<String> storePathList = buildStorePathList();
+        List<String> storePathList = checkExistList(buildStorePathList());
         totalSize = calcStoreFileSize(storePathList);
         totalCount = calcStoreFileCount(storePathList);
         processedSize = 0;
@@ -178,14 +178,21 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
             }
 
             for (int numberI = numberB; numberI <= numberS; numberI++) {
-                String path = String.format("A%04d/B%04d", numberA, numberI);
-                if (new File(buildRootPath(path)).exists()) {
-                    storePathList.add(path);
-                }
+                storePathList.add(String.format("A%04d/B%04d", numberA, numberI));
             }
         }
         TransLog.getLogger().info(storePathList.toString());
         return storePathList;
+    }
+
+    private List<String> checkExistList(List<String> storePathList) {
+        ArrayList<String> existList = new ArrayList<>();
+        for (String path : storePathList) {
+            if (new File(buildRootPath(path)).exists()) {
+                existList.add(path);
+            }
+        }
+        return existList;
     }
 
     private long logTimeElapsed(long t0) {
