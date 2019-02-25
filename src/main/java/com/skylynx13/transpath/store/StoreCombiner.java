@@ -97,6 +97,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private void publishProgressNewList(long processedSize, long processedCount) {
         progressData.setProgress((int)(100 * processedSize / totalSize));
         progressData.setLine("Building new list: " + processedCount + " of " + totalCount + " files processed.");
+        //TODO time estimating.
         publish(progressData);
     }
 
@@ -317,6 +318,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private void publishCombinedList(long processedSize, long processedCount) {
         progressData.setProgress((int)(100 * processedSize / totalSize));
         progressData.setLine("Combining list: " + processedCount + " of " + totalCount + " files processed.");
+        //TODO time estimating.
         publish(progressData);
     }
 
