@@ -123,6 +123,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         for (String storePathName : storePathList) {
             totalSize += FileUtils.getFileSize(buildRootPath(storePathName));
         }
+        // TODO: totalSize maybe zero.
         return totalSize;
     }
 
@@ -131,6 +132,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         for (String storePathName : storePathList) {
             totalCount += FileUtils.getFileCount(buildRootPath(storePathName));
         }
+        // TODO: totalCount maybe zero.
         return totalCount;
     }
 
@@ -176,7 +178,10 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
             }
 
             for (int numberI = numberB; numberI <= numberS; numberI++) {
-                storePathList.add(String.format("A%04d/B%04d", numberA, numberI));
+                String path = String.format("A%04d/B%04d", numberA, numberI);
+                if (new File(buildRootPath(path)).exists()) {
+                    storePathList.add(path);
+                }
             }
         }
         TransLog.getLogger().info(storePathList.toString());
