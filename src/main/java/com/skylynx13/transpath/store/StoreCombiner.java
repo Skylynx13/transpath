@@ -88,14 +88,27 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         }
 
         long calcTimeLeftBySize() {
+            if (sizeNow == 0) {
+                return 0;
+            }
             long timeNow = System.currentTimeMillis();
             long timeLeft = (timeNow - timeStart) * sizeTotal / sizeNow - timeNow + timeStart;
             return timeLeft / 1000;
         }
 
+        String reportTimeLeftBySize() {
+            if (sizeNow == 0) {
+                return "Estimating time left...";
+            }
+            return "" + calcTimeLeftBySize() + " seconds left.";
+        }
+
         long calcTimeLeftByCount() {
             long timeNow = System.currentTimeMillis();
-            long timeLeft = (timeNow - timeStart) * countTotal / countNow - timeNow + timeStart;
+            long timeLeft = 0;
+            if (countNow != 0) {
+                timeLeft = (timeNow - timeStart) * countTotal / countNow - timeNow + timeStart;
+            }
             return timeLeft / 1000;
         }
     }
@@ -159,7 +172,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private void publishProgressNewList() {
         progressData.setProgress(progressParam.calcProgressSize());
         progressData.setLine("Building new list: " + progressParam.reportOfCount() + " processed. "
-                + progressParam.calcTimeLeftBySize() + " seconds left.");
+                + progressParam.reportTimeLeftBySize());
         publish(progressData);
     }
 
@@ -384,7 +397,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private void publishCombinedList() {
         progressData.setProgress(progressParam.calcProgressSize());
         progressData.setLine("Combining list: " + progressParam.reportOfCount() + " files processed."
-                + progressParam.calcTimeLeftBySize() + " seconds left.");
+                + progressParam.reportTimeLeftBySize());
         publish(progressData);
     }
 
