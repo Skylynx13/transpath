@@ -29,11 +29,76 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private final static int GROUP_A = 2;
     private final static int GROUP_B = 3;
     private final static int GROUP_S = 5;
-    private long processedSize;
-    private long processedCount;
+    private ProgressParam progressParam = new ProgressParam();
     private ProgressData progressData = new ProgressData();
-    private long totalSize;
-    private long totalCount;
+
+    private class ProgressParam {
+        long sizeTotal;
+        long countTotal;
+        long timeStart;
+        long sizeNow;
+        long countNow;
+
+        ProgressParam(){
+
+        }
+
+        ProgressParam(long tSize, long tCount) {
+            reset(tSize, tCount);
+        }
+
+        void reset(long tSize, long tCount) {
+            sizeTotal = tSize;
+            countTotal = tCount;
+            sizeNow = 0;
+            countNow = 0;
+            timeStart = System.currentTimeMillis();
+        }
+
+        long getCountTotal() {
+            return countTotal;
+        }
+
+        long getCountNow() {
+            return countNow;
+        }
+
+        void addSize(long nSize) {
+            sizeNow += nSize;
+        }
+
+        void incCount() {
+            countNow++;
+        }
+
+        int calcProgressSize() {
+            return (int)(100 * sizeNow / sizeTotal);
+        }
+
+        int calcProgressCount() {
+            return (int)(100 * countNow / countTotal);
+        }
+
+        String reportOfSize() {
+            return "" + sizeNow + " of " + sizeTotal + " bytes";
+        }
+
+        String reportOfCount() {
+            return "" + countNow + " of " + countTotal + " files";
+        }
+
+        long calcTimeLeftBySize() {
+            long timeNow = System.currentTimeMillis();
+            long timeLeft = (timeNow - timeStart) * sizeTotal / sizeNow - timeNow + timeStart;
+            return timeLeft / 1000;
+        }
+
+        long calcTimeLeftByCount() {
+            long timeNow = System.currentTimeMillis();
+            long timeLeft = (timeNow - timeStart) * countTotal / countNow - timeNow + timeStart;
+            return timeLeft / 1000;
+        }
+    }
 
     public StoreCombiner(boolean updateList) {
         this.updateList = updateList;
@@ -73,11 +138,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         TransLog.getLogger().info("Building new store list...");
         long t0 = System.currentTimeMillis();
         List<String> storePathList = checkExistList(buildStorePathList());
-        totalSize = calcStoreFileSize(storePathList);
-        totalCount = calcStoreFileCount(storePathList);
-        processedSize = 0;
-        processedCount = 0;
-        publishProgressNewList(0, 0);
+        progressParam.reset(calcStoreFileSize(storePathList), calcStoreFileCount(storePathList));
+        publishProgressNewList();
 
         StoreList newList = new StoreList();
 
@@ -94,10 +156,10 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         return newList;
     }
 
-    private void publishProgressNewList(long processedSize, long processedCount) {
-        progressData.setProgress((int)(100 * processedSize / totalSize));
-        progressData.setLine("Building new list: " + processedCount + " of " + totalCount + " files processed.");
-        //TODO time estimating.
+    private void publishProgressNewList() {
+        progressData.setProgress(progressParam.calcProgressSize());
+        progressData.setLine("Building new list: " + progressParam.reportOfCount() + " processed. "
+                + progressParam.calcTimeLeftBySize() + " seconds left.");
         publish(progressData);
     }
 
@@ -108,9 +170,9 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
                 StoreNode aNode = new StoreNode(STORE_ROOT, aPath);
                 storeList.addNode(aNode);
                 TransLog.getLogger().info(aNode.keepNode());
-                processedSize += aNode.getLength();
-                processedCount++;
-                publishProgressNewList(processedSize, processedCount);
+                progressParam.addSize((aNode.getLength()));
+                progressParam.incCount();
+                publishProgressNewList();
             }
             if (aPath.isDirectory() && aPath.listFiles() != null) {
                 storeList.attachList(buildStoreListByPath(aPath));
@@ -119,22 +181,26 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         return storeList;
     }
 
-    private long calcStoreFileSize(List<String> storePathList) {
-        long totalSize = 0;
+    private long calcStoreFileSize(List<String> storePathList) throws StoreListException {
+        long tSize = 0;
         for (String storePathName : storePathList) {
-            totalSize += FileUtils.getFileSize(buildRootPath(storePathName));
+            tSize += FileUtils.getFileSize(buildRootPath(storePathName));
         }
-        // TODO: totalSize maybe zero.
-        return totalSize;
+        if (tSize == 0) {
+            throw new StoreListException("Total size is 0");
+        }
+        return tSize;
     }
 
-    private long calcStoreFileCount(List<String> storePathList) {
-        long totalCount = 0;
+    private long calcStoreFileCount(List<String> storePathList) throws StoreListException {
+        long tCount = 0;
         for (String storePathName : storePathList) {
-            totalCount += FileUtils.getFileCount(buildRootPath(storePathName));
+            tCount += FileUtils.getFileCount(buildRootPath(storePathName));
         }
-        // TODO: totalCount maybe zero.
-        return totalCount;
+        if (tCount == 0) {
+            throw new StoreListException("Total count is 0");
+        }
+        return tCount;
     }
 
     private List<String> buildStorePathList() throws StoreListException {
@@ -186,12 +252,15 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         return storePathList;
     }
 
-    private List<String> checkExistList(List<String> storePathList) {
+    private List<String> checkExistList(List<String> storePathList) throws StoreListException {
         ArrayList<String> existList = new ArrayList<>();
         for (String path : storePathList) {
             if (new File(buildRootPath(path)).exists()) {
                 existList.add(path);
             }
+        }
+        if (existList.size() == 0) {
+            throw new StoreListException("Exist list is empty.");
         }
         return existList;
     }
@@ -223,11 +292,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         StoreList duplicatedList = new StoreList();
         StoreList removedList = new StoreList();
 
-        totalSize = overallList.getStoreSize();
-        totalCount = overallList.size();
-        processedSize = 0;
-        processedCount = 0;
-        publishCombinedList(0, 0);
+        progressParam.reset(overallList.getStoreSize(), overallList.size());
+        publishCombinedList();
         for (StoreNode aNode : overallList.storeList) {
             if (aNode == null) {
                 continue;
@@ -242,9 +308,9 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
                 dNode = aNode;
                 reservedList.storeList.add(aNode);
             }
-            processedSize += aNode.getLength();
-            processedCount++;
-            publishCombinedList(processedSize, processedCount);
+            progressParam.addSize(aNode.getLength());
+            progressParam.incCount();
+            publishCombinedList();
         }
         TransLog.getLogger().info("Duplicated list.");
         TransLog.getLogger().info(duplicatedList.toString());
@@ -315,10 +381,10 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
         }
     }
 
-    private void publishCombinedList(long processedSize, long processedCount) {
-        progressData.setProgress((int)(100 * processedSize / totalSize));
-        progressData.setLine("Combining list: " + processedCount + " of " + totalCount + " files processed.");
-        //TODO time estimating.
+    private void publishCombinedList() {
+        progressData.setProgress(progressParam.calcProgressSize());
+        progressData.setLine("Combining list: " + progressParam.reportOfCount() + " files processed."
+                + progressParam.calcTimeLeftBySize() + " seconds left.");
         publish(progressData);
     }
 
