@@ -3,10 +3,7 @@ package com.skylynx13.transpath.store;
 import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.error.StoreListException;
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.utils.FileUtils;
-import com.skylynx13.transpath.utils.ProgressData;
-import com.skylynx13.transpath.utils.TransConst;
-import com.skylynx13.transpath.utils.TransProp;
+import com.skylynx13.transpath.utils.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -31,87 +28,6 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     private final static int GROUP_S = 5;
     private ProgressParam progressParam = new ProgressParam();
     private ProgressData progressData = new ProgressData();
-
-    private class ProgressParam {
-        long sizeTotal;
-        long countTotal;
-        long timeStart;
-        long sizeNow;
-        long countNow;
-
-        ProgressParam(){
-
-        }
-
-        ProgressParam(long tSize, long tCount) {
-            reset(tSize, tCount);
-        }
-
-        void reset(long tSize, long tCount) {
-            sizeTotal = tSize;
-            countTotal = tCount;
-            sizeNow = 0;
-            countNow = 0;
-            timeStart = System.currentTimeMillis();
-        }
-
-        long getCountTotal() {
-            return countTotal;
-        }
-
-        long getCountNow() {
-            return countNow;
-        }
-
-        void addSize(long nSize) {
-            sizeNow += nSize;
-        }
-
-        void incCount() {
-            countNow++;
-        }
-
-        int calcProgressSize() {
-            return (int)(100 * sizeNow / sizeTotal);
-        }
-
-        int calcProgressCount() {
-            return (int)(100 * countNow / countTotal);
-        }
-
-        String reportOfSize() {
-            return "" + sizeNow + " of " + sizeTotal + " bytes";
-        }
-
-        String reportOfCount() {
-            return "" + countNow + " of " + countTotal + " files";
-        }
-
-        long calcTimeLeftBySize() {
-            if (sizeNow == 0) {
-                return 0;
-            }
-            long timeNow = System.currentTimeMillis();
-            long timeLeft = (timeNow - timeStart) * sizeTotal / sizeNow - timeNow + timeStart;
-            return timeLeft / 1000;
-        }
-
-        String reportTimeLeftBySize() {
-            if (sizeNow == 0) {
-                return "Estimating time left...";
-            }
-            return "" + calcTimeLeftBySize() + " seconds left.";
-        }
-
-        long calcTimeLeftByCount() {
-            long timeNow = System.currentTimeMillis();
-            long timeLeft = 0;
-            if (countNow != 0) {
-                timeLeft = (timeNow - timeStart) * countTotal / countNow - timeNow + timeStart;
-            }
-            return timeLeft / 1000;
-        }
-    }
 
     public StoreCombiner(boolean updateList) {
         this.updateList = updateList;
@@ -171,7 +87,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
 
     private void publishProgressNewList() {
         progressData.setProgress(progressParam.calcProgressSize());
-        progressData.setLine("Building new list: " + progressParam.reportOfCount() + " processed. "
+        progressData.setLine("Building new list: " + progressParam.reportOfCount() + " processed.        "
                 + progressParam.reportTimeLeftBySize());
         publish(progressData);
     }
@@ -396,7 +312,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
 
     private void publishCombinedList() {
         progressData.setProgress(progressParam.calcProgressSize());
-        progressData.setLine("Combining list: " + progressParam.reportOfCount() + " files processed."
+        progressData.setLine("Combining list: " + progressParam.reportOfCount() + " files processed.        "
                 + progressParam.reportTimeLeftBySize());
         publish(progressData);
     }

@@ -2,10 +2,7 @@ package com.skylynx13.transpath.task;
 
 import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.utils.FileUtils;
-import com.skylynx13.transpath.utils.ProgressData;
-import com.skylynx13.transpath.utils.TransConst;
-import com.skylynx13.transpath.utils.TransProp;
+import com.skylynx13.transpath.utils.*;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -21,6 +18,8 @@ import java.util.concurrent.ExecutionException;
  * Date: 2015-02-03 11:08:20
  */
 public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
+    private ProgressParam progressParam = new ProgressParam();
+    private ProgressData progressData = new ProgressData();
 
     @Override
     protected StringBuilder doInBackground() {
@@ -62,17 +61,13 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         long procSize = 0;
         int totalCount = checkFiles.length;
         int procCount = 0;
-        ProgressData progressData =
-                new ProgressData(0,
-                        "Checking packages: 0 of " + totalCount + " files processed");
-        publish(progressData);
+        progressParam.reset(totalSize, totalCount);
+        publishCheckPackageList();
         for (File checkFile : checkFiles) {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
-            procSize += checkFile.length();
-            procCount ++;
-            progressData.setProgress((int)(100 * procSize / totalSize));
-            progressData.setLine("Checking packages: " + procCount + " of " + totalCount + " files processed.");
-            publish(progressData);
+            progressParam.addSize(checkFile.length());
+            progressParam.incCount();
+            publishCheckPackageList();
         }
         StringBuilder errInfoStr = new StringBuilder("Result: ");
         errInfoStr.append(errorInfos.size()).append(" error(s) found.").append(TransConst.CRLN);
@@ -83,6 +78,13 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
                   .append(errorInfos.get(key)).append(TransConst.CRLN);
         }
         return errInfoStr;
+    }
+
+    private void publishCheckPackageList() {
+        progressData.setProgress(progressParam.calcProgressSize());
+        progressData.setLine("Checking packages: " + progressParam.reportOfCount() + " files processed.        "
+                + progressParam.reportTimeLeftBySize());
+        publish(progressData);
     }
 
     Map<String, String> checkPackage(String fileName) {
