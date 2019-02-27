@@ -318,8 +318,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
     }
 
     @Override
-    protected void process(List<ProgressData> progressData) {
-        ProgressData lastProgressData = progressData.get(progressData.size()-1);
+    protected void process(List<ProgressData> progressDataList) {
+        ProgressData lastProgressData = progressDataList.get(progressDataList.size()-1);
         Transpath.getProgressBar().setValue(lastProgressData.getProgress());
         Transpath.getStatusLabel().setText(lastProgressData.getLine());
     }
