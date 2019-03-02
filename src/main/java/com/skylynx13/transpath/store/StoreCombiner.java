@@ -99,8 +99,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
                 StoreNode aNode = new StoreNode(STORE_ROOT, aPath);
                 storeList.addNode(aNode);
                 TransLog.getLogger().info(aNode.keepNode());
-                progressParam.addSize((aNode.getLength()));
-                progressParam.incCount();
+                progressParam.update(aNode.getLength());
                 publishProgressNewList();
             }
             if (aPath.isDirectory() && aPath.listFiles() != null) {
@@ -237,8 +236,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressData> {
                 dNode = aNode;
                 reservedList.storeList.add(aNode);
             }
-            progressParam.addSize(aNode.getLength());
-            progressParam.incCount();
+            progressParam.update(aNode.getLength());
             publishCombinedList();
         }
         TransLog.getLogger().info("Duplicated list.");

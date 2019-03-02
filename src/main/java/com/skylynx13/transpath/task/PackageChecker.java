@@ -62,8 +62,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         publishCheckPackageList();
         for (File checkFile : checkFiles) {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
-            progressParam.addSize(checkFile.length());
-            progressParam.incCount();
+            progressParam.update(checkFile.length());
             publishCheckPackageList();
         }
         StringBuilder errInfoStr = new StringBuilder("Result: ");

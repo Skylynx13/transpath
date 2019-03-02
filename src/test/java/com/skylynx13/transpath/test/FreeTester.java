@@ -152,7 +152,12 @@ public class FreeTester {
     }
 
     public static void main(String[] args) {
-        fileTester();
+        comaString();
+    }
+
+    private static void comaString() {
+        long aaa = 1234567890L;
+        System.out.println(String.format("aaa %,d", aaa));
     }
 
     private static void fileTester() {
