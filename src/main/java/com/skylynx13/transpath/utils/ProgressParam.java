@@ -35,14 +35,6 @@ public class ProgressParam {
         return (int)(100 * sizeNow / sizeTotal);
     }
 
-    int calcProgressCount() {
-        return (int)(100 * countNow / countTotal);
-    }
-
-    String reportOfSize() {
-        return String.format("%,d of %,d bytes.", sizeNow, sizeTotal);
-    }
-
     public String reportOfCount() {
         return String.format("%,d of %,d files.", countNow, countTotal);
     }
@@ -61,14 +53,5 @@ public class ProgressParam {
             return "Estimating time left...";
         }
         return String.format("%d seconds left. ", calcTimeLeftBySize());
-    }
-
-    long calcTimeLeftByCount() {
-        if (countNow == 0) {
-            return 0;
-        }
-        long timeNow = System.currentTimeMillis();
-        long timeLeft = (timeNow - timeStart) * countTotal / countNow - timeNow + timeStart;
-        return timeLeft / 1000;
     }
 }
