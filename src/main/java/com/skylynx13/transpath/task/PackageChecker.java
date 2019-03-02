@@ -58,10 +58,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         for (File checkFile : checkFiles) {
             totalSize += checkFile.length();
         }
-        long procSize = 0;
-        int totalCount = checkFiles.length;
-        int procCount = 0;
-        progressParam.reset(totalSize, totalCount);
+        progressParam.reset(totalSize, checkFiles.length);
         publishCheckPackageList();
         for (File checkFile : checkFiles) {
             errorInfos.putAll(checkPackage(checkFile.getPath()));

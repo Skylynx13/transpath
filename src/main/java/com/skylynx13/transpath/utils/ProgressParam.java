@@ -1,18 +1,13 @@
 package com.skylynx13.transpath.utils;
 
 public class ProgressParam {
-    long sizeTotal;
-    long countTotal;
-    long timeStart;
-    long sizeNow;
-    long countNow;
+    private long sizeTotal;
+    private long countTotal;
+    private long timeStart;
+    private long sizeNow;
+    private long countNow;
 
     public ProgressParam(){
-
-    }
-
-    ProgressParam(long tSize, long tCount) {
-        reset(tSize, tCount);
     }
 
     public void reset(long tSize, long tCount) {
@@ -55,7 +50,7 @@ public class ProgressParam {
         return "" + countNow + " of " + countTotal + " files";
     }
 
-    long calcTimeLeftBySize() {
+    private long calcTimeLeftBySize() {
         if (sizeNow == 0) {
             return 0;
         }
