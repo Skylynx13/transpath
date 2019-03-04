@@ -19,7 +19,6 @@ import java.util.concurrent.ExecutionException;
  */
 public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
     private ProgressParam progressParam = new ProgressParam();
-    private ProgressData progressData = new ProgressData();
 
     @Override
     protected StringBuilder doInBackground() {
@@ -77,6 +76,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
     }
 
     private void publishCheckPackageList() {
+        ProgressData progressData = new ProgressData();
         progressData.setProgress(progressParam.calcProgressSize());
         progressData.setLine("Checking packages: " + progressParam.reportOfCount() + " files processed.        "
                 + progressParam.reportTimeLeftBySize());

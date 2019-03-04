@@ -23,8 +23,4 @@ public class ProgressData {
         this.line = line;
     }
 
-    public ProgressData(int pProgress, String pLine) {
-        progress = pProgress;
-        line = pLine;
-    }
 }
