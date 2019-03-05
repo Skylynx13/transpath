@@ -17,8 +17,8 @@ import java.util.concurrent.ExecutionException;
  * Description: To rename file with a regular name by replace template.
  * Date: 2015-02-03 11:08:20
  */
-public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
-    private ProgressParam progressParam = new ProgressParam();
+public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
+    private ProgressTracer progressTracer = new ProgressTracer();
 
     @Override
     protected StringBuilder doInBackground() {
@@ -35,10 +35,10 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
     }
 
     @Override
-    protected void process(List<ProgressData> progressDataList) {
-        ProgressData lastProgressData = progressDataList.get(progressDataList.size()-1);
-        Transpath.getProgressBar().setValue(lastProgressData.getProgress());
-        Transpath.getStatusLabel().setText(lastProgressData.getLine());
+    protected void process(List<ProgressReport> progressReportList) {
+        ProgressReport lastProgressReport = progressReportList.get(progressReportList.size()-1);
+        Transpath.getProgressBar().setValue(lastProgressReport.getProgress());
+        Transpath.getStatusLabel().setText(lastProgressReport.getReportLine());
     }
 
     @Override
@@ -52,17 +52,16 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
     }
 
     StringBuilder check(File[] checkFiles) {
-        Map<String, String> errorInfos = new HashMap<>();
         long totalSize = 0;
         for (File checkFile : checkFiles) {
             totalSize += checkFile.length();
         }
-        progressParam.reset(totalSize, checkFiles.length);
-        publishCheckPackageList();
+        resetProgress(totalSize, checkFiles.length);
+
+        Map<String, String> errorInfos = new HashMap<>();
         for (File checkFile : checkFiles) {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
-            progressParam.update(checkFile.length());
-            publishCheckPackageList();
+            updateProgress(checkFile.length());
         }
         StringBuilder errInfoStr = new StringBuilder("Result: ");
         errInfoStr.append(errorInfos.size()).append(" error(s) found.").append(TransConst.CRLN);
@@ -75,12 +74,14 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressData> {
         return errInfoStr;
     }
 
-    private void publishCheckPackageList() {
-        ProgressData progressData = new ProgressData();
-        progressData.setProgress(progressParam.calcProgressSize());
-        progressData.setLine("Checking packages: " + progressParam.reportOfCount() + " files processed.        "
-                + progressParam.reportTimeLeftBySize());
-        publish(progressData);
+    private void resetProgress(long totalSize, long totalCount) {
+        progressTracer.reset(totalSize, totalCount, "Checking packages");
+        publish(progressTracer.report());
+    }
+
+    private void updateProgress(long nSize) {
+        progressTracer.update(nSize);
+        publish(progressTracer.report());
     }
 
     Map<String, String> checkPackage(String fileName) {

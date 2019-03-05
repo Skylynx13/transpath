@@ -1,42 +1,32 @@
 package com.skylynx13.transpath.utils;
 
-public class ProgressParam {
+public class ProgressTracer {
     private long sizeTotal;
     private long countTotal;
-    private long timeStart;
     private long sizeNow;
     private long countNow;
+    private long timeStart;
+    private String reportHeader;
 
-    public ProgressParam(){
+    public ProgressTracer(){
     }
 
-    public void reset(long tSize, long tCount) {
+    public void reset(long tSize, long tCount, String header) {
         sizeTotal = tSize;
         countTotal = tCount;
         sizeNow = 0;
         countNow = 0;
         timeStart = System.currentTimeMillis();
+        reportHeader = header;
     }
 
     public void update(long nSize) {
-        addSize(nSize);
-        incCount();
-    }
-
-    private void addSize(long nSize) {
         sizeNow += nSize;
+        countNow ++;
     }
 
-    private void incCount() {
-        countNow++;
-    }
-
-    public int calcProgressSize() {
+    private int calcSizePercentage() {
         return (int)(100 * sizeNow / sizeTotal);
-    }
-
-    public String reportOfCount() {
-        return String.format("%,d of %,d files.", countNow, countTotal);
     }
 
     private long calcTimeLeftBySize() {
@@ -48,10 +38,16 @@ public class ProgressParam {
         return timeLeft / 1000;
     }
 
-    public String reportTimeLeftBySize() {
-        if (sizeNow == 0) {
-            return "Estimating time left...";
+    public ProgressReport report() {
+        return new ProgressReport(calcSizePercentage(), buildReportLine());
+    }
+
+    private String buildReportLine() {
+        StringBuilder line = new StringBuilder(reportHeader);
+        line.append(String.format(": Count %,d/%,d. ", countNow, countTotal));
+        if (sizeNow != 0) {
+            line.append(String.format("    >>>>>>>>     %,d seconds left. ", calcTimeLeftBySize()));
         }
-        return String.format("%d seconds left. ", calcTimeLeftBySize());
+        return line.toString();
     }
 }
