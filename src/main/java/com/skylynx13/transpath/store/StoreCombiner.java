@@ -65,13 +65,13 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private StoreList buildNewStoreList() throws StoreListException {
         TransLog.getLogger().info("Building new store list...");
         long t0 = System.currentTimeMillis();
-        List<String> storePathList = checkExistList(buildStorePathList());
+        List<String> storePathList = buildStorePathList();
         resetProgress(calcStoreFileSize(storePathList), calcStoreFileCount(storePathList),
                 "Building new list");
         StoreList newList = new StoreList();
 
         for (String storePathName : storePathList) {
-            File storePath = new File(buildRootPath(storePathName));
+            File storePath = new File(storePathName);
             if (!storePath.isDirectory() || storePath.listFiles() == null) {
                 TransLog.getLogger().warn("Store path ignored: " + storePathName);
                 continue;
@@ -112,7 +112,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private long calcStoreFileSize(List<String> storePathList) throws StoreListException {
         long tSize = 0;
         for (String storePathName : storePathList) {
-            tSize += FileUtils.getFileSize(buildRootPath(storePathName));
+            tSize += FileUtils.getFileSize(storePathName);
         }
         if (tSize == 0) {
             throw new StoreListException("Total size is 0");
@@ -123,7 +123,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private long calcStoreFileCount(List<String> storePathList) throws StoreListException {
         long tCount = 0;
         for (String storePathName : storePathList) {
-            tCount += FileUtils.getFileCount(buildRootPath(storePathName));
+            tCount += FileUtils.getFileCount(storePathName);
         }
         if (tCount == 0) {
             throw new StoreListException("Total count is 0");
@@ -133,25 +133,30 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
 
     private List<String> buildStorePathList() throws StoreListException {
         if (updateList) {
-            return parseStorePathList(TransProp.get(TransConst.PATH_BRANCH));
+            return buildList(TransProp.get(TransConst.PATH_BRANCH));
         } else {
-            return parseStorePathList(TransProp.get(TransConst.PATH_DRILL));
+            return buildList(TransProp.get(TransConst.PATH_DRILL));
         }
     }
 
-    private String buildRootPath(String pathName) {
-        return FileUtils.regulatePath(STORE_ROOT + pathName);
-    }
-
-    List<String> parseStorePathList(String branchPath) throws StoreListException {
+    List<String> buildList(String branchPath) throws StoreListException {
         if (!branchPath.matches(REGEX_PATH_FULL)) {
+            if (new File(branchPath).exists()) {
+                List<String> singlePathList = new ArrayList<>();
+                singlePathList.add(branchPath);
+                TransLog.getLogger().info(singlePathList.toString());
+                return singlePathList;
+            }
             TransLog.getLogger().error("Error branch path: " + branchPath);
             throw new StoreListException("Error branch path.");
         }
+        return checkExistList(parseList(branchPath));
+    }
 
+    List<String> parseList(String branchPath) throws StoreListException {
+        List<String> parsedList = new ArrayList<>();
         Matcher branchMatcher = PATTERN_PATH_UNIT.matcher(branchPath);
         int numberA = 0;
-        List<String> storePathList = new ArrayList<>();
         while (branchMatcher.find()) {
             TransLog.getLogger()
                     .info("count: " + branchMatcher.groupCount() + ", group: " + branchMatcher.group());
@@ -173,18 +178,19 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
             }
 
             for (int numberI = numberB; numberI <= numberS; numberI++) {
-                storePathList.add(String.format("A%04d/B%04d", numberA, numberI));
+                parsedList.add(String.format("A%04d/B%04d", numberA, numberI));
             }
         }
-        TransLog.getLogger().info(storePathList.toString());
-        return storePathList;
+        TransLog.getLogger().info(parsedList.toString());
+        return parsedList;
     }
 
-    private List<String> checkExistList(List<String> storePathList) throws StoreListException {
+    private List<String> checkExistList(List<String> parsedList) throws StoreListException {
         ArrayList<String> existList = new ArrayList<>();
-        for (String path : storePathList) {
-            if (new File(buildRootPath(path)).exists()) {
-                existList.add(path);
+        for (String relativePath : parsedList) {
+            String fullPath = FileUtils.regulatePath((STORE_ROOT + relativePath));
+            if (new File(fullPath).exists()) {
+                existList.add(fullPath);
             }
         }
         if (existList.size() == 0) {

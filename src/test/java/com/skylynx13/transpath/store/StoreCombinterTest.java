@@ -10,18 +10,25 @@ public class StoreCombinterTest {
     private StoreCombiner storeCombiner = new StoreCombiner(false);
 
     @Test
-    public void parseStorePathListTest() {
+    public void buildListTest() {
         try {
-            assertNull(storeCombiner.parseStorePathList("A1111/B2222,B3333,B4444,B5555a"));
+            assertNull(storeCombiner.buildList("A1111/B2222,B3333,B4444,B5555a"));
         } catch (StoreListException e) {
             assertEquals("Error branch path.", e.getMessage());
         }
         try {
-            assertNull(storeCombiner.parseStorePathList("A1111/B2222,B3333-1111,B4444,B5555"));
+            assertNull(storeCombiner.buildList("A1111/B2222,B3333-1111,B4444,B5555"));
         } catch (StoreListException e) {
             assertEquals("Error branch group.", e.getMessage());
         }
+        try {
+            assertEquals("[/]", storeCombiner.buildList("/").toString());
+        } catch (StoreListException ignored) {
+        }
+    }
 
+    @Test
+    public void parseListTest() {
         try {
             assertEquals("[" +
                             "A1111/B2222, " +
@@ -50,7 +57,7 @@ public class StoreCombinterTest {
                             "A3333/B6676, " +
                             "A3333/B6677, " +
                             "A3333/B8888]",
-                    storeCombiner.parseStorePathList("A1111/B2222,A3333/B4444-4455,B6666-6677,B8888")
+                    storeCombiner.parseList("A1111/B2222,A3333/B4444-4455,B6666-6677,B8888")
                             .toString());
         } catch (StoreListException ignored) {
         }

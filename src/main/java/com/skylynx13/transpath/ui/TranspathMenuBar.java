@@ -94,6 +94,7 @@ public class TranspathMenuBar extends JMenuBar {
         JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
         storeMenu.add(storeCombineTestItem);
         storeCombineTestItem.addActionListener(e -> new StoreCombiner(false).execute());
+        storeCombineTestItem.setAccelerator(KeyStroke.getKeyStroke('T', InputEvent.CTRL_DOWN_MASK));
 
         storeMenu.add(new JSeparator());
 
