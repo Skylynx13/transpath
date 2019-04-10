@@ -97,12 +97,20 @@ public class TranspathFrame extends JFrame {
     }
 
     private void initLookAndFeel() {
-        UIManager.getSystemLookAndFeelClassName();
         try {
             // Look and feel candidates:
             // "javax.swing.plaf.metal.MetalLookAndFeel"
             // "javax.swing.plaf.nimbus.NimbusLookAndFeel"
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            // "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+            // "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
+            // "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+            // "com.sun.java.swing.plaf.mac.MacLookAndFeel";
+            // "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+            // UIManager.getCrossPlatformLookAndFeelClassName();
+            // UIManager.getSystemLookAndFeelClassName();
+
+            String lookAndFeel = "javax.swing.plaf.metal.MetalLookAndFeel";
+            UIManager.setLookAndFeel(lookAndFeel);
         } catch (ClassNotFoundException
                 | InstantiationException
                 | IllegalAccessException

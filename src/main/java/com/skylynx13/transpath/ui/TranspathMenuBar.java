@@ -49,6 +49,10 @@ public class TranspathMenuBar extends JMenuBar {
         sysMenu.add(sysReloadItem);
         sysReloadItem.addActionListener(e -> Transpath.getTranspathFrame().reloadStore());
 
+        JMenuItem sysPropertiesItem = new JMenuItem("Properties...");
+        sysMenu.add(sysPropertiesItem);
+        sysPropertiesItem.addActionListener(e -> new PropertiesDialog().setVisible(true));
+
         sysMenu.add(new JSeparator());
 
         JMenuItem sysExitItem = new JMenuItem("Exit");
@@ -120,24 +124,7 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem helpAboutItem = new JMenuItem("About");
         helpMenu.add(helpAboutItem);
-        helpAboutItem.addActionListener(e -> showAboutDialog());
+        helpAboutItem.addActionListener(e -> new AboutDialog().setVisible(true));
         return helpMenu;
-    }
-
-    private void showAboutDialog() {
-        if (aboutDialog == null) {
-            aboutDialog = new JDialog(Transpath.getTranspathFrame(), "About Transpath", true);
-            aboutDialog.add(
-                    new JLabel("<html><h2>Transpath is here anyway.</h2><hr>By Skylynx13</html>"),
-                    BorderLayout.CENTER
-            );
-            JButton okButton = new JButton("OK");
-            okButton.addActionListener(e -> aboutDialog.setVisible(false));
-            JPanel okPanel = new JPanel();
-            okPanel.add(okButton);
-            aboutDialog.add(okPanel, BorderLayout.SOUTH);
-            aboutDialog.setSize(250, 150);
-        }
-        aboutDialog.setVisible(true);
     }
 }

@@ -10,6 +10,7 @@ public class Transpath {
     private static JTextArea logTextArea = new JTextArea();
     private static JProgressBar progressBar = new JProgressBar();
     private static JLabel statusLabel = new JLabel();
+    private static Dialog propertiesDialog = new Dialog(tpFrame);
 
     public static TranspathFrame getTranspathFrame() {
         return tpFrame;
@@ -23,6 +24,9 @@ public class Transpath {
     public static JLabel getStatusLabel() {
         return statusLabel;
     }
+    public static Dialog getPropertiesDialog() {
+        return propertiesDialog;
+    }
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -30,4 +34,5 @@ public class Transpath {
             tpFrame.setVisible(true);
         });
     }
+
 }
