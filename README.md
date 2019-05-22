@@ -17,3 +17,6 @@ mvn install:install-file -DgroupId=org.apache.commons.codec -DartifactId=commons
 ssh-agent bash
 ssh-add ~/.ssh/skylynx13_rsa
 
+# rar and unzip support
+English version of rar should be installed and system path be set.
+
