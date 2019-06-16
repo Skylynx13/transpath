@@ -303,7 +303,7 @@ public class TranspathFrame extends JFrame {
         String target = TransProp.get(TransConst.LOC_TARGET);
         //exec and feedback
         for (StoreNode sNode : sList.getStoreList()) {
-            String pathName = FileUtils.regulatePath(sNode.getPath().substring(1)) + sNode.getName();
+            String pathName = FileUtils.regulateSysPath(sNode.getPath().substring(1)) + sNode.getName();
             String cmd = TransConst.CMD_COPY_TO_TARGET + "\"" + sourceBase + pathName + "\" " + target;
             TransLog.getLogger().info("Command: " + cmd);
         }

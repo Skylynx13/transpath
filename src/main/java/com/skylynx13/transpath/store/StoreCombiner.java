@@ -188,7 +188,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private List<String> checkExistList(List<String> parsedList) throws StoreListException {
         ArrayList<String> existList = new ArrayList<>();
         for (String relativePath : parsedList) {
-            String fullPath = FileUtils.regulatePath((STORE_ROOT + relativePath));
+            String fullPath = FileUtils.regulateSysPath((STORE_ROOT + relativePath));
             if (new File(fullPath).exists()) {
                 existList.add(fullPath);
             }
@@ -303,7 +303,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
             PrintWriter out = new PrintWriter(delFile);
             for (StoreNode aNode : delList.storeList) {
                 out.println("del \"" + TransProp.get(TransConst.LOC_STORE)
-                        + FileUtils.regulatePath(aNode.getPath().substring(1))
+                        + FileUtils.regulateSysPath(aNode.getPath().substring(1))
                         + aNode.getName() + "\"");
             }
             out.close();

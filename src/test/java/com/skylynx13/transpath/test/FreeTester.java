@@ -152,7 +152,19 @@ public class FreeTester {
     }
 
     public static void main(String[] args) {
-        formatString();
+        replacePath();
+    }
+
+    private static void replacePath() {
+        String origin = "D:\\Book\\test001.txt";
+        String rep0 = "D:\\Book\\";
+        File f = new File(origin);
+        String origin1 = f.getPath();
+        System.out.println(origin1);
+        String rep = rep0.replaceAll("\\\\", "\\\\\\\\");
+        String replaced = origin1.replaceAll(rep, "/");
+        System.out.println(origin);
+        System.out.println(replaced);
     }
 
     private static void formatString() {

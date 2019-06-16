@@ -260,7 +260,15 @@ public class FileUtils {
         return digest(pFile, TransConst.CRC32);
     }
 
-    public static String regulatePath(String path) {
+    public static String regulateRelativePath(String pRoot, File pFile) {
+        String aRoot = pRoot;
+        if (isWindows()) {
+            aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.BACK_SLASH_8);
+        }
+        return pFile.getParent().replaceAll(aRoot, TransConst.SLASH) + TransConst.SLASH;
+    }
+
+    public static String regulateSysPath(String path) {
         if (isWindows()) {
             return toWindowsPath(path);
         }

@@ -27,7 +27,8 @@ public class TransConst {
     public static final String CR     = "\r";    
     public static final String LN     = "\n";
     static final String BACK_SLASH_4 = "\\\\";
-    
+    static final String BACK_SLASH_8 = "\\\\\\\\";
+
     public static final String ROOT = "TFLib";
 
     public static final String TP_PROPS = System.getProperty("transpath.properties");
