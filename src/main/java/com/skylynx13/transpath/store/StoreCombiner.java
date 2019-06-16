@@ -196,6 +196,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         if (existList.size() == 0) {
             throw new StoreListException("Exist list is empty.");
         }
+        TransLog.getLogger().info("Existing: " + existList.toString());
         return existList;
     }
 
