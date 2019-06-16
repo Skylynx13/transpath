@@ -265,7 +265,7 @@ public class FileUtils {
         if (isWindows()) {
             aRoot = pRoot.replaceAll(TransConst.BACK_SLASH_4, TransConst.BACK_SLASH_8);
         }
-        return pFile.getParent().replaceAll(aRoot, TransConst.SLASH) + TransConst.SLASH;
+        return toStandardPath(pFile.getParent().replaceAll(aRoot, TransConst.SLASH) + TransConst.SLASH);
     }
 
     public static String regulateSysPath(String path) {
