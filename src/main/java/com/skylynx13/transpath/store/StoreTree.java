@@ -94,7 +94,8 @@ public class StoreTree implements MutableTreeNode {
         StoreNode aNode = storeTree.getNode();
         if (aNode.isBranch()) {
             long length = storeTree.sumLength();
-            row = aNode.toBranchRow(length);
+            int size = storeTree.sumSize();
+            row = aNode.toBranchRow(length, size);
         } else {
             row = aNode.toStoreRow();
         }
@@ -112,6 +113,19 @@ public class StoreTree implements MutableTreeNode {
             }
         }
         return length;
+    }
+
+    private int sumSize() {
+        int size = 0;
+        for (StoreTree storeTree : this.getChildren()) {
+            StoreNode aNode = storeTree.getNode();
+            if (aNode.isBranch()){
+                size += storeTree.sumSize();
+            } else {
+                size += 1;
+            }
+        }
+        return size;
     }
 
     private void addChild(StoreTree storeTree) {
