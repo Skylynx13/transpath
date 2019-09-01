@@ -181,7 +181,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
                 parsedList.add(String.format("A%04d/B%04d", numberA, numberI));
             }
         }
-        TransLog.getLogger().info(parsedList.toString());
+        TransLog.getLogger().info("Request list:" + parsedList.toString());
         return parsedList;
     }
 
@@ -194,9 +194,9 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
             }
         }
         if (existList.size() == 0) {
-            throw new StoreListException("Exist list is empty.");
+            throw new StoreListException("Respond list is empty.");
         }
-        TransLog.getLogger().info("Existing: " + existList.toString());
+        TransLog.getLogger().info("Respond list: " + existList.toString());
         return existList;
     }
 
