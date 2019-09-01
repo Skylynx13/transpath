@@ -1,20 +1,24 @@
 package com.skylynx13.transpath.ui;
 
-import java.awt.*;
-import java.awt.dnd.DropTarget;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
+import com.skylynx13.transpath.Transpath;
+import com.skylynx13.transpath.log.TransLog;
+import com.skylynx13.transpath.store.StoreList;
+import com.skylynx13.transpath.store.StoreNode;
+import com.skylynx13.transpath.store.StoreTree;
+import com.skylynx13.transpath.utils.FileUtils;
+import com.skylynx13.transpath.utils.TransConst;
+import com.skylynx13.transpath.utils.TransProp;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-
-import com.skylynx13.transpath.Transpath;
-import com.skylynx13.transpath.log.TransLog;
-import com.skylynx13.transpath.store.*;
-import com.skylynx13.transpath.utils.FileUtils;
-import com.skylynx13.transpath.utils.TransConst;
-import com.skylynx13.transpath.utils.TransProp;
+import java.awt.*;
+import java.awt.dnd.DropTarget;
+import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * ClassName: TranspathFrame
@@ -193,9 +197,17 @@ public class TranspathFrame extends JFrame {
 
     private JToolBar setupStatusBar() {
         JToolBar statusBar = new JToolBar();
-        statusBar.setLayout(new GridLayout());
+        statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         statusBar.setFloatable(false);
 
+        statusBar.add(getTimerLabel());
+        statusBar.add(getProgressBar());
+        statusBar.add(Transpath.getStatusLabel());
+
+        return statusBar;
+    }
+
+    private JProgressBar getProgressBar() {
         Transpath.getProgressBar().setMaximum(100);
         Transpath.getProgressBar().setMinimum(0);
         Transpath.getProgressBar().setValue(0);
@@ -204,12 +216,17 @@ public class TranspathFrame extends JFrame {
         // Color change unavailable when using NimbusLookAndFeel;
         // progressBar.setBackground(Color.gray);
         // progressBar.setForeground(Color.green);
-        statusBar.add(Transpath.getProgressBar());
+        Transpath.getProgressBar().setPreferredSize(new Dimension(600, 20));
+        return Transpath.getProgressBar();
+    }
 
-        Transpath.getStatusLabel().setText("Status Normal.");
-        statusBar.add(Transpath.getStatusLabel());
-
-        return statusBar;
+    private JLabel getTimerLabel() {
+        JLabel timerLabel = new JLabel();
+        Timer timer = new Timer(0,
+                e -> timerLabel.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                        .format(new Date())));
+        timer.start();
+        return timerLabel;
     }
 
     private void updateInfoTable(StoreList storeList) {
@@ -335,7 +352,7 @@ public class TranspathFrame extends JFrame {
         }
     }
 
-    protected void exit() {
+    void exit() {
         TransLog.getLogger().info("Transpath Exit.");
         System.exit(0);
     }

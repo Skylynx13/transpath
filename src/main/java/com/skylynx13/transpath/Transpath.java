@@ -9,7 +9,7 @@ public class Transpath {
     private static TranspathFrame tpFrame;
     private static JTextArea logTextArea = new JTextArea();
     private static JProgressBar progressBar = new JProgressBar();
-    private static JLabel statusLabel = new JLabel();
+    private static JLabel statusLabel = new JLabel("Status Normal.");
     private static Dialog propertiesDialog = new Dialog(tpFrame);
 
     public static TranspathFrame getTranspathFrame() {
@@ -34,5 +34,4 @@ public class Transpath {
             tpFrame.setVisible(true);
         });
     }
-
 }
