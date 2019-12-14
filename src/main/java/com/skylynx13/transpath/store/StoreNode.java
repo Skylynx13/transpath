@@ -177,13 +177,13 @@ public class StoreNode implements Cloneable {
         };
     }
 
-    Object[] toBranchRow(long length, int size) {
+    Object[] toBranchRow(long length, int count) {
         return new Object[]{
                 id,
                 path,
                 name,
                 StringUtils.formatLongInt(length),
-                size
+                count
         };
     }
 

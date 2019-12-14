@@ -54,7 +54,7 @@ public class TransConst {
             new Font(TransProp.get(FONT_TYPE), Font.PLAIN, TransProp.getInt(FONT_SIZE));
 
     public static String[] TABLE_TITLE_BRANCH =
-            {"BranchId", "BranchPath", "BranchName", "Length", "Size"};
+            {"BranchId", "BranchPath", "BranchName", "Length", "Count"};
 
     public static String[] TABLE_TITLE_STORE =
             {"StoreId", "StorePath", "StoreName", "Length", "Update Time", "MD5", "SHA", "CRC32"};
