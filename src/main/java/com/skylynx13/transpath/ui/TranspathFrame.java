@@ -238,7 +238,7 @@ public class TranspathFrame extends JFrame {
     }
 
     private void updateInfoTable(DefaultTableModel tableModel) {
-        String[] rightAlignedTitles = {"StoreId", "Length", "BranchId", "Size"};
+        String[] rightAlignedTitles = {"StoreId", "Length", "BranchId", "Count"};
         infoTable.setModel(tableModel);
         columnSizeFitContents(infoTable);
 
