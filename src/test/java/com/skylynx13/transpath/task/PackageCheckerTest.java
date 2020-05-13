@@ -101,7 +101,7 @@ public class PackageCheckerTest {
         testFiles.add(new File(testResource("testIgnorable.pdf")));
         String result = packageChecker.check(testFiles.toArray(new File[0])).toString();
         System.out.println(result);
-        assertEquals("Result: 5 error(s) found.\r\n" +
+        assertEquals("=== Package Check Result: 5 error(s) found. ===\r\n" +
                 "src/test/resources/testEmpty.rar : All checkers failed.\r\n" +
                 "src/test/resources/testEmpty.zip : All checkers failed.\r\n" +
                 "src/test/resources/testRarFakeZip.zip : Type mismatch.\r\n" +

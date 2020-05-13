@@ -65,4 +65,4 @@ public class TransConst {
     public static final String PKG_TYPE_MISMATCH = "Type mismatch.";
     public static final String PKG_TYPE_NOT_RECOGNIZED = "File type not recognized.";
     public static final String PKG_IGNORE = "File type ignorable.";
-    }
+}

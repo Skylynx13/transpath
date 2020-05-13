@@ -246,8 +246,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         }
         TransLog.getLogger().info("Duplicated list.");
         TransLog.getLogger().info(duplicatedList.toString());
-        TransLog.getLogger().info("Duplicated count: " + (duplicatedList.size() - removedList.size()));
-        TransLog.getLogger().info("Removed count: " + removedList.size());
+        TransLog.getLogger().info("=== Duplicated count: " + (duplicatedList.size() - removedList.size()) + " ===");
+        TransLog.getLogger().info("=== Removed count: " + removedList.size() + " ===");
         TransLog.getLogger().info("Duplication checked.");
         t0 = logTimeElapsed(t0);
 

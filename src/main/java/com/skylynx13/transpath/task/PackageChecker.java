@@ -63,8 +63,8 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
             updateProgress(checkFile.length());
         }
-        StringBuilder errInfoStr = new StringBuilder("Result: ");
-        errInfoStr.append(errorInfos.size()).append(" error(s) found.").append(TransConst.CRLN);
+        StringBuilder errInfoStr = new StringBuilder("=== Package Check Result: ");
+        errInfoStr.append(errorInfos.size()).append(" error(s) found. ===").append(TransConst.CRLN);
         List<String> keyList = new ArrayList<>(Arrays.asList(errorInfos.keySet().toArray(new String[0])));
         Collections.sort(keyList);
         for (String key : keyList) {
