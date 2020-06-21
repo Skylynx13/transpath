@@ -3,10 +3,11 @@ package com.skylynx13.transpath.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
- /**
+/**
  * ClassName: DateUtils
  * Description: Date utils
  * Date: 2015-11-04 23:49:42
+ * @author skylynx
  */
 public class DateUtils {
     

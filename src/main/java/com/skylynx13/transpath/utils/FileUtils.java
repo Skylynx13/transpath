@@ -12,6 +12,7 @@ import java.util.zip.CRC32;
  * ClassName: FileUtils
  * Description: Utilities for file processing.
  * Date: 2015-02-17 10:18:37
+ * @author skylynx
  */
 public class FileUtils {
     private static final int READ_BUFFER_SIZE = 1024 * 128;

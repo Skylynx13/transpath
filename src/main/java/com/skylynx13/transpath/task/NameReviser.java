@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * @author skylynx
+ */
 public class NameReviser {
     public static void rename() {
         TransLog.getLogger().info("Result: "

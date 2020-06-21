@@ -10,13 +10,13 @@ import com.skylynx13.transpath.utils.TransConst;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * ClassName: TransMenuBar
  * Description: Transpath menu bar
  * Date: 2017-10-14 16:00:27
+ * @author skylynx
  */
 public class TranspathMenuBar extends JMenuBar {
 
@@ -24,8 +24,14 @@ public class TranspathMenuBar extends JMenuBar {
 
     private JDialog aboutDialog;
 
-    private ExecutorService transpathMenuAction =
-            Executors.newCachedThreadPool(r -> new Thread(r, "TranspathMenuAction"));
+    private ThreadPoolExecutor transpathTasks =
+            new ThreadPoolExecutor(
+                    0,
+                    10,
+                    0L,
+                    TimeUnit.MILLISECONDS,
+                    new ArrayBlockingQueue<>(2),
+                    new ThreadPoolExecutor.AbortPolicy());
 
     public TranspathMenuBar() {
         setFont();
@@ -66,14 +72,14 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem taskWeekItem = new JMenuItem("Weekly Digging");
         taskMenu.add(taskWeekItem);
-        taskWeekItem.addActionListener(e -> transpathMenuAction.submit(() -> {
+        taskWeekItem.addActionListener(e -> transpathTasks.submit(() -> {
             TaskKeeper.weekFresh();
             TaskKeeper.digNewFresh();
         }));
 
         JMenuItem taskSpecItem = new JMenuItem("Spec Digging");
         taskMenu.add(taskSpecItem);
-        taskSpecItem.addActionListener(e -> transpathMenuAction.submit(TaskKeeper::digSpecFresh));
+        taskSpecItem.addActionListener(e -> transpathTasks.submit(TaskKeeper::digSpecFresh));
 
         JMenuItem taskPackageItem = new JMenuItem("Package Check");
         taskMenu.add(taskPackageItem);
@@ -82,7 +88,7 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem taskNameItem = new JMenuItem("Name Revise");
         taskMenu.add(taskNameItem);
-        taskNameItem.addActionListener(e -> transpathMenuAction.submit(NameReviser::rename));
+        taskNameItem.addActionListener(e -> transpathTasks.submit(NameReviser::rename));
         taskNameItem.setAccelerator(KeyStroke.getKeyStroke('R', InputEvent.CTRL_DOWN_MASK));
 
         return taskMenu;

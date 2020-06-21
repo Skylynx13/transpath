@@ -16,6 +16,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author skylynx
+ */
 public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private boolean updateList;
     private final static String STORE_ROOT = TransProp.get(TransConst.LOC_STORE);

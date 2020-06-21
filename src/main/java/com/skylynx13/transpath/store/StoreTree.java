@@ -12,6 +12,7 @@ import java.util.*;
  * If this is not enough for use,
  * reference to Class DefaultMutableTreeNode.
  * Date: 2014-04-05 22:47:08
+ * @author skylynx
  */
 public class StoreTree implements MutableTreeNode {
     private static class NodeNameAscComparator implements Comparator<StoreTree> {
@@ -52,6 +53,7 @@ public class StoreTree implements MutableTreeNode {
         this.node = node;
     }
 
+    @Override
     public StoreTree getParent() {
         return parent;
     }
@@ -170,7 +172,7 @@ public class StoreTree implements MutableTreeNode {
         }
     }
 
-    // For JTree display
+    /** For JTree display */
     @Override
     public String toString() {
         return this.getNodeName();
@@ -186,11 +188,13 @@ public class StoreTree implements MutableTreeNode {
     }
 
     private StoreTree getChildByName(String aName) {
-        if (null == this.children)
+        if (null == this.children) {
             return null;
+        }
         for (StoreTree aChild : this.children) {
-            if (aChild.node.getName().equals(aName))
+            if (aChild.node.getName().equals(aName)) {
                 return aChild;
+            }
         }
         return null;
     }
@@ -218,10 +222,12 @@ public class StoreTree implements MutableTreeNode {
     public Enumeration<StoreTree> children() {
         if (this.isLeaf()) {
             return new Enumeration<StoreTree>() {
+                @Override
                 public boolean hasMoreElements() {
                     return false;
                 }
 
+                @Override
                 public StoreTree nextElement() {
                     throw new NoSuchElementException("No elements here.");
                 }
@@ -230,10 +236,12 @@ public class StoreTree implements MutableTreeNode {
             return new Enumeration<StoreTree>() {
                 Iterator<StoreTree> iter = children.iterator();
 
+                @Override
                 public boolean hasMoreElements() {
                     return iter.hasNext();
                 }
 
+                @Override
                 public StoreTree nextElement() throws NoSuchElementException {
                     return iter.next();
                 }
@@ -241,6 +249,7 @@ public class StoreTree implements MutableTreeNode {
         }
     }
 
+    @Override
     public boolean isLeaf() {
         return (null == this.children);
     }
@@ -261,7 +270,6 @@ public class StoreTree implements MutableTreeNode {
         StoreTree bTree = this;
         for (String nodeName : nodeNames) {
             if (null != nodeName && !nodeName.isEmpty()) {
-                // TransLog.getLogger().info(nodeName);
                 bTree = bTree.getChildByNameOrAddIt(nodeName);
             }
         }

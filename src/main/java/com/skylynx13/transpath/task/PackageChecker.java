@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
  * ClassName: PackageChecker
  * Description: To rename file with a regular name by replace template.
  * Date: 2015-02-03 11:08:20
+ * @author skylynx
  */
 public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
     private ProgressTracer progressTracer = new ProgressTracer();
@@ -58,7 +59,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
         }
         resetProgress(totalSize, checkFiles.length);
 
-        Map<String, String> errorInfos = new HashMap<>();
+        Map<String, String> errorInfos = new HashMap<>(16);
         for (File checkFile : checkFiles) {
             errorInfos.putAll(checkPackage(checkFile.getPath()));
             updateProgress(checkFile.length());
@@ -85,7 +86,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
     }
 
     Map<String, String> checkPackage(String fileName) {
-        Map<String, String> errorInfos = new HashMap<>();
+        Map<String, String> errorInfos = new HashMap<>(16);
         List<Checker> checkers = new ArrayList<>();
         checkers.add(new RarChecker());
         checkers.add(new ZipChecker());
@@ -138,9 +139,29 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
         return lastLine;
     }
 
+    /**
+     * Interface for methods of all kind of compressors.
+     */
     interface Checker {
+        /**
+         * Check if match the type of compressor;
+         * @param fileName file to check
+         * @return match or not
+         */
         boolean checkType(String fileName);
+
+        /**
+         * Get command for compressor;
+         * @param fileName file to check
+         * @return command list
+         */
         String[] checkCommand(String fileName);
+
+        /**
+         * Check status ok or not;
+         * @param result result of compressor command
+         * @return ok or not
+         */
         boolean checkOk(String result);
     }
 
@@ -157,7 +178,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
 
         @Override
         public boolean checkOk(String result) {
-            return result.equalsIgnoreCase("All OK");
+            return "All OK".equalsIgnoreCase(result);
         }
     }
 
@@ -183,21 +204,21 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
     }
 
     private static boolean isRar(String fileName) {
-        final String[] ARRAY_SUFFIX_RAR = {"rar", "cbr"};
+        final String[] arraySuffixRar = {"rar", "cbr"};
 
-        return Arrays.asList(ARRAY_SUFFIX_RAR).contains(getSuffix(fileName));
+        return Arrays.asList(arraySuffixRar).contains(getSuffix(fileName));
     }
 
     private static boolean isZip(String fileName) {
-        final String[] ARRAY_SUFFIX_ZIP = {"zip", "cbz"};
+        final String[] arraySuffixZip = {"zip", "cbz"};
 
-        return Arrays.asList(ARRAY_SUFFIX_ZIP).contains(getSuffix(fileName));
+        return Arrays.asList(arraySuffixZip).contains(getSuffix(fileName));
     }
 
     boolean isIgnorable(String fileName) {
-        final String[] ARRAY_SUFFIX_IGNORABLE = {"pdf", "txt", "epub", "mobi", "pdb", "gif"};
+        final String[] arraySuffixIgnorable = {"pdf", "txt", "epub", "mobi", "pdb", "gif"};
 
-        return Arrays.asList(ARRAY_SUFFIX_IGNORABLE).contains(getSuffix(fileName));
+        return Arrays.asList(arraySuffixIgnorable).contains(getSuffix(fileName));
     }
 
     private static String getSuffix(String fileName) {

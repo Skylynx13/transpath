@@ -14,10 +14,11 @@ import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.utils.TransConst;
 
  /**
- * ClassName: Arranger
- * Description: To arrange raw file and build a task list.
- * Date: 2014-04-23 23:32:59
- */
+  * ClassName: Arranger
+  * Description: To arrange raw file and build a task list.
+  * Date: 2014-04-23 23:32:59
+  * @author skylynx
+  */
 public class TaskArranger {
     private ArrayList<TaskEntry> entries;
     private TaskEntry entry;
@@ -65,7 +66,8 @@ public class TaskArranger {
             in = new Scanner(new FileReader(fileName));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            status = 100000; // File open error;
+            // File open error;
+            status = 100000;
             return null;
         }
         int cnt = 0;
@@ -76,14 +78,16 @@ public class TaskArranger {
             }
             if (this.checkLinkLine(line)) {
                 if (this.entry == null || this.entry.hasNoName()) {
-                    status = 200000 + cnt; // Error: Entry no name at line cnt.
+                    // Error: Entry no name at line cnt.
+                    status = 200000 + cnt;
                     in.close();
                     return null;
                 }
                 entry.addUniqueLink(line);
             } else if (this.checkCommentLine(line)) {
                 if (this.entry == null || this.entry.hasNoName()) {
-                    status = 200000 + cnt; // Error: Entry no name at line cnt.
+                    // Error: Entry no name at line cnt.
+                    status = 200000 + cnt;
                     in.close();
                     return null;
                 }
@@ -154,14 +158,16 @@ public class TaskArranger {
         return newArranger;
     }
     
+    @Override
     public String toString() {
         return entries.toString();
     }
     
     public String toOutput() {
         StringBuilder str = new StringBuilder();
-        if (this.entries == null) 
+        if (this.entries == null) {
             return str.toString();
+        }
         for (TaskEntry cde:this.entries) {
             str.append(cde.getName()).append(TransConst.LN);
             for (String cmt: cde.getComments()) {
@@ -221,13 +227,11 @@ public class TaskArranger {
                 isInWindow = true;
                 iLastOpen = iInLine;
                 sLastOpen = inLine;
-                //TransLog.getLogger().info("Line " + iInLine + " window opened.");
             }
             if (isInWindow && checkEndLine(inLine)) {
                 isInWindow = false;
                 iLastClose = iInLine;
                 sLastClose = inLine;
-                //TransLog.getLogger().info("Line " + iInLine + " window closed.");
             }
             if (isInWindow && !checkIgnorableLine(inLine)) {
                 Objects.requireNonNull(out).println(inLine);
@@ -276,21 +280,24 @@ public class TaskArranger {
     TaskArranger applyFilter(String[] keys) {
         TaskArranger newArranger = new TaskArranger();
         for (TaskEntry currEntry : this.entries) {
-            if (currEntry.matches(keys))
+            if (currEntry.matches(keys)) {
                 newArranger.addEntry(currEntry);
+            }
         }
         return newArranger;
     }
     
     public boolean equals(TaskArranger another) {
-        if (this.entries.size() != another.entries.size())
+        if (this.entries.size() != another.entries.size()) {
             return false;
+        }
 
         for (int iLength = 0; iLength < this.entries.size(); iLength++) {
             TaskEntry thisEntry = this.entries.get(iLength);
             TaskEntry anotherEntry = another.entries.get(iLength);
-            if (!thisEntry.equals(anotherEntry))
+            if (!thisEntry.equals(anotherEntry)) {
                 return false;
+            }
         }
         return true;
     }

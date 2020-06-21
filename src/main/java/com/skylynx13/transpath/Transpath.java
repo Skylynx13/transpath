@@ -5,6 +5,9 @@ import com.skylynx13.transpath.ui.TranspathFrame;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author skylynx
+ */
 public class Transpath {
     private static TranspathFrame tpFrame;
     private static JTextArea logTextArea = new JTextArea();

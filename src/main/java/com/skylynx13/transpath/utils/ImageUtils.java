@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
  * ClassName: ImageUtils
  * Description: Image utils
  * Date: 2017-10-05 22:30:31
+ * @author skylynx
  */
 public class ImageUtils {
     
@@ -78,8 +79,9 @@ public class ImageUtils {
 //               int height = img.getHeight(null); // 得到源图长
                BufferedImage tag = new BufferedImage(newWidth, newHeight,
                       BufferedImage.TYPE_INT_RGB);
+               // 绘制后的图
                tag.getGraphics()
-                      .drawImage(img, 0, 0, newWidth, newHeight, null); // 绘制后的图
+                      .drawImage(img, 0, 0, newWidth, newHeight, null);
                //FileOutputStream out = new FileOutputStream(path + newimg);
                //JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
                //encoder.encode(tag); // 近JPEG编码
@@ -136,9 +138,9 @@ public class ImageUtils {
      *                        String img3 = "D:/imgs/big.jpg";
      *                        String[] pics = new String[]{img1,img2,img3};
      * @param type ：图片输出类型（jpg，png，jpeg...）
-     * @param dst_pic ：图片输出绝对路径，如 String dst_pic="D:/imgs/big2.jpg";
+     * @param dstPic ：图片输出绝对路径，如 String dst_pic="D:/imgs/big2.jpg";
      */
-    private static void merge(String[] pics, String type, String dst_pic) {
+    private static void merge(String[] pics, String type, String dstPic) {
   
         int len = pics.length;  //图片文件个数
         if (len < 1) {  
@@ -147,7 +149,7 @@ public class ImageUtils {
         }  
         File[] src = new File[len];  
         BufferedImage[] images = new BufferedImage[len];  
-        int[][] ImageArrays = new int[len][];  
+        int[][] imageArrays = new int[len][];
         for (int i = 0; i < len; i++) {  
             try {  
                 src[i] = new File(pics[i]);  
@@ -158,22 +160,21 @@ public class ImageUtils {
             }  
             int width = images[i].getWidth();  
             int height = images[i].getHeight();  
-            ImageArrays[i] = new int[width * height];// 从图片中读取RGB   
-            ImageArrays[i] = images[i].getRGB(0, 0, width, height,  
-                    ImageArrays[i], 0, width);  
+            imageArrays[i] = new int[width * height];// 从图片中读取RGB
+            imageArrays[i] = images[i].getRGB(0, 0, width, height,
+                    imageArrays[i], 0, width);
         }  
   
-        int dst_height = 0;  
-        int dst_width = images[0].getWidth();
+        int dstHeight = 0;
+        int dstWidth = images[0].getWidth();
         for (BufferedImage image : images) {
-            dst_width = dst_width > image.getWidth() ? dst_width
-                    : image.getWidth();
+            dstWidth = Math.max(dstWidth, image.getWidth());
 
-            dst_height += image.getHeight();
+            dstHeight += image.getHeight();
         }  
-        System.out.println(dst_width);  
-        System.out.println(dst_height);  
-        if (dst_height < 1) {  
+        System.out.println(dstWidth);
+        System.out.println(dstHeight);
+        if (dstHeight < 1) {
             System.out.println("dst_height < 1");  
             return;
         }  
@@ -181,17 +182,17 @@ public class ImageUtils {
         // 生成新图片   
         try {  
             // dst_width = images[0].getWidth();   
-            BufferedImage ImageNew = new BufferedImage(dst_width, dst_height,  
+            BufferedImage imageNew = new BufferedImage(dstWidth, dstHeight,
                     BufferedImage.TYPE_INT_RGB);  
-            int height_i = 0;  
+            int heightI = 0;
             for (int i = 0; i < images.length; i++) {  
-                ImageNew.setRGB(0, height_i, dst_width, images[i].getHeight(),  
-                        ImageArrays[i], 0, dst_width);  
-                height_i += images[i].getHeight();  
+                imageNew.setRGB(0, heightI, dstWidth, images[i].getHeight(),
+                        imageArrays[i], 0, dstWidth);
+                heightI += images[i].getHeight();
             }  
   
-            File outFile = new File(dst_pic);  
-            ImageIO.write(ImageNew, type, outFile);// 写图片   
+            File outFile = new File(dstPic);
+            ImageIO.write(imageNew, type, outFile);// 写图片
         } catch (Exception e) {  
             e.printStackTrace();
         }

@@ -19,6 +19,7 @@ import java.io.Serializable;
  * ClassName: LogAppender
  * Description: Log appender
  * Date: 2017-9-26 18:30:43
+ * @author skylynx
  * See:
  * https://github.com/M-Razavi/log4j-swing-appender
  * http://www.howtobuildsoftware.com/index.php/how-do/chab/java-logging-log4j-log4j2-how-to-create-a-custom-appender-in-log4j2

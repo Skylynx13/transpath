@@ -12,13 +12,15 @@ import com.skylynx13.transpath.utils.*;
  * ClassName: StoreList
  * Description: Store list
  * Date: 2016-06-17 12:05:40
+ * @author skylynx
  */
 public class StoreList {
     private static final String STORELIST_DEFAULT = TransProp.get(TransConst.LOC_LIST) + "StoreList.txt";
     private String version;
     private int minId;
     int maxId;
-    private long storeSize; // recap, clear
+    /** recap, clear */
+    private long storeSize;
     ArrayList<StoreNode> storeList;
 
     public String getVersion() {
@@ -127,7 +129,7 @@ public class StoreList {
     }
 
     HashMap<Integer, Integer> attachList(StoreList pList) {
-        HashMap<Integer, Integer> aMap = new HashMap<>();
+        HashMap<Integer, Integer> aMap = new HashMap<>(16);
         for (StoreNode aNode : pList.storeList) {
             int oldId = aNode.getId();
             addNode(aNode);
@@ -156,7 +158,7 @@ public class StoreList {
     }
 
     HashMap<Integer, Integer> reorgId() {
-        HashMap<Integer, Integer> aMap = new HashMap<>();
+        HashMap<Integer, Integer> aMap = new HashMap<>(16);
         int newId = 0;
         for (StoreNode aNode : storeList) {
             newId++;
@@ -242,6 +244,7 @@ public class StoreList {
         }
     }
 
+    @Override
     public String toString() {
         StringBuilder strBuff = new StringBuilder(keepHeader());
         strBuff.append(TransConst.CRLN);

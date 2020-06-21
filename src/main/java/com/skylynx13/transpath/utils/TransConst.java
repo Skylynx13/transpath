@@ -2,6 +2,9 @@ package com.skylynx13.transpath.utils;
 
 import java.awt.*;
 
+/**
+ * @author skylynx
+ */
 public class TransConst {
     public static final String LOC_CONFIG = "LOC_CONFIG";
     public static final String LOC_LIST   = "LOC_LIST";

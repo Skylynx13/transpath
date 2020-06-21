@@ -1,5 +1,8 @@
 package com.skylynx13.transpath.utils;
 
+/**
+ * @author skylynx
+ */
 public class ProgressTracer {
     private long sizeTotal;
     private long countTotal;

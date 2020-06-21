@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
  * ClassName: TransLog
  * Description: Transpath logger
  * Date: 2016-10-19 17:17:21
+ * @author skylynx
  */
 public class TransLog {
     

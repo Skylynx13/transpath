@@ -13,8 +13,8 @@ import com.skylynx13.transpath.utils.TransConst;
  * Description: Store node
  * <sid>:<size>:<time>:<md5>:<sha1>:<crc32>:<spath>:<sname>
  * Date: 2016-05-16 14:04:15
+ * @author skylynx
  */
-
 public class StoreNode implements Cloneable {
     private int id;
     private String path;
