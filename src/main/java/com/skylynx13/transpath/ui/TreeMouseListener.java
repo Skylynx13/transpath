@@ -20,9 +20,9 @@ public class TreeMouseListener implements MouseListener {
 
     private static final String[] POPITEMS = {"New Child", "Rename", "Cut", "Copy", "Paste", "Delete"};
 
-    private JTree jTree;
+    private final JTree jTree;
 
-    private JPopupMenu popupMenu;
+    private final JPopupMenu popupMenu;
 
     TreeMouseListener(JTree pTree) {
         jTree = pTree;

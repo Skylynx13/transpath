@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
  * @author skylynx
  */
 public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
-    private ProgressTracer progressTracer = new ProgressTracer();
+    private final ProgressTracer progressTracer = new ProgressTracer();
 
     @Override
     protected StringBuilder doInBackground() {
@@ -165,7 +165,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
         boolean checkOk(String result);
     }
 
-    class RarChecker implements Checker {
+    static class RarChecker implements Checker {
         @Override
         public boolean checkType(String fileName) {
             return isRar(fileName);
@@ -182,7 +182,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
         }
     }
 
-    class ZipChecker implements Checker {
+    static class ZipChecker implements Checker {
         @Override
         public boolean checkType(String fileName) {
             return isZip(fileName);

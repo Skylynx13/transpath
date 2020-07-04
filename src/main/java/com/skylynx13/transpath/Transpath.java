@@ -10,25 +10,25 @@ import java.awt.*;
  */
 public class Transpath {
     private static TranspathFrame tpFrame;
-    private static JTextArea logTextArea = new JTextArea();
-    private static JProgressBar progressBar = new JProgressBar();
-    private static JLabel statusLabel = new JLabel("Status Normal.");
-    private static Dialog propertiesDialog = new Dialog(tpFrame);
+    private static final JTextArea LOG_TEXT_AREA = new JTextArea();
+    private static final JProgressBar PROGRESS_BAR = new JProgressBar();
+    private static final JLabel STATUS_LABEL = new JLabel("Status Normal.");
+    private static final Dialog PROPERTIES_DIALOG = new Dialog(tpFrame);
 
     public static TranspathFrame getTranspathFrame() {
         return tpFrame;
     }
     public static JTextArea getLogTextArea() {
-        return logTextArea;
+        return LOG_TEXT_AREA;
     }
     public static JProgressBar getProgressBar() {
-        return progressBar;
+        return PROGRESS_BAR;
     }
     public static JLabel getStatusLabel() {
-        return statusLabel;
+        return STATUS_LABEL;
     }
     public static Dialog getPropertiesDialog() {
-        return propertiesDialog;
+        return PROPERTIES_DIALOG;
     }
 
     public static void main(String[] args) {

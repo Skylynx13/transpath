@@ -34,8 +34,8 @@ public class TranspathFrame extends JFrame {
     private static final double SPLIT_V_DEFAULT = 0.7;
     private static final double SPLIT_H_DEFAULT = 0.2;
 
-    private JTable infoTable = new JTable();
-    private JTextArea infoTextArea = new JTextArea();
+    private final JTable infoTable = new JTable();
+    private final JTextArea infoTextArea = new JTextArea();
 
     private StoreList storeList;
     private JScrollPane treePane;

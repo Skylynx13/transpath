@@ -4,8 +4,8 @@ package com.skylynx13.transpath.utils;
  * @author skylynx
  */
 public class ProgressReport {
-    private int progress;
-    private String reportLine;
+    private final int progress;
+    private final String reportLine;
 
     ProgressReport(int progress, String reportLine) {
         this.progress = progress;

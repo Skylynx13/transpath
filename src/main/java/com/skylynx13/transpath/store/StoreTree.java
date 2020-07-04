@@ -234,7 +234,7 @@ public class StoreTree implements MutableTreeNode {
             };
         } else {
             return new Enumeration<StoreTree>() {
-                Iterator<StoreTree> iter = children.iterator();
+                final Iterator<StoreTree> iter = children.iterator();
 
                 @Override
                 public boolean hasMoreElements() {

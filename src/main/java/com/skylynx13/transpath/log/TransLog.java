@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class TransLog {
     
-    private static Logger translog = LogManager.getLogger("com.skylynx13.transpath");
+    private static final Logger translog = LogManager.getLogger("com.skylynx13.transpath");
 
     public static Logger getLogger() {
         return translog;

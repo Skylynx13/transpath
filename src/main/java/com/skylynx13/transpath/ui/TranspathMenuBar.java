@@ -8,9 +8,10 @@ import com.skylynx13.transpath.task.TaskKeeper;
 import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.InputEvent;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClassName: TransMenuBar
@@ -22,9 +23,7 @@ public class TranspathMenuBar extends JMenuBar {
 
     private static final long serialVersionUID = 1L;
 
-    private JDialog aboutDialog;
-
-    private ThreadPoolExecutor transpathTasks =
+    private final ThreadPoolExecutor transpathTasks =
             new ThreadPoolExecutor(
                     0,
                     10,

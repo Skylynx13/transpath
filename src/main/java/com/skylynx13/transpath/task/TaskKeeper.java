@@ -13,7 +13,7 @@ import com.skylynx13.transpath.utils.TransProp;
  * @author skylynx
  */
 public class TaskKeeper {
-    private String archDate;
+    private final String archDate;
     
     private TaskKeeper() {
         archDate = DateUtils.formatDateToday();

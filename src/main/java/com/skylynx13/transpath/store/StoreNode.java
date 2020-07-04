@@ -22,10 +22,10 @@ public class StoreNode implements Cloneable {
 
     private long length;
 
-    private long lastModified;
-    private String md5;
-    private String sha1;
-    private String crc32;
+    private final long lastModified;
+    private final String md5;
+    private final String sha1;
+    private final String crc32;
 
     private boolean branch = false;
 
@@ -101,7 +101,6 @@ public class StoreNode implements Cloneable {
     StoreNode(String pRoot, File pFile) {
         id = 0;
         name = pFile.getName();
-        String okok = pFile.getParent();
         path = FileUtils.regulateRelativePath(pRoot, pFile);
         length = pFile.length();
         lastModified = pFile.lastModified();
