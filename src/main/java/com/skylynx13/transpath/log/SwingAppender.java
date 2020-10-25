@@ -28,7 +28,7 @@ import java.io.Serializable;
  */
 @Plugin(name="Swing", category="Core", elementType="appender", printObject=true)
 public class SwingAppender extends AbstractAppender {  
-    private final JTextArea logTextArea = Transpath.getLogTextArea();
+    private final JTextArea logTextArea = Transpath.getLogTextArea(); 
 
     private SwingAppender(String name, Filter filter,
             Layout<? extends Serializable> layout, final boolean ignoreExceptions) {

@@ -68,7 +68,6 @@ public class NameReviser {
     }
 
     static String[][] readRenameList(String renameListName) {
-
         Scanner in;
         ArrayList<String[]> namePairs = new ArrayList<>();
         try {

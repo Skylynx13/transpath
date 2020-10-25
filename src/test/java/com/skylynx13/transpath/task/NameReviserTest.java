@@ -4,11 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class NameReviserTest {
-    private NameReviser nameReviser = new NameReviser();
+    private final NameReviser nameReviser = new NameReviser();
     private static final String TEST_RENAMELIST = "src/test/resources/rename.list";
-    private String[][] replaceTemplates = {
+    private final String[][] replaceTemplates = {
             {"\\+", " "},
             {"%28", "("},
             {"%29", ")"},
@@ -63,6 +64,7 @@ public class NameReviserTest {
     @Test
     public void testGetReplaceNameByReplaceList() {
         String[][] repList = NameReviser.readRenameList(TEST_RENAMELIST);
+        assertNotNull(repList);
         assertEquals("", nameReviser.getReplacedName(repList, ""));
         assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameReviser.getReplacedName(repList, "Abcde fg Hijklmn 07 (of 05) (2017) (digital) (opq-rst).CBR"));
         assertEquals("Abcde fg Hijklmn 007 (of 05) (2017) (Digital) (opq-rst).cbr", nameReviser.getReplacedName(repList, "Abcde+fg+Hijklmn+07+(of+05)+(2017)_(digital)_%28opq-rst%29.rar"));
