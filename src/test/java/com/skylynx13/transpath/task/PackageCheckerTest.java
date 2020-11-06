@@ -21,7 +21,7 @@ public class PackageCheckerTest {
     private String testResource(String fileName) {
         return (TEST_RESOURCES_LOC + fileName);
     }
-    private PackageChecker packageChecker = new PackageChecker();
+    private final PackageChecker packageChecker = new PackageChecker();
 
     @Test
     public void isIgnorableTest() {
