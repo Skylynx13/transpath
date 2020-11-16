@@ -15,7 +15,6 @@ import com.skylynx13.transpath.utils.*;
  * @author skylynx
  */
 public class StoreList {
-    private static final String STORELIST_DEFAULT = TransProp.get(TransConst.LOC_LIST) + "StoreList.txt";
     private String version;
     private int minId;
     int maxId;
@@ -170,8 +169,12 @@ public class StoreList {
         return aMap;
     }
 
+    private String buildDefaultStorelistName() {
+        return TransProp.get(TransConst.LOC_LIST) + "StoreList.txt";
+    }
+
     StoreList loadCurrent() {
-        load(new File(STORELIST_DEFAULT));
+        load(new File(buildDefaultStorelistName()));
         return this;
     }
 
@@ -225,7 +228,7 @@ public class StoreList {
     }
 
     void keepFile() {
-        keepFile(new File(STORELIST_DEFAULT));
+        keepFile(new File(buildDefaultStorelistName()));
     }
 
     private void keepFile(File pFile) {

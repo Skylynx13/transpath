@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
  */
 public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private final boolean updateList;
-    private final static String STORE_ROOT = TransProp.get(TransConst.LOC_STORE);
     private final static String REGEX_PATH_FULL =
             "^(A\\d{4})/B(\\d{4})(-(\\d{4}))?(,((A\\d{4})/)?B(\\d{4})(-(\\d{4}))?)*?$";
     private final static String REGEX_PATH_UNIT = ",?(A(\\d{4})/)?B(\\d{4})(-(\\d{4}))?";
@@ -57,6 +56,10 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         }
     }
 
+    private String buildRootPath() {
+        return TransProp.get(TransConst.LOC_STORE);
+    }
+
     private StoreList buildOldStoreList() {
         TransLog.getLogger().info("Building old store list...");
         long t0 = System.currentTimeMillis();
@@ -90,7 +93,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         StoreList storeList = new StoreList();
         for (File aPath : Objects.requireNonNull(storePath.listFiles())) {
             if (aPath.isFile()) {
-                StoreNode aNode = new StoreNode(STORE_ROOT, aPath);
+                StoreNode aNode = new StoreNode(buildRootPath(), aPath);
                 storeList.addNode(aNode);
                 TransLog.getLogger().info(aNode.keepNode());
                 updateProgress(aNode.getLength());
@@ -191,7 +194,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private List<String> checkExistList(List<String> parsedList) throws StoreListException {
         ArrayList<String> existList = new ArrayList<>();
         for (String relativePath : parsedList) {
-            String fullPath = FileUtils.regulateSysPath((STORE_ROOT + relativePath));
+            String fullPath = FileUtils.regulateSysPath((buildRootPath() + relativePath));
             if (new File(fullPath).exists()) {
                 existList.add(fullPath);
             }
