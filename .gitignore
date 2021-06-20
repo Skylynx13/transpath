@@ -9,6 +9,7 @@ target/
 .factorypath
 .jupiter
 .pmd
+.vscode
 transpath.jar
 .attach_*
 *.out
