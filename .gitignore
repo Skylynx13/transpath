@@ -6,6 +6,7 @@ target/
 *.iml
 *.sh
 .checkstyle
+.factorypath
 .jupiter
 .pmd
 transpath.jar
