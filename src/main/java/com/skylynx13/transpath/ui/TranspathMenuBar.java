@@ -8,6 +8,8 @@ import com.skylynx13.transpath.task.TaskKeeper;
 import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -104,6 +106,14 @@ public class TranspathMenuBar extends JMenuBar {
         storeMenu.add(storeCombineTestItem);
         storeCombineTestItem.addActionListener(e -> new StoreCombiner(false).execute());
         storeCombineTestItem.setAccelerator(KeyStroke.getKeyStroke('T', InputEvent.CTRL_DOWN_MASK));
+
+        JMenuItem storeExamineItem = new JMenuItem("Examine");
+        storeMenu.add(storeExamineItem);
+        storeExamineItem.addActionListener(e -> {
+            new StoreCombiner(false).execute();
+            new PackageChecker().execute();
+        });
+        storeExamineItem.setAccelerator(KeyStroke.getKeyStroke('E', InputEvent.CTRL_DOWN_MASK));
 
         storeMenu.add(new JSeparator());
 

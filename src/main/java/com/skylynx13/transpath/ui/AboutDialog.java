@@ -14,7 +14,7 @@ class AboutDialog extends JDialog {
     }
 
     private JLabel createAboutLabel() {
-        return new JLabel("<html><h2>Transpath is here anyway.</h2><hr>By Skylynx13</html>");
+        return new JLabel("<html><h2>Transpath 2.0 waiting orders.</h2><hr>By Skylynx13</html>");
     }
 
     private JPanel createOkPanel() {
