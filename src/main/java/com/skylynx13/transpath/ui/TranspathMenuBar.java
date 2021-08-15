@@ -1,6 +1,7 @@
 package com.skylynx13.transpath.ui;
 
 import com.skylynx13.transpath.Transpath;
+import com.skylynx13.transpath.store.StoreBrowser;
 import com.skylynx13.transpath.store.StoreCombiner;
 import com.skylynx13.transpath.task.NameReviser;
 import com.skylynx13.transpath.task.PackageChecker;
@@ -101,6 +102,10 @@ public class TranspathMenuBar extends JMenuBar {
         JMenuItem storeCombineItem = new JMenuItem("Combine");
         storeMenu.add(storeCombineItem);
         storeCombineItem.addActionListener(e -> new StoreCombiner(true).execute());
+
+        JMenuItem storeBrowseItem = new JMenuItem("Browse");
+        storeMenu.add(storeBrowseItem);
+        storeBrowseItem.addActionListener(e -> new StoreBrowser().execute());
 
         JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
         storeMenu.add(storeCombineTestItem);

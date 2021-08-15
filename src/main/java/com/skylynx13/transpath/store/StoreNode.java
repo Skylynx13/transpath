@@ -109,6 +109,17 @@ public class StoreNode implements Cloneable {
         crc32 = FileUtils.digestCrc32(pFile);
     }
 
+    StoreNode(String pRoot, File pFile, boolean forBrowse) {
+        id = 0;
+        name = pFile.getName();
+        path = FileUtils.regulateRelativePath(pRoot, pFile);
+        length = pFile.length();
+        lastModified = pFile.lastModified();
+        md5 = "";
+        sha1 = "";
+        crc32 = "";
+    }
+
     static StoreNode newBranchNode(String name, String path) {
         StoreNode branchNode = new StoreNode();
         branchNode.setName(name);

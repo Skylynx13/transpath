@@ -231,7 +231,7 @@ public class StoreList {
         keepFile(new File(buildDefaultStorelistName()));
     }
 
-    private void keepFile(File pFile) {
+    void keepFile(File pFile) {
         if (0 == size()) {
             return;
         }
