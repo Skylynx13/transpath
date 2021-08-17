@@ -19,6 +19,7 @@ public class StoreNode implements Cloneable {
     private int id;
     private String path;
     private String name;
+    private String fName;
 
     private long length;
 
@@ -61,6 +62,14 @@ public class StoreNode implements Cloneable {
         this.name = name;
     }
 
+    public String getFName() {
+        return fName;
+    }
+
+    public void setFName(String fName) {
+        this.fName = fName;
+    }
+
     public long getLength() {
         return length;
     }
@@ -77,6 +86,7 @@ public class StoreNode implements Cloneable {
         id = 0;
         path = "";
         name = "";
+        fName = "";
         length = 0;
         lastModified = 0;
         md5 = "";
@@ -95,12 +105,18 @@ public class StoreNode implements Cloneable {
         crc32 = sItems[5];
         path = sItems[6];
         name = sItems[7];
+        // TODO: Remove if after next combine.
+        fName = "";
+        if (sItems.length > 8) {
+            fName = sItems[8];
+        }
         branch = false;
     }
 
     StoreNode(String pRoot, File pFile) {
         id = 0;
         name = pFile.getName();
+        fName = pFile.getName();
         path = FileUtils.regulateRelativePath(pRoot, pFile);
         length = pFile.length();
         lastModified = pFile.lastModified();
@@ -111,7 +127,8 @@ public class StoreNode implements Cloneable {
 
     StoreNode(String pRoot, File pFile, boolean forBrowse) {
         id = 0;
-        name = pFile.getName();
+        name = "";
+        fName = pFile.getName();
         path = FileUtils.regulateRelativePath(pRoot, pFile);
         length = pFile.length();
         lastModified = pFile.lastModified();
@@ -171,7 +188,9 @@ public class StoreNode implements Cloneable {
                 TransConst.COLON +
                 path +
                 TransConst.COLON +
-                name;
+                name +
+                TransConst.COLON +
+                fName;
     }
 
     Object[] toStoreRow() {
@@ -196,5 +215,4 @@ public class StoreNode implements Cloneable {
                 count
         };
     }
-
 }
