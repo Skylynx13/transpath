@@ -23,7 +23,7 @@ public class StoreNode implements Cloneable {
 
     private long length;
 
-    private final long lastModified;
+    private long lastModified;
     private final String md5;
     private final String sha1;
     private final String crc32;
@@ -76,6 +76,14 @@ public class StoreNode implements Cloneable {
 
     public void setLength(long length) {
         this.length = length;
+    }
+
+    public long getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
     }
 
     String getMd5() {
