@@ -101,19 +101,20 @@ public class TranspathFrame extends JFrame {
         setJMenuBar(new TranspathMenuBar());
     }
 
+    /**
+     * Other Look and feel candidates:
+     * "javax.swing.plaf.metal.MetalLookAndFeel"
+     * "javax.swing.plaf.nimbus.NimbusLookAndFeel"
+     * "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+     * "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
+     * "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+     * "com.sun.java.swing.plaf.mac.MacLookAndFeel";
+     * "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+     * UIManager.getCrossPlatformLookAndFeelClassName();
+     * UIManager.getSystemLookAndFeelClassName();
+     */
     private void initLookAndFeel() {
         try {
-            // Look and feel candidates:
-            // "javax.swing.plaf.metal.MetalLookAndFeel"
-            // "javax.swing.plaf.nimbus.NimbusLookAndFeel"
-            // "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-            // "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
-            // "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-            // "com.sun.java.swing.plaf.mac.MacLookAndFeel";
-            // "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-            // UIManager.getCrossPlatformLookAndFeelClassName();
-            // UIManager.getSystemLookAndFeelClassName();
-
             String lookAndFeel = "javax.swing.plaf.metal.MetalLookAndFeel";
             UIManager.setLookAndFeel(lookAndFeel);
         } catch (ClassNotFoundException
@@ -208,15 +209,17 @@ public class TranspathFrame extends JFrame {
         return statusBar;
     }
 
+    /**
+     * Color change unavailable when using NimbusLookAndFeel;
+     * progressBar.setBackground(Color.gray);
+     * progressBar.setForeground(Color.green);
+     */
     private JProgressBar getProgressBar() {
         Transpath.getProgressBar().setMaximum(100);
         Transpath.getProgressBar().setMinimum(0);
         Transpath.getProgressBar().setValue(0);
         Transpath.getProgressBar().setStringPainted(true);
         Transpath.getProgressBar().setIndeterminate(false);
-        // Color change unavailable when using NimbusLookAndFeel;
-        // progressBar.setBackground(Color.gray);
-        // progressBar.setForeground(Color.green);
         Transpath.getProgressBar().setPreferredSize(new Dimension(600, 20));
         return Transpath.getProgressBar();
     }

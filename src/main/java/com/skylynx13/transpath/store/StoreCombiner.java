@@ -38,14 +38,17 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     protected StringBuilder doInBackground() {
         try {
             TransLog.getLogger().info("Store combiner started...");
+
             StoreList oldStoreList = buildOldStoreList();
             StoreList newStoreList = buildNewStoreList();
             StoreList combinedList = combine(oldStoreList, newStoreList);
+
             if (updateList) {
                 oldStoreList.backup();
                 combinedList.keepFile();
                 Transpath.getTranspathFrame().reloadStore();
             }
+
             return new StringBuilder("Store combiner done.")
                     .append(" Old: ").append(oldStoreList.size())
                     .append(" New: ").append(newStoreList.size())
@@ -94,7 +97,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         for (File aPath : Objects.requireNonNull(storePath.listFiles())) {
             if (aPath.isFile()) {
                 StoreNode aNode = new StoreNode(buildRootPath(), aPath);
-                storeList.addNode(aNode);
+                storeList.addNodeWithId(aNode);
                 TransLog.getLogger().info(aNode.keepNode());
                 updateProgress(aNode.getLength());
             }

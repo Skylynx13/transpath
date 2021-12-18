@@ -99,7 +99,7 @@ public class StoreList {
         StoreList rNodeList = getNewList();
         for (StoreNode node : storeList) {
             if (ids.contains(node.getId())) {
-                rNodeList.addNode(node.clone());
+                rNodeList.addNodeWithId(node.clone());
             }
         }
         return rNodeList;
@@ -109,7 +109,7 @@ public class StoreList {
         return storeList.contains(pNode);
     }
 
-    void addNode(StoreNode pNode) {
+    void addNodeWithId(StoreNode pNode) {
         if (0 == size()) {
             minId = 1;
         }
@@ -131,7 +131,7 @@ public class StoreList {
         HashMap<Integer, Integer> aMap = new HashMap<>(16);
         for (StoreNode aNode : pList.storeList) {
             int oldId = aNode.getId();
-            addNode(aNode);
+            addNodeWithId(aNode);
             if (oldId != aNode.getId()) {
                 aMap.put(oldId, aNode.getId());
             }

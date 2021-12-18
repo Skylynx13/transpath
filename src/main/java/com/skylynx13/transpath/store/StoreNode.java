@@ -19,7 +19,7 @@ public class StoreNode implements Cloneable {
     private int id;
     private String path;
     private String name;
-    private String fName;
+    private String rawName;
 
     private long length;
 
@@ -62,12 +62,12 @@ public class StoreNode implements Cloneable {
         this.name = name;
     }
 
-    public String getFName() {
-        return fName;
+    public String getRawName() {
+        return rawName;
     }
 
-    public void setFName(String fName) {
-        this.fName = fName;
+    public void setRawName(String rawName) {
+        this.rawName = rawName;
     }
 
     public long getLength() {
@@ -94,7 +94,7 @@ public class StoreNode implements Cloneable {
         id = 0;
         path = "";
         name = "";
-        fName = "";
+        rawName = "";
         length = 0;
         lastModified = 0;
         md5 = "";
@@ -113,10 +113,11 @@ public class StoreNode implements Cloneable {
         crc32 = sItems[5];
         path = sItems[6];
         name = sItems[7];
-        // TODO: Remove if after next combine.
-        fName = "";
+        // Keep if statement
+        // while compatibility for old store files is required.
+        rawName = "";
         if (sItems.length > 8) {
-            fName = sItems[8];
+            rawName = sItems[8];
         }
         branch = false;
     }
@@ -124,7 +125,7 @@ public class StoreNode implements Cloneable {
     StoreNode(String pRoot, File pFile) {
         id = 0;
         name = pFile.getName();
-        fName = pFile.getName();
+        rawName = pFile.getName();
         path = FileUtils.regulateRelativePath(pRoot, pFile);
         length = pFile.length();
         lastModified = pFile.lastModified();
@@ -136,7 +137,7 @@ public class StoreNode implements Cloneable {
     StoreNode(String pRoot, File pFile, boolean forBrowse) {
         id = 0;
         name = "";
-        fName = pFile.getName();
+        rawName = pFile.getName();
         path = FileUtils.regulateRelativePath(pRoot, pFile);
         length = pFile.length();
         lastModified = pFile.lastModified();
@@ -168,9 +169,9 @@ public class StoreNode implements Cloneable {
     boolean checkDupStoreNode(StoreNode pStoreNode) {
         return (null != pStoreNode)
                 && (pStoreNode.length == this.length)
-                && (pStoreNode.crc32.equals(this.crc32))
-                && (pStoreNode.md5.equals(this.md5))
-                && (pStoreNode.sha1.equals(this.sha1));
+                && ((pStoreNode.crc32.equals(this.crc32))
+                || (pStoreNode.md5.equals(this.md5))
+                || (pStoreNode.sha1.equals(this.sha1)));
     }
 
     boolean searchName(String searchText) {
@@ -198,7 +199,7 @@ public class StoreNode implements Cloneable {
                 TransConst.COLON +
                 name +
                 TransConst.COLON +
-                fName;
+                rawName;
     }
 
     Object[] toStoreRow() {

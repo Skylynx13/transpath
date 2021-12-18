@@ -57,7 +57,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
         for (File aPath : Objects.requireNonNull(storePath.listFiles())) {
             if (aPath.isFile()) {
                 StoreNode aNode = new StoreNode(TransProp.get(TransConst.LOC_SOURCE), aPath, true);
-                storeList.addNode(aNode);
+                storeList.addNodeWithId(aNode);
                 TransLog.getLogger().info(aNode.keepNode());
                 updateProgress(aNode.getLength());
             }

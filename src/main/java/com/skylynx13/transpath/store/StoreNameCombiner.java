@@ -75,9 +75,9 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
             for (StoreNode diskNode : diskStoreList.storeList) {
                 if ((storeNode.getPath().equals(diskNode.getPath())) &&
                         (storeNode.getLength() == diskNode.getLength())) {
-                    storeNode.setFName(diskNode.getName());
+                    storeNode.setRawName(diskNode.getName());
                     storeNode.setLastModified(diskNode.getLastModified());
-                    diskNode.setFName("MMM");
+                    diskNode.setRawName("MMM");
                     break;
                 }
             }
@@ -88,13 +88,13 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
         StoreList noStoreList = new StoreList();
 
         for (StoreNode storeNode : storeList.storeList) {
-            if ((storeNode.getFName() == null) || (storeNode.getFName().isEmpty())) {
+            if ((storeNode.getRawName() == null) || (storeNode.getRawName().isEmpty())) {
                 noDiskList.storeList.add(storeNode);
             }
         }
 
         for (StoreNode diskNode : diskStoreList.storeList) {
-            if ((diskNode.getFName() == null) || (diskNode.getFName().isEmpty())) {
+            if ((diskNode.getRawName() == null) || (diskNode.getRawName().isEmpty())) {
                 noStoreList.storeList.add(diskNode);
             }
         }
