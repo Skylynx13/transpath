@@ -95,6 +95,20 @@ public class StoreList {
         return storeList.get(index);
     }
 
+    public StoreNode queryMd5(String md5) {
+        for (StoreNode storeNode : this.storeList) {
+            if (storeNode.getMd5().equals(md5)) {
+                return storeNode;
+            }
+        }
+        return null;
+    }
+
+    public boolean checkIntegrity() {
+        //TODO
+        return true;
+    }
+
     public StoreList getListByIds(ArrayList<Integer> ids) {
         StoreList rNodeList = getNewList();
         for (StoreNode node : storeList) {
@@ -109,6 +123,10 @@ public class StoreList {
         return storeList.contains(pNode);
     }
 
+    boolean hasMd5(String md5) {
+        return (queryMd5(md5) != null);
+    }
+
     void addNodeWithId(StoreNode pNode) {
         if (0 == size()) {
             minId = 1;
@@ -117,7 +135,15 @@ public class StoreList {
         storeList.add(pNode);
     }
 
-    private void enlist(StoreNode pNode) {
+    StoreNode addNodeCheckMd5(StoreNode pNode) {
+        StoreNode storeNode = queryMd5(pNode.getMd5());
+        if (storeNode == null) {
+            storeList.add(pNode);
+        }
+        return storeNode;
+    }
+
+    public void enlist(StoreNode pNode) {
         if (0 == size()) {
             minId = pNode.getId();
             maxId = pNode.getId();
@@ -132,6 +158,20 @@ public class StoreList {
         for (StoreNode aNode : pList.storeList) {
             int oldId = aNode.getId();
             addNodeWithId(aNode);
+            if (oldId != aNode.getId()) {
+                aMap.put(oldId, aNode.getId());
+            }
+        }
+        recap();
+        //Return value only used by test.
+        return aMap;
+    }
+
+    HashMap<Integer, Integer> attachListCheckMd5(StoreList pList) {
+        HashMap<Integer, Integer> aMap = new HashMap<>(16);
+        for (StoreNode aNode : pList.storeList) {
+            int oldId = aNode.getId();
+            addNodeCheckMd5(aNode);
             if (oldId != aNode.getId()) {
                 aMap.put(oldId, aNode.getId());
             }
