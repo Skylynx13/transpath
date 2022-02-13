@@ -50,7 +50,6 @@ public class StoreList {
         refreshVersion();
         storeList = new ArrayList<>(pList.storeList);
         recap();
-        calcSize();
     }
 
     public StoreList(String fileName) {
@@ -62,7 +61,6 @@ public class StoreList {
         refreshVersion();
         storeList = new ArrayList<>(pList);
         recap();
-        calcSize();
     }
 
     public int size() {
@@ -235,7 +233,6 @@ public class StoreList {
         }
         aScan.close();
         recap();
-        calcSize();
     }
 
     private void loadVersion(String pLine) {
