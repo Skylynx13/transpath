@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -78,45 +79,31 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         resetProgress(calcStoreFileSize(storePathList), calcStoreFileCount(storePathList),
                 "Building new list");
         StoreList newList = new StoreList();
-        StoreList dupList = new StoreList();
 
         for (String storePathName : storePathList) {
             File storePath = new File(storePathName);
-            if (!storePath.isDirectory() || storePath.listFiles() == null) {
-                TransLog.getLogger().warn("Store path ignored: " + storePathName);
-                continue;
-            }
-            buildStoreListByPathCheckMd5(storePath, newList, dupList);
+            newList.attachList(buildStoreListByPath(storePath));
         }
         TransLog.getLogger().info("New store list built.");
         logTimeElapsed(t0);
         return newList;
     }
 
-    private void buildStoreListByPathCheckMd5(File storePath, StoreList newList, StoreList dupList) {
-        for (File aPath : Objects.requireNonNull(storePath.listFiles())) {
-            if (aPath.isFile()) {
-                StoreNode aNode = new StoreNode(buildRootPath(), aPath);
-                StoreNode dupNode = newList.addNodeCheckMd5(aNode);
-                if (dupNode != null) {
-                    dupList.storeList.add(dupNode);
-                }
-                TransLog.getLogger().info(aNode.keepNode());
-                updateProgress(aNode.getLength());
-            }
-            if (aPath.isDirectory() && aPath.listFiles() != null) {
-                buildStoreListByPathCheckMd5(aPath, newList, dupList);
-            }
-        }
-    }
-
     private StoreList buildStoreListByPath(File storePath) {
         StoreList storeList = new StoreList();
-        for (File aPath : Objects.requireNonNull(storePath.listFiles())) {
+
+        File[] storeFiles = storePath.listFiles();
+
+        if (!storePath.isDirectory() || storeFiles == null) {
+            TransLog.getLogger().warn("Store path ignored: " + storePath.getPath());
+            return storeList;
+        }
+
+        for (File aPath : storeFiles) {
             if (aPath.isFile()) {
                 StoreNode aNode = new StoreNode(buildRootPath(), aPath);
-                storeList.addNodeCheckMd5(aNode);
-                TransLog.getLogger().info(aNode.keepNode());
+                storeList.addNode(aNode);
+                TransLog.getLogger().info(aNode.toNodeString());
                 updateProgress(aNode.getLength());
             }
             if (aPath.isDirectory() && aPath.listFiles() != null) {
@@ -237,65 +224,73 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         TransLog.getLogger().info("Combining...");
         long t0 = System.currentTimeMillis();
 
-        StoreList overallList = new StoreList();
-        overallList.attachList(oldStoreList);
-        overallList.attachList(newStoreList);
+        StoreList reservedNewList = new StoreList();
+        StoreList duplicateList = new StoreList();
+        StoreList removeList = new StoreList();
 
-        TransLog.getLogger().info("Attach done.");
-        t0 = logTimeElapsed(t0);
-
-        overallList.orderByMd5();
-
-        TransLog.getLogger().info("List ordered by MD5.");
-        t0 = logTimeElapsed(t0);
-
-        StoreNode dNode = null;
-        StoreList reservedList = new StoreList();
-        StoreList duplicatedList = new StoreList();
-        StoreList removedList = new StoreList();
-
-        resetProgress(overallList.getStoreSize(), overallList.size(), "Combining list");
-        for (StoreNode aNode : overallList.storeList) {
-            if (aNode == null) {
-                continue;
-            }
-            if (aNode.checkDupStoreNode(dNode)) {
-                if (!duplicatedList.hasNode(dNode)) {
-                    duplicatedList.storeList.add(dNode);
-                }
-                duplicatedList.storeList.add(aNode);
-                removedList.storeList.add(aNode);
+        HashMap<String, Integer> md5Map = new HashMap<>();
+        for (StoreNode aNode : newStoreList.getStoreList()) {
+            String md5 = aNode.getMd5();
+            if (md5Map.get(md5) != null) {
+                Integer counter = md5Map.get(md5);
+                md5Map.put(md5, counter+1);
+                removeList.addNode(aNode);
             } else {
-                dNode = aNode;
-                reservedList.storeList.add(aNode);
+                md5Map.put(md5, 1);
+                reservedNewList.addNode(aNode);
             }
-            updateProgress(aNode.getLength());
         }
+        for (StoreNode aNode : newStoreList.getStoreList()) {
+            String md5 = aNode.getMd5();
+            if ((md5Map.get(md5) != null) && (md5Map.get(md5) > 1)) {
+                duplicateList.addNode(aNode);
+            }
+        }
+
+        TransLog.getLogger().info("Duplication in new list checked.");
+        t0 = logTimeElapsed(t0);
+
+        resetProgress(reservedNewList.getStoreSize(), reservedNewList.size(), "Checking duplication in old list");
+        StoreList finalNewList = new StoreList();
+        for (StoreNode newNode : reservedNewList.getStoreList()) {
+            StoreNode oldNode = oldStoreList.queryNode(newNode);
+            if (oldNode != null) {
+                duplicateList.addNode(oldNode);
+                duplicateList.addNode(newNode);
+                removeList.addNode(newNode);
+            } else {
+                finalNewList.addNode(newNode);
+            }
+            updateProgress(newNode.getLength());
+        }
+
+        TransLog.getLogger().info("Duplication in old list checked.");
+        t0 = logTimeElapsed(t0);
+
+        duplicateList.orderByMd5();
         TransLog.getLogger().info("Duplicated list.");
-        TransLog.getLogger().info(duplicatedList.toString());
-        TransLog.getLogger().info("=== Duplicated count: " + (duplicatedList.size() - removedList.size()) + " ===");
-        TransLog.getLogger().info("=== Removed count: " + removedList.size() + " ===");
+        TransLog.getLogger().info(duplicateList.toString());
+        TransLog.getLogger().info("=== Duplicated count: " + (duplicateList.size() - removeList.size()) + " ===");
+        TransLog.getLogger().info("=== Removed count: " + removeList.size() + " ===");
         TransLog.getLogger().info("Duplication checked.");
         t0 = logTimeElapsed(t0);
 
-        removedList.orderByPathAndName();
-        removedList.recap();
-        keepDelList(removedList);
-        TransLog.getLogger().info("Overall count: " + overallList.size());
-        TransLog.getLogger().info("Reserved count: " + reservedList.size());
-        TransLog.getLogger().info("Removed count: " + removedList.size());
-        TransLog.getLogger().info("Removed size: " + removedList.getStoreSize());
+        removeList.orderByPathAndName();
+        removeList.recap();
+        keepDelList(removeList);
+        TransLog.getLogger().info("Removed count: " + removeList.size());
+        TransLog.getLogger().info("Removed size: " + removeList.getStoreSize());
         TransLog.getLogger().info("Removal scripted.");
         t0 = logTimeElapsed(t0);
 
-        reservedList.orderByPathAndName();
-        reservedList.recap();
-        reservedList.reorgId();
-        TransLog.getLogger().info("List ordered by name.");
+        // Keep old IDs
+        StoreList combinedList = new StoreList(oldStoreList);
+        // Assign new IDs
+        combinedList.attachListWithId(finalNewList);
+        TransLog.getLogger().info("Combined list attached.");
         logTimeElapsed(t0);
 
-        TransLog.getLogger().info("Store combined.");
-        return reservedList;
+        return combinedList;
     }
 
     private static void keepDelList(StoreList delList) {

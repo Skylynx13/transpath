@@ -102,6 +102,15 @@ public class StoreList {
         return null;
     }
 
+    public StoreNode queryNode(StoreNode pNode) {
+        for (StoreNode aNode : this.storeList) {
+            if (aNode.checkDupStoreNode(pNode)) {
+                return aNode;
+            }
+        }
+        return null;
+    }
+
     public boolean checkIntegrity() {
         //TODO
         return true;
@@ -125,20 +134,20 @@ public class StoreList {
         return (queryMd5(md5) != null);
     }
 
+    void addNode(StoreNode pNode) {
+        storeList.add(pNode);
+    }
+
+    void removeNode(StoreNode pNode) {
+        storeList.remove(pNode);
+    }
+
     void addNodeWithId(StoreNode pNode) {
         if (0 == size()) {
             minId = 1;
         }
         pNode.setId(++maxId);
         storeList.add(pNode);
-    }
-
-    StoreNode addNodeCheckMd5(StoreNode pNode) {
-        StoreNode storeNode = queryMd5(pNode.getMd5());
-        if (storeNode == null) {
-            storeList.add(pNode);
-        }
-        return storeNode;
     }
 
     public void enlist(StoreNode pNode) {
@@ -165,18 +174,11 @@ public class StoreList {
         return aMap;
     }
 
-    HashMap<Integer, Integer> attachListCheckMd5(StoreList pList) {
-        HashMap<Integer, Integer> aMap = new HashMap<>(16);
+    void attachListWithId(StoreList pList) {
         for (StoreNode aNode : pList.storeList) {
-            int oldId = aNode.getId();
-            addNodeCheckMd5(aNode);
-            if (oldId != aNode.getId()) {
-                aMap.put(oldId, aNode.getId());
-            }
+            addNodeWithId(aNode);
         }
         recap();
-        //Return value only used by test.
-        return aMap;
     }
 
     void removeByPath(String pPath) {
@@ -337,7 +339,7 @@ public class StoreList {
     }
 
     private String keepLine(StoreNode pNode) {
-        return pNode.keepNode();
+        return pNode.toNodeString();
     }
 
     private Object[] toRow(StoreNode pNode) {

@@ -182,7 +182,7 @@ public class StoreNode implements Cloneable {
         return member.matches("(?i).*" + searchText + ".*");
     }
 
-    public String keepNode() {
+    public String toNodeString() {
         return String.format(TransConst.FORMAT_INT_08, id) +
                 TransConst.COLON +
                 String.format(TransConst.FORMAT_INT_13, length) +

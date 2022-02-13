@@ -98,7 +98,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
             if (aPath.isFile()) {
                 StoreNode aNode = new StoreNode(buildRootPath(), aPath);
                 storeList.addNodeWithId(aNode);
-                TransLog.getLogger().info(aNode.keepNode());
+                TransLog.getLogger().info(aNode.toNodeString());
                 updateProgress(aNode.getLength());
             }
             if (aPath.isDirectory() && aPath.listFiles() != null) {

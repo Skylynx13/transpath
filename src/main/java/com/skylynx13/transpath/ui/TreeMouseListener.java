@@ -44,9 +44,9 @@ public class TreeMouseListener implements MouseListener {
 
         StoreNode selectNode = selectTree.getNode();
         if (selectNode.isBranch()) {
-            infoTextArea.append("Branch Node Selected: " + selectNode.keepNode()+"\n");
+            infoTextArea.append("Branch Node Selected: " + selectNode.toNodeString()+"\n");
         } else {
-            infoTextArea.append("Store Node Selected: " + selectNode.keepNode()+"\n");
+            infoTextArea.append("Store Node Selected: " + selectNode.toNodeString()+"\n");
         }
         Transpath.getTranspathFrame().updateInfoTable(selectTree);
     }
