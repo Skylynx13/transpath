@@ -12,7 +12,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -224,46 +223,13 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         TransLog.getLogger().info("Combining...");
         long t0 = System.currentTimeMillis();
 
-        StoreList reservedNewList = new StoreList();
         StoreList duplicateList = new StoreList();
         StoreList removeList = new StoreList();
-
-        HashMap<String, Integer> md5Map = new HashMap<>();
-        for (StoreNode aNode : newStoreList.getStoreList()) {
-            String md5 = aNode.getMd5();
-            if (md5Map.get(md5) != null) {
-                Integer counter = md5Map.get(md5);
-                md5Map.put(md5, counter+1);
-                removeList.addNode(aNode);
-            } else {
-                md5Map.put(md5, 1);
-                reservedNewList.addNode(aNode);
-            }
-        }
-        for (StoreNode aNode : newStoreList.getStoreList()) {
-            String md5 = aNode.getMd5();
-            if ((md5Map.get(md5) != null) && (md5Map.get(md5) > 1)) {
-                duplicateList.addNode(aNode);
-            }
-        }
-
+        StoreList reservedNewList = getReservedNewList(newStoreList, duplicateList, removeList);
         TransLog.getLogger().info("Duplication in new list checked.");
         t0 = logTimeElapsed(t0);
 
-        resetProgress(reservedNewList.getStoreSize(), reservedNewList.size(), "Checking duplication in old list");
-        StoreList finalNewList = new StoreList();
-        for (StoreNode newNode : reservedNewList.getStoreList()) {
-            StoreNode oldNode = oldStoreList.queryNode(newNode);
-            if (oldNode != null) {
-                duplicateList.addNode(oldNode);
-                duplicateList.addNode(newNode);
-                removeList.addNode(newNode);
-            } else {
-                finalNewList.addNode(newNode);
-            }
-            updateProgress(newNode.getLength());
-        }
-
+        StoreList finalNewList = getFinalNewList(oldStoreList, duplicateList, removeList, reservedNewList);
         TransLog.getLogger().info("Duplication in old list checked.");
         t0 = logTimeElapsed(t0);
 
@@ -291,6 +257,49 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         logTimeElapsed(t0);
 
         return combinedList;
+    }
+
+    private StoreList getReservedNewList(StoreList newStoreList, StoreList duplicateList, StoreList removeList) {
+        StoreList reservedNewList = new StoreList();
+        HashMap<String, Integer> md5Map = new HashMap<>();
+        for (StoreNode aNode : newStoreList.getStoreList()) {
+            String md5 = aNode.getMd5();
+            if (md5Map.get(md5) != null) {
+                Integer counter = md5Map.get(md5);
+                md5Map.put(md5, counter+1);
+                removeList.addNode(aNode);
+            } else {
+                md5Map.put(md5, 1);
+                reservedNewList.addNode(aNode);
+            }
+        }
+        for (StoreNode aNode : newStoreList.getStoreList()) {
+            String md5 = aNode.getMd5();
+            if ((md5Map.get(md5) != null) && (md5Map.get(md5) > 1)) {
+                duplicateList.addNode(aNode);
+            }
+        }
+        reservedNewList.recap();
+        return reservedNewList;
+    }
+
+    private StoreList getFinalNewList(StoreList reservedNewList, StoreList oldStoreList,
+                                      StoreList duplicateList, StoreList removeList) {
+        resetProgress(reservedNewList.getStoreSize(), reservedNewList.size(),
+                "Checking duplication in old list");
+        StoreList finalNewList = new StoreList();
+        for (StoreNode newNode : reservedNewList.getStoreList()) {
+            StoreNode oldNode = oldStoreList.queryNode(newNode);
+            if (oldNode != null) {
+                duplicateList.addNode(oldNode);
+                duplicateList.addNode(newNode);
+                removeList.addNode(newNode);
+            } else {
+                finalNewList.addNode(newNode);
+            }
+            updateProgress(newNode.getLength());
+        }
+        return finalNewList;
     }
 
     private static void keepDelList(StoreList delList) {

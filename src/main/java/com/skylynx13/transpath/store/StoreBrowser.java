@@ -42,7 +42,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
             TransLog.getLogger().warn("Store path ignored: " + browsePath);
             return storeList;
         }
-        storeList.attachList(browseStoreListByPath(storePath));
+        storeList.attachListWithIdMap(browseStoreListByPath(storePath));
         storeList.orderByPathAndName();
         storeList.recap();
         storeList.reorgId();
@@ -62,7 +62,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
                 updateProgress(aNode.getLength());
             }
             if (aPath.isDirectory() && aPath.listFiles() != null) {
-                storeList.attachList(browseStoreListByPath(aPath));
+                storeList.attachListWithIdMap(browseStoreListByPath(aPath));
             }
         }
         return storeList;

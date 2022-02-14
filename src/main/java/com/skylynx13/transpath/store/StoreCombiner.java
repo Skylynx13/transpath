@@ -85,7 +85,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
                 TransLog.getLogger().warn("Store path ignored: " + storePathName);
                 continue;
             }
-            newList.attachList(buildStoreListByPath(storePath));
+            newList.attachListWithIdMap(buildStoreListByPath(storePath));
         }
         TransLog.getLogger().info("New store list built.");
         logTimeElapsed(t0);
@@ -102,7 +102,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
                 updateProgress(aNode.getLength());
             }
             if (aPath.isDirectory() && aPath.listFiles() != null) {
-                storeList.attachList(buildStoreListByPath(aPath));
+                storeList.attachListWithIdMap(buildStoreListByPath(aPath));
             }
         }
         return storeList;
@@ -220,8 +220,8 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         long t0 = System.currentTimeMillis();
 
         StoreList overallList = new StoreList();
-        overallList.attachList(oldStoreList);
-        overallList.attachList(newStoreList);
+        overallList.attachListWithIdMap(oldStoreList);
+        overallList.attachListWithIdMap(newStoreList);
 
         TransLog.getLogger().info("Attach done.");
         t0 = logTimeElapsed(t0);

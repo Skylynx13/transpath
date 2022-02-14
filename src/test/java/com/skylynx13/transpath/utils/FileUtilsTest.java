@@ -58,7 +58,7 @@ public class FileUtilsTest {
 
     @Test
     public void getFileSizeTest_dir_size() {
-        assertEquals(32510100, FileUtils.getFileSize(new File(testResource(""))));
+        assertEquals(32514126, FileUtils.getFileSize(new File(testResource(""))));
     }
 
     @Test

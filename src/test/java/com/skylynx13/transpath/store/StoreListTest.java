@@ -50,7 +50,7 @@ public class StoreListTest {
         sl2.addNodeWithId(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc22"));
         sl2.addNodeWithId(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc23"));
         sl2.addNodeWithId(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc24"));
-        sl1.attachList(sl2);
+        sl1.attachListWithIdMap(sl2);
         String expResult = "00000001:00000006:00000000000000000738:00000006\r\n"
                 + "00000001:0000000000123:456:1:2:3:/aaa/bbb/:ccc11:\r\n"
                 + "00000002:0000000000123:456:1:2:3:/aaa/bbb/:ccc12:\r\n"
@@ -72,7 +72,7 @@ public class StoreListTest {
         sl2.addNodeWithId(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc22"));
         sl2.addNodeWithId(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc23"));
         sl2.addNodeWithId(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc24"));
-        HashMap<Integer, Integer> aMap = sl1.attachList(sl2);
+        HashMap<Integer, Integer> aMap = sl1.attachListWithIdMap(sl2);
         System.out.println( "testAttachListReturnHashMap: " + aMap.toString());
         assertEquals(4, aMap.size());
         assertEquals(3, (int)aMap.get(1));

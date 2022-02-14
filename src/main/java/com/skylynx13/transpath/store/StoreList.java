@@ -160,7 +160,7 @@ public class StoreList {
         storeList.add(pNode);
     }
 
-    HashMap<Integer, Integer> attachList(StoreList pList) {
+    HashMap<Integer, Integer> attachListWithIdMap(StoreList pList) {
         HashMap<Integer, Integer> aMap = new HashMap<>(16);
         for (StoreNode aNode : pList.storeList) {
             int oldId = aNode.getId();
@@ -177,6 +177,13 @@ public class StoreList {
     void attachListWithId(StoreList pList) {
         for (StoreNode aNode : pList.storeList) {
             addNodeWithId(aNode);
+        }
+        recap();
+    }
+
+    void attachList(StoreList pList) {
+        for (StoreNode aNode : pList.storeList) {
+            addNode(aNode);
         }
         recap();
     }
