@@ -122,18 +122,97 @@ public class StoreNewCombinerTest {
         System.out.println(newList);
         StoreList dupList = new StoreList();
         StoreList remList = new StoreList();
+
         Method method = StoreNewCombiner.class.getDeclaredMethod(
                 "getReservedNewList", StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
         StoreList resNewList = (StoreList) method.invoke(storeNewCombiner, newList, dupList, remList);
+
         System.out.println("resNewList:");
         System.out.println(resNewList);
+        System.out.println("dupList:");
+        System.out.println(dupList);
+        System.out.println("remList:");
+        System.out.println(remList);
+
         assertEquals(7353, newList.getStoreSize());
         assertEquals(12, newList.size());
         assertEquals(5, dupList.size());
         assertEquals(3, remList.size());
         assertEquals(5330, resNewList.getStoreSize());
         assertEquals(9, resNewList.size());
+    }
+
+    @Test
+    public void getFinalNewListTest_Normal()
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        StoreList resNewList = new StoreList("src/test/resources/ResNewList_Normal.txt");
+        resNewList.recap();
+        System.out.println("resNewList:");
+        System.out.println(resNewList);
+        StoreList oldList = new StoreList("src/test/resources/OldList_Normal.txt");
+        oldList.recap();
+        System.out.println("oldList:");
+        System.out.println(oldList);
+        StoreList dupList = new StoreList();
+        StoreList remList = new StoreList();
+
+        Method method = StoreNewCombiner.class.getDeclaredMethod(
+                "getFinalNewList", StoreList.class, StoreList.class, StoreList.class, StoreList.class);
+        method.setAccessible(true);
+        StoreList finNewList = (StoreList) method.invoke(storeNewCombiner, resNewList, oldList, dupList, remList);
+
+        System.out.println("finNewList:");
+        System.out.println(finNewList);
+        System.out.println("dupList:");
+        System.out.println(dupList);
+        System.out.println("remList:");
+        System.out.println(remList);
+
+        assertEquals(6905, resNewList.getStoreSize());
+        assertEquals(12, resNewList.size());
+        assertEquals(5632169576L, oldList.getStoreSize());
+        assertEquals(20, oldList.size());
+        assertEquals(0, dupList.size());
+        assertEquals(0, remList.size());
+        assertEquals(6905, finNewList.getStoreSize());
+        assertEquals(12, finNewList.size());
+    }
+
+    @Test
+    public void getFinalNewListTest_Duplicate_Old()
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        StoreList resNewList = new StoreList("src/test/resources/ResNewList_Duplicate.txt");
+        resNewList.recap();
+        System.out.println("resNewList:");
+        System.out.println(resNewList);
+        StoreList oldList = new StoreList("src/test/resources/OldList_Normal.txt");
+        oldList.recap();
+        System.out.println("oldList:");
+        System.out.println(oldList);
+        StoreList dupList = new StoreList();
+        StoreList remList = new StoreList();
+
+        Method method = StoreNewCombiner.class.getDeclaredMethod(
+                "getFinalNewList", StoreList.class, StoreList.class, StoreList.class, StoreList.class);
+        method.setAccessible(true);
+        StoreList finNewList = (StoreList) method.invoke(storeNewCombiner, resNewList, oldList, dupList, remList);
+
+        System.out.println("finNewList:");
+        System.out.println(finNewList);
+        System.out.println("dupList:");
+        System.out.println(dupList);
+        System.out.println("remList:");
+        System.out.println(remList);
+
+        assertEquals(567028726L, resNewList.getStoreSize());
+        assertEquals(12, resNewList.size());
+        assertEquals(5632169576L, oldList.getStoreSize());
+        assertEquals(20, oldList.size());
+        assertEquals(8, dupList.size());
+        assertEquals(4, remList.size());
+        assertEquals(3905, finNewList.getStoreSize());
+        assertEquals(8, finNewList.size());
     }
 
 }

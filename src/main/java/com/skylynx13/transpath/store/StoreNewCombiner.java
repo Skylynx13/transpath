@@ -299,6 +299,7 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
             }
             updateProgress(newNode.getLength());
         }
+        finalNewList.recap();
         return finalNewList;
     }
 
