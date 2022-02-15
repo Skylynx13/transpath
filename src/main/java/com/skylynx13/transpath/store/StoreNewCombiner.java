@@ -59,6 +59,56 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         }
     }
 
+    @Override
+    protected void process(List<ProgressReport> progressReportList) {
+        ProgressReport lastProgressReport = progressReportList.get(progressReportList.size()-1);
+        Transpath.getProgressBar().setValue(lastProgressReport.getProgress());
+        Transpath.getStatusLabel().setText(lastProgressReport.getReportLine());
+    }
+
+    @Override
+    protected void done() {
+        try {
+            StringBuilder result = get();
+            TransLog.getLogger().info(result.toString());
+            Transpath.getStatusLabel().setText(result.toString());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void resetProgress(long totalSize, long totalCount, String header) {
+        progressTracer.reset(totalSize, totalCount, header);
+        publish(progressTracer.report());
+    }
+
+    private void updateProgress(long nSize) {
+        progressTracer.update(nSize);
+        publish(progressTracer.report());
+    }
+
+    private long calcStoreFileSize(List<String> storePathList) throws StoreListException {
+        long tSize = 0;
+        for (String storePathName : storePathList) {
+            tSize += FileUtils.getFileSize(storePathName);
+        }
+        if (tSize == 0) {
+            throw new StoreListException("Total size is 0");
+        }
+        return tSize;
+    }
+
+    private long calcStoreFileCount(List<String> storePathList) throws StoreListException {
+        long tCount = 0;
+        for (String storePathName : storePathList) {
+            tCount += FileUtils.getFileCount(storePathName);
+        }
+        if (tCount == 0) {
+            throw new StoreListException("Total count is 0");
+        }
+        return tCount;
+    }
+
     private String buildRootPath() {
         return TransProp.get(TransConst.LOC_STORE);
     }
@@ -112,38 +162,6 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         return storeList;
     }
 
-    private void resetProgress(long totalSize, long totalCount, String header) {
-        progressTracer.reset(totalSize, totalCount, header);
-        publish(progressTracer.report());
-    }
-
-    private void updateProgress(long nSize) {
-        progressTracer.update(nSize);
-        publish(progressTracer.report());
-    }
-
-    private long calcStoreFileSize(List<String> storePathList) throws StoreListException {
-        long tSize = 0;
-        for (String storePathName : storePathList) {
-            tSize += FileUtils.getFileSize(storePathName);
-        }
-        if (tSize == 0) {
-            throw new StoreListException("Total size is 0");
-        }
-        return tSize;
-    }
-
-    private long calcStoreFileCount(List<String> storePathList) throws StoreListException {
-        long tCount = 0;
-        for (String storePathName : storePathList) {
-            tCount += FileUtils.getFileCount(storePathName);
-        }
-        if (tCount == 0) {
-            throw new StoreListException("Total count is 0");
-        }
-        return tCount;
-    }
-
     private List<String> buildStorePathList() throws StoreListException {
         if (updateList) {
             return buildList(TransProp.get(TransConst.PATH_BRANCH));
@@ -171,8 +189,9 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         Matcher branchMatcher = PATTERN_PATH_UNIT.matcher(branchPath);
         int numberA = 0;
         while (branchMatcher.find()) {
-            TransLog.getLogger()
-                    .info("count: " + branchMatcher.groupCount() + ", group: " + branchMatcher.group());
+            TransLog.getLogger().info(
+                    "count: " + branchMatcher.groupCount() + ", " +
+                    "group: " + branchMatcher.group());
 
             if (branchMatcher.group(GROUP_A) != null) {
                 numberA = Integer.parseInt(branchMatcher.group(GROUP_A));
@@ -341,24 +360,6 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
             }
             out.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void process(List<ProgressReport> progressReportList) {
-        ProgressReport lastProgressReport = progressReportList.get(progressReportList.size()-1);
-        Transpath.getProgressBar().setValue(lastProgressReport.getProgress());
-        Transpath.getStatusLabel().setText(lastProgressReport.getReportLine());
-    }
-
-    @Override
-    protected void done() {
-        try {
-            StringBuilder result = get();
-            TransLog.getLogger().info(result.toString());
-            Transpath.getStatusLabel().setText(result.toString());
-        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }
