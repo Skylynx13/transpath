@@ -31,8 +31,8 @@ public class TranspathFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final int DIVIDER_SIZE = 8;
     private static final int ZOOM_PERCENT = 66;
-    private static final double SPLIT_V_DEFAULT = 0.7;
-    private static final double SPLIT_H_DEFAULT = 0.2;
+    private static final double SPLIT_V_DEFAULT = 0.3;
+    private static final double SPLIT_H_DEFAULT = 0.1;
 
     private final JTable infoTable = new JTable();
     private final JTextArea infoTextArea = new JTextArea();

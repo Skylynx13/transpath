@@ -77,7 +77,7 @@ public class StoreNewCombinerTest {
         StoreList dupList = new StoreList();
         StoreList remList = new StoreList();
         Method method = StoreNewCombiner.class.getDeclaredMethod(
-                "getReservedNewList", StoreList.class, StoreList.class, StoreList.class);
+                "buildReservedNewList", StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
         StoreList resNewList = (StoreList) method.invoke(storeNewCombiner, newList, dupList, remList);
         System.out.println("resNewList:");
@@ -100,7 +100,7 @@ public class StoreNewCombinerTest {
         StoreList dupList = new StoreList();
         StoreList remList = new StoreList();
         Method method = StoreNewCombiner.class.getDeclaredMethod(
-                "getReservedNewList", StoreList.class, StoreList.class, StoreList.class);
+                "buildReservedNewList", StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
         StoreList resNewList = (StoreList) method.invoke(storeNewCombiner, newList, dupList, remList);
         System.out.println("resNewList:");
@@ -124,7 +124,7 @@ public class StoreNewCombinerTest {
         StoreList remList = new StoreList();
 
         Method method = StoreNewCombiner.class.getDeclaredMethod(
-                "getReservedNewList", StoreList.class, StoreList.class, StoreList.class);
+                "buildReservedNewList", StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
         StoreList resNewList = (StoreList) method.invoke(storeNewCombiner, newList, dupList, remList);
 
@@ -158,7 +158,7 @@ public class StoreNewCombinerTest {
         StoreList remList = new StoreList();
 
         Method method = StoreNewCombiner.class.getDeclaredMethod(
-                "getFinalNewList", StoreList.class, StoreList.class, StoreList.class, StoreList.class);
+                "buildFinalNewList", StoreList.class, StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
         StoreList finNewList = (StoreList) method.invoke(storeNewCombiner, resNewList, oldList, dupList, remList);
 
@@ -194,7 +194,7 @@ public class StoreNewCombinerTest {
         StoreList remList = new StoreList();
 
         Method method = StoreNewCombiner.class.getDeclaredMethod(
-                "getFinalNewList", StoreList.class, StoreList.class, StoreList.class, StoreList.class);
+                "buildFinalNewList", StoreList.class, StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
         StoreList finNewList = (StoreList) method.invoke(storeNewCombiner, resNewList, oldList, dupList, remList);
 

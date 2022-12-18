@@ -244,16 +244,17 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
 
         StoreList duplicateList = new StoreList();
         StoreList removeList = new StoreList();
-        StoreList reservedNewList = getReservedNewList(newStoreList, duplicateList, removeList);
+
+        StoreList reservedNewList = buildReservedNewList(newStoreList, duplicateList, removeList);
         TransLog.getLogger().info("Duplication in new list checked.");
         t0 = logTimeElapsed(t0);
 
-        StoreList finalNewList = getFinalNewList(oldStoreList, duplicateList, removeList, reservedNewList);
+        StoreList finalNewList = buildFinalNewList(reservedNewList, oldStoreList, duplicateList, removeList);
         TransLog.getLogger().info("Duplication in old list checked.");
         t0 = logTimeElapsed(t0);
 
         duplicateList.orderByMd5();
-        TransLog.getLogger().info("Duplicated list.");
+        TransLog.getLogger().info("Duplicated list: ");
         TransLog.getLogger().info(duplicateList.toString());
         TransLog.getLogger().info("=== Duplicated count: " + (duplicateList.size() - removeList.size()) + " ===");
         TransLog.getLogger().info("=== Removed count: " + removeList.size() + " ===");
@@ -278,7 +279,7 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         return combinedList;
     }
 
-    private StoreList getReservedNewList(StoreList newStoreList, StoreList duplicateList, StoreList removeList) {
+    private StoreList buildReservedNewList(StoreList newStoreList, StoreList duplicateList, StoreList removeList) {
         StoreList reservedNewList = new StoreList();
         HashMap<String, Integer> md5Map = new HashMap<>();
         for (StoreNode aNode : newStoreList.getStoreList()) {
@@ -302,8 +303,8 @@ public class StoreNewCombiner extends SwingWorker<StringBuilder, ProgressReport>
         return reservedNewList;
     }
 
-    private StoreList getFinalNewList(StoreList reservedNewList, StoreList oldStoreList,
-                                      StoreList duplicateList, StoreList removeList) {
+    private StoreList buildFinalNewList(StoreList reservedNewList, StoreList oldStoreList,
+                                        StoreList duplicateList, StoreList removeList) {
         resetProgress(reservedNewList.getStoreSize(), reservedNewList.size(),
                 "Checking duplication in old list");
         StoreList finalNewList = new StoreList();
