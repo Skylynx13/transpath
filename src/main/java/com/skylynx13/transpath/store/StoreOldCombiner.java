@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 /**
  * @author skylynx
  */
-public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
+public class StoreOldCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private final boolean updateList;
     private final static String REGEX_PATH_FULL =
             "^(A\\d{4})/B(\\d{4})(-(\\d{4}))?(,((A\\d{4})/)?B(\\d{4})(-(\\d{4}))?)*?$";
@@ -30,7 +30,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     private final static int GROUP_S = 5;
     private final ProgressTracer progressTracer = new ProgressTracer();
 
-    public StoreCombiner(boolean updateList) {
+    public StoreOldCombiner(boolean updateList) {
         this.updateList = updateList;
     }
 

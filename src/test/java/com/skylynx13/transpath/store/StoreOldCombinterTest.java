@@ -6,23 +6,23 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class StoreCombinterTest {
-    private StoreCombiner storeCombiner = new StoreCombiner(false);
+public class StoreOldCombinterTest {
+    private final StoreOldCombiner storeOldCombiner = new StoreOldCombiner(false);
 
     @Test
     public void buildListTest() {
         try {
-            assertNull(storeCombiner.buildList("A1111/B2222,B3333,B4444,B5555a"));
+            assertNull(storeOldCombiner.buildList("A1111/B2222,B3333,B4444,B5555a"));
         } catch (StoreListException e) {
             assertEquals("Error branch path.", e.getMessage());
         }
         try {
-            assertNull(storeCombiner.buildList("A1111/B2222,B3333-1111,B4444,B5555"));
+            assertNull(storeOldCombiner.buildList("A1111/B2222,B3333-1111,B4444,B5555"));
         } catch (StoreListException e) {
             assertEquals("Error branch group.", e.getMessage());
         }
         try {
-            assertEquals("[/]", storeCombiner.buildList("/").toString());
+            assertEquals("[/]", storeOldCombiner.buildList("/").toString());
         } catch (StoreListException ignored) {
         }
     }
@@ -57,7 +57,7 @@ public class StoreCombinterTest {
                             "A3333/B6676, " +
                             "A3333/B6677, " +
                             "A3333/B8888]",
-                    storeCombiner.parseList("A1111/B2222,A3333/B4444-4455,B6666-6677,B8888")
+                    storeOldCombiner.parseList("A1111/B2222,A3333/B4444-4455,B6666-6677,B8888")
                             .toString());
         } catch (StoreListException ignored) {
         }

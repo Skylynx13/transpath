@@ -2,7 +2,7 @@ package com.skylynx13.transpath.ui;
 
 import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.store.StoreBrowser;
-import com.skylynx13.transpath.store.StoreCombiner;
+import com.skylynx13.transpath.store.StoreOldCombiner;
 import com.skylynx13.transpath.store.StoreNameCombiner;
 import com.skylynx13.transpath.store.StoreNewCombiner;
 import com.skylynx13.transpath.task.NameReviser;
@@ -11,8 +11,6 @@ import com.skylynx13.transpath.task.TaskKeeper;
 import com.skylynx13.transpath.utils.TransConst;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -101,9 +99,9 @@ public class TranspathMenuBar extends JMenuBar {
     private JMenu createStoreMenu() {
         JMenu storeMenu = new JMenu("Store");
 
-        JMenuItem storeCombineItem = new JMenuItem("Combine");
-        storeMenu.add(storeCombineItem);
-        storeCombineItem.addActionListener(e -> new StoreCombiner(true).execute());
+        JMenuItem storeOldCombineItem = new JMenuItem("OldCombine");
+        storeMenu.add(storeOldCombineItem);
+        storeOldCombineItem.addActionListener(e -> new StoreOldCombiner(true).execute());
 
         JMenuItem storeNewCombineItem = new JMenuItem("NewCombine");
         storeMenu.add(storeNewCombineItem);
@@ -117,10 +115,10 @@ public class TranspathMenuBar extends JMenuBar {
         storeMenu.add(storeBrowseItem);
         storeBrowseItem.addActionListener(e -> new StoreBrowser().execute());
 
-        JMenuItem storeCombineTestItem = new JMenuItem("CombineTest");
-        storeMenu.add(storeCombineTestItem);
-        storeCombineTestItem.addActionListener(e -> new StoreCombiner(false).execute());
-        storeCombineTestItem.setAccelerator(KeyStroke.getKeyStroke('T', InputEvent.CTRL_DOWN_MASK));
+        JMenuItem storeOldCombineTestItem = new JMenuItem("OldCombineTest");
+        storeMenu.add(storeOldCombineTestItem);
+        storeOldCombineTestItem.addActionListener(e -> new StoreOldCombiner(false).execute());
+        storeOldCombineTestItem.setAccelerator(KeyStroke.getKeyStroke('T', InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem storeNewCombineTestItem = new JMenuItem("NewCombineTest");
         storeMenu.add(storeNewCombineTestItem);
@@ -130,7 +128,7 @@ public class TranspathMenuBar extends JMenuBar {
         JMenuItem storeExamineItem = new JMenuItem("Examine");
         storeMenu.add(storeExamineItem);
         storeExamineItem.addActionListener(e -> {
-            new StoreCombiner(false).execute();
+            new StoreNewCombiner(false).execute();
             new PackageChecker().execute();
         });
         storeExamineItem.setAccelerator(KeyStroke.getKeyStroke('E', InputEvent.CTRL_DOWN_MASK));
