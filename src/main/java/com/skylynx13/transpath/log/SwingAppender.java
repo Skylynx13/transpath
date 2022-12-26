@@ -21,10 +21,10 @@ import java.io.Serializable;
  * Date: 2017-9-26 18:30:43
  * @author skylynx
  * See:
- * https://github.com/M-Razavi/log4j-swing-appender
- * http://www.howtobuildsoftware.com/index.php/how-do/chab/java-logging-log4j-log4j2-how-to-create-a-custom-appender-in-log4j2
- * http://logging.apache.org/log4j/2.x/manual/configuration.html#Properties
- * http://logging.apache.org/log4j/2.x/manual/extending.html#Appenders
+ * <a href="https://github.com/M-Razavi/log4j-swing-appender">...</a>
+ * <a href="http://www.howtobuildsoftware.com/index.php/how-do/chab/java-logging-log4j-log4j2-how-to-create-a-custom-appender-in-log4j2">...</a>
+ * <a href="http://logging.apache.org/log4j/2.x/manual/configuration.html#Properties">...</a>
+ * <a href="http://logging.apache.org/log4j/2.x/manual/extending.html#Appenders">...</a>
  */
 @Plugin(name="Swing", category="Core", elementType="appender", printObject=true)
 public class SwingAppender extends AbstractAppender {  
@@ -32,7 +32,7 @@ public class SwingAppender extends AbstractAppender {
 
     private SwingAppender(String name, Filter filter,
             Layout<? extends Serializable> layout, final boolean ignoreExceptions) {
-        super(name, filter, layout, ignoreExceptions);
+        super(name, filter, layout, ignoreExceptions, null);
     }
     
     @Override
