@@ -9,24 +9,24 @@ import java.lang.reflect.Method;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class StoreNewCombinerTest {
+public class StoreCombinerTest {
 
-    private final StoreNewCombiner storeNewCombiner = new StoreNewCombiner(false);
+    private final StoreCombiner storeCombiner = new StoreCombiner(false);
 
     @Test
     public void buildListTest() {
         try {
-            assertNull(storeNewCombiner.buildList("A1111/B2222,B3333,B4444,B5555a"));
+            assertNull(storeCombiner.buildList("A1111/B2222,B3333,B4444,B5555a"));
         } catch (StoreListException e) {
             assertEquals("Error branch path.", e.getMessage());
         }
         try {
-            assertNull(storeNewCombiner.buildList("A1111/B2222,B3333-1111,B4444,B5555"));
+            assertNull(storeCombiner.buildList("A1111/B2222,B3333-1111,B4444,B5555"));
         } catch (StoreListException e) {
             assertEquals("Error branch group.", e.getMessage());
         }
         try {
-            assertEquals("[/]", storeNewCombiner.buildList("/").toString());
+            assertEquals("[/]", storeCombiner.buildList("/").toString());
         } catch (StoreListException ignored) {
         }
     }
@@ -61,7 +61,7 @@ public class StoreNewCombinerTest {
                             "A3333/B6676, " +
                             "A3333/B6677, " +
                             "A3333/B8888]",
-                    storeNewCombiner.parseList("A1111/B2222,A3333/B4444-4455,B6666-6677,B8888")
+                    storeCombiner.parseList("A1111/B2222,A3333/B4444-4455,B6666-6677,B8888")
                             .toString());
         } catch (StoreListException ignored) {
         }
@@ -76,10 +76,10 @@ public class StoreNewCombinerTest {
         System.out.println(newList);
         StoreList dupList = new StoreList();
         StoreList remList = new StoreList();
-        Method method = StoreNewCombiner.class.getDeclaredMethod(
+        Method method = StoreCombiner.class.getDeclaredMethod(
                 "buildReservedNewList", StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
-        StoreList resNewList = (StoreList) method.invoke(storeNewCombiner, newList, dupList, remList);
+        StoreList resNewList = (StoreList) method.invoke(storeCombiner, newList, dupList, remList);
         System.out.println("resNewList:");
         System.out.println(resNewList);
         assertEquals(6905, newList.getStoreSize());
@@ -99,10 +99,10 @@ public class StoreNewCombinerTest {
         System.out.println(newList);
         StoreList dupList = new StoreList();
         StoreList remList = new StoreList();
-        Method method = StoreNewCombiner.class.getDeclaredMethod(
+        Method method = StoreCombiner.class.getDeclaredMethod(
                 "buildReservedNewList", StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
-        StoreList resNewList = (StoreList) method.invoke(storeNewCombiner, newList, dupList, remList);
+        StoreList resNewList = (StoreList) method.invoke(storeCombiner, newList, dupList, remList);
         System.out.println("resNewList:");
         System.out.println(resNewList);
         assertEquals(0, newList.getStoreSize());
@@ -123,10 +123,10 @@ public class StoreNewCombinerTest {
         StoreList dupList = new StoreList();
         StoreList remList = new StoreList();
 
-        Method method = StoreNewCombiner.class.getDeclaredMethod(
+        Method method = StoreCombiner.class.getDeclaredMethod(
                 "buildReservedNewList", StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
-        StoreList resNewList = (StoreList) method.invoke(storeNewCombiner, newList, dupList, remList);
+        StoreList resNewList = (StoreList) method.invoke(storeCombiner, newList, dupList, remList);
 
         System.out.println("resNewList:");
         System.out.println(resNewList);
@@ -157,10 +157,10 @@ public class StoreNewCombinerTest {
         StoreList dupList = new StoreList();
         StoreList remList = new StoreList();
 
-        Method method = StoreNewCombiner.class.getDeclaredMethod(
+        Method method = StoreCombiner.class.getDeclaredMethod(
                 "buildFinalNewList", StoreList.class, StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
-        StoreList finNewList = (StoreList) method.invoke(storeNewCombiner, resNewList, oldList, dupList, remList);
+        StoreList finNewList = (StoreList) method.invoke(storeCombiner, resNewList, oldList, dupList, remList);
 
         System.out.println("finNewList:");
         System.out.println(finNewList);
@@ -193,10 +193,10 @@ public class StoreNewCombinerTest {
         StoreList dupList = new StoreList();
         StoreList remList = new StoreList();
 
-        Method method = StoreNewCombiner.class.getDeclaredMethod(
+        Method method = StoreCombiner.class.getDeclaredMethod(
                 "buildFinalNewList", StoreList.class, StoreList.class, StoreList.class, StoreList.class);
         method.setAccessible(true);
-        StoreList finNewList = (StoreList) method.invoke(storeNewCombiner, resNewList, oldList, dupList, remList);
+        StoreList finNewList = (StoreList) method.invoke(storeCombiner, resNewList, oldList, dupList, remList);
 
         System.out.println("finNewList:");
         System.out.println(finNewList);
