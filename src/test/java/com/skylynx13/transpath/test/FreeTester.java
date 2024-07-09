@@ -2,11 +2,14 @@ package com.skylynx13.transpath.test;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.store.StoreNode;
 import com.skylynx13.transpath.task.TaskArranger;
 import com.skylynx13.transpath.task.TaskEntry;
@@ -124,9 +127,9 @@ public class FreeTester {
         String aProp;
         Properties aProps = new Properties();
         try {
-            aProps.load(new FileInputStream(TransConst.TP_PROPS));
+            aProps.load(Files.newInputStream(Paths.get(TransConst.TP_PROPS)));
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
         aProp = aProps.getProperty("test");
         System.out.println("free props tests: [" + aProp + "]");
@@ -169,9 +172,9 @@ public class FreeTester {
 
     private static void formatString() {
         long aaa = 1234567890L;
-        System.out.println(String.format("aaa %,d", aaa));
+        System.out.printf("aaa %,d%n", aaa);
         String aab = "okk";
-        System.out.println(String.format("aaa %s %d", aab, aaa));
+        System.out.printf("aaa %s %d%n", aab, aaa);
     }
 
     private static void fileTester() {
@@ -187,7 +190,7 @@ public class FreeTester {
             out.println("ok");
             out.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
 
     }
@@ -197,7 +200,7 @@ public class FreeTester {
             Desktop.getDesktop().open(new File("/home/qxu/Book/TFLib/A2018/B0912/G.I. Joe - A Real American Hero 256 (2018) (Digital) (Thornn-Empire).cbr"));
             //Desktop.getDesktop().open(new File("/home/qxu/workspace/transpath/star.sh"));
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 
@@ -207,7 +210,7 @@ public class FreeTester {
             System.out.println(path.getName() + " | " + path.getPath() + " | " + path.getAbsolutePath() + " | " + path.getAbsoluteFile()
                     + " | " + path.getParent() + " | " + path.getCanonicalPath() + " | " + path.getCanonicalFile() + " | " + path.getParentFile());
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 
@@ -264,9 +267,9 @@ public class FreeTester {
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    TransLog.getLogger().error("", e);
                 //} catch (InterruptedException e) {
-                    e.printStackTrace();
+                    TransLog.getLogger().error("", e);
                 }
 
             }
@@ -290,7 +293,7 @@ public class FreeTester {
                 System.out.println("Output: " + line);
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
 
     }
@@ -338,7 +341,7 @@ public class FreeTester {
         if (matched) {
             String airline = matcher.group(1);
             String flightNumber = matcher.group(2);
-            String suffix = matcher.group(3).equals("")?"^":matcher.group(3);
+            String suffix = matcher.group(3).isEmpty() ?"^":matcher.group(3);
             String more = matcher.group(4);
             System.out.println("airline is [" + airline + "]; flightNumber is [" + flightNumber + "]; suffix is [" + suffix + "]; more is [" + more + "]");
             System.out.println("Time elapsed: " + (System.currentTimeMillis()-timeTag) + " ms.");
@@ -378,8 +381,7 @@ public class FreeTester {
                 }
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
-
     }
 }

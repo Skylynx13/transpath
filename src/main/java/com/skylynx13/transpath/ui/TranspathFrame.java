@@ -121,7 +121,7 @@ public class TranspathFrame extends JFrame {
                 | InstantiationException
                 | IllegalAccessException
                 | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.skylynx13.transpath.test;
 
+import com.skylynx13.transpath.log.TransLog;
+
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
@@ -80,7 +82,7 @@ class DragTree extends JTree implements DragGestureListener, DragSourceListener,
                         this.setClosedIcon(icon);
                         this.setDisabledIcon(icon);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        TransLog.getLogger().error("", e);
                     }
                 }
                 return super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
@@ -132,7 +134,7 @@ class DragTree extends JTree implements DragGestureListener, DragSourceListener,
                             }
                             node.reexplore();
                         } catch (Exception ioe) {
-                            ioe.printStackTrace();
+                            TransLog.getLogger().error("", ioe);
                         }
                         updateUI();
                     }
@@ -308,7 +310,7 @@ class DragTree extends JTree implements DragGestureListener, DragSourceListener,
                 e.rejectDrop();
             }
         } catch (IOException | UnsupportedFlavorException ioe) {
-            ioe.printStackTrace();
+            TransLog.getLogger().error("", ioe);
         } finally {
             ghostImage = null;
             this.repaint();

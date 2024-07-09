@@ -1,5 +1,6 @@
 package com.skylynx13.transpath.utils;
 
+import com.skylynx13.transpath.log.TransLog;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -68,7 +69,7 @@ public class FileUtilsTest {
         try (PrintWriter pw = new PrintWriter(fn)) {
             pw.println("12345");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
         File f1 = new File(fn);
         assertNotEquals(0, f1.length());

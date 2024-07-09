@@ -1,7 +1,11 @@
 package com.skylynx13.transpath.utils;
 
+import com.skylynx13.transpath.log.TransLog;
+
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
@@ -15,9 +19,9 @@ public class TransProp {
     public static String get(String propName) {
         Properties tProps = new Properties();
         try {
-            tProps.load(new FileInputStream(TransConst.TP_PROPS));
+            tProps.load(Files.newInputStream(Paths.get(TransConst.TP_PROPS)));
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
         return tProps.getProperty(propName);
     }

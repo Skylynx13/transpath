@@ -1,5 +1,7 @@
 package com.skylynx13.transpath.test;
 
+import com.skylynx13.transpath.log.TransLog;
+
 import javax.swing.*;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
@@ -33,7 +35,7 @@ public class Test extends JFrame implements DropTargetListener {
                     System.out.println("JFL: " + tr.getTransferData(DataFlavor.javaFileListFlavor).toString());
                 } catch (UnsupportedFlavorException | IOException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    TransLog.getLogger().error("", e);
                 }
             }
 
@@ -50,7 +52,7 @@ public class Test extends JFrame implements DropTargetListener {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e1) {
-            e1.printStackTrace();
+            TransLog.getLogger().error("", e1);
         }
         Test test = new Test();
         test.setBounds(300, 300, 850, 350);
@@ -90,7 +92,7 @@ public class Test extends JFrame implements DropTargetListener {
 //                document.remove(0, document.getLength());
 //                kit.read(new FileReader(filename), document, 0);
 //            } catch (Exception ex) {
-//                ex.printStackTrace();
+//                TransLog.getLogger().error("", ex);
 //            }
 //        }
 //    }
@@ -105,7 +107,7 @@ public class Test extends JFrame implements DropTargetListener {
 //                document.remove(0, document.getLength());
 //                kit.read(new FileReader(f), document, 0);
 //            } catch (Exception ex) {
-//                ex.printStackTrace();
+//                TransLog.getLogger().error("", ex);
 //            }
 //        }
 //    }
@@ -134,7 +136,7 @@ public class Test extends JFrame implements DropTargetListener {
 //                e.rejectDrop();
 //            }
 //        } catch (IOException | UnsupportedFlavorException ioe) {
-//            ioe.printStackTrace();
+//            TransLog.getLogger().error("", ioe);
 //        }
     }
 //

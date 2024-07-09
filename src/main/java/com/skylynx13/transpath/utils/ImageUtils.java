@@ -1,5 +1,7 @@
 package com.skylynx13.transpath.utils;
 
+import com.skylynx13.transpath.log.TransLog;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -91,7 +93,7 @@ public class ImageUtils {
                ImageIO.write(tag, /*"GIF"*/ formatName /* format desired */ , new File(dstName) /* target */ );
            } catch (IOException e) {
                System.out.println("处理文件出现异常");
-               e.printStackTrace();
+               TransLog.getLogger().error("", e);
            }
         }
     
@@ -124,7 +126,7 @@ public class ImageUtils {
 //               outputStream.close();
            } catch (IOException e) {
                System.out.println("处理文件出现异常");
-               e.printStackTrace();
+               TransLog.getLogger().error("", e);
            }
         }
     
@@ -154,8 +156,8 @@ public class ImageUtils {
             try {  
                 src[i] = new File(pics[i]);  
                 images[i] = ImageIO.read(src[i]);  
-            } catch (Exception e) {  
-                e.printStackTrace();  
+            } catch (Exception e) {
+                TransLog.getLogger().error("", e);
                 return;
             }  
             int width = images[i].getWidth();  
@@ -193,8 +195,8 @@ public class ImageUtils {
   
             File outFile = new File(dstPic);
             ImageIO.write(imageNew, type, outFile);// 写图片
-        } catch (Exception e) {  
-            e.printStackTrace();
+        } catch (Exception e) {
+            TransLog.getLogger().error("", e);
         }
     }
 }

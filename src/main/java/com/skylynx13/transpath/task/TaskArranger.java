@@ -65,7 +65,7 @@ public class TaskArranger {
         try {
             in = new Scanner(new FileReader(fileName));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             // File open error;
             status = 100000;
             return null;
@@ -107,13 +107,13 @@ public class TaskArranger {
             out.print(this.toOutput());
             out.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
         return entries.size();
     }
     
     int appendToFile(String fileName) {
-        if (entries.size() == 0) {
+        if (entries.isEmpty()) {
             return 0;
         }
         try {
@@ -121,7 +121,7 @@ public class TaskArranger {
             out.print(this.toOutput());
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
         return entries.size();
     }
@@ -199,7 +199,7 @@ public class TaskArranger {
             in = new Scanner(new FileReader(inFile));
             out = new PrintWriter(outFile);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
         
         while (Objects.requireNonNull(in).hasNext()) {

@@ -161,7 +161,7 @@ public class StoreNode implements Cloneable {
             storeNode = (StoreNode) super.clone();
         } catch (CloneNotSupportedException e) {
             TransLog.getLogger().error("StoreNode clone error: " + e.getMessage());
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
         return storeNode;
     }

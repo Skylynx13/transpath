@@ -33,7 +33,7 @@ public class CommandTester {
                 }
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 }

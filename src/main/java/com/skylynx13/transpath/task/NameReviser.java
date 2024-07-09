@@ -73,7 +73,7 @@ public class NameReviser {
         try {
             in = new Scanner(new FileReader(renameListName));
         } catch (Exception e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             return null;
         }
         while (in.hasNext()) {

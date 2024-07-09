@@ -1,8 +1,11 @@
 package com.skylynx13.transpath.utils;
 
+import com.skylynx13.transpath.log.TransLog;
 import org.apache.commons.codec.binary.Hex;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.Objects;
@@ -22,7 +25,7 @@ public class FileUtils {
             FileOutputStream file = new FileOutputStream(pFileName);
             file.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 
@@ -31,8 +34,8 @@ public class FileUtils {
         BufferedOutputStream outBuff = null;
         boolean result;
         try {
-            inBuff = new BufferedInputStream(new FileInputStream(srcFileName));
-            outBuff = new BufferedOutputStream(new FileOutputStream(tarFileName));
+            inBuff = new BufferedInputStream(Files.newInputStream(Paths.get(srcFileName)));
+            outBuff = new BufferedOutputStream(Files.newOutputStream(Paths.get(tarFileName)));
 
             byte[] b = new byte[1024 * 5];
             int len;
@@ -42,7 +45,7 @@ public class FileUtils {
             outBuff.flush();
             result = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             result = false;
         } finally {
             try {
@@ -53,7 +56,7 @@ public class FileUtils {
                     outBuff.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                TransLog.getLogger().error("", e);
                 result = false;
             }
         }
@@ -65,7 +68,7 @@ public class FileUtils {
         BufferedOutputStream outBuff = null;
         boolean result;
         try {
-            inBuff = new BufferedInputStream(new FileInputStream(srcFileName));
+            inBuff = new BufferedInputStream(Files.newInputStream(Paths.get(srcFileName)));
             outBuff = new BufferedOutputStream(new FileOutputStream(tarFileName, true));
 
             byte[] b = new byte[1024 * 5];
@@ -76,7 +79,7 @@ public class FileUtils {
             outBuff.flush();
             result = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             result = false;
         } finally {
             try {
@@ -87,7 +90,7 @@ public class FileUtils {
                     outBuff.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                TransLog.getLogger().error("", e);
                 result = false;
             }
         }
@@ -100,9 +103,9 @@ public class FileUtils {
         BufferedOutputStream outBuff = null;
         boolean result;
         try {
-            inBuff1 = new BufferedInputStream(new FileInputStream(srcFileName1));
-            inBuff2 = new BufferedInputStream(new FileInputStream(srcFileName2));
-            outBuff = new BufferedOutputStream(new FileOutputStream(tarFileName));
+            inBuff1 = new BufferedInputStream(Files.newInputStream(Paths.get(srcFileName1)));
+            inBuff2 = new BufferedInputStream(Files.newInputStream(Paths.get(srcFileName2)));
+            outBuff = new BufferedOutputStream(Files.newOutputStream(Paths.get(tarFileName)));
 
             byte[] b = new byte[1024 * 5];
             int len;
@@ -115,7 +118,7 @@ public class FileUtils {
             outBuff.flush();
             result = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             result = false;
         } finally {
             try {
@@ -129,7 +132,7 @@ public class FileUtils {
                     outBuff.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                TransLog.getLogger().error("", e);
                 result = false;
             }
         }
@@ -146,7 +149,7 @@ public class FileUtils {
             inStream1 = new FileInputStream(pFileName1);
             inStream2 = new FileInputStream(pFileName2);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             return false;
         }
         try {
@@ -166,7 +169,7 @@ public class FileUtils {
             inStream2.close();
             return (inByte1 == inByte2);
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             return false;
         }
     }
@@ -219,14 +222,14 @@ public class FileUtils {
         if (TransConst.CRC32.equals(algorithm)) {
             CRC32 crc32 = new CRC32();
             try {
-                BufferedInputStream inBuff = new BufferedInputStream(new FileInputStream(pFile));
+                BufferedInputStream inBuff = new BufferedInputStream(Files.newInputStream(pFile.toPath()));
                 int nLen;
                 while ((nLen = inBuff.read(rBytes)) != -1) {
                     crc32.update(rBytes, 0, nLen);
                 }
                 inBuff.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                TransLog.getLogger().error("", e);
                 return "";
             }
             return String.format(TransConst.FORMAT_HEX_08, crc32.getValue()).toUpperCase();
@@ -236,14 +239,14 @@ public class FileUtils {
         try {
             md = MessageDigest.getInstance(algorithm);
 
-            DigestInputStream dInput = new DigestInputStream(new FileInputStream(pFile), md);
+            DigestInputStream dInput = new DigestInputStream(Files.newInputStream(pFile.toPath()), md);
             //noinspection StatementWithEmptyBody
             while (dInput.read(rBytes) != -1) {
             }
             dInput.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             return "";
         }
         return new String(Hex.encodeHex(md.digest())).toUpperCase();

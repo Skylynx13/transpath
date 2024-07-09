@@ -48,7 +48,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
             StringBuilder result = get();
             TransLog.getLogger().info(result.toString());
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 
@@ -132,7 +132,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
                 lastLine = line;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
 
         TransLog.getLogger().info("Package Status: " + lastLine);

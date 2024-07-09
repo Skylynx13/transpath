@@ -113,7 +113,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
             TransLog.getLogger().info(result.toString());
             Transpath.getStatusLabel().setText(result.toString());
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 }

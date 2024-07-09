@@ -73,7 +73,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
             TransLog.getLogger().info(result.toString());
             Transpath.getStatusLabel().setText(result.toString());
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 
@@ -344,7 +344,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
             }
             out.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 
@@ -361,7 +361,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
             }
             out.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 }

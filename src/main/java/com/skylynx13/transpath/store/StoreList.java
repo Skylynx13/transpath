@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
 
+import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.utils.*;
 
 /**
@@ -231,7 +232,7 @@ public class StoreList {
         try {
             aScan = new Scanner(new FileReader(pFile));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             return;
         }
         if (aScan.hasNext()) {
@@ -289,7 +290,7 @@ public class StoreList {
             }
             out.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
         }
     }
 

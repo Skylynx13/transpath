@@ -46,7 +46,7 @@ class TaskDigger {
         try {
             in = new Scanner(new FileReader(key));
         } catch (Exception e) {
-            e.printStackTrace();
+            TransLog.getLogger().error("", e);
             return null;
         }
         while (in.hasNext()) {
