@@ -31,11 +31,11 @@ import java.util.Objects;
 class DragTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener {
     private static final long serialVersionUID = -7123350256666099899L;
     private BufferedImage ghostImage;
-    private Rectangle2D ghostRect = new Rectangle2D.Float();
-    private Point ptOffset = new Point();
-    private Point lastPoint = new Point();
+    private final Rectangle2D ghostRect = new Rectangle2D.Float();
+    private final Point ptOffset = new Point();
+    private final Point lastPoint = new Point();
     private TreePath lastPath;
-    private Timer hoverTimer;
+    private final Timer hoverTimer;
     private FileNode sourceNode;
 
     DragTree() {

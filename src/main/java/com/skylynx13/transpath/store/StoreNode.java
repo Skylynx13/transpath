@@ -86,8 +86,16 @@ public class StoreNode implements Cloneable {
         this.lastModified = lastModified;
     }
 
-    String getMd5() {
+    public String getMd5() {
         return md5;
+    }
+
+    public String getSha1() {
+        return sha1;
+    }
+
+    public String getCrc32() {
+        return crc32;
     }
 
     public StoreNode() {
@@ -103,7 +111,7 @@ public class StoreNode implements Cloneable {
         branch = false;
     }
 
-    StoreNode(String sEntry) {
+    public StoreNode(String sEntry) {
         String[] sItems = sEntry.split(TransConst.COLON);
         id = Integer.parseInt(sItems[0]);
         length = Long.parseLong(sItems[1]);
