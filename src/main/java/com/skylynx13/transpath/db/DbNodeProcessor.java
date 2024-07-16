@@ -9,7 +9,6 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import javax.persistence.TypedQuery;
-import java.sql.Timestamp;
 import java.util.List;
 
 public class DbNodeProcessor {
@@ -19,7 +18,7 @@ public class DbNodeProcessor {
             // default param for configure() is hibernate.cfg.xml
             sessionFactory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable throwable) {
-            TransLog.getLogger().error("Failed to create sessionFactory object. " + throwable);
+            TransLog.getLogger().error("Failed to create sessionFactory object. ", throwable);
         }
         DbNodeProcessor dbNodeProcessor = new DbNodeProcessor();
 
