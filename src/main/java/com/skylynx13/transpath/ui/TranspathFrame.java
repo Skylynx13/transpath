@@ -1,6 +1,8 @@
 package com.skylynx13.transpath.ui;
 
 import com.skylynx13.transpath.Transpath;
+import com.skylynx13.transpath.db.DbNode;
+import com.skylynx13.transpath.db.DbNodeProcessor;
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.store.StoreList;
 import com.skylynx13.transpath.store.StoreNode;
@@ -8,6 +10,7 @@ import com.skylynx13.transpath.store.StoreTree;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
+import org.hibernate.cfg.Configuration;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -360,4 +363,16 @@ public class TranspathFrame extends JFrame {
         TransLog.getLogger().info("Transpath Exit.");
         System.exit(0);
     }
+
+    public void initDB() {
+        DbNodeProcessor dbNodeProcessor = new DbNodeProcessor();
+        dbNodeProcessor.truncateDbNode();
+//        for (StoreNode storeNode : storeList.getStoreList()) {
+//            DbNode dbNode = new DbNode(storeNode);
+//            dbNodeProcessor.addDbNode(dbNode);
+//        }
+        dbNodeProcessor.addDbNodeList(storeList);
+    }
+
+
 }

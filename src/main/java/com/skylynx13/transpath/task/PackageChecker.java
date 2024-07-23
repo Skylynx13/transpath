@@ -217,7 +217,6 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
 
     boolean isIgnorable(String fileName) {
         final String[] arraySuffixIgnorable = {"txt", "pdf", "pdb", "epub", "mobi", "azw3", "jpg", "gif", "mp3"};
-
         return Arrays.asList(arraySuffixIgnorable).contains(getSuffix(fileName));
     }
 

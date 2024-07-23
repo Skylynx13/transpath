@@ -25,8 +25,9 @@ public class PackageCheckerTest {
 
     @Test
     public void isIgnorableTest() {
-        String[] filesOk = {"testfile.txt", "testfile.pdf", "test.epub", "test.mobi"};
-        String[] filesErr = {"testfile.pda", "testfile"};
+        String[] filesOk = {"testfile.txt", "testfile.pdf", "test.pdb", "test.epub", "test.mobi", "test.azw3",
+                "test.jpg", "test.gif", "test.mp3"};
+        String[] filesErr = {"testfile.pda", "testfile", "testfile.cbz", "test.cbr", "test.rar", "test.zip"};
 
         for (String fn : filesOk){
             assertTrue(packageChecker.isIgnorable(fn));

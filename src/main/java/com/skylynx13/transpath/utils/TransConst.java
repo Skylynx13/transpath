@@ -20,6 +20,8 @@ public class TransConst {
     public static final String PATH_BRANCH = "PATH_BRANCH";
     public static final String PATH_DRILL = "PATH_DRILL";
 
+    public static final String DB_COMMIT_INTERVAL = "DB_COMMIT_INTERVAL";
+
     static final String SYS_TYPE = "SYS_TYPE";
     static final String SYS_WINDOWS = "Windows";
 

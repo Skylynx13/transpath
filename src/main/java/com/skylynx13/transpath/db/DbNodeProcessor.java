@@ -1,25 +1,34 @@
 package com.skylynx13.transpath.db;
 
 import com.skylynx13.transpath.log.TransLog;
+import com.skylynx13.transpath.store.StoreList;
 import com.skylynx13.transpath.store.StoreNode;
+import com.skylynx13.transpath.utils.DateUtils;
+import com.skylynx13.transpath.utils.TransConst;
+import com.skylynx13.transpath.utils.TransProp;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class DbNodeProcessor {
     private static SessionFactory sessionFactory;
-    public static void main(String[] args) {
+
+    public DbNodeProcessor() {
         try {
             // default param for configure() is hibernate.cfg.xml
             sessionFactory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable throwable) {
             TransLog.getLogger().error("Failed to create sessionFactory object. ", throwable);
         }
+    }
+
+    public static void main(String[] args) {
         DbNodeProcessor dbNodeProcessor = new DbNodeProcessor();
 
         DbNode dbNode = new DbNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc11"));
@@ -34,11 +43,12 @@ public class DbNodeProcessor {
         dbNodeProcessor.listDbNode();
         dbNodeProcessor.deleteDbNode(id2);
         dbNodeProcessor.listDbNode();
-        dbNodeProcessor.deleteDbNode(id1);
+//        dbNodeProcessor.deleteDbNode(id1);
+        dbNodeProcessor.truncateDbNode();
         dbNodeProcessor.listDbNode();
     }
 
-    private void listDbNode() {
+    public void listDbNode() {
         System.out.println("listing...");
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
@@ -62,11 +72,10 @@ public class DbNodeProcessor {
         }
     }
 
-    private int addDbNode(DbNode dbNode) {
-        Session session = sessionFactory.openSession();
+    public int addDbNode(DbNode dbNode) {
         Transaction tx = null;
         int id = 0;
-        try {
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
             id = (int) session.save(dbNode);
             tx.commit();
@@ -75,13 +84,49 @@ public class DbNodeProcessor {
                 tx.rollback();
             }
             TransLog.getLogger().error("", e);
-        } finally {
-            session.close();
         }
         return id;
     }
 
-    private void updateDbNode(int id, String name) {
+
+    public void addDbNodeList(StoreList storeList) {
+        Transaction tx = null;
+        int id = 0;
+        DbNode dbNode;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+            long t1 = System.currentTimeMillis();
+            for (StoreNode storeNode : storeList.getStoreList()) {
+                dbNode = new DbNode(storeNode);
+                id = (int) session.save(dbNode);
+
+                /*
+                    Commit interval
+                    Raw     Millis
+                    100     130408
+                    1000    32515
+                    10000   23072
+                    100000  22227
+                    1000000 21866
+                 */
+                if (0 == id % TransProp.getInt(TransConst.DB_COMMIT_INTERVAL)) {
+                    tx.commit();
+                    tx = session.beginTransaction();
+                    System.out.println("id=" + id);
+                }
+            }
+            tx.commit();
+            System.out.println("id=" + id);
+            System.out.println(System.currentTimeMillis() - t1);
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            TransLog.getLogger().error("", e);
+        }
+    }
+
+    public void updateDbNode(int id, String name) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
@@ -96,12 +141,28 @@ public class DbNodeProcessor {
         }
     }
 
-    private void deleteDbNode(int id) {
+    public void deleteDbNode(int id) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
             DbNode dbNode = session.get(DbNode.class, id);
             session.delete(dbNode);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            TransLog.getLogger().error("", e);
+        }
+    }
+
+    public void truncateDbNode() {
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+            String sql = "TRUNCATE TABLE node";
+            Query query = session.createSQLQuery(sql);
+            query.executeUpdate();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {

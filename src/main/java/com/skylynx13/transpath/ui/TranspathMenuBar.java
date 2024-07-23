@@ -40,8 +40,8 @@ public class TranspathMenuBar extends JMenuBar {
         this.add(createSysMenu());
         this.add(createTaskMenu());
         this.add(createStoreMenu());
+        this.add(createDataMenu());
         this.add(createHelpMenu());
-
     }
 
     private void setFont() {
@@ -140,6 +140,15 @@ public class TranspathMenuBar extends JMenuBar {
         fetchSelectedItem.addActionListener(e -> Transpath.getTranspathFrame().fetchSelectedStores());
 
         return storeMenu;
+    }
+
+    private JMenu createDataMenu() {
+        JMenu dataMenu = new JMenu("Data");
+
+        JMenuItem InitDbItem = new JMenuItem("Init DB");
+        dataMenu.add(InitDbItem);
+        InitDbItem.addActionListener(e -> Transpath.getTranspathFrame().initDB());
+        return dataMenu;
     }
 
     private JMenu createHelpMenu() {
