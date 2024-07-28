@@ -39,7 +39,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
         StoreList storeList = new StoreList();
         File storePath = new File(browsePath);
         if (!storePath.isDirectory() || storePath.listFiles() == null) {
-            TransLog.getLogger().warn("Store path ignored: " + browsePath);
+            TransLog.getLogger().warn("Store path ignored: {}", browsePath);
             return storeList;
         }
         storeList.attachListWithIdMap(browseStoreListByPath(storePath));
@@ -96,7 +96,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
 
     private void logTimeElapsed(long t0) {
         long t1 = System.currentTimeMillis();
-        TransLog.getLogger().info("Time elapsed " + (t1-t0) + "ms.");
+        TransLog.getLogger().info("Time elapsed {}ms.", t1 - t0);
     }
 
     @Override

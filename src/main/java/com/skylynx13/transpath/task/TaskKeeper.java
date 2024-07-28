@@ -30,8 +30,8 @@ public class TaskKeeper {
         FileUtils.copyFileBytes(
                 TransProp.get(TransConst.LOC_TASK) + "raw.txt",
                 TransProp.get(TransConst.LOC_TASK) + "raw_" + archDate + ".txt");
-        TransLog.getLogger().info("Raw Filtered to "+ n + " lines.");        
-        TransLog.getLogger().info("Done.");
+        TransLog.getLogger().info("Raw Filtered to {} lines.", n);
+        TransLog.getLogger().info("Raw done.");
     }
     
     private void keepFresh() {
@@ -44,8 +44,8 @@ public class TaskKeeper {
         FileUtils.copyFileBytes(
                 TransProp.get(TransConst.LOC_TASK) + "fresh.txt",
                 TransProp.get(TransConst.LOC_TASK) + "fresh_" + archDate + ".txt");
-        TransLog.getLogger().info("Totally " + n + " fresh entries processed.");
-        TransLog.getLogger().info("Done.");
+        TransLog.getLogger().info("Totally {} fresh entries processed.", n);
+        TransLog.getLogger().info("Fresh done.");
     }
     
     public static void weekFresh() {
@@ -58,7 +58,7 @@ public class TaskKeeper {
         TaskDigger.digKeywordFileDefault(
                 TransProp.get(TransConst.LOC_TASK) + "fresh.txt",
                 TransProp.get(TransConst.LOC_TASK) + "task_week.txt");
-        TransLog.getLogger().info("Done.");
+        TransLog.getLogger().info("New fresh done.");
     }
     
     public static void digSpecFresh() {

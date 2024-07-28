@@ -210,5 +210,4 @@ public class ArrangerTest {
         thirdArranger.addEntry(ent2);
         assertFalse(firstArranger.equals(thirdArranger));
     }
-
 }

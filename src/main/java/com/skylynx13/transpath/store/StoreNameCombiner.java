@@ -39,7 +39,7 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
         TransLog.getLogger().info("Building store list...");
         long t0 = System.currentTimeMillis();
         StoreList storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList_Store.txt");
-        TransLog.getLogger().info("Store list built in " + (System.currentTimeMillis() - t0) + "ms.");
+        TransLog.getLogger().info("Store list built in {}ms.", System.currentTimeMillis() - t0);
         return storeList;
     }
 
@@ -47,7 +47,7 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
         TransLog.getLogger().info("Building disk store list...");
         long t0 = System.currentTimeMillis();
         StoreList diskList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList_Browse.txt");
-        TransLog.getLogger().info("Disk store list built in " + (System.currentTimeMillis() - t0) + "ms.");
+        TransLog.getLogger().info("Disk store list built in {}ms.", System.currentTimeMillis() - t0);
         return diskList;
     }
 
@@ -63,7 +63,7 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
 
     private void logTimeElapsed(long t0) {
         long t1 = System.currentTimeMillis();
-        TransLog.getLogger().info("Time elapsed " + (t1-t0) + "ms.");
+        TransLog.getLogger().info("Time elapsed {}ms.", t1 - t0);
     }
 
     private StoreList nameCombine(StoreList storeList, StoreList diskStoreList) {
@@ -101,11 +101,11 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
 
         TransLog.getLogger().info("No disk list.");
         TransLog.getLogger().info(noDiskList.toString());
-        TransLog.getLogger().info("=== No disk count: " + noDiskList.size() + " ===");
+        TransLog.getLogger().info("=== No disk count: {} ===", noDiskList.size());
 
         TransLog.getLogger().info("No store list.");
         TransLog.getLogger().info(noStoreList.toString());
-        TransLog.getLogger().info("=== No store count: " + noStoreList.size() + " ===");
+        TransLog.getLogger().info("=== No store count: {} ===", noStoreList.size());
 
         TransLog.getLogger().info("Store list mismatch checked.");
         logTimeElapsed(t0);

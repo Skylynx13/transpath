@@ -1,7 +1,6 @@
 package com.skylynx13.transpath.utils;
 
 import com.skylynx13.transpath.log.TransLog;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;

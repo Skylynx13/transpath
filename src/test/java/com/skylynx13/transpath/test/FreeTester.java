@@ -23,7 +23,7 @@ import com.skylynx13.transpath.utils.TransProp;
  * Date: 2014-04-14 22:35:28
  */
 public class FreeTester {
-    public class SortByName implements Comparator<String> {
+    public static class SortByName implements Comparator<String> {
         public int compare (String s1, String s2) {
             if (s1.compareTo(s2) > 0) {
                 return 1;
@@ -39,11 +39,11 @@ public class FreeTester {
         aStrList.add("abcde");
         aStrList.add("1234");
         aStrList.add("12345");
-        System.out.println(aStrList.toString());
+        System.out.println(aStrList);
         Collections.sort(aStrList);
-        System.out.println(aStrList.toString());
+        System.out.println(aStrList);
         aStrList.sort(new SortByName());
-        System.out.println(aStrList.toString());
+        System.out.println(aStrList);
     }
     public void testArrangerBasic() {
         TaskEntry cde1 = new TaskEntry("name1");
@@ -64,7 +64,7 @@ public class FreeTester {
         cde3.addLink("link42");
         cdEntries.add(cde3);
         TaskArranger argr = new TaskArranger(cdEntries);
-        System.out.println(argr.toString());
+        System.out.println(argr);
         System.out.println(argr.toOutput());
         
         System.out.println(argr.sort().toString());
@@ -78,7 +78,8 @@ public class FreeTester {
     public void testArranger() {
         TaskArranger argr = new TaskArranger();
         try {
-            int n = argr.readFromFile("src/test/resources/raw.txt").sort().merge().writeToFile("src/test/resources/task.txt");
+            int n = argr.readFromFile("src/test/resources/raw.txt")
+                    .sort().merge().writeToFile("src/test/resources/task.txt");
             System.out.println("Totally " + n + " entries processed.");
         } catch (NullPointerException e) {
             System.out.println(argr.getStatus());
@@ -218,7 +219,7 @@ public class FreeTester {
         Map<String, String> disMap = new HashMap<>();
         disMap.put("aaa", "bbb");
         disMap.put("333", "444");
-        System.out.println(disMap.toString());
+        System.out.println(disMap);
 
     }
 

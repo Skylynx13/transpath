@@ -96,7 +96,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
         processBuilder.redirectErrorStream(true);
 
         if (isIgnorable(fileName)) {
-            TransLog.getLogger().info(TransConst.PKG_IGNORE + ": " + fileName);
+            TransLog.getLogger().info(TransConst.PKG_IGNORE + ": {}", fileName);
             return errorInfos;
         }
 
@@ -108,8 +108,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
         String result;
         for (Checker checker : checkers) {
             processBuilder.command(checker.checkCommand(fileName));
-            TransLog.getLogger().info("Command line: "
-                    + String.join(" ", processBuilder.command()));
+            TransLog.getLogger().info("Command line: {}", String.join(" ", processBuilder.command()));
             result = processCommand(processBuilder);
             if (checker.checkOk(result)) {
                 if (!checker.checkType(fileName)) {
@@ -136,7 +135,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
             TransLog.getLogger().error("", e);
         }
 
-        TransLog.getLogger().info("Package Status: " + lastLine);
+        TransLog.getLogger().info("Package Status: {}", lastLine);
         return lastLine.toString();
     }
 

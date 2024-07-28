@@ -117,7 +117,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         TransLog.getLogger().info("Building old store list...");
         long t0 = System.currentTimeMillis();
         StoreList oldList = new StoreList().loadCurrent();
-        TransLog.getLogger().info("Old store list built in " + (System.currentTimeMillis() - t0) + "ms.");
+        TransLog.getLogger().info("Old store list built in {}ms.", System.currentTimeMillis() - t0);
         return oldList;
     }
 
@@ -144,7 +144,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         File[] storeFiles = storePath.listFiles();
 
         if (!storePath.isDirectory() || storeFiles == null) {
-            TransLog.getLogger().warn("Store path ignored: " + storePath.getPath());
+            TransLog.getLogger().warn("Store path ignored: {}", storePath.getPath());
             return storeList;
         }
 
@@ -178,7 +178,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
                 TransLog.getLogger().info(singlePathList.toString());
                 return singlePathList;
             }
-            TransLog.getLogger().error("Error branch path: " + branchPath);
+            TransLog.getLogger().error("Error branch path: {}", branchPath);
             throw new StoreListException("Error branch path.");
         }
         return checkExistList(parseList(branchPath));
@@ -189,9 +189,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         Matcher branchMatcher = PATTERN_PATH_UNIT.matcher(branchPath);
         int numberA = 0;
         while (branchMatcher.find()) {
-            TransLog.getLogger().info(
-                    "count: " + branchMatcher.groupCount() + ", " +
-                    "group: " + branchMatcher.group());
+            TransLog.getLogger().info("count: {}, group: {}", branchMatcher.groupCount(), branchMatcher.group());
 
             if (branchMatcher.group(GROUP_A) != null) {
                 numberA = Integer.parseInt(branchMatcher.group(GROUP_A));
@@ -205,7 +203,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
             }
 
             if (numberB > numberS) {
-                TransLog.getLogger().error("Error branch group: " + branchMatcher.group());
+                TransLog.getLogger().error("Error branch group: {}", branchMatcher.group());
                 throw new StoreListException("Error branch group.");
             }
 
@@ -213,7 +211,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
                 parsedList.add(String.format("A%04d/B%04d", numberA, numberI));
             }
         }
-        TransLog.getLogger().info("Request list:" + parsedList);
+        TransLog.getLogger().info("Request list:{}", parsedList);
         return parsedList;
     }
 
@@ -228,13 +226,13 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         if (existList.isEmpty()) {
             throw new StoreListException("Respond list is empty.");
         }
-        TransLog.getLogger().info("Respond list: " + existList);
+        TransLog.getLogger().info("Respond list: {}", existList);
         return existList;
     }
 
     private long logTimeElapsed(long t0) {
         long t1 = System.currentTimeMillis();
-        TransLog.getLogger().info("Time elapsed " + (t1-t0) + "ms.");
+        TransLog.getLogger().info("Time elapsed {}ms.", t1 - t0);
         return t1;
     }
 
@@ -256,16 +254,16 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         duplicateList.orderByMd5();
         TransLog.getLogger().info("Duplicated list: ");
         TransLog.getLogger().info(duplicateList.toString());
-        TransLog.getLogger().info("=== Duplicated count: " + (duplicateList.size() - removeList.size()) + " ===");
-        TransLog.getLogger().info("=== Removed count: " + removeList.size() + " ===");
+        TransLog.getLogger().info("=== Duplicated count: {} ===", duplicateList.size() - removeList.size());
+        TransLog.getLogger().info("=== Removed count: {} ===", removeList.size());
         TransLog.getLogger().info("Duplication checked.");
         t0 = logTimeElapsed(t0);
 
         removeList.orderByPathAndName();
         removeList.recap();
         keepDelList(removeList);
-        TransLog.getLogger().info("Removed count: " + removeList.size());
-        TransLog.getLogger().info("Removed size: " + removeList.getStoreSize());
+        TransLog.getLogger().info("Removed count: {}", removeList.size());
+        TransLog.getLogger().info("Removed size: {}", removeList.getStoreSize());
         TransLog.getLogger().info("Removal scripted.");
         t0 = logTimeElapsed(t0);
 
@@ -285,8 +283,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         for (StoreNode aNode : newStoreList.getStoreList()) {
             String md5 = aNode.getMd5();
             if (md5Map.get(md5) != null) {
-                Integer counter = md5Map.get(md5);
-                md5Map.put(md5, counter+1);
+                md5Map.compute(md5, (k, counter) -> counter + 1);
                 removeList.addNode(aNode);
             } else {
                 md5Map.put(md5, 1);

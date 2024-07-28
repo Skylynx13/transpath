@@ -52,7 +52,7 @@ public class TaskArranger {
     }
     
     public boolean checkLinkLine(String line) {
-        return line.matches("[v]?http[s]?://.*");
+        return line.matches("v?https?://.*");
     }
     
     public boolean checkCommentLine(String line) {
@@ -210,18 +210,18 @@ public class TaskArranger {
             }
             if (!isInWindow && checkEndLine(inLine)) {
                 TransLog.getLogger().info("Error: End line out of window!");
-                TransLog.getLogger().info("Last End Line " + iLastClose + ": " + sLastClose);
-                TransLog.getLogger().info("This End Line " + iInLine + ": " + inLine);
+                TransLog.getLogger().info("Last End Line {}: {}", iLastClose, sLastClose);
+                TransLog.getLogger().info("This End Line {}: {}", iInLine, inLine);
             }
             if (!isInWindow && checkLinkLine(inLine)) {
                 TransLog.getLogger().info("Error: Link line out of window!");
-                TransLog.getLogger().info("Last End Line: " + iLastClose + ": " + sLastClose);
-                TransLog.getLogger().info("This Link Line " + iInLine + ": " + inLine);
+                TransLog.getLogger().info("Last End Line: {}: {}", iLastClose, sLastClose);
+                TransLog.getLogger().info("This Link Line {}: {}", iInLine, inLine);
             }
             if (isInWindow && checkStartLine(inLine)) {
                 TransLog.getLogger().info("Error: Start line inside window!");
-                TransLog.getLogger().info("Last Start Line: " + iLastOpen + ": " + sLastOpen);
-                TransLog.getLogger().info("This Start Line " + iInLine + ": " + inLine);
+                TransLog.getLogger().info("Last Start Line: {}: {}", iLastOpen, sLastOpen);
+                TransLog.getLogger().info("This Start Line {}: {}", iInLine, inLine);
             }
             if (!isInWindow && checkStartLine(inLine)) {
                 isInWindow = true;

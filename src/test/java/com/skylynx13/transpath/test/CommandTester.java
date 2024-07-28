@@ -22,10 +22,10 @@ public class CommandTester {
                     ));
             String inLine;
             while ((inLine = iReader.readLine()) != null) {
-                TransLog.getLogger().info("Return: " + inLine);
+                TransLog.getLogger().info("Return: {}", inLine);
             }
             while ((inLine = eReader.readLine()) != null) {
-                TransLog.getLogger().info("Error: " + inLine);
+                TransLog.getLogger().info("Error: {}", inLine);
             }
             if (cmdProcessor.waitFor() != 0) {
                 if (cmdProcessor.exitValue() == 1) {

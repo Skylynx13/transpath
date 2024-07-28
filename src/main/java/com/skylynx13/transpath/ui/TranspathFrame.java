@@ -1,8 +1,6 @@
 package com.skylynx13.transpath.ui;
 
 import com.skylynx13.transpath.Transpath;
-import com.skylynx13.transpath.db.DbNode;
-import com.skylynx13.transpath.db.DbNodeProcessor;
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.store.StoreList;
 import com.skylynx13.transpath.store.StoreNode;
@@ -10,7 +8,6 @@ import com.skylynx13.transpath.store.StoreTree;
 import com.skylynx13.transpath.utils.FileUtils;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
-import org.hibernate.cfg.Configuration;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -69,7 +66,7 @@ public class TranspathFrame extends JFrame {
         storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
         getTreePane().setViewportView(createTree(storeList));
         setTitle("Storage Archivist - " + storeList.getVersion());
-        TransLog.getLogger().info("List of version " + storeList.getVersion() + " loaded.");
+        TransLog.getLogger().info("List of version {} loaded.", storeList.getVersion());
     }
 
     public StoreList getStoreList() {
@@ -306,7 +303,7 @@ public class TranspathFrame extends JFrame {
     }
 
     void searchList(String searchText) {
-        TransLog.getLogger().info("Searching for \"" + searchText + "\" ... ... ... ...");
+        TransLog.getLogger().info("Searching for \"{}\" ... ... ... ...", searchText);
         StoreList sList = storeList.searchName(searchText);
         updateInfoTable(sList);
         TransLog.getLogger().info(sList.toString());
@@ -314,7 +311,7 @@ public class TranspathFrame extends JFrame {
 
     void fetchSelectedStores() {
         int columnIndex = getIdColumnIndex();
-        TransLog.getLogger().info("Column index = " + columnIndex);
+        TransLog.getLogger().info("Column index = {}", columnIndex);
         if (columnIndex != -1) {
             ArrayList<Integer> storeIdList = getSelectedIdList(columnIndex);
             fetchStore(storeIdList);
@@ -333,7 +330,7 @@ public class TranspathFrame extends JFrame {
         for (StoreNode sNode : sList.getStoreList()) {
             String pathName = FileUtils.regulateSysPath(sNode.getPath().substring(1)) + sNode.getName();
             String cmd = TransConst.CMD_COPY_TO_TARGET + "\"" + sourceBase + pathName + "\" " + target;
-            TransLog.getLogger().info("Command: " + cmd);
+            TransLog.getLogger().info("Command: {}", cmd);
         }
     }
 
@@ -341,7 +338,7 @@ public class TranspathFrame extends JFrame {
         ArrayList<Integer> selectedIds = new ArrayList<>();
         for (int iSelectedRow : infoTable.getSelectedRows()) {
             int id = (Integer)infoTable.getValueAt(iSelectedRow, columnIndex);
-            TransLog.getLogger().info("StoreId selected: " + id);
+            TransLog.getLogger().info("StoreId selected: {}", id);
             selectedIds.add(id);
         }
         return selectedIds;
@@ -367,16 +364,4 @@ public class TranspathFrame extends JFrame {
         TransLog.getLogger().info("Transpath Exit.");
         System.exit(0);
     }
-
-//    public void initDB() {
-//        DbNodeProcessor dbNodeProcessor = new DbNodeProcessor();
-//        dbNodeProcessor.truncateDbNode();
-////        for (StoreNode storeNode : storeList.getStoreList()) {
-////            DbNode dbNode = new DbNode(storeNode);
-////            dbNodeProcessor.addDbNode(dbNode);
-////        }
-//        dbNodeProcessor.addDbNodeList(storeList);
-//    }
-
-
 }

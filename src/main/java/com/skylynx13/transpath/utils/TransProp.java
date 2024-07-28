@@ -2,11 +2,9 @@ package com.skylynx13.transpath.utils;
 
 import com.skylynx13.transpath.log.TransLog;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;

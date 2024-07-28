@@ -15,9 +15,8 @@ import java.util.Scanner;
  */
 public class NameReviser {
     public static void rename() {
-        TransLog.getLogger().info("Result: "
-                + new NameReviser().renameFileByRenameList(TransProp.get(TransConst.LOC_CONFIG)
-                + TransConst.LIST_RENAME) + ".");
+        TransLog.getLogger().info("Result: {}.", new NameReviser().renameFileByRenameList(TransProp.get(TransConst.LOC_CONFIG)
+                + TransConst.LIST_RENAME));
     }
 
     private boolean renameFileByRenameList(String renameListName) {
@@ -41,15 +40,15 @@ public class NameReviser {
                 if (!aFile.getName().equals(replacedName)) {
                     procFile++;
                     if (!aFile.renameTo(new File(rootDir + replacedName))) {
-                        TransLog.getLogger().info(aFile.getName() + " -e> " + replacedName);
+                        TransLog.getLogger().info("{} -e> {}", aFile.getName(), replacedName);
                         return false;
                     }
-                    TransLog.getLogger().info(aFile.getName() + " -> " + replacedName);
+                    TransLog.getLogger().info("{} -> {}", aFile.getName(), replacedName);
                 }
                 checkChars(aFile.getName());
             }
         }
-        TransLog.getLogger().info(procFile + " of " + totalFile + " files renamed.");
+        TransLog.getLogger().info("{} of {} files renamed.", procFile, totalFile);
         return true;
     }
 
@@ -63,7 +62,7 @@ public class NameReviser {
 
     private void checkChars(String fileName) {
         if (!fileName.matches(TransConst.NAME_CHARS)) {
-            TransLog.getLogger().info("Check Characters: " + fileName);
+            TransLog.getLogger().info("Check Characters: {}", fileName);
         }
     }
 

@@ -19,20 +19,22 @@ import javax.imageio.ImageIO;
 public class ImageUtils {
     
     public static void main(String[] args) {
-//        System.out.println("123");
-//        
-//        //设置图片宽度相同
-//        changeImage("D:/imgs/", "1.jpg", "1.jpg", 300,200);
-//        changeImage("D:/imgs/", "2.jpg", "2.jpg", 300,200);
-//        changeImage("D:/imgs/", "3.jpg", "3.jpg", 300,200);
-//        //获取宽度相同的图片
-//        String img1 = "D:/imgs/1.jpg";
-//        String img2 = "D:/imgs/2.jpg";
-//        String img3 = "D:/imgs/3.jpg";
-//        String[] imgs = new String[]{img1,img2,img3};
-//        //图片拼接
-//        merge(imgs,"jpg","D:/imgs/big.jpg");
-        
+/*
+        System.out.println("123");
+
+        //设置图片宽度相同
+        changeImage("D:/imgs/", "1.jpg", "1.jpg", 300,200);
+        changeImage("D:/imgs/", "2.jpg", "2.jpg", 300,200);
+        changeImage("D:/imgs/", "3.jpg", "3.jpg", 300,200);
+        //获取宽度相同的图片
+        String img1 = "D:/imgs/1.jpg";
+        String img2 = "D:/imgs/2.jpg";
+        String img3 = "D:/imgs/3.jpg";
+        String[] imgs = new String[]{img1,img2,img3};
+        //图片拼接
+        merge(imgs,"jpg","D:/imgs/big.jpg");
+*/
+
         String folderPath = "D:/temp/img";
         changeFolderImages(folderPath,5000,5000);
         

@@ -30,13 +30,13 @@ class TaskDigger {
 
     private static void digKeywordFile(String key, String src, String target) {
         String[] keywords = TaskDigger.readKeywordList(key);
-        TransLog.getLogger().info("Digging keywords " + Arrays.toString(keywords));
+        TransLog.getLogger().info("Digging file keywords {}", Arrays.toString(keywords));
         TaskDigger.digKeyword(keywords, src, target);
     }
 
     private static int digKeyword(String[] keywords, String src, String target) {
         int n = new TaskArranger().readFromFile(src).applyFilter(keywords).appendToFile(target);
-        TransLog.getLogger().info("" + n + " entries digged from " + src + " are saved to " + target);
+        TransLog.getLogger().info("{} entries digged from {} are saved to {}", n, src, target);
         return n;
     }
 
@@ -61,11 +61,11 @@ class TaskDigger {
         FileUtils.clearFile(target);
         File path = new File(TransProp.get(TransConst.LOC_TASK));
         int total = 0;
-        TransLog.getLogger().info("Digging keywords " + Arrays.toString(keys));
+        TransLog.getLogger().info("Digging specific keywords {}", Arrays.toString(keys));
         for (File file : Objects.requireNonNull(path.listFiles((file, name) -> name.matches(FRESH_TXT)))) {
             total += TaskDigger.digKeyword(keys, file.getAbsolutePath(), target);
         }
-        TransLog.getLogger().info("Total: " + total);
-        TransLog.getLogger().info("Time : " + (System.currentTimeMillis() - t0) + "ms");
+        TransLog.getLogger().info("Total: {}", total);
+        TransLog.getLogger().info("Time : {}ms", System.currentTimeMillis() - t0);
     }
 }

@@ -107,9 +107,8 @@ public class PackageCheckerTest {
                 "src/test/resources/testEmpty.zip : All checkers failed.\r\n" +
                 "src/test/resources/testRarFakeZip.zip : Type mismatch.\r\n" +
                 "src/test/resources/testWrongType.tmp : File type not recognized.\r\n" +
-                "src/test/resources/testZipFakeRar.rar : Type mismatch.\r\n" +
+                "src/test/resources/testZipFakeRar.rar : Type mismatch.\r\n", result);
 //                "src/test/resources/testIgnorable.pdf : File type ignorable.\r\n" +
-                "", result);
 //        assertEquals(5, result.size());
 //        assertEquals("No files to extract", result.get(testResource("testZipFakeRar.rar")));
 //        assertEquals("No files to extract", result.get(testResource("testEmpty.rar")));

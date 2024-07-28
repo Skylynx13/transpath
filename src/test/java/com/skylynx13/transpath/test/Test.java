@@ -3,8 +3,6 @@ package com.skylynx13.transpath.test;
 import com.skylynx13.transpath.log.TransLog;
 
 import javax.swing.*;
-import javax.swing.text.Document;
-import javax.swing.text.EditorKit;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -12,15 +10,13 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class Test extends JFrame implements DropTargetListener {
     private static final long serialVersionUID = -5037743965292608371L;
-    private JEditorPane textPane = new JEditorPane();
-    private DragTree tree = new DragTree();
-    private JScrollPane jsPane = new JScrollPane(tree);
+    private final JEditorPane textPane = new JEditorPane();
+    private final DragTree tree = new DragTree();
+    private final JScrollPane jsPane = new JScrollPane(tree);
 
     private Test() {
         super("Drag and Drop With Swing");
@@ -82,63 +78,67 @@ public class Test extends JFrame implements DropTargetListener {
         return textPanel;
     }
 
-//    private void readFile(final String filename) {
-//        try {
-//            textPane.setPage(new File(filename).toURL());
-//        } catch (IOException e) {
-//            EditorKit kit = textPane.getEditorKit();
-//            Document document = textPane.getDocument();
-//            try {
-//                document.remove(0, document.getLength());
-//                kit.read(new FileReader(filename), document, 0);
-//            } catch (Exception ex) {
-//                TransLog.getLogger().error("", ex);
-//            }
-//        }
-//    }
-//
-//    private void readFile(final File f) {
-//        try {
-//            textPane.setPage(f.toURL());
-//        } catch (IOException e) {
-//            EditorKit kit = textPane.getEditorKit();
-//            Document document = textPane.getDocument();
-//            try {
-//                document.remove(0, document.getLength());
-//                kit.read(new FileReader(f), document, 0);
-//            } catch (Exception ex) {
-//                TransLog.getLogger().error("", ex);
-//            }
-//        }
-//    }
-//
-    public void drop(DropTargetDropEvent e) {
-//        System.out.println("Drop");
-//        try {
-//            DataFlavor stringFlavor = DataFlavor.stringFlavor;
-//            Transferable tr = e.getTransferable();
-//            System.out.println("JFL: " + e.isDataFlavorSupported(DataFlavor.javaFileListFlavor));
-//            System.out.println("JFL: " + tr.getTransferData(DataFlavor.javaFileListFlavor).toString());
-//            if (e.isDataFlavorSupported(stringFlavor)) {
-//                String filename = (String) tr.getTransferData(stringFlavor);
-//                System.out.println(filename + "|");
-//                if (filename.endsWith(".txt") || filename.endsWith(".java") || filename.endsWith(".jsp")
-//                        || filename.endsWith(".html") || filename.endsWith(".htm") || filename.endsWith(".log")) {
-//                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-//                    //readFile("D:\\temp\\" + filename);
-//                    readFile((File)((java.util.List)tr.getTransferData(DataFlavor.javaFileListFlavor)).get(0));
-//                    textPane.setCaretPosition(0);
-//                    e.dropComplete(true);
-//                } else {
-//                    e.rejectDrop();
-//                }
-//            } else {
-//                e.rejectDrop();
-//            }
-//        } catch (IOException | UnsupportedFlavorException ioe) {
-//            TransLog.getLogger().error("", ioe);
-//        }
+/*
+    private void readFile(final String filename) {
+        try {
+            textPane.setPage(new File(filename).toURL());
+        } catch (IOException e) {
+            EditorKit kit = textPane.getEditorKit();
+            Document document = textPane.getDocument();
+            try {
+                document.remove(0, document.getLength());
+                kit.read(new FileReader(filename), document, 0);
+            } catch (Exception ex) {
+                TransLog.getLogger().error("", ex);
+            }
+        }
     }
+
+    private void readFile(final File f) {
+        try {
+            textPane.setPage(f.toURL());
+        } catch (IOException e) {
+            EditorKit kit = textPane.getEditorKit();
+            Document document = textPane.getDocument();
+            try {
+                document.remove(0, document.getLength());
+                kit.read(new FileReader(f), document, 0);
+            } catch (Exception ex) {
+                TransLog.getLogger().error("", ex);
+            }
+        }
+    }
+
+*/
+public void drop(DropTargetDropEvent e) {
+/*
+        System.out.println("Drop");
+        try {
+            DataFlavor stringFlavor = DataFlavor.stringFlavor;
+            Transferable tr = e.getTransferable();
+            System.out.println("JFL: " + e.isDataFlavorSupported(DataFlavor.javaFileListFlavor));
+            System.out.println("JFL: " + tr.getTransferData(DataFlavor.javaFileListFlavor).toString());
+            if (e.isDataFlavorSupported(stringFlavor)) {
+                String filename = (String) tr.getTransferData(stringFlavor);
+                System.out.println(filename + "|");
+                if (filename.endsWith(".txt") || filename.endsWith(".java") || filename.endsWith(".jsp")
+                        || filename.endsWith(".html") || filename.endsWith(".htm") || filename.endsWith(".log")) {
+                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                    //readFile("D:\\temp\\" + filename);
+                    readFile((File)((java.util.List)tr.getTransferData(DataFlavor.javaFileListFlavor)).get(0));
+                    textPane.setCaretPosition(0);
+                    e.dropComplete(true);
+                } else {
+                    e.rejectDrop();
+                }
+            } else {
+                e.rejectDrop();
+            }
+        } catch (IOException | UnsupportedFlavorException ioe) {
+            TransLog.getLogger().error("", ioe);
+        }
+*/
+}
 //
     public void dragEnter(DropTargetDragEvent e) {
         System.out.println("testenter1");

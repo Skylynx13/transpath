@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
  */
 public class StringUtils {
     public static boolean isEmpty(String pString) {
-        return pString == null || pString.length() == 0;
+        return pString == null || pString.isEmpty();
     }
 
     public static String formatLongInt(Long longInt) {
