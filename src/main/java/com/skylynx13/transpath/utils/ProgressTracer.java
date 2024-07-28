@@ -28,6 +28,11 @@ public class ProgressTracer {
         countNow ++;
     }
 
+    public void updateCurrent(long cSize, long cCount) {
+        sizeNow = cSize;
+        countNow = cCount;
+    }
+
     private int calcSizePercentage() {
         return (int)(100 * sizeNow / sizeTotal);
     }

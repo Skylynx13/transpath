@@ -1,9 +1,11 @@
 package com.skylynx13.transpath.db;
 
+import com.skylynx13.transpath.Transpath;
 import com.skylynx13.transpath.log.TransLog;
 import com.skylynx13.transpath.store.StoreList;
 import com.skylynx13.transpath.store.StoreNode;
-import com.skylynx13.transpath.utils.DateUtils;
+import com.skylynx13.transpath.utils.ProgressReport;
+import com.skylynx13.transpath.utils.ProgressTracer;
 import com.skylynx13.transpath.utils.TransConst;
 import com.skylynx13.transpath.utils.TransProp;
 import org.hibernate.HibernateException;
@@ -14,18 +16,68 @@ import org.hibernate.cfg.Configuration;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.swing.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class DbNodeProcessor {
+public class DbNodeProcessor extends SwingWorker<StringBuilder, ProgressReport> {
     private static SessionFactory sessionFactory;
+    private final ProgressTracer progressTracer = new ProgressTracer();
 
     public DbNodeProcessor() {
         try {
             // default param for configure() is hibernate.cfg.xml
+            //Configuration configuration = new Configuration().addResource("conf/hibernate.cfg.xml");
             sessionFactory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable throwable) {
             TransLog.getLogger().error("Failed to create sessionFactory object. ", throwable);
         }
+    }
+    @Override
+    protected StringBuilder doInBackground() {
+        long startTimeMillis = System.currentTimeMillis();
+
+        this.truncateDbNode();
+        TransLog.getLogger().info("DB nodes truncated.");
+
+        StoreList storeList = Transpath.getTranspathFrame().getStoreList();
+        resetProgress(storeList.size(), storeList.size());
+        this.addDbNodeList(storeList);
+
+        long endTimeMillis =  System.currentTimeMillis();
+         return new StringBuilder("DB initialized.")
+                .append(" Init Rows: ").append(storeList.size())
+                .append(" Init Time: ").append(endTimeMillis - startTimeMillis).append("ms.");
+    }
+
+    @Override
+    protected void process(List<ProgressReport> progressReportList) {
+        ProgressReport lastProgressReport = progressReportList.get(progressReportList.size()-1);
+        Transpath.getProgressBar().setValue(lastProgressReport.getProgress());
+        Transpath.getStatusLabel().setText(lastProgressReport.getReportLine());
+    }
+
+    @Override
+    protected void done() {
+        try {
+            StringBuilder result = get();
+            TransLog.getLogger().info(result.toString());
+            Transpath.getStatusLabel().setText(result.toString());
+        } catch (InterruptedException | ExecutionException e) {
+            TransLog.getLogger().error("", e);
+        }
+    }
+
+    private void resetProgress(long totalSize, long totalCount) {
+        TransLog.getLogger().info("DB initializing.");
+        progressTracer.reset(totalSize, totalCount, "DB initializing");
+        publish(progressTracer.report());
+    }
+
+    private void updateProgress(long cSize, long cCount) {
+        TransLog.getLogger().info("Processed: {}", cCount);
+        progressTracer.updateCurrent(cSize, cCount);
+        publish(progressTracer.report());
     }
 
     public static void main(String[] args) {
@@ -88,18 +140,17 @@ public class DbNodeProcessor {
         return id;
     }
 
-
     public void addDbNodeList(StoreList storeList) {
         Transaction tx = null;
-        int id = 0;
+        int interval = TransProp.getInt(TransConst.DB_COMMIT_INTERVAL);
+        int counter = 0;
         DbNode dbNode;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
-            long t1 = System.currentTimeMillis();
             for (StoreNode storeNode : storeList.getStoreList()) {
                 dbNode = new DbNode(storeNode);
-                id = (int) session.save(dbNode);
-
+                session.save(dbNode);
+                counter++;
                 /*
                     Commit interval
                     Raw     Millis
@@ -109,15 +160,14 @@ public class DbNodeProcessor {
                     100000  22227
                     1000000 21866
                  */
-                if (0 == id % TransProp.getInt(TransConst.DB_COMMIT_INTERVAL)) {
+                if (0 == counter % interval) {
                     tx.commit();
+                    updateProgress(counter, counter);
                     tx = session.beginTransaction();
-                    System.out.println("id=" + id);
                 }
             }
             tx.commit();
-            System.out.println("id=" + id);
-            System.out.println(System.currentTimeMillis() - t1);
+            updateProgress(counter, counter);
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();

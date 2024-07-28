@@ -72,6 +72,10 @@ public class TranspathFrame extends JFrame {
         TransLog.getLogger().info("List of version " + storeList.getVersion() + " loaded.");
     }
 
+    public StoreList getStoreList() {
+        return storeList;
+    }
+
     private JTree createTree(StoreList storeList) {
         StoreTree storeTree = StoreTree.buildFromList(storeList);
         storeTree.recursivelySort();
@@ -364,15 +368,15 @@ public class TranspathFrame extends JFrame {
         System.exit(0);
     }
 
-    public void initDB() {
-        DbNodeProcessor dbNodeProcessor = new DbNodeProcessor();
-        dbNodeProcessor.truncateDbNode();
-//        for (StoreNode storeNode : storeList.getStoreList()) {
-//            DbNode dbNode = new DbNode(storeNode);
-//            dbNodeProcessor.addDbNode(dbNode);
-//        }
-        dbNodeProcessor.addDbNodeList(storeList);
-    }
+//    public void initDB() {
+//        DbNodeProcessor dbNodeProcessor = new DbNodeProcessor();
+//        dbNodeProcessor.truncateDbNode();
+////        for (StoreNode storeNode : storeList.getStoreList()) {
+////            DbNode dbNode = new DbNode(storeNode);
+////            dbNodeProcessor.addDbNode(dbNode);
+////        }
+//        dbNodeProcessor.addDbNodeList(storeList);
+//    }
 
 
 }

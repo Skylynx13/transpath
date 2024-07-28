@@ -225,7 +225,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
                 existList.add(fullPath);
             }
         }
-        if (existList.size() == 0) {
+        if (existList.isEmpty()) {
             throw new StoreListException("Respond list is empty.");
         }
         TransLog.getLogger().info("Respond list: " + existList);

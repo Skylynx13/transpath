@@ -90,6 +90,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
         List<Checker> checkers = new ArrayList<>();
         checkers.add(new RarChecker());
         checkers.add(new ZipChecker());
+        checkers.add(new SevenZChecker());
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.redirectErrorStream(true);
@@ -122,21 +123,21 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
     }
 
     private static String processCommand(ProcessBuilder processBuilder) {
-        String lastLine = "";
+        StringBuilder lastLine = new StringBuilder();
 
         try {
             Process process = processBuilder.start();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                lastLine = line;
+                lastLine.append(line);
             }
         } catch (IOException e) {
             TransLog.getLogger().error("", e);
         }
 
         TransLog.getLogger().info("Package Status: " + lastLine);
-        return lastLine;
+        return lastLine.toString();
     }
 
     /**
@@ -178,7 +179,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
 
         @Override
         public boolean checkOk(String result) {
-            return "All OK".equalsIgnoreCase(result);
+            return result.contains("All OK");
         }
     }
 
@@ -195,7 +196,24 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
 
         @Override
         public boolean checkOk(String result) {
-            return result.startsWith("No errors detected in compressed data of");
+            return result.contains("No errors detected in compressed data of");
+        }
+    }
+
+    static class SevenZChecker implements Checker {
+        @Override
+        public boolean checkType(String fileName) {
+            return isZip(fileName);
+        }
+
+        @Override
+        public String[] checkCommand(String fileName) {
+            return new String[]{"7z", "t", fileName};
+        }
+
+        @Override
+        public boolean checkOk(String result) {
+            return result.contains("Everything is Ok");
         }
     }
 
@@ -224,4 +242,3 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
         return fileName.substring(fileName.lastIndexOf('.') + 1);
     }
 }
-

@@ -1,6 +1,7 @@
 package com.skylynx13.transpath.ui;
 
 import com.skylynx13.transpath.Transpath;
+import com.skylynx13.transpath.db.DbNodeProcessor;
 import com.skylynx13.transpath.store.StoreBrowser;
 import com.skylynx13.transpath.store.StoreNameCombiner;
 import com.skylynx13.transpath.store.StoreCombiner;
@@ -147,7 +148,7 @@ public class TranspathMenuBar extends JMenuBar {
 
         JMenuItem InitDbItem = new JMenuItem("Init DB");
         dataMenu.add(InitDbItem);
-        InitDbItem.addActionListener(e -> Transpath.getTranspathFrame().initDB());
+        InitDbItem.addActionListener(e -> new DbNodeProcessor().execute());
         return dataMenu;
     }
 

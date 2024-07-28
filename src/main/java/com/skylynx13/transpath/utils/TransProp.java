@@ -22,7 +22,6 @@ public class TransProp {
     public static String get(String propName) {
         Properties tProps = new Properties();
         try {
-            System.out.println(TransConst.TP_PROPS);
             tProps.load(Files.newInputStream(Paths.get(TransConst.TP_PROPS)));
         } catch (IOException e) {
             TransLog.getLogger().error("", e);
