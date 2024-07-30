@@ -17,6 +17,7 @@ import org.hibernate.cfg.Configuration;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.swing.*;
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -79,26 +80,26 @@ public class DbNodeProcessor extends SwingWorker<StringBuilder, ProgressReport> 
         progressTracer.updateCurrent(cSize, cCount);
         publish(progressTracer.report());
     }
-
-    public static void main(String[] args) {
-        DbNodeProcessor dbNodeProcessor = new DbNodeProcessor();
-
-        DbNode dbNode = new DbNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc11"));
-        int id1 = dbNodeProcessor.addDbNode(dbNode);
-        dbNode =  new DbNode(new StoreNode("1:234:567:4:5:6:/ddd/eee/:fff22"));
-        int id2 = dbNodeProcessor.addDbNode(dbNode);
-
-        dbNodeProcessor.listDbNode();
-        dbNodeProcessor.updateDbNode(id1, "ccc22");
-        dbNodeProcessor.listDbNode();
-        dbNodeProcessor.updateDbNode(id2, "fff33");
-        dbNodeProcessor.listDbNode();
-        dbNodeProcessor.deleteDbNode(id2);
-        dbNodeProcessor.listDbNode();
-//        dbNodeProcessor.deleteDbNode(id1);
-        dbNodeProcessor.truncateDbNode();
-        dbNodeProcessor.listDbNode();
-    }
+//
+//    public static void main(String[] args) {
+//        DbNodeProcessor dbNodeProcessor = new DbNodeProcessor();
+//
+//        DbNode dbNode = new DbNode(new StoreNode("0:123:456:1:2:3:/aaa/bbb/:ccc11"));
+//        int id1 = dbNodeProcessor.addDbNode(dbNode);
+//        dbNode =  new DbNode(new StoreNode("1:234:567:4:5:6:/ddd/eee/:fff22"));
+//        int id2 = dbNodeProcessor.addDbNode(dbNode);
+//
+//        dbNodeProcessor.listDbNode();
+//        dbNodeProcessor.updateDbNode(id1, "ccc22");
+//        dbNodeProcessor.listDbNode();
+//        dbNodeProcessor.updateDbNode(id2, "fff33");
+//        dbNodeProcessor.listDbNode();
+//        dbNodeProcessor.deleteDbNode(id2);
+//        dbNodeProcessor.listDbNode();
+////        dbNodeProcessor.deleteDbNode(id1);
+//        dbNodeProcessor.truncateDbNode();
+//        dbNodeProcessor.listDbNode();
+//    }
 
     public void listDbNode() {
         System.out.println("listing...");
@@ -122,6 +123,36 @@ public class DbNodeProcessor extends SwingWorker<StringBuilder, ProgressReport> 
             }
             TransLog.getLogger().error("", e);
         }
+    }
+
+    public StoreList listAllDbNode() {
+        System.out.println("listing...");
+        long t1 = System.currentTimeMillis();
+        StoreList storeList = new StoreList();
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+
+            //Will get a Raw use of parameterized class or an Unchecked Assignment warning here
+            //List qhRows = session.createQuery("FROM QhRow").list();
+            // FROM a class name, not table name
+            TypedQuery<DbNode> query = session.createQuery("FROM DbNode", DbNode.class);
+            List<DbNode> dbNodes = query.getResultList();
+
+            for (DbNode dbNode : dbNodes) {
+                storeList.getStoreList().add(dbNode.toStoreNode());
+            }
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            TransLog.getLogger().error("", e);
+        }
+        storeList.refreshVersion();
+        storeList.recap();
+        System.out.printf("listed in %dms.", (System.currentTimeMillis() - t1));
+        return storeList;
     }
 
     public int addDbNode(DbNode dbNode) {
@@ -220,5 +251,10 @@ public class DbNodeProcessor extends SwingWorker<StringBuilder, ProgressReport> 
             }
             TransLog.getLogger().error("", e);
         }
+    }
+
+    public void dumpDbNode() {
+        StoreList storeList = listAllDbNode();
+        storeList.keepFile(new File(TransProp.get(TransConst.LOC_LIST) + "StoreList_DB.txt"));
     }
 }

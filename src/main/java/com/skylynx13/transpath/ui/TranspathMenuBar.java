@@ -149,6 +149,11 @@ public class TranspathMenuBar extends JMenuBar {
         JMenuItem InitDbItem = new JMenuItem("Init DB");
         dataMenu.add(InitDbItem);
         InitDbItem.addActionListener(e -> new DbNodeProcessor().execute());
+
+        JMenuItem DumpDbItem = new JMenuItem("Dump DB");
+        dataMenu.add(DumpDbItem);
+        DumpDbItem.addActionListener(e -> new DbNodeProcessor().dumpDbNode());
+
         return dataMenu;
     }
 

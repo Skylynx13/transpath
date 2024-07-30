@@ -59,6 +59,21 @@ public class DbNode {
         this.branch = storeNode.isBranch();
     }
 
+    public StoreNode toStoreNode() {
+        StoreNode storeNode = new StoreNode();
+        storeNode.setId(this.id);
+        storeNode.setPath(this.path);
+        storeNode.setName(this.name);
+        storeNode.setRawName(this.rawName);
+        storeNode.setLength(this.length);
+        storeNode.setLastModified(this.lastModified);
+        storeNode.setMd5(this.md5);
+        storeNode.setSha1(this.sha1);
+        storeNode.setCrc32(this.crc32);
+        storeNode.setBranch(this.branch);
+        return storeNode;
+    }
+
     public int getId() {
         return id;
     }

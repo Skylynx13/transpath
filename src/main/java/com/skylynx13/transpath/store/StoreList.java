@@ -68,7 +68,7 @@ public class StoreList {
         return (null == storeList) ? 0 : storeList.size();
     }
 
-    void recap() {
+    public void recap() {
         minId = Integer.MAX_VALUE;
         maxId = 0;
         for (StoreNode aNode : storeList) {
@@ -200,7 +200,7 @@ public class StoreList {
         recap();
     }
 
-    private void refreshVersion() {
+    public void refreshVersion() {
         version = DateUtils.formatDateTimeLongToday();
     }
 
@@ -278,7 +278,7 @@ public class StoreList {
         keepFile(new File(buildDefaultStorelistName()));
     }
 
-    void keepFile(File pFile) {
+    public void keepFile(File pFile) {
         if (0 == size()) {
             return;
         }

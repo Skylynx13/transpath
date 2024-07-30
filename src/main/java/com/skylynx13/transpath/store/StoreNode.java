@@ -24,9 +24,9 @@ public class StoreNode implements Cloneable {
     private long length;
 
     private long lastModified;
-    private final String md5;
-    private final String sha1;
-    private final String crc32;
+    private String md5;
+    private String sha1;
+    private String crc32;
 
     private boolean branch = false;
 
@@ -34,8 +34,8 @@ public class StoreNode implements Cloneable {
         return branch;
     }
 
-    private void setBranch() {
-        this.branch = true;
+    public void setBranch(boolean branch) {
+        this.branch = branch;
     }
 
     public int getId() {
@@ -90,12 +90,24 @@ public class StoreNode implements Cloneable {
         return md5;
     }
 
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
     public String getSha1() {
         return sha1;
     }
 
+    public void setSha1(String sha1) {
+        this.sha1 = sha1;
+    }
+
     public String getCrc32() {
         return crc32;
+    }
+
+    public void setCrc32(String crc32) {
+        this.crc32 = crc32;
     }
 
     public StoreNode() {
@@ -158,7 +170,7 @@ public class StoreNode implements Cloneable {
         StoreNode branchNode = new StoreNode();
         branchNode.setName(name);
         branchNode.setPath(path);
-        branchNode.setBranch();
+        branchNode.setBranch(true);
         return branchNode;
     }
 
