@@ -294,6 +294,26 @@ public class StoreList {
         }
     }
 
+    public void extractKeyword(File pFile) {
+        if (0 == size()) {
+            return;
+        }
+        Set<String> keySet = new HashSet<>();
+        try {
+            PrintWriter out = new PrintWriter(pFile);
+            for (StoreNode aNode : storeList) {
+                String[] keyList = aNode.getName().split(" ");
+                keySet.addAll(Arrays.asList(keyList));
+            }
+            for (String key : keySet) {
+                out.println(key);
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
+            TransLog.getLogger().error("", e);
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder strBuff = new StringBuilder(keepHeader());

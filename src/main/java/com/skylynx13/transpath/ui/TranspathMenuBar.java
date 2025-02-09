@@ -140,6 +140,10 @@ public class TranspathMenuBar extends JMenuBar {
         storeMenu.add(fetchSelectedItem);
         fetchSelectedItem.addActionListener(e -> Transpath.getTranspathFrame().fetchSelectedStores());
 
+        JMenuItem extractKeywordItem = new JMenuItem("Extract Keyword");
+        storeMenu.add(extractKeywordItem);
+        extractKeywordItem.addActionListener(e -> Transpath.getTranspathFrame().extractKeyword());
+
         return storeMenu;
     }
 

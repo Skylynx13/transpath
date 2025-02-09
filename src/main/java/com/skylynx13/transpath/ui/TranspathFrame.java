@@ -16,6 +16,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -363,5 +364,11 @@ public class TranspathFrame extends JFrame {
     void exit() {
         TransLog.getLogger().info("Transpath Exit.");
         System.exit(0);
+    }
+
+    public void extractKeyword() {
+        TransLog.getLogger().info("Extracting keywords...");
+        storeList.extractKeyword(new File(TransProp.get(TransConst.LOC_LIST) + "StoreKeyword.txt"));
+        TransLog.getLogger().info("Extracted");
     }
 }
