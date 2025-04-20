@@ -17,6 +17,7 @@ public class NameReviser {
     public static void rename() {
         TransLog.getLogger().info("Result: {}.", new NameReviser().renameFileByRenameList(TransProp.get(TransConst.LOC_CONFIG)
                 + TransConst.LIST_RENAME));
+        TransLog.getLogger().info("Get: {}", TransProp.get(TransConst.LOC_CONFIG));
     }
 
     private boolean renameFileByRenameList(String renameListName) {
