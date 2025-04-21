@@ -64,7 +64,7 @@ public class TranspathFrame extends JFrame {
     }
 
     public void reloadStore() {
-        storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList.txt");
+        storeList = new StoreList(TransProp.getString(TransConst.LOC_LIST) + "StoreList.txt");
         getTreePane().setViewportView(createTree(storeList));
         setTitle("Storage Archivist - " + storeList.getVersion());
         TransLog.getLogger().info("List of version {} loaded.", storeList.getVersion());
@@ -99,7 +99,7 @@ public class TranspathFrame extends JFrame {
     }
 
     private void initIcon() {
-        setIconImage(new ImageIcon(TransProp.get(TransConst.LOC_CONFIG) + "star16.png").getImage());
+        setIconImage(new ImageIcon(TransProp.getString(TransConst.LOC_CONFIG) + "star16.png").getImage());
     }
 
     private void initMenuBar() {
@@ -325,8 +325,8 @@ public class TranspathFrame extends JFrame {
         //get source path-name list
         StoreList sList = storeList.getListByIds(storeIdList);
         //get target
-        String sourceBase = TransProp.get(TransConst.LOC_SOURCE);
-        String target = TransProp.get(TransConst.LOC_TARGET);
+        String sourceBase = TransProp.getString(TransConst.LOC_SOURCE);
+        String target = TransProp.getString(TransConst.LOC_TARGET);
         //exec and feedback
         for (StoreNode sNode : sList.getStoreList()) {
             String pathName = FileUtils.regulateSysPath(sNode.getPath().substring(1)) + sNode.getName();
@@ -368,7 +368,7 @@ public class TranspathFrame extends JFrame {
 
     public void extractKeyword() {
         TransLog.getLogger().info("Extracting keywords...");
-        storeList.extractKeyword(new File(TransProp.get(TransConst.LOC_LIST) + "StoreKeyword.txt"));
+        storeList.extractKeyword(new File(TransProp.getString(TransConst.LOC_LIST) + "StoreKeyword.txt"));
         TransLog.getLogger().info("Extracted");
     }
 }

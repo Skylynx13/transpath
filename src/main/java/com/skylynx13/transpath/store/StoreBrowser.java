@@ -22,7 +22,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
         try {
             TransLog.getLogger().info("Store browser started...");
             StoreList storeList = browseStoreList();
-            storeList.keepFile(new File(TransProp.get(TransConst.LOC_LIST) + "StoreList_Browse.txt"));
+            storeList.keepFile(new File(TransProp.getString(TransConst.LOC_LIST) + "StoreList_Browse.txt"));
             return new StringBuilder("Store browser done.");
         } catch (StoreListException e) {
             return new StringBuilder(e.getMessage());
@@ -32,7 +32,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
     private StoreList browseStoreList() throws StoreListException {
         TransLog.getLogger().info("Browse store list...");
         long t0 = System.currentTimeMillis();
-        String browsePath = TransProp.get(TransConst.LOC_SOURCE);
+        String browsePath = TransProp.getString(TransConst.LOC_SOURCE);
         resetProgress(calcStoreFileSize(browsePath), calcStoreFileCount(browsePath)
         );
 
@@ -56,7 +56,7 @@ public class StoreBrowser extends SwingWorker<StringBuilder, ProgressReport> {
         StoreList storeList = new StoreList();
         for (File aPath : Objects.requireNonNull(storePath.listFiles())) {
             if (aPath.isFile()) {
-                StoreNode aNode = new StoreNode(TransProp.get(TransConst.LOC_SOURCE), aPath, true);
+                StoreNode aNode = new StoreNode(TransProp.getString(TransConst.LOC_SOURCE), aPath, true);
                 storeList.addNodeWithId(aNode);
                 TransLog.getLogger().info(aNode.toNodeString());
                 updateProgress(aNode.getLength());

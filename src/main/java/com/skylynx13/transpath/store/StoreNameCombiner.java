@@ -23,7 +23,7 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
             StoreList storeList = buildStoreList();
             StoreList diskStoreList = buildDiskStoreList();
             StoreList nameCombinedList = nameCombine(storeList, diskStoreList);
-            nameCombinedList.keepFile(new File(TransProp.get(TransConst.LOC_LIST) + "StoreList_All.txt"));
+            nameCombinedList.keepFile(new File(TransProp.getString(TransConst.LOC_LIST) + "StoreList_All.txt"));
 
             return new StringBuilder("Store name combiner done.")
                     .append(" Store: ").append(storeList.size())
@@ -38,7 +38,7 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
     private StoreList buildStoreList() {
         TransLog.getLogger().info("Building store list...");
         long t0 = System.currentTimeMillis();
-        StoreList storeList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList_Store.txt");
+        StoreList storeList = new StoreList(TransProp.getString(TransConst.LOC_LIST) + "StoreList_Store.txt");
         TransLog.getLogger().info("Store list built in {}ms.", System.currentTimeMillis() - t0);
         return storeList;
     }
@@ -46,7 +46,7 @@ public class StoreNameCombiner extends SwingWorker<StringBuilder, ProgressReport
     private StoreList buildDiskStoreList() throws StoreListException {
         TransLog.getLogger().info("Building disk store list...");
         long t0 = System.currentTimeMillis();
-        StoreList diskList = new StoreList(TransProp.get(TransConst.LOC_LIST) + "StoreList_Browse.txt");
+        StoreList diskList = new StoreList(TransProp.getString(TransConst.LOC_LIST) + "StoreList_Browse.txt");
         TransLog.getLogger().info("Disk store list built in {}ms.", System.currentTimeMillis() - t0);
         return diskList;
     }

@@ -218,7 +218,7 @@ public class StoreList {
     }
 
     private String buildDefaultStorelistName() {
-        return TransProp.get(TransConst.LOC_LIST) + "StoreList.txt";
+        return TransProp.getString(TransConst.LOC_LIST) + "StoreList.txt";
     }
 
     StoreList loadCurrent() {
@@ -270,7 +270,7 @@ public class StoreList {
     }
 
     private File getBackupRev(int rev) {
-        return new File(FileUtils.regulateSysPath(TransProp.get(TransConst.LOC_LIST)
+        return new File(FileUtils.regulateSysPath(TransProp.getString(TransConst.LOC_LIST)
                 + String.format("Backup/StoreList_%s_%03d.txt", version, rev)));
     }
 

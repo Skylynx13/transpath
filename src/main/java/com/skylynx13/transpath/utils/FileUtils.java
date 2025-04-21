@@ -280,7 +280,7 @@ public class FileUtils {
     }
 
     public static boolean isWindows() {
-        return TransProp.get(TransConst.SYS_TYPE).equalsIgnoreCase(TransConst.SYS_WINDOWS);
+        return TransProp.getString(TransConst.SYS_TYPE).equalsIgnoreCase(TransConst.SYS_WINDOWS);
     }
 
     private static String toWindowsPath(String path) {

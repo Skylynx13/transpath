@@ -22,14 +22,14 @@ public class TaskKeeper {
     private void keepRaw() {
         TransLog.getLogger().info("Keeping raw...");
         FileUtils.copyFileBytes(
-                TransProp.get(TransConst.LOC_TASK) + "dump.txt",
-                TransProp.get(TransConst.LOC_TASK) + "dump_" + archDate + ".txt");
+                TransProp.getString(TransConst.LOC_TASK) + "dump.txt",
+                TransProp.getString(TransConst.LOC_TASK) + "dump_" + archDate + ".txt");
         int n = new TaskArranger().trimFile(
-                TransProp.get(TransConst.LOC_TASK) + "dump.txt",
-                TransProp.get(TransConst.LOC_TASK) + "raw.txt");
+                TransProp.getString(TransConst.LOC_TASK) + "dump.txt",
+                TransProp.getString(TransConst.LOC_TASK) + "raw.txt");
         FileUtils.copyFileBytes(
-                TransProp.get(TransConst.LOC_TASK) + "raw.txt",
-                TransProp.get(TransConst.LOC_TASK) + "raw_" + archDate + ".txt");
+                TransProp.getString(TransConst.LOC_TASK) + "raw.txt",
+                TransProp.getString(TransConst.LOC_TASK) + "raw_" + archDate + ".txt");
         TransLog.getLogger().info("Raw Filtered to {} lines.", n);
         TransLog.getLogger().info("Raw done.");
     }
@@ -37,13 +37,13 @@ public class TaskKeeper {
     private void keepFresh() {
         TransLog.getLogger().info("Keeping fresh...");
         int n = new TaskArranger()
-                .readFromFile(TransProp.get(TransConst.LOC_TASK) + "raw.txt")
+                .readFromFile(TransProp.getString(TransConst.LOC_TASK) + "raw.txt")
                 .sort()
                 .merge()
-                .writeToFile(TransProp.get(TransConst.LOC_TASK) + "fresh.txt");
+                .writeToFile(TransProp.getString(TransConst.LOC_TASK) + "fresh.txt");
         FileUtils.copyFileBytes(
-                TransProp.get(TransConst.LOC_TASK) + "fresh.txt",
-                TransProp.get(TransConst.LOC_TASK) + "fresh_" + archDate + ".txt");
+                TransProp.getString(TransConst.LOC_TASK) + "fresh.txt",
+                TransProp.getString(TransConst.LOC_TASK) + "fresh_" + archDate + ".txt");
         TransLog.getLogger().info("Totally {} fresh entries processed.", n);
         TransLog.getLogger().info("Fresh done.");
     }
@@ -56,15 +56,15 @@ public class TaskKeeper {
     
     public static void digNewFresh() {
         TaskDigger.digKeywordFileDefault(
-                TransProp.get(TransConst.LOC_TASK) + "fresh.txt",
-                TransProp.get(TransConst.LOC_TASK) + "task_week.txt");
+                TransProp.getString(TransConst.LOC_TASK) + "fresh.txt",
+                TransProp.getString(TransConst.LOC_TASK) + "task_week.txt");
         TransLog.getLogger().info("New fresh done.");
     }
     
     public static void digSpecFresh() {
-        String[] keys = TransProp.get("DIG_SPEC").split("/");
+        String[] keys = TransProp.getString("DIG_SPEC").split("/");
         TaskDigger.digAllFreshSpecific(
                 keys,
-                TransProp.get(TransConst.LOC_TASK) + "task_spec.txt");    
+                TransProp.getString(TransConst.LOC_TASK) + "task_spec.txt");
     }
 }

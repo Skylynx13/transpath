@@ -319,7 +319,7 @@ public class FreeTester {
         int bbb = 3;
         System.out.println(Integer.compare(aaa, bbb));
         
-        System.out.println(TransProp.get(TransConst.LOC_CONFIG));
+        System.out.println(TransProp.getString(TransConst.LOC_CONFIG));
 
         System.out.println("Time elapsed: " + (System.currentTimeMillis()-timeTag) + " ms.");
         System.out.println(System.getProperty("qxu.test"));

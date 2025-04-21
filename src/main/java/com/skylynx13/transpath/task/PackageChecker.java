@@ -23,7 +23,7 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
 
     @Override
     protected StringBuilder doInBackground() {
-        String rootDirStr = TransProp.get(TransConst.LOC_TRANS);
+        String rootDirStr = TransProp.getString(TransConst.LOC_TRANS);
         File rootDir = new File(rootDirStr);
         if (!rootDir.isDirectory()) {
             return new StringBuilder("Invalid root: ").append(rootDirStr);
@@ -233,8 +233,9 @@ public class PackageChecker extends SwingWorker<StringBuilder, ProgressReport> {
     }
 
     boolean isIgnorable(String fileName) {
-        final String[] arraySuffixIgnorable =
-                {"txt", "pdf", "pdb", "epub", "mobi", "azw3", "jpg", "gif", "mp3", "fb2", "rtf"};
+        //{"txt", "pdf", "pdb", "epub", "mobi", "azw3", "jpg", "gif", "mp3", "fb2", "rtf"};
+        final String[] arraySuffixIgnorable = TransProp.getStringArray(TransConst.SUFFIX_IGNORABLE);
+        TransLog.getLogger().info(arraySuffixIgnorable);
         return Arrays.asList(arraySuffixIgnorable).contains(getSuffix(fileName));
     }
 

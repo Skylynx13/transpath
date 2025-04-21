@@ -15,9 +15,9 @@ import java.util.Scanner;
  */
 public class NameReviser {
     public static void rename() {
-        TransLog.getLogger().info("Result: {}.", new NameReviser().renameFileByRenameList(TransProp.get(TransConst.LOC_CONFIG)
+        TransLog.getLogger().info("Result: {}.", new NameReviser().renameFileByRenameList(TransProp.getString(TransConst.LOC_CONFIG)
                 + TransConst.LIST_RENAME));
-        TransLog.getLogger().info("Get: {}", TransProp.get(TransConst.LOC_CONFIG));
+        TransLog.getLogger().info("Get: {}", TransProp.getString(TransConst.LOC_CONFIG));
     }
 
     private boolean renameFileByRenameList(String renameListName) {
@@ -27,7 +27,7 @@ public class NameReviser {
     private boolean renameRootPathFile(String[][] replaceList) {
         int totalFile = 0;
         int procFile = 0;
-        String rootDir = TransProp.get(TransConst.LOC_TRANS);
+        String rootDir = TransProp.getString(TransConst.LOC_TRANS);
         File dirRoot = new File(rootDir);
         if (!dirRoot.isDirectory()) {
             TransLog.getLogger().info("Path name error.");

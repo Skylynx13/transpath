@@ -24,7 +24,7 @@ class TaskDigger {
     public static final String FRESH_TXT = "fresh_.*.txt";
 
     static void digKeywordFileDefault(String src, String target) {
-        TaskDigger.digKeywordFile(TransProp.get(TransConst.LOC_CONFIG) + TransConst.LIST_KEYWORDS, 
+        TaskDigger.digKeywordFile(TransProp.getString(TransConst.LOC_CONFIG) + TransConst.LIST_KEYWORDS,
                                   src, target);
     }
 
@@ -59,7 +59,7 @@ class TaskDigger {
     static void digAllFreshSpecific(String[] keys, String target) {
         long t0 = System.currentTimeMillis();
         FileUtils.clearFile(target);
-        File path = new File(TransProp.get(TransConst.LOC_TASK));
+        File path = new File(TransProp.getString(TransConst.LOC_TASK));
         int total = 0;
         TransLog.getLogger().info("Digging specific keywords {}", Arrays.toString(keys));
         for (File file : Objects.requireNonNull(path.listFiles((file, name) -> name.matches(FRESH_TXT)))) {

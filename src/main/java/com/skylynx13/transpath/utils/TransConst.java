@@ -14,6 +14,8 @@ public class TransConst {
     public static final String LOC_SOURCE  = "LOC_SOURCE";
     public static final String LOC_TARGET  = "LOC_TARGET";
 
+    public static final String SUFFIX_IGNORABLE = "SUFFIX_IGNORABLE";
+
     private static final String FONT_TYPE = "FONT_TYPE";
     private static final String FONT_SIZE = "FONT_SIZE";
 
@@ -56,7 +58,7 @@ public class TransConst {
     public static final String NAME_CHARS = "[\\-\\+!@#$%^&½=,.'A-Za-z0-9 \\(\\)]+";
 
     public static final Font GLOBAL_FONT =
-            new Font(TransProp.get(FONT_TYPE), Font.PLAIN, TransProp.getInt(FONT_SIZE));
+            new Font(TransProp.getString(FONT_TYPE), Font.PLAIN, TransProp.getInt(FONT_SIZE));
 
     public static String[] TABLE_TITLE_BRANCH =
             {"BranchId", "BranchPath", "BranchName", "Length", "Count"};

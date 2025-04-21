@@ -11,8 +11,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 class PropertiesDialog extends JDialog {
@@ -22,10 +21,9 @@ class PropertiesDialog extends JDialog {
         this.setSize(800,600);
         this.setLayout(new BorderLayout());
 
-        // 创建表格模型
-        DefaultTableModel tableModel = TransProp.createTableModel();
+        DefaultTableModel tableModel = createTableModel();
 
-        // 创建表格并启用拖拽排序
+        // Create table that can be dragged
         JTable table = new JTable(tableModel);
         table.setDragEnabled(true);
         table.setDropMode(DropMode.INSERT_ROWS);
@@ -34,16 +32,15 @@ class PropertiesDialog extends JDialog {
         JScrollPane scrollPane = new JScrollPane(table);
         this.add(scrollPane, BorderLayout.CENTER);
 
-        // 创建按钮面板
         JPanel buttonPanel = new JPanel();
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
-            // 确保表格编辑器提交所有更改
+            // Make sure all changes can be committed
             if (table.isEditing()) {
                 table.getCellEditor().stopCellEditing();
             }
-            // 更新 orderedProperties 并保存顺序
-            TransProp.savePropertiesWithOrder(tableModel);
+            // Save properties in given order
+            TransProp.saveProperties(getPropertiesFromTableModel(tableModel));
             this.dispose();
         });
 
@@ -85,7 +82,29 @@ class PropertiesDialog extends JDialog {
         buttonPanel.add(deleteButton);
         this.add(buttonPanel, BorderLayout.SOUTH);
     }
-    // 表格行拖拽处理类
+
+    private static LinkedHashMap<String, String> getPropertiesFromTableModel(DefaultTableModel tableModel) {
+        LinkedHashMap<String, String> properties = new LinkedHashMap<>();
+
+        // add keys and values in given order
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String key = (String) tableModel.getValueAt(i, 0);
+            String value = (String) tableModel.getValueAt(i, 1);
+            properties.put(key, value);
+        }
+
+        return properties;
+    }
+
+    private static DefaultTableModel createTableModel() {
+        DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Key", "Value"}, 0);
+        for (Map.Entry<String, String> entry : TransProp.getProperties().entrySet()) {
+            tableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
+        }
+        return tableModel;
+    }
+
+    // Table with lines that can be dragged
     private static class TableRowTransferHandler extends TransferHandler {
         private final JTable table;
 

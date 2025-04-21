@@ -110,7 +110,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
     }
 
     private String buildRootPath() {
-        return TransProp.get(TransConst.LOC_STORE);
+        return TransProp.getString(TransConst.LOC_STORE);
     }
 
     private StoreList buildOldStoreList() {
@@ -164,9 +164,9 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
 
     private List<String> buildStorePathList() throws StoreListException {
         if (updateList) {
-            return buildList(TransProp.get(TransConst.PATH_BRANCH));
+            return buildList(TransProp.getString(TransConst.PATH_BRANCH));
         } else {
-            return buildList(TransProp.get(TransConst.PATH_DRILL));
+            return buildList(TransProp.getString(TransConst.PATH_DRILL));
         }
     }
 
@@ -322,9 +322,9 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
 
     private static void keepDelList(StoreList delList) {
         if (FileUtils.isWindows()) {
-            keepDelBatch(delList, new File(TransProp.get(TransConst.LOC_LIST) + "ToDel.bat"));
+            keepDelBatch(delList, new File(TransProp.getString(TransConst.LOC_LIST) + "ToDel.bat"));
         } else {
-            keepDelShell(delList, new File(TransProp.get(TransConst.LOC_LIST) + "todel.sh"));
+            keepDelShell(delList, new File(TransProp.getString(TransConst.LOC_LIST) + "todel.sh"));
         }
     }
 
@@ -335,7 +335,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         try {
             PrintWriter out = new PrintWriter(delFile);
             for (StoreNode aNode : delList.storeList) {
-                out.println("rm \"" + TransProp.get(TransConst.LOC_STORE)
+                out.println("rm \"" + TransProp.getString(TransConst.LOC_STORE)
                         + aNode.getPath().substring(1)
                         + aNode.getName() + "\"");
             }
@@ -352,7 +352,7 @@ public class StoreCombiner extends SwingWorker<StringBuilder, ProgressReport> {
         try {
             PrintWriter out = new PrintWriter(delFile);
             for (StoreNode aNode : delList.storeList) {
-                out.println("del \"" + TransProp.get(TransConst.LOC_STORE)
+                out.println("del \"" + TransProp.getString(TransConst.LOC_STORE)
                         + FileUtils.regulateSysPath(aNode.getPath().substring(1))
                         + aNode.getName() + "\"");
             }

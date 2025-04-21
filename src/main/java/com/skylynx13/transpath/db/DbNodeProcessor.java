@@ -255,6 +255,6 @@ public class DbNodeProcessor extends SwingWorker<StringBuilder, ProgressReport> 
 
     public void dumpDbNode() {
         StoreList storeList = listAllDbNode();
-        storeList.keepFile(new File(TransProp.get(TransConst.LOC_LIST) + "StoreList_DB.txt"));
+        storeList.keepFile(new File(TransProp.getString(TransConst.LOC_LIST) + "StoreList_DB.txt"));
     }
 }
