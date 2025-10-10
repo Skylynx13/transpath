@@ -1,5 +1,8 @@
 package com.skylynx13.transpath.tools;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 
 public class Transtool {
@@ -105,7 +108,37 @@ public class Transtool {
             outsideParentheses.add(currentPhrase.toString().trim());
         }
     }
-    public static void main(String[] args) {
-        analyzeString();
+
+    private static void sortTextLines() throws IOException {
+        // 1. 从 toSort.txt 读取所有行
+        List<String> lines = new ArrayList<>();
+        File inFile = new File("/opt/app/transpath/conf/rename.list");
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(Files.newInputStream(inFile.toPath()), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        // 2. 排序（默认字典序，可自定义比较器）
+        Collections.sort(lines);                       // 字典序
+        // Collections.sort(lines, String.CASE_INSENSITIVE_ORDER); // 忽略大小写
+        // lines.sort(Comparator.comparingInt(String::length));   // 按长度升序
+
+        // 3. 写入 sorted.txt
+        File outFile = new File("/opt/app/transpath/conf/rename.list.st");
+        try (PrintWriter pw = new PrintWriter(
+                new OutputStreamWriter(Files.newOutputStream(outFile.toPath()), StandardCharsets.UTF_8))) {
+            for (String l : lines) {
+                pw.println(l);
+            }
+        }
+
+        System.out.println("排序完成！结果已写入 " + outFile.getAbsolutePath());
+    }
+
+    public static void main(String[] args) throws IOException {
+        sortTextLines();
     }
 }

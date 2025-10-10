@@ -38,6 +38,7 @@ public class DbNodeProcessor extends SwingWorker<StringBuilder, ProgressReport> 
     protected StringBuilder doInBackground() {
         long startTimeMillis = System.currentTimeMillis();
 
+        TransLog.getLogger().info("DB init started.");
         this.truncateDbNode();
         TransLog.getLogger().info("DB nodes truncated.");
 

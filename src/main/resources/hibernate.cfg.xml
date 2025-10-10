@@ -13,7 +13,8 @@
 
         <!-- Assume test is the database name -->
         <property name="hibernate.connection.url">
-            jdbc:mysql://192.168.1.97:3306/transdb
+            <!-- jdbc:mysql://192.168.1.97:3306/transdb -->
+            jdbc:mysql://192.168.0.196:3306/transdb
         </property>
         <property name="hibernate.connection.username">
             skylynx
@@ -21,7 +22,11 @@
         <property name="hibernate.connection.password">
             Sky123$%^
         </property>
-
+        <!--
+        <property name="connection.autocommit">
+            true
+        </property>
+        -->
         <!-- List of XML mapping files -->
         <!-- Use full package path name here -->
         <!-- list of hbm files -->
